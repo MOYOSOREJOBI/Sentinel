@@ -1,0 +1,1 @@
+{"status":"success","data":{"resultType":"vector","result":[{"metric":{"__name__":"inference_scoring_latency_seconds_count","instance":"inference:8090","job":"inference"},"value":[1772341430.204,"0"]}]}}

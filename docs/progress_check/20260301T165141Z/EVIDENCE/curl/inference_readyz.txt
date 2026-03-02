@@ -1,0 +1,8 @@
+HTTP/1.1 200 OK
+Server: Werkzeug/3.1.6 Python/3.11.14
+Date: Sun, 01 Mar 2026 17:38:19 GMT
+Content-Type: application/json
+Content-Length: 200
+Connection: close
+
+{"fallback_mode":false,"model_artifact_hash":"6a873dbd943816987a7d3a0b3280f613977f811edadc87ecce1edde0aa6e681f","model_version":"quant-v1-2026-03-01","ready":true,"trained_at":"2026-03-01T03:01:18Z"}

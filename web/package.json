@@ -1,0 +1,34 @@
+{
+  "name": "sentinel-web",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev -p 3000",
+    "build": "next build",
+    "start": "next start -p 3000",
+    "lint": "next lint --dir app --dir components --dir lib --dir e2e --dir scripts",
+    "lint:fix": "tsc --noEmit --pretty false",
+    "typecheck": "next build --no-lint && tsc --noEmit",
+    "test": "rm -rf .tmp-tests && tsc -p tests/tsconfig.json && node --test .tmp-tests/tests/*.test.js .tmp-tests/tests/**/*.test.js",
+    "test:watch": "npm run test",
+    "test:e2e": "npx -y @playwright/test@1.53.0 test",
+    "check:i18n": "node scripts/i18n-check.js"
+  },
+  "dependencies": {
+    "lightweight-charts": "4.1.3",
+    "next": "14.2.5",
+    "react": "18.3.1",
+    "react-dom": "18.3.1",
+    "recharts": "2.12.7",
+    "three": "0.167.1"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.53.0",
+    "@types/node": "20.14.11",
+    "@types/react": "18.3.3",
+    "@types/three": "0.167.1",
+    "eslint": "^10.0.2",
+    "tailwindcss": "3.4.10",
+    "typescript": "5.5.4"
+  }
+}

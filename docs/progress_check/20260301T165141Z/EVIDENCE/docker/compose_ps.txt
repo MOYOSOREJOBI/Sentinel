@@ -1,0 +1,15 @@
+NAME                   IMAGE                               COMMAND                  SERVICE       CREATED          STATUS                    PORTS
+docker-aggregator-1    docker-aggregator                   "/app/service"           aggregator    18 minutes ago   Up 17 minutes (healthy)   0.0.0.0:8081->8081/tcp, [::]:8081->8081/tcp
+docker-alerts-1        docker-alerts                       "/app/service"           alerts        18 minutes ago   Up 17 minutes (healthy)   0.0.0.0:8083->8083/tcp, [::]:8083->8083/tcp
+docker-features-1      docker-features                     "/app/service"           features      18 minutes ago   Up 17 minutes (healthy)   0.0.0.0:8082->8082/tcp, [::]:8082->8082/tcp
+docker-gateway-api-1   docker-gateway-api                  "/app/service"           gateway-api   18 minutes ago   Up 17 minutes (healthy)   0.0.0.0:8080->8080/tcp, [::]:8080->8080/tcp
+docker-governance-1    docker-governance                   "/app/service"           governance    18 minutes ago   Up 18 minutes (healthy)   0.0.0.0:8084->8084/tcp, [::]:8084->8084/tcp
+docker-grafana-1       grafana/grafana:11.1.4              "/run.sh"                grafana       18 minutes ago   Up 18 minutes             0.0.0.0:3001->3000/tcp, [::]:3001->3000/tcp
+docker-inference-1     docker-inference                    "python app.py"          inference     18 minutes ago   Up 17 minutes (healthy)   0.0.0.0:8090->8090/tcp, [::]:8090->8090/tcp
+docker-postgres-1      timescale/timescaledb:2.15.1-pg16   "docker-entrypoint.s…"   postgres      18 minutes ago   Up 18 minutes (healthy)   0.0.0.0:5432->5432/tcp, [::]:5432->5432/tcp
+docker-prometheus-1    prom/prometheus:v2.54.1             "/bin/prometheus --c…"   prometheus    18 minutes ago   Up 18 minutes             0.0.0.0:9090->9090/tcp, [::]:9090->9090/tcp
+docker-query-1         docker-query                        "/app/service"           query         18 minutes ago   Up 18 minutes (healthy)   0.0.0.0:8085->8085/tcp, [::]:8085->8085/tcp
+docker-redis-1         redis:7                             "docker-entrypoint.s…"   redis         18 minutes ago   Up 18 minutes (healthy)   0.0.0.0:6379->6379/tcp, [::]:6379->6379/tcp
+docker-redpanda-1      redpandadata/redpanda:v24.1.10      "/entrypoint.sh redp…"   redpanda      18 minutes ago   Up 18 minutes (healthy)   0.0.0.0:9092->9092/tcp, [::]:9092->9092/tcp
+docker-simulator-1     docker-simulator                    "/app/service"           simulator     18 minutes ago   Up 17 minutes (healthy)   
+docker-web-1           node:20-alpine                      "docker-entrypoint.s…"   web           18 minutes ago   Up 17 minutes (healthy)   0.0.0.0:3000->3000/tcp, [::]:3000->3000/tcp

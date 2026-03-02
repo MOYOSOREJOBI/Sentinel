@@ -1,0 +1,110 @@
+HTTP/1.1 200 OK
+Content-Type: text/plain; version=0.0.4; charset=utf-8; escaping=underscores
+Date: Sun, 01 Mar 2026 17:38:19 GMT
+Transfer-Encoding: chunked
+
+# HELP db_query_duration_seconds Database query latency in seconds.
+# TYPE db_query_duration_seconds histogram
+db_query_duration_seconds_bucket{query="upsert_candles_1m",service="aggregator",le="0.0005"} 0
+db_query_duration_seconds_bucket{query="upsert_candles_1m",service="aggregator",le="0.001"} 30065
+db_query_duration_seconds_bucket{query="upsert_candles_1m",service="aggregator",le="0.005"} 160418
+db_query_duration_seconds_bucket{query="upsert_candles_1m",service="aggregator",le="0.01"} 160577
+db_query_duration_seconds_bucket{query="upsert_candles_1m",service="aggregator",le="0.025"} 160597
+db_query_duration_seconds_bucket{query="upsert_candles_1m",service="aggregator",le="0.05"} 160610
+db_query_duration_seconds_bucket{query="upsert_candles_1m",service="aggregator",le="0.1"} 160612
+db_query_duration_seconds_bucket{query="upsert_candles_1m",service="aggregator",le="0.25"} 160612
+db_query_duration_seconds_bucket{query="upsert_candles_1m",service="aggregator",le="0.5"} 160612
+db_query_duration_seconds_bucket{query="upsert_candles_1m",service="aggregator",le="1"} 160612
+db_query_duration_seconds_bucket{query="upsert_candles_1m",service="aggregator",le="+Inf"} 160612
+db_query_duration_seconds_sum{query="upsert_candles_1m",service="aggregator"} 217.2444379379998
+db_query_duration_seconds_count{query="upsert_candles_1m",service="aggregator"} 160612
+db_query_duration_seconds_bucket{query="upsert_candles_1s",service="aggregator",le="0.0005"} 0
+db_query_duration_seconds_bucket{query="upsert_candles_1s",service="aggregator",le="0.001"} 2566
+db_query_duration_seconds_bucket{query="upsert_candles_1s",service="aggregator",le="0.005"} 160307
+db_query_duration_seconds_bucket{query="upsert_candles_1s",service="aggregator",le="0.01"} 160564
+db_query_duration_seconds_bucket{query="upsert_candles_1s",service="aggregator",le="0.025"} 160599
+db_query_duration_seconds_bucket{query="upsert_candles_1s",service="aggregator",le="0.05"} 160610
+db_query_duration_seconds_bucket{query="upsert_candles_1s",service="aggregator",le="0.1"} 160612
+db_query_duration_seconds_bucket{query="upsert_candles_1s",service="aggregator",le="0.25"} 160612
+db_query_duration_seconds_bucket{query="upsert_candles_1s",service="aggregator",le="0.5"} 160612
+db_query_duration_seconds_bucket{query="upsert_candles_1s",service="aggregator",le="1"} 160612
+db_query_duration_seconds_bucket{query="upsert_candles_1s",service="aggregator",le="+Inf"} 160612
+db_query_duration_seconds_sum{query="upsert_candles_1s",service="aggregator"} 269.81749965400115
+db_query_duration_seconds_count{query="upsert_candles_1s",service="aggregator"} 160612
+# HELP http_request_duration_seconds HTTP request latency in seconds.
+# TYPE http_request_duration_seconds histogram
+http_request_duration_seconds_bucket{path="/",service="aggregator",le="0.005"} 1
+http_request_duration_seconds_bucket{path="/",service="aggregator",le="0.01"} 1
+http_request_duration_seconds_bucket{path="/",service="aggregator",le="0.025"} 1
+http_request_duration_seconds_bucket{path="/",service="aggregator",le="0.05"} 1
+http_request_duration_seconds_bucket{path="/",service="aggregator",le="0.1"} 1
+http_request_duration_seconds_bucket{path="/",service="aggregator",le="0.25"} 1
+http_request_duration_seconds_bucket{path="/",service="aggregator",le="0.5"} 1
+http_request_duration_seconds_bucket{path="/",service="aggregator",le="1"} 1
+http_request_duration_seconds_bucket{path="/",service="aggregator",le="2.5"} 1
+http_request_duration_seconds_bucket{path="/",service="aggregator",le="5"} 1
+http_request_duration_seconds_bucket{path="/",service="aggregator",le="+Inf"} 1
+http_request_duration_seconds_sum{path="/",service="aggregator"} 2.9239e-05
+http_request_duration_seconds_count{path="/",service="aggregator"} 1
+http_request_duration_seconds_bucket{path="/healthz",service="aggregator",le="0.005"} 1
+http_request_duration_seconds_bucket{path="/healthz",service="aggregator",le="0.01"} 1
+http_request_duration_seconds_bucket{path="/healthz",service="aggregator",le="0.025"} 1
+http_request_duration_seconds_bucket{path="/healthz",service="aggregator",le="0.05"} 1
+http_request_duration_seconds_bucket{path="/healthz",service="aggregator",le="0.1"} 1
+http_request_duration_seconds_bucket{path="/healthz",service="aggregator",le="0.25"} 1
+http_request_duration_seconds_bucket{path="/healthz",service="aggregator",le="0.5"} 1
+http_request_duration_seconds_bucket{path="/healthz",service="aggregator",le="1"} 1
+http_request_duration_seconds_bucket{path="/healthz",service="aggregator",le="2.5"} 1
+http_request_duration_seconds_bucket{path="/healthz",service="aggregator",le="5"} 1
+http_request_duration_seconds_bucket{path="/healthz",service="aggregator",le="+Inf"} 1
+http_request_duration_seconds_sum{path="/healthz",service="aggregator"} 2.4523e-05
+http_request_duration_seconds_count{path="/healthz",service="aggregator"} 1
+http_request_duration_seconds_bucket{path="/metrics",service="aggregator",le="0.005"} 218
+http_request_duration_seconds_bucket{path="/metrics",service="aggregator",le="0.01"} 219
+http_request_duration_seconds_bucket{path="/metrics",service="aggregator",le="0.025"} 219
+http_request_duration_seconds_bucket{path="/metrics",service="aggregator",le="0.05"} 219
+http_request_duration_seconds_bucket{path="/metrics",service="aggregator",le="0.1"} 219
+http_request_duration_seconds_bucket{path="/metrics",service="aggregator",le="0.25"} 219
+http_request_duration_seconds_bucket{path="/metrics",service="aggregator",le="0.5"} 219
+http_request_duration_seconds_bucket{path="/metrics",service="aggregator",le="1"} 219
+http_request_duration_seconds_bucket{path="/metrics",service="aggregator",le="2.5"} 219
+http_request_duration_seconds_bucket{path="/metrics",service="aggregator",le="5"} 219
+http_request_duration_seconds_bucket{path="/metrics",service="aggregator",le="+Inf"} 219
+http_request_duration_seconds_sum{path="/metrics",service="aggregator"} 0.19027172500000003
+http_request_duration_seconds_count{path="/metrics",service="aggregator"} 219
+http_request_duration_seconds_bucket{path="/readyz",service="aggregator",le="0.005"} 196
+http_request_duration_seconds_bucket{path="/readyz",service="aggregator",le="0.01"} 211
+http_request_duration_seconds_bucket{path="/readyz",service="aggregator",le="0.025"} 214
+http_request_duration_seconds_bucket{path="/readyz",service="aggregator",le="0.05"} 214
+http_request_duration_seconds_bucket{path="/readyz",service="aggregator",le="0.1"} 214
+http_request_duration_seconds_bucket{path="/readyz",service="aggregator",le="0.25"} 214
+http_request_duration_seconds_bucket{path="/readyz",service="aggregator",le="0.5"} 214
+http_request_duration_seconds_bucket{path="/readyz",service="aggregator",le="1"} 214
+http_request_duration_seconds_bucket{path="/readyz",service="aggregator",le="2.5"} 214
+http_request_duration_seconds_bucket{path="/readyz",service="aggregator",le="5"} 214
+http_request_duration_seconds_bucket{path="/readyz",service="aggregator",le="+Inf"} 214
+http_request_duration_seconds_sum{path="/readyz",service="aggregator"} 0.7164760249999998
+http_request_duration_seconds_count{path="/readyz",service="aggregator"} 214
+# HELP http_requests_total Total HTTP requests handled by Sentinel Go services.
+# TYPE http_requests_total counter
+http_requests_total{method="GET",path="/",service="aggregator",status="200"} 1
+http_requests_total{method="GET",path="/healthz",service="aggregator",status="200"} 1
+http_requests_total{method="GET",path="/metrics",service="aggregator",status="200"} 219
+http_requests_total{method="GET",path="/readyz",service="aggregator",status="200"} 214
+# HELP kafka_messages_consumed_total Kafka messages consumed by Go services.
+# TYPE kafka_messages_consumed_total counter
+kafka_messages_consumed_total{service="aggregator",topic="raw.ticks"} 160613
+# HELP kafka_messages_produced_total Kafka messages produced by Go services.
+# TYPE kafka_messages_produced_total counter
+kafka_messages_produced_total{service="aggregator",topic="derived.candles"} 160612
+# HELP promhttp_metric_handler_requests_in_flight Current number of scrapes being served.
+# TYPE promhttp_metric_handler_requests_in_flight gauge
+promhttp_metric_handler_requests_in_flight 1
+# HELP promhttp_metric_handler_requests_total Total number of scrapes by HTTP status code.
+# TYPE promhttp_metric_handler_requests_total counter
+promhttp_metric_handler_requests_total{code="200"} 219
+promhttp_metric_handler_requests_total{code="500"} 0
+promhttp_metric_handler_requests_total{code="503"} 0
+# HELP sentinel_up Whether the service process is up.
+# TYPE sentinel_up gauge
+sentinel_up{service="aggregator"} 1

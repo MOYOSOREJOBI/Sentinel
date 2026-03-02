@@ -1,0 +1,3 @@
+Playwright browser automation was blocked by an existing Chrome session, so screenshots were not captured.
+The web workspace does not have lighthouse installed (npm ls lighthouse -> empty), so a Lighthouse run could not be executed locally in this environment.
+Used fallback proof: runtime timings from curl and bundle size from web/.next/static.

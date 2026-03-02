@@ -1,0 +1,1235 @@
+=== Playwright via compose service ===
+ Container docker-redpanda-1 Running 
+ Container docker-postgres-1 Running 
+ Container docker-redis-1 Running 
+ Container docker-query-1 Running 
+ Container docker-gateway-api-1 Running 
+ Container docker-web-1 Running 
+ Container docker-redpanda-1 Waiting 
+ Container docker-postgres-1 Waiting 
+ Container docker-postgres-1 Healthy 
+ Container docker-redpanda-1 Healthy 
+ Container docker-migrate-1 Starting 
+ Container docker-topics-init-1 Starting 
+ Container docker-migrate-1 Started 
+ Container docker-postgres-1 Waiting 
+ Container docker-migrate-1 Waiting 
+ Container docker-topics-init-1 Started 
+ Container docker-postgres-1 Waiting 
+ Container docker-redpanda-1 Waiting 
+ Container docker-redis-1 Waiting 
+ Container docker-migrate-1 Waiting 
+ Container docker-topics-init-1 Waiting 
+ Container docker-postgres-1 Healthy 
+ Container docker-postgres-1 Healthy 
+ Container docker-redpanda-1 Healthy 
+ Container docker-redis-1 Healthy 
+ Container docker-migrate-1 Exited 
+ Container docker-migrate-1 Exited 
+ Container docker-topics-init-1 Exited 
+ Container docker-gateway-api-1 Waiting 
+ Container docker-query-1 Waiting 
+ Container docker-query-1 Healthy 
+ Container docker-gateway-api-1 Healthy 
+ Container docker-web-1 Waiting 
+ Container docker-web-1 Healthy 
+ Container docker-playwright-run-ca9079c1916c Creating 
+ Container docker-playwright-run-ca9079c1916c Created 
+npm warn deprecated next@14.2.5: This version has a security vulnerability. Please upgrade to a patched version. See https://nextjs.org/blog/security-update-2025-12-11 for more details.
+
+added 211 packages in 1m
+
+Running 10 tests using 1 worker
+××F××F××F××F××F·××F××F××F××F
+
+  1) e2e/sentinel.spec.ts:17:5 › login works and logout clears the session ─────────────────────────
+
+    Error: [31mTimed out 5000ms waiting for [39m[2mexpect([22m[31mlocator[39m[2m).[22mtoHaveURL[2m([22m[32mexpected[39m[2m)[22m
+
+    Locator: locator(':root')
+    Expected pattern: [32m/command-center/[39m
+    Received string:  [31m"http://web:3000/login"[39m
+    Call log:
+    [2m  - Expect "toHaveURL" with timeout 5000ms[22m
+    [2m  - waiting for locator(':root')[22m
+    [2m    9 × locator resolved to <html lang="en">…</html>[22m
+    [2m      - unexpected value "http://web:3000/login"[22m
+
+
+       8 |   await page.getByTestId('login-password').fill(password)
+       9 |   await page.getByTestId('login-submit').click()
+    > 10 |   await expect(page).toHaveURL(/command-center/)
+         |                      ^
+      11 | }
+      12 |
+      13 | async function login(page: any) {
+        at loginAs (/repo/web/e2e/sentinel.spec.ts:10:22)
+        at login (/repo/web/e2e/sentinel.spec.ts:14:3)
+        at /repo/web/e2e/sentinel.spec.ts:18:3
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/sentinel-login-works-and-logout-clears-the-session/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results/sentinel-login-works-and-logout-clears-the-session/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/sentinel-login-works-and-logout-clears-the-session/error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/sentinel-login-works-and-logout-clears-the-session/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/sentinel-login-works-and-logout-clears-the-session/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: [31mTimed out 5000ms waiting for [39m[2mexpect([22m[31mlocator[39m[2m).[22mtoHaveURL[2m([22m[32mexpected[39m[2m)[22m
+
+    Locator: locator(':root')
+    Expected pattern: [32m/command-center/[39m
+    Received string:  [31m"http://web:3000/login"[39m
+    Call log:
+    [2m  - Expect "toHaveURL" with timeout 5000ms[22m
+    [2m  - waiting for locator(':root')[22m
+    [2m    9 × locator resolved to <html lang="en">…</html>[22m
+    [2m      - unexpected value "http://web:3000/login"[22m
+
+
+       8 |   await page.getByTestId('login-password').fill(password)
+       9 |   await page.getByTestId('login-submit').click()
+    > 10 |   await expect(page).toHaveURL(/command-center/)
+         |                      ^
+      11 | }
+      12 |
+      13 | async function login(page: any) {
+        at loginAs (/repo/web/e2e/sentinel.spec.ts:10:22)
+        at login (/repo/web/e2e/sentinel.spec.ts:14:3)
+        at /repo/web/e2e/sentinel.spec.ts:18:3
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/sentinel-login-works-and-logout-clears-the-session-retry1/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results/sentinel-login-works-and-logout-clears-the-session-retry1/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/sentinel-login-works-and-logout-clears-the-session-retry1/error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/sentinel-login-works-and-logout-clears-the-session-retry1/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/sentinel-login-works-and-logout-clears-the-session-retry1/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #2 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: [31mTimed out 5000ms waiting for [39m[2mexpect([22m[31mlocator[39m[2m).[22mtoHaveURL[2m([22m[32mexpected[39m[2m)[22m
+
+    Locator: locator(':root')
+    Expected pattern: [32m/command-center/[39m
+    Received string:  [31m"http://web:3000/login"[39m
+    Call log:
+    [2m  - Expect "toHaveURL" with timeout 5000ms[22m
+    [2m  - waiting for locator(':root')[22m
+    [2m    9 × locator resolved to <html lang="en">…</html>[22m
+    [2m      - unexpected value "http://web:3000/login"[22m
+
+
+       8 |   await page.getByTestId('login-password').fill(password)
+       9 |   await page.getByTestId('login-submit').click()
+    > 10 |   await expect(page).toHaveURL(/command-center/)
+         |                      ^
+      11 | }
+      12 |
+      13 | async function login(page: any) {
+        at loginAs (/repo/web/e2e/sentinel.spec.ts:10:22)
+        at login (/repo/web/e2e/sentinel.spec.ts:14:3)
+        at /repo/web/e2e/sentinel.spec.ts:18:3
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/sentinel-login-works-and-logout-clears-the-session-retry2/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results/sentinel-login-works-and-logout-clears-the-session-retry2/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/sentinel-login-works-and-logout-clears-the-session-retry2/error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/sentinel-login-works-and-logout-clears-the-session-retry2/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/sentinel-login-works-and-logout-clears-the-session-retry2/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  2) e2e/sentinel.spec.ts:29:5 › command center loads map and globe containers ─────────────────────
+
+    Error: [31mTimed out 5000ms waiting for [39m[2mexpect([22m[31mlocator[39m[2m).[22mtoHaveURL[2m([22m[32mexpected[39m[2m)[22m
+
+    Locator: locator(':root')
+    Expected pattern: [32m/command-center/[39m
+    Received string:  [31m"http://web:3000/login"[39m
+    Call log:
+    [2m  - Expect "toHaveURL" with timeout 5000ms[22m
+    [2m  - waiting for locator(':root')[22m
+    [2m    9 × locator resolved to <html lang="en">…</html>[22m
+    [2m      - unexpected value "http://web:3000/login"[22m
+
+
+       8 |   await page.getByTestId('login-password').fill(password)
+       9 |   await page.getByTestId('login-submit').click()
+    > 10 |   await expect(page).toHaveURL(/command-center/)
+         |                      ^
+      11 | }
+      12 |
+      13 | async function login(page: any) {
+        at loginAs (/repo/web/e2e/sentinel.spec.ts:10:22)
+        at login (/repo/web/e2e/sentinel.spec.ts:14:3)
+        at /repo/web/e2e/sentinel.spec.ts:30:3
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/sentinel-command-center-loads-map-and-globe-containers/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results/sentinel-command-center-loads-map-and-globe-containers/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/sentinel-command-center-loads-map-and-globe-containers/error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/sentinel-command-center-loads-map-and-globe-containers/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/sentinel-command-center-loads-map-and-globe-containers/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: [31mTimed out 5000ms waiting for [39m[2mexpect([22m[31mlocator[39m[2m).[22mtoHaveURL[2m([22m[32mexpected[39m[2m)[22m
+
+    Locator: locator(':root')
+    Expected pattern: [32m/command-center/[39m
+    Received string:  [31m"http://web:3000/login"[39m
+    Call log:
+    [2m  - Expect "toHaveURL" with timeout 5000ms[22m
+    [2m  - waiting for locator(':root')[22m
+    [2m    9 × locator resolved to <html lang="en">…</html>[22m
+    [2m      - unexpected value "http://web:3000/login"[22m
+
+
+       8 |   await page.getByTestId('login-password').fill(password)
+       9 |   await page.getByTestId('login-submit').click()
+    > 10 |   await expect(page).toHaveURL(/command-center/)
+         |                      ^
+      11 | }
+      12 |
+      13 | async function login(page: any) {
+        at loginAs (/repo/web/e2e/sentinel.spec.ts:10:22)
+        at login (/repo/web/e2e/sentinel.spec.ts:14:3)
+        at /repo/web/e2e/sentinel.spec.ts:30:3
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/sentinel-command-center-loads-map-and-globe-containers-retry1/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results/sentinel-command-center-loads-map-and-globe-containers-retry1/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/sentinel-command-center-loads-map-and-globe-containers-retry1/error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/sentinel-command-center-loads-map-and-globe-containers-retry1/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/sentinel-command-center-loads-map-and-globe-containers-retry1/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #2 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: [31mTimed out 5000ms waiting for [39m[2mexpect([22m[31mlocator[39m[2m).[22mtoHaveURL[2m([22m[32mexpected[39m[2m)[22m
+
+    Locator: locator(':root')
+    Expected pattern: [32m/command-center/[39m
+    Received string:  [31m"http://web:3000/login"[39m
+    Call log:
+    [2m  - Expect "toHaveURL" with timeout 5000ms[22m
+    [2m  - waiting for locator(':root')[22m
+    [2m    9 × locator resolved to <html lang="en">…</html>[22m
+    [2m      - unexpected value "http://web:3000/login"[22m
+
+
+       8 |   await page.getByTestId('login-password').fill(password)
+       9 |   await page.getByTestId('login-submit').click()
+    > 10 |   await expect(page).toHaveURL(/command-center/)
+         |                      ^
+      11 | }
+      12 |
+      13 | async function login(page: any) {
+        at loginAs (/repo/web/e2e/sentinel.spec.ts:10:22)
+        at login (/repo/web/e2e/sentinel.spec.ts:14:3)
+        at /repo/web/e2e/sentinel.spec.ts:30:3
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/sentinel-command-center-loads-map-and-globe-containers-retry2/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results/sentinel-command-center-loads-map-and-globe-containers-retry2/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/sentinel-command-center-loads-map-and-globe-containers-retry2/error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/sentinel-command-center-loads-map-and-globe-containers-retry2/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/sentinel-command-center-loads-map-and-globe-containers-retry2/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  3) e2e/sentinel.spec.ts:39:5 › queue renders ranked rows after login ─────────────────────────────
+
+    Error: [31mTimed out 5000ms waiting for [39m[2mexpect([22m[31mlocator[39m[2m).[22mtoHaveURL[2m([22m[32mexpected[39m[2m)[22m
+
+    Locator: locator(':root')
+    Expected pattern: [32m/command-center/[39m
+    Received string:  [31m"http://web:3000/login"[39m
+    Call log:
+    [2m  - Expect "toHaveURL" with timeout 5000ms[22m
+    [2m  - waiting for locator(':root')[22m
+    [2m    9 × locator resolved to <html lang="en">…</html>[22m
+    [2m      - unexpected value "http://web:3000/login"[22m
+
+
+       8 |   await page.getByTestId('login-password').fill(password)
+       9 |   await page.getByTestId('login-submit').click()
+    > 10 |   await expect(page).toHaveURL(/command-center/)
+         |                      ^
+      11 | }
+      12 |
+      13 | async function login(page: any) {
+        at loginAs (/repo/web/e2e/sentinel.spec.ts:10:22)
+        at login (/repo/web/e2e/sentinel.spec.ts:14:3)
+        at /repo/web/e2e/sentinel.spec.ts:40:3
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/sentinel-queue-renders-ranked-rows-after-login/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results/sentinel-queue-renders-ranked-rows-after-login/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/sentinel-queue-renders-ranked-rows-after-login/error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/sentinel-queue-renders-ranked-rows-after-login/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/sentinel-queue-renders-ranked-rows-after-login/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: [31mTimed out 5000ms waiting for [39m[2mexpect([22m[31mlocator[39m[2m).[22mtoHaveURL[2m([22m[32mexpected[39m[2m)[22m
+
+    Locator: locator(':root')
+    Expected pattern: [32m/command-center/[39m
+    Received string:  [31m"http://web:3000/login"[39m
+    Call log:
+    [2m  - Expect "toHaveURL" with timeout 5000ms[22m
+    [2m  - waiting for locator(':root')[22m
+    [2m    9 × locator resolved to <html lang="en">…</html>[22m
+    [2m      - unexpected value "http://web:3000/login"[22m
+
+
+       8 |   await page.getByTestId('login-password').fill(password)
+       9 |   await page.getByTestId('login-submit').click()
+    > 10 |   await expect(page).toHaveURL(/command-center/)
+         |                      ^
+      11 | }
+      12 |
+      13 | async function login(page: any) {
+        at loginAs (/repo/web/e2e/sentinel.spec.ts:10:22)
+        at login (/repo/web/e2e/sentinel.spec.ts:14:3)
+        at /repo/web/e2e/sentinel.spec.ts:40:3
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/sentinel-queue-renders-ranked-rows-after-login-retry1/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results/sentinel-queue-renders-ranked-rows-after-login-retry1/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/sentinel-queue-renders-ranked-rows-after-login-retry1/error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/sentinel-queue-renders-ranked-rows-after-login-retry1/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/sentinel-queue-renders-ranked-rows-after-login-retry1/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #2 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: [31mTimed out 5000ms waiting for [39m[2mexpect([22m[31mlocator[39m[2m).[22mtoHaveURL[2m([22m[32mexpected[39m[2m)[22m
+
+    Locator: locator(':root')
+    Expected pattern: [32m/command-center/[39m
+    Received string:  [31m"http://web:3000/login"[39m
+    Call log:
+    [2m  - Expect "toHaveURL" with timeout 5000ms[22m
+    [2m  - waiting for locator(':root')[22m
+    [2m    9 × locator resolved to <html lang="en">…</html>[22m
+    [2m      - unexpected value "http://web:3000/login"[22m
+
+
+       8 |   await page.getByTestId('login-password').fill(password)
+       9 |   await page.getByTestId('login-submit').click()
+    > 10 |   await expect(page).toHaveURL(/command-center/)
+         |                      ^
+      11 | }
+      12 |
+      13 | async function login(page: any) {
+        at loginAs (/repo/web/e2e/sentinel.spec.ts:10:22)
+        at login (/repo/web/e2e/sentinel.spec.ts:14:3)
+        at /repo/web/e2e/sentinel.spec.ts:40:3
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/sentinel-queue-renders-ranked-rows-after-login-retry2/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results/sentinel-queue-renders-ranked-rows-after-login-retry2/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/sentinel-queue-renders-ranked-rows-after-login-retry2/error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/sentinel-queue-renders-ranked-rows-after-login-retry2/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/sentinel-queue-renders-ranked-rows-after-login-retry2/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  4) e2e/sentinel.spec.ts:46:5 › switch locale to Arabic sets rtl html direction ───────────────────
+
+    Error: [31mTimed out 5000ms waiting for [39m[2mexpect([22m[31mlocator[39m[2m).[22mtoHaveURL[2m([22m[32mexpected[39m[2m)[22m
+
+    Locator: locator(':root')
+    Expected pattern: [32m/command-center/[39m
+    Received string:  [31m"http://web:3000/login"[39m
+    Call log:
+    [2m  - Expect "toHaveURL" with timeout 5000ms[22m
+    [2m  - waiting for locator(':root')[22m
+    [2m    9 × locator resolved to <html lang="en">…</html>[22m
+    [2m      - unexpected value "http://web:3000/login"[22m
+
+
+       8 |   await page.getByTestId('login-password').fill(password)
+       9 |   await page.getByTestId('login-submit').click()
+    > 10 |   await expect(page).toHaveURL(/command-center/)
+         |                      ^
+      11 | }
+      12 |
+      13 | async function login(page: any) {
+        at loginAs (/repo/web/e2e/sentinel.spec.ts:10:22)
+        at login (/repo/web/e2e/sentinel.spec.ts:14:3)
+        at /repo/web/e2e/sentinel.spec.ts:47:3
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/sentinel-switch-locale-to-Arabic-sets-rtl-html-direction/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results/sentinel-switch-locale-to-Arabic-sets-rtl-html-direction/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/sentinel-switch-locale-to-Arabic-sets-rtl-html-direction/error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/sentinel-switch-locale-to-Arabic-sets-rtl-html-direction/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/sentinel-switch-locale-to-Arabic-sets-rtl-html-direction/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: [31mTimed out 5000ms waiting for [39m[2mexpect([22m[31mlocator[39m[2m).[22mtoHaveURL[2m([22m[32mexpected[39m[2m)[22m
+
+    Locator: locator(':root')
+    Expected pattern: [32m/command-center/[39m
+    Received string:  [31m"http://web:3000/login"[39m
+    Call log:
+    [2m  - Expect "toHaveURL" with timeout 5000ms[22m
+    [2m  - waiting for locator(':root')[22m
+    [2m    9 × locator resolved to <html lang="en">…</html>[22m
+    [2m      - unexpected value "http://web:3000/login"[22m
+
+
+       8 |   await page.getByTestId('login-password').fill(password)
+       9 |   await page.getByTestId('login-submit').click()
+    > 10 |   await expect(page).toHaveURL(/command-center/)
+         |                      ^
+      11 | }
+      12 |
+      13 | async function login(page: any) {
+        at loginAs (/repo/web/e2e/sentinel.spec.ts:10:22)
+        at login (/repo/web/e2e/sentinel.spec.ts:14:3)
+        at /repo/web/e2e/sentinel.spec.ts:47:3
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/sentinel-switch-locale-to-Arabic-sets-rtl-html-direction-retry1/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results/sentinel-switch-locale-to-Arabic-sets-rtl-html-direction-retry1/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/sentinel-switch-locale-to-Arabic-sets-rtl-html-direction-retry1/error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/sentinel-switch-locale-to-Arabic-sets-rtl-html-direction-retry1/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/sentinel-switch-locale-to-Arabic-sets-rtl-html-direction-retry1/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #2 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: [31mTimed out 5000ms waiting for [39m[2mexpect([22m[31mlocator[39m[2m).[22mtoHaveURL[2m([22m[32mexpected[39m[2m)[22m
+
+    Locator: locator(':root')
+    Expected pattern: [32m/command-center/[39m
+    Received string:  [31m"http://web:3000/login"[39m
+    Call log:
+    [2m  - Expect "toHaveURL" with timeout 5000ms[22m
+    [2m  - waiting for locator(':root')[22m
+    [2m    9 × locator resolved to <html lang="en">…</html>[22m
+    [2m      - unexpected value "http://web:3000/login"[22m
+
+
+       8 |   await page.getByTestId('login-password').fill(password)
+       9 |   await page.getByTestId('login-submit').click()
+    > 10 |   await expect(page).toHaveURL(/command-center/)
+         |                      ^
+      11 | }
+      12 |
+      13 | async function login(page: any) {
+        at loginAs (/repo/web/e2e/sentinel.spec.ts:10:22)
+        at login (/repo/web/e2e/sentinel.spec.ts:14:3)
+        at /repo/web/e2e/sentinel.spec.ts:47:3
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/sentinel-switch-locale-to-Arabic-sets-rtl-html-direction-retry2/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results/sentinel-switch-locale-to-Arabic-sets-rtl-html-direction-retry2/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/sentinel-switch-locale-to-Arabic-sets-rtl-html-direction-retry2/error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/sentinel-switch-locale-to-Arabic-sets-rtl-html-direction-retry2/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/sentinel-switch-locale-to-Arabic-sets-rtl-html-direction-retry2/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  5) e2e/sentinel.spec.ts:52:5 › SSE endpoint returns a live stream response ───────────────────────
+
+    Error: [31mTimed out 5000ms waiting for [39m[2mexpect([22m[31mlocator[39m[2m).[22mtoHaveURL[2m([22m[32mexpected[39m[2m)[22m
+
+    Locator: locator(':root')
+    Expected pattern: [32m/command-center/[39m
+    Received string:  [31m"http://web:3000/login"[39m
+    Call log:
+    [2m  - Expect "toHaveURL" with timeout 5000ms[22m
+    [2m  - waiting for locator(':root')[22m
+    [2m    9 × locator resolved to <html lang="en">…</html>[22m
+    [2m      - unexpected value "http://web:3000/login"[22m
+
+
+       8 |   await page.getByTestId('login-password').fill(password)
+       9 |   await page.getByTestId('login-submit').click()
+    > 10 |   await expect(page).toHaveURL(/command-center/)
+         |                      ^
+      11 | }
+      12 |
+      13 | async function login(page: any) {
+        at loginAs (/repo/web/e2e/sentinel.spec.ts:10:22)
+        at login (/repo/web/e2e/sentinel.spec.ts:14:3)
+        at /repo/web/e2e/sentinel.spec.ts:53:3
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/sentinel-SSE-endpoint-returns-a-live-stream-response/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results/sentinel-SSE-endpoint-returns-a-live-stream-response/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/sentinel-SSE-endpoint-returns-a-live-stream-response/error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/sentinel-SSE-endpoint-returns-a-live-stream-response/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/sentinel-SSE-endpoint-returns-a-live-stream-response/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: [31mTimed out 5000ms waiting for [39m[2mexpect([22m[31mlocator[39m[2m).[22mtoHaveURL[2m([22m[32mexpected[39m[2m)[22m
+
+    Locator: locator(':root')
+    Expected pattern: [32m/command-center/[39m
+    Received string:  [31m"http://web:3000/login"[39m
+    Call log:
+    [2m  - Expect "toHaveURL" with timeout 5000ms[22m
+    [2m  - waiting for locator(':root')[22m
+    [2m    9 × locator resolved to <html lang="en">…</html>[22m
+    [2m      - unexpected value "http://web:3000/login"[22m
+
+
+       8 |   await page.getByTestId('login-password').fill(password)
+       9 |   await page.getByTestId('login-submit').click()
+    > 10 |   await expect(page).toHaveURL(/command-center/)
+         |                      ^
+      11 | }
+      12 |
+      13 | async function login(page: any) {
+        at loginAs (/repo/web/e2e/sentinel.spec.ts:10:22)
+        at login (/repo/web/e2e/sentinel.spec.ts:14:3)
+        at /repo/web/e2e/sentinel.spec.ts:53:3
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/sentinel-SSE-endpoint-returns-a-live-stream-response-retry1/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results/sentinel-SSE-endpoint-returns-a-live-stream-response-retry1/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/sentinel-SSE-endpoint-returns-a-live-stream-response-retry1/error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/sentinel-SSE-endpoint-returns-a-live-stream-response-retry1/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/sentinel-SSE-endpoint-returns-a-live-stream-response-retry1/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #2 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: [31mTimed out 5000ms waiting for [39m[2mexpect([22m[31mlocator[39m[2m).[22mtoHaveURL[2m([22m[32mexpected[39m[2m)[22m
+
+    Locator: locator(':root')
+    Expected pattern: [32m/command-center/[39m
+    Received string:  [31m"http://web:3000/login"[39m
+    Call log:
+    [2m  - Expect "toHaveURL" with timeout 5000ms[22m
+    [2m  - waiting for locator(':root')[22m
+    [2m    9 × locator resolved to <html lang="en">…</html>[22m
+    [2m      - unexpected value "http://web:3000/login"[22m
+
+
+       8 |   await page.getByTestId('login-password').fill(password)
+       9 |   await page.getByTestId('login-submit').click()
+    > 10 |   await expect(page).toHaveURL(/command-center/)
+         |                      ^
+      11 | }
+      12 |
+      13 | async function login(page: any) {
+        at loginAs (/repo/web/e2e/sentinel.spec.ts:10:22)
+        at login (/repo/web/e2e/sentinel.spec.ts:14:3)
+        at /repo/web/e2e/sentinel.spec.ts:53:3
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/sentinel-SSE-endpoint-returns-a-live-stream-response-retry2/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results/sentinel-SSE-endpoint-returns-a-live-stream-response-retry2/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/sentinel-SSE-endpoint-returns-a-live-stream-response-retry2/error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/sentinel-SSE-endpoint-returns-a-live-stream-response-retry2/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/sentinel-SSE-endpoint-returns-a-live-stream-response-retry2/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  6) e2e/sentinel.spec.ts:72:5 › viewer cannot ack alerts ──────────────────────────────────────────
+
+    Error: [31mTimed out 5000ms waiting for [39m[2mexpect([22m[31mlocator[39m[2m).[22mtoHaveURL[2m([22m[32mexpected[39m[2m)[22m
+
+    Locator: locator(':root')
+    Expected pattern: [32m/command-center/[39m
+    Received string:  [31m"http://web:3000/login"[39m
+    Call log:
+    [2m  - Expect "toHaveURL" with timeout 5000ms[22m
+    [2m  - waiting for locator(':root')[22m
+    [2m    9 × locator resolved to <html lang="en">…</html>[22m
+    [2m      - unexpected value "http://web:3000/login"[22m
+
+
+       8 |   await page.getByTestId('login-password').fill(password)
+       9 |   await page.getByTestId('login-submit').click()
+    > 10 |   await expect(page).toHaveURL(/command-center/)
+         |                      ^
+      11 | }
+      12 |
+      13 | async function login(page: any) {
+        at loginAs (/repo/web/e2e/sentinel.spec.ts:10:22)
+        at /repo/web/e2e/sentinel.spec.ts:73:3
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/sentinel-viewer-cannot-ack-alerts/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results/sentinel-viewer-cannot-ack-alerts/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/sentinel-viewer-cannot-ack-alerts/error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/sentinel-viewer-cannot-ack-alerts/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/sentinel-viewer-cannot-ack-alerts/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: [31mTimed out 5000ms waiting for [39m[2mexpect([22m[31mlocator[39m[2m).[22mtoHaveURL[2m([22m[32mexpected[39m[2m)[22m
+
+    Locator: locator(':root')
+    Expected pattern: [32m/command-center/[39m
+    Received string:  [31m"http://web:3000/login"[39m
+    Call log:
+    [2m  - Expect "toHaveURL" with timeout 5000ms[22m
+    [2m  - waiting for locator(':root')[22m
+    [2m    9 × locator resolved to <html lang="en">…</html>[22m
+    [2m      - unexpected value "http://web:3000/login"[22m
+
+
+       8 |   await page.getByTestId('login-password').fill(password)
+       9 |   await page.getByTestId('login-submit').click()
+    > 10 |   await expect(page).toHaveURL(/command-center/)
+         |                      ^
+      11 | }
+      12 |
+      13 | async function login(page: any) {
+        at loginAs (/repo/web/e2e/sentinel.spec.ts:10:22)
+        at /repo/web/e2e/sentinel.spec.ts:73:3
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/sentinel-viewer-cannot-ack-alerts-retry1/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results/sentinel-viewer-cannot-ack-alerts-retry1/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/sentinel-viewer-cannot-ack-alerts-retry1/error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/sentinel-viewer-cannot-ack-alerts-retry1/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/sentinel-viewer-cannot-ack-alerts-retry1/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #2 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: [31mTimed out 5000ms waiting for [39m[2mexpect([22m[31mlocator[39m[2m).[22mtoHaveURL[2m([22m[32mexpected[39m[2m)[22m
+
+    Locator: locator(':root')
+    Expected pattern: [32m/command-center/[39m
+    Received string:  [31m"http://web:3000/login"[39m
+    Call log:
+    [2m  - Expect "toHaveURL" with timeout 5000ms[22m
+    [2m  - waiting for locator(':root')[22m
+    [2m    9 × locator resolved to <html lang="en">…</html>[22m
+    [2m      - unexpected value "http://web:3000/login"[22m
+
+
+       8 |   await page.getByTestId('login-password').fill(password)
+       9 |   await page.getByTestId('login-submit').click()
+    > 10 |   await expect(page).toHaveURL(/command-center/)
+         |                      ^
+      11 | }
+      12 |
+      13 | async function login(page: any) {
+        at loginAs (/repo/web/e2e/sentinel.spec.ts:10:22)
+        at /repo/web/e2e/sentinel.spec.ts:73:3
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/sentinel-viewer-cannot-ack-alerts-retry2/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results/sentinel-viewer-cannot-ack-alerts-retry2/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/sentinel-viewer-cannot-ack-alerts-retry2/error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/sentinel-viewer-cannot-ack-alerts-retry2/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/sentinel-viewer-cannot-ack-alerts-retry2/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  7) e2e/sentinel.spec.ts:86:5 › T2: filter typeahead triggers search-suggest request ──────────────
+
+    Error: [31mTimed out 5000ms waiting for [39m[2mexpect([22m[31mlocator[39m[2m).[22mtoHaveURL[2m([22m[32mexpected[39m[2m)[22m
+
+    Locator: locator(':root')
+    Expected pattern: [32m/command-center/[39m
+    Received string:  [31m"http://web:3000/login"[39m
+    Call log:
+    [2m  - Expect "toHaveURL" with timeout 5000ms[22m
+    [2m  - waiting for locator(':root')[22m
+    [2m    9 × locator resolved to <html lang="en">…</html>[22m
+    [2m      - unexpected value "http://web:3000/login"[22m
+
+
+       8 |   await page.getByTestId('login-password').fill(password)
+       9 |   await page.getByTestId('login-submit').click()
+    > 10 |   await expect(page).toHaveURL(/command-center/)
+         |                      ^
+      11 | }
+      12 |
+      13 | async function login(page: any) {
+        at loginAs (/repo/web/e2e/sentinel.spec.ts:10:22)
+        at login (/repo/web/e2e/sentinel.spec.ts:14:3)
+        at /repo/web/e2e/sentinel.spec.ts:87:3
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/sentinel-T2-filter-typeahead-triggers-search-suggest-request/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results/sentinel-T2-filter-typeahead-triggers-search-suggest-request/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/sentinel-T2-filter-typeahead-triggers-search-suggest-request/error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/sentinel-T2-filter-typeahead-triggers-search-suggest-request/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/sentinel-T2-filter-typeahead-triggers-search-suggest-request/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: [31mTimed out 5000ms waiting for [39m[2mexpect([22m[31mlocator[39m[2m).[22mtoHaveURL[2m([22m[32mexpected[39m[2m)[22m
+
+    Locator: locator(':root')
+    Expected pattern: [32m/command-center/[39m
+    Received string:  [31m"http://web:3000/login"[39m
+    Call log:
+    [2m  - Expect "toHaveURL" with timeout 5000ms[22m
+    [2m  - waiting for locator(':root')[22m
+    [2m    8 × locator resolved to <html lang="en">…</html>[22m
+    [2m      - unexpected value "http://web:3000/login"[22m
+
+
+       8 |   await page.getByTestId('login-password').fill(password)
+       9 |   await page.getByTestId('login-submit').click()
+    > 10 |   await expect(page).toHaveURL(/command-center/)
+         |                      ^
+      11 | }
+      12 |
+      13 | async function login(page: any) {
+        at loginAs (/repo/web/e2e/sentinel.spec.ts:10:22)
+        at login (/repo/web/e2e/sentinel.spec.ts:14:3)
+        at /repo/web/e2e/sentinel.spec.ts:87:3
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/sentinel-T2-filter-typeahead-triggers-search-suggest-request-retry1/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results/sentinel-T2-filter-typeahead-triggers-search-suggest-request-retry1/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/sentinel-T2-filter-typeahead-triggers-search-suggest-request-retry1/error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/sentinel-T2-filter-typeahead-triggers-search-suggest-request-retry1/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/sentinel-T2-filter-typeahead-triggers-search-suggest-request-retry1/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #2 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: [31mTimed out 5000ms waiting for [39m[2mexpect([22m[31mlocator[39m[2m).[22mtoHaveURL[2m([22m[32mexpected[39m[2m)[22m
+
+    Locator: locator(':root')
+    Expected pattern: [32m/command-center/[39m
+    Received string:  [31m"http://web:3000/login"[39m
+    Call log:
+    [2m  - Expect "toHaveURL" with timeout 5000ms[22m
+    [2m  - waiting for locator(':root')[22m
+    [2m    9 × locator resolved to <html lang="en">…</html>[22m
+    [2m      - unexpected value "http://web:3000/login"[22m
+
+
+       8 |   await page.getByTestId('login-password').fill(password)
+       9 |   await page.getByTestId('login-submit').click()
+    > 10 |   await expect(page).toHaveURL(/command-center/)
+         |                      ^
+      11 | }
+      12 |
+      13 | async function login(page: any) {
+        at loginAs (/repo/web/e2e/sentinel.spec.ts:10:22)
+        at login (/repo/web/e2e/sentinel.spec.ts:14:3)
+        at /repo/web/e2e/sentinel.spec.ts:87:3
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/sentinel-T2-filter-typeahead-triggers-search-suggest-request-retry2/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results/sentinel-T2-filter-typeahead-triggers-search-suggest-request-retry2/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/sentinel-T2-filter-typeahead-triggers-search-suggest-request-retry2/error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/sentinel-T2-filter-typeahead-triggers-search-suggest-request-retry2/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/sentinel-T2-filter-typeahead-triggers-search-suggest-request-retry2/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  8) e2e/sentinel.spec.ts:95:5 › T3: changing time window to 7d keeps page functional ──────────────
+
+    Error: [31mTimed out 5000ms waiting for [39m[2mexpect([22m[31mlocator[39m[2m).[22mtoHaveURL[2m([22m[32mexpected[39m[2m)[22m
+
+    Locator: locator(':root')
+    Expected pattern: [32m/command-center/[39m
+    Received string:  [31m"http://web:3000/login"[39m
+    Call log:
+    [2m  - Expect "toHaveURL" with timeout 5000ms[22m
+    [2m  - waiting for locator(':root')[22m
+    [2m    9 × locator resolved to <html lang="en">…</html>[22m
+    [2m      - unexpected value "http://web:3000/login"[22m
+
+
+       8 |   await page.getByTestId('login-password').fill(password)
+       9 |   await page.getByTestId('login-submit').click()
+    > 10 |   await expect(page).toHaveURL(/command-center/)
+         |                      ^
+      11 | }
+      12 |
+      13 | async function login(page: any) {
+        at loginAs (/repo/web/e2e/sentinel.spec.ts:10:22)
+        at login (/repo/web/e2e/sentinel.spec.ts:14:3)
+        at /repo/web/e2e/sentinel.spec.ts:96:3
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/sentinel-T3-changing-time-window-to-7d-keeps-page-functional/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results/sentinel-T3-changing-time-window-to-7d-keeps-page-functional/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/sentinel-T3-changing-time-window-to-7d-keeps-page-functional/error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/sentinel-T3-changing-time-window-to-7d-keeps-page-functional/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/sentinel-T3-changing-time-window-to-7d-keeps-page-functional/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: [31mTimed out 5000ms waiting for [39m[2mexpect([22m[31mlocator[39m[2m).[22mtoHaveURL[2m([22m[32mexpected[39m[2m)[22m
+
+    Locator: locator(':root')
+    Expected pattern: [32m/command-center/[39m
+    Received string:  [31m"http://web:3000/login"[39m
+    Call log:
+    [2m  - Expect "toHaveURL" with timeout 5000ms[22m
+    [2m  - waiting for locator(':root')[22m
+    [2m    9 × locator resolved to <html lang="en">…</html>[22m
+    [2m      - unexpected value "http://web:3000/login"[22m
+
+
+       8 |   await page.getByTestId('login-password').fill(password)
+       9 |   await page.getByTestId('login-submit').click()
+    > 10 |   await expect(page).toHaveURL(/command-center/)
+         |                      ^
+      11 | }
+      12 |
+      13 | async function login(page: any) {
+        at loginAs (/repo/web/e2e/sentinel.spec.ts:10:22)
+        at login (/repo/web/e2e/sentinel.spec.ts:14:3)
+        at /repo/web/e2e/sentinel.spec.ts:96:3
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/sentinel-T3-changing-time-window-to-7d-keeps-page-functional-retry1/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results/sentinel-T3-changing-time-window-to-7d-keeps-page-functional-retry1/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/sentinel-T3-changing-time-window-to-7d-keeps-page-functional-retry1/error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/sentinel-T3-changing-time-window-to-7d-keeps-page-functional-retry1/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/sentinel-T3-changing-time-window-to-7d-keeps-page-functional-retry1/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #2 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: [31mTimed out 5000ms waiting for [39m[2mexpect([22m[31mlocator[39m[2m).[22mtoHaveURL[2m([22m[32mexpected[39m[2m)[22m
+
+    Locator: locator(':root')
+    Expected pattern: [32m/command-center/[39m
+    Received string:  [31m"http://web:3000/login"[39m
+    Call log:
+    [2m  - Expect "toHaveURL" with timeout 5000ms[22m
+    [2m  - waiting for locator(':root')[22m
+    [2m    9 × locator resolved to <html lang="en">…</html>[22m
+    [2m      - unexpected value "http://web:3000/login"[22m
+
+
+       8 |   await page.getByTestId('login-password').fill(password)
+       9 |   await page.getByTestId('login-submit').click()
+    > 10 |   await expect(page).toHaveURL(/command-center/)
+         |                      ^
+      11 | }
+      12 |
+      13 | async function login(page: any) {
+        at loginAs (/repo/web/e2e/sentinel.spec.ts:10:22)
+        at login (/repo/web/e2e/sentinel.spec.ts:14:3)
+        at /repo/web/e2e/sentinel.spec.ts:96:3
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/sentinel-T3-changing-time-window-to-7d-keeps-page-functional-retry2/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results/sentinel-T3-changing-time-window-to-7d-keeps-page-functional-retry2/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/sentinel-T3-changing-time-window-to-7d-keeps-page-functional-retry2/error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/sentinel-T3-changing-time-window-to-7d-keeps-page-functional-retry2/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/sentinel-T3-changing-time-window-to-7d-keeps-page-functional-retry2/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  9) e2e/sentinel.spec.ts:103:5 › T4: candle-risk-panel renders and /scores returns data ───────────
+
+    Error: [31mTimed out 5000ms waiting for [39m[2mexpect([22m[31mlocator[39m[2m).[22mtoHaveURL[2m([22m[32mexpected[39m[2m)[22m
+
+    Locator: locator(':root')
+    Expected pattern: [32m/command-center/[39m
+    Received string:  [31m"http://web:3000/login"[39m
+    Call log:
+    [2m  - Expect "toHaveURL" with timeout 5000ms[22m
+    [2m  - waiting for locator(':root')[22m
+    [2m    9 × locator resolved to <html lang="en">…</html>[22m
+    [2m      - unexpected value "http://web:3000/login"[22m
+
+
+       8 |   await page.getByTestId('login-password').fill(password)
+       9 |   await page.getByTestId('login-submit').click()
+    > 10 |   await expect(page).toHaveURL(/command-center/)
+         |                      ^
+      11 | }
+      12 |
+      13 | async function login(page: any) {
+        at loginAs (/repo/web/e2e/sentinel.spec.ts:10:22)
+        at login (/repo/web/e2e/sentinel.spec.ts:14:3)
+        at /repo/web/e2e/sentinel.spec.ts:109:3
+
+    Error: page.waitForResponse: Test ended.
+
+      103 | test('T4: candle-risk-panel renders and /scores returns data', async ({ page }) => {
+      104 |   // Intercept the /scores proxy request before loading the page
+    > 105 |   const scoresPromise = page.waitForResponse(
+          |                              ^
+      106 |     r => r.url().includes('/proxy/query/scores') && r.status() === 200,
+      107 |     { timeout: 30000 }
+      108 |   )
+        at /repo/web/e2e/sentinel.spec.ts:105:30
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/sentinel-T4-candle-risk-pa-7920e-ers-and-scores-returns-data/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/sentinel-T4-candle-risk-pa-7920e-ers-and-scores-returns-data/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/sentinel-T4-candle-risk-pa-7920e-ers-and-scores-returns-data/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/sentinel-T4-candle-risk-pa-7920e-ers-and-scores-returns-data/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: [31mTimed out 5000ms waiting for [39m[2mexpect([22m[31mlocator[39m[2m).[22mtoHaveURL[2m([22m[32mexpected[39m[2m)[22m
+
+    Locator: locator(':root')
+    Expected pattern: [32m/command-center/[39m
+    Received string:  [31m"http://web:3000/login"[39m
+    Call log:
+    [2m  - Expect "toHaveURL" with timeout 5000ms[22m
+    [2m  - waiting for locator(':root')[22m
+    [2m    9 × locator resolved to <html lang="en">…</html>[22m
+    [2m      - unexpected value "http://web:3000/login"[22m
+
+
+       8 |   await page.getByTestId('login-password').fill(password)
+       9 |   await page.getByTestId('login-submit').click()
+    > 10 |   await expect(page).toHaveURL(/command-center/)
+         |                      ^
+      11 | }
+      12 |
+      13 | async function login(page: any) {
+        at loginAs (/repo/web/e2e/sentinel.spec.ts:10:22)
+        at login (/repo/web/e2e/sentinel.spec.ts:14:3)
+        at /repo/web/e2e/sentinel.spec.ts:109:3
+
+    Error: page.waitForResponse: Test ended.
+
+      103 | test('T4: candle-risk-panel renders and /scores returns data', async ({ page }) => {
+      104 |   // Intercept the /scores proxy request before loading the page
+    > 105 |   const scoresPromise = page.waitForResponse(
+          |                              ^
+      106 |     r => r.url().includes('/proxy/query/scores') && r.status() === 200,
+      107 |     { timeout: 30000 }
+      108 |   )
+        at /repo/web/e2e/sentinel.spec.ts:105:30
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/sentinel-T4-candle-risk-pa-7920e-ers-and-scores-returns-data-retry1/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/sentinel-T4-candle-risk-pa-7920e-ers-and-scores-returns-data-retry1/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/sentinel-T4-candle-risk-pa-7920e-ers-and-scores-returns-data-retry1/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/sentinel-T4-candle-risk-pa-7920e-ers-and-scores-returns-data-retry1/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #2 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: [31mTimed out 5000ms waiting for [39m[2mexpect([22m[31mlocator[39m[2m).[22mtoHaveURL[2m([22m[32mexpected[39m[2m)[22m
+
+    Locator: locator(':root')
+    Expected pattern: [32m/command-center/[39m
+    Received string:  [31m"http://web:3000/login"[39m
+    Call log:
+    [2m  - Expect "toHaveURL" with timeout 5000ms[22m
+    [2m  - waiting for locator(':root')[22m
+    [2m    9 × locator resolved to <html lang="en">…</html>[22m
+    [2m      - unexpected value "http://web:3000/login"[22m
+
+
+       8 |   await page.getByTestId('login-password').fill(password)
+       9 |   await page.getByTestId('login-submit').click()
+    > 10 |   await expect(page).toHaveURL(/command-center/)
+         |                      ^
+      11 | }
+      12 |
+      13 | async function login(page: any) {
+        at loginAs (/repo/web/e2e/sentinel.spec.ts:10:22)
+        at login (/repo/web/e2e/sentinel.spec.ts:14:3)
+        at /repo/web/e2e/sentinel.spec.ts:109:3
+
+    Error: page.waitForResponse: Test ended.
+
+      103 | test('T4: candle-risk-panel renders and /scores returns data', async ({ page }) => {
+      104 |   // Intercept the /scores proxy request before loading the page
+    > 105 |   const scoresPromise = page.waitForResponse(
+          |                              ^
+      106 |     r => r.url().includes('/proxy/query/scores') && r.status() === 200,
+      107 |     { timeout: 30000 }
+      108 |   )
+        at /repo/web/e2e/sentinel.spec.ts:105:30
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/sentinel-T4-candle-risk-pa-7920e-ers-and-scores-returns-data-retry2/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/sentinel-T4-candle-risk-pa-7920e-ers-and-scores-returns-data-retry2/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/sentinel-T4-candle-risk-pa-7920e-ers-and-scores-returns-data-retry2/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/sentinel-T4-candle-risk-pa-7920e-ers-and-scores-returns-data-retry2/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  9 failed
+    e2e/sentinel.spec.ts:17:5 › login works and logout clears the session ──────────────────────────
+    e2e/sentinel.spec.ts:29:5 › command center loads map and globe containers ──────────────────────
+    e2e/sentinel.spec.ts:39:5 › queue renders ranked rows after login ──────────────────────────────
+    e2e/sentinel.spec.ts:46:5 › switch locale to Arabic sets rtl html direction ────────────────────
+    e2e/sentinel.spec.ts:52:5 › SSE endpoint returns a live stream response ────────────────────────
+    e2e/sentinel.spec.ts:72:5 › viewer cannot ack alerts ───────────────────────────────────────────
+    e2e/sentinel.spec.ts:86:5 › T2: filter typeahead triggers search-suggest request ───────────────
+    e2e/sentinel.spec.ts:95:5 › T3: changing time window to 7d keeps page functional ───────────────
+    e2e/sentinel.spec.ts:103:5 › T4: candle-risk-panel renders and /scores returns data ────────────
+  1 passed (5.4m)
+

@@ -1,0 +1,139 @@
+       table_name       
+------------------------
+ alerts
+ audit_log
+ candles
+ candles_1d
+ candles_1h
+ case_actions
+ case_evidence
+ case_notes
+ cases
+ circuit_suppression
+ escalation_policies
+ features
+ forecast_snapshots
+ incident_alert_links
+ incident_notifications
+ incidents
+ instrument_metadata
+ model_deployments
+ model_registry
+ on_call_rotations
+ raw_ticks
+ replay_jobs
+ replay_runs
+ scores
+ scores_1d
+ scores_1h
+ user_preferences
+ users
+ watchlist_items
+ watchlists
+(30 rows)
+
+-- constraints --
+       table_name       |                 conname                 | contype 
+------------------------+-----------------------------------------+---------
+ alerts                 | alerts_incident_id_fkey                 | f
+ alerts                 | alerts_pkey                             | p
+ alerts                 | alerts_status_check                     | c
+ audit_log              | audit_log_pkey                          | p
+ case_actions           | case_actions_case_id_fkey               | f
+ case_actions           | case_actions_pkey                       | p
+ case_evidence          | case_evidence_case_id_fkey              | f
+ case_evidence          | case_evidence_pkey                      | p
+ case_notes             | case_notes_case_id_fkey                 | f
+ case_notes             | case_notes_pkey                         | p
+ cases                  | cases_incident_id_fkey                  | f
+ cases                  | cases_pkey                              | p
+ cases                  | cases_status_check                      | c
+ circuit_suppression    | circuit_suppression_pkey                | p
+ escalation_policies    | escalation_policies_pkey                | p
+ escalation_policies    | escalation_policies_severity_band_check | c
+ forecast_snapshots     | forecast_snapshots_pkey                 | p
+ incident_alert_links   | incident_alert_links_alert_id_fkey      | f
+ incident_alert_links   | incident_alert_links_incident_id_fkey   | f
+ incident_alert_links   | incident_alert_links_pkey               | p
+ incident_notifications | incident_notifications_incident_id_fkey | f
+ incident_notifications | incident_notifications_pkey             | p
+ incidents              | incidents_pkey                          | p
+ incidents              | incidents_status_check                  | c
+ instrument_metadata    | instrument_metadata_pkey                | p
+ model_deployments      | model_deployments_pkey                  | p
+ model_deployments      | model_deployments_status_check          | c
+ model_registry         | model_registry_model_name_key           | u
+ model_registry         | model_registry_pkey                     | p
+ on_call_rotations      | on_call_rotations_pkey                  | p
+ on_call_rotations      | on_call_rotations_policy_id_fkey        | f
+ raw_ticks              | raw_ticks_pkey                          | p
+ replay_jobs            | replay_jobs_pkey                        | p
+ replay_jobs            | replay_jobs_status_check                | c
+ replay_runs            | replay_runs_pkey                        | p
+ user_preferences       | user_preferences_pkey                   | p
+ users                  | users_email_key                         | u
+ users                  | users_pkey                              | p
+ watchlist_items        | watchlist_items_pkey                    | p
+ watchlist_items        | watchlist_items_watchlist_id_fkey       | f
+ watchlists             | watchlists_pkey                         | p
+(41 rows)
+
+-- indexes --
+       tablename        |                  indexname                  
+------------------------+---------------------------------------------
+ alerts                 | alerts_pkey
+ alerts                 | alerts_score_id_idx
+ alerts                 | idx_alerts_status_created_at
+ alerts                 | idx_alerts_symbol_created_at
+ audit_log              | audit_log_pkey
+ audit_log              | idx_audit_created_at
+ candles                | candles_bucket_idx
+ candles                | candles_id_idx
+ candles                | candles_idempotency_bucket_uq
+ candles                | idx_candles_symbol_bucket_interval
+ case_actions           | case_actions_pkey
+ case_evidence          | case_evidence_pkey
+ case_notes             | case_notes_pkey
+ cases                  | cases_pkey
+ circuit_suppression    | circuit_suppression_pkey
+ escalation_policies    | escalation_policies_pkey
+ escalation_policies    | idx_escalation_policies_severity
+ features               | features_id_idx
+ features               | features_idempotency_ts_uq
+ features               | features_ts_idx
+ features               | idx_features_symbol_ts
+ forecast_snapshots     | forecast_snapshots_pkey
+ forecast_snapshots     | idx_forecast_snapshots_generated_at
+ incident_alert_links   | incident_alert_links_pkey
+ incident_notifications | idx_incident_notifications_incident_created
+ incident_notifications | incident_notifications_pkey
+ incidents              | idx_incidents_queue
+ incidents              | idx_incidents_symbol_time
+ incidents              | incidents_pkey
+ instrument_metadata    | idx_instrument_metadata_geo
+ instrument_metadata    | instrument_metadata_pkey
+ model_deployments      | idx_model_deployments_status
+ model_deployments      | model_deployments_pkey
+ model_registry         | model_registry_model_name_key
+ model_registry         | model_registry_pkey
+ on_call_rotations      | idx_on_call_rotations_name
+ on_call_rotations      | on_call_rotations_pkey
+ raw_ticks              | raw_ticks_pkey
+ replay_jobs            | idx_replay_jobs_status_req
+ replay_jobs            | replay_jobs_pkey
+ replay_runs            | replay_runs_pkey
+ scores                 | idx_scores_artifact_hash
+ scores                 | idx_scores_model_version
+ scores                 | idx_scores_produced_at_desc
+ scores                 | idx_scores_scoring_run_id
+ scores                 | idx_scores_symbol_ts
+ scores                 | scores_id_idx
+ scores                 | scores_idempotency_ts_uq
+ scores                 | scores_ts_idx
+ user_preferences       | user_preferences_pkey
+ users                  | users_email_key
+ users                  | users_pkey
+ watchlist_items        | watchlist_items_pkey
+ watchlists             | watchlists_pkey
+(54 rows)
+

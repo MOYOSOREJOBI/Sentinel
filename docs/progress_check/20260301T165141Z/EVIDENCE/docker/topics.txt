@@ -1,0 +1,17 @@
+NAME              PARTITIONS  REPLICAS
+alerts.created    3           1
+derived.candles   3           1
+derived.features  3           1
+derived.scores    3           1
+dlq.aggregator    3           1
+dlq.alerts        3           1
+dlq.features      3           1
+dlq.inference     3           1
+dq.metrics        3           1
+raw.ticks         3           1
+-- groups --
+BROKER  GROUP
+0       aggregator
+0       alerts
+0       features
+0       inference

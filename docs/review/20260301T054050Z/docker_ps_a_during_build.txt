@@ -1,0 +1,17 @@
+blissful_jang	Up 7 hours
+docker-aggregator-1	Up 3 minutes (healthy)
+docker-alerts-1	Up 3 minutes (healthy)
+docker-features-1	Up 3 minutes (healthy)
+docker-gateway-api-1	Up 3 minutes (healthy)
+docker-governance-1	Up 3 minutes (healthy)
+docker-grafana-1	Up 3 minutes
+docker-inference-1	Up 3 minutes (healthy)
+docker-migrate-1	Exited (0) 3 minutes ago
+docker-postgres-1	Up 3 minutes (healthy)
+docker-prometheus-1	Up 3 minutes
+docker-query-1	Up 3 minutes (healthy)
+docker-redis-1	Up 3 minutes (healthy)
+docker-redpanda-1	Up 3 minutes (healthy)
+docker-simulator-1	Up 3 minutes (healthy)
+docker-topics-init-1	Exited (0) 3 minutes ago
+docker-web-1	Up 3 minutes (healthy)

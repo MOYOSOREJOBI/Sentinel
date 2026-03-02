@@ -1,0 +1,33 @@
+# HELP inference_scoring_latency_seconds End-to-end scoring latency per message
+# TYPE inference_scoring_latency_seconds histogram
+inference_scoring_latency_seconds_bucket{le="0.001"} 110407.0
+inference_scoring_latency_seconds_bucket{le="0.005"} 111229.0
+inference_scoring_latency_seconds_bucket{le="0.01"} 111249.0
+inference_scoring_latency_seconds_bucket{le="0.025"} 111261.0
+inference_scoring_latency_seconds_bucket{le="0.05"} 111263.0
+inference_scoring_latency_seconds_bucket{le="0.1"} 111264.0
+inference_scoring_latency_seconds_bucket{le="0.25"} 111264.0
+inference_scoring_latency_seconds_bucket{le="0.5"} 111264.0
+inference_scoring_latency_seconds_bucket{le="1.0"} 111264.0
+inference_scoring_latency_seconds_bucket{le="2.5"} 111264.0
+inference_scoring_latency_seconds_bucket{le="+Inf"} 111264.0
+inference_scoring_latency_seconds_count 111264.0
+inference_scoring_latency_seconds_sum 32.66114258766174
+# HELP inference_scoring_latency_seconds_created End-to-end scoring latency per message
+# TYPE inference_scoring_latency_seconds_created gauge
+inference_scoring_latency_seconds_created 1.7723515438712602e+09
+# HELP inference_fallback_mode Whether inference is currently using deterministic fallback scoring
+# TYPE inference_fallback_mode gauge
+inference_fallback_mode 0.0
+# HELP inference_escalation_auc Escalation model ROC AUC from the active bundle
+# TYPE inference_escalation_auc gauge
+inference_escalation_auc 0.675797
+# HELP inference_escalation_brier Escalation model Brier score from the active bundle
+# TYPE inference_escalation_brier gauge
+inference_escalation_brier 0.011114
+# HELP inference_escalation_pr_auc Escalation model PR-AUC from the active bundle
+# TYPE inference_escalation_pr_auc gauge
+inference_escalation_pr_auc 0.017884
+# HELP inference_anomaly_stability_score Stability score for the active anomaly model bundle
+# TYPE inference_anomaly_stability_score gauge
+inference_anomaly_stability_score 0.837725

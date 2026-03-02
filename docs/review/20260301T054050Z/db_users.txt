@@ -1,0 +1,9 @@
+ users_count 
+-------------
+           0
+(1 row)
+
+ email | role 
+-------+------
+(0 rows)
+

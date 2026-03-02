@@ -1,0 +1,40 @@
+680M	.
+637M	./web
+518M	./web/node_modules
+288M	./web/node_modules/@next
+160M	./web/node_modules/@next/swc-linux-x64-musl/next-swc.linux-x64-musl.node
+160M	./web/node_modules/@next/swc-linux-x64-musl
+128M	./web/node_modules/@next/swc-linux-x64-gnu/next-swc.linux-x64-gnu.node
+128M	./web/node_modules/@next/swc-linux-x64-gnu
+118M	./web/.next
+100M	./web/node_modules/next
+ 99M	./web/node_modules/next/dist
+ 94M	./web/.next/cache/webpack
+ 94M	./web/.next/cache
+ 64M	./web/node_modules/next/dist/compiled
+ 30M	./web/.next/cache/webpack/client-development
+ 29M	./web/.next/cache/webpack/client-production
+ 27M	./web/node_modules/three
+ 21M	./web/node_modules/typescript/lib
+ 21M	./web/node_modules/typescript
+ 19M	./alerts
+ 18M	./web/node_modules/next/dist/compiled/next-server
+ 17M	./web/.next/static
+ 16M	./web/node_modules/three/examples
+ 16M	./web/.next/static/chunks
+ 16M	./web/.next/cache/webpack/server-production
+ 15M	./query
+ 13M	./web/node_modules/three/examples/jsm
+ 12M	./web/node_modules/next/dist/server
+ 12M	./web/node_modules/next/dist/esm
+ 11M	./web/node_modules/next/dist/compiled/react-dom-experimental/cjs
+ 11M	./web/node_modules/next/dist/compiled/react-dom-experimental
+ 11M	./web/.next/cache/webpack/client-development-fallback/0.pack.gz
+ 11M	./web/.next/cache/webpack/client-development-fallback
+ 10M	./web/.next/cache/webpack/client-production/0.pack
+9.5M	./web/node_modules/three/examples/jsm/libs
+9.1M	./web/.next/cache/webpack/client-development/8.pack.gz
+8.5M	./web/node_modules/typescript/lib/typescript.js
+8.3M	./web/node_modules/playwright-core
+8.2M	./web/.next/cache/webpack/server-development
+7.9M	./web/node_modules/next/dist/compiled/react-dom/cjs

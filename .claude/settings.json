@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npx next lint --dir app --dir components --dir lib)",
+      "Bash(npm run lint)"
+    ]
+  }
+}

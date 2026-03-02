@@ -1,0 +1,10 @@
+HTTP/1.1 200 OK
+Cache-Control: no-store
+X-Content-Type-Options: nosniff
+X-Frame-Options: deny
+X-Xss-Protection: 1; mode=block
+Date: Sun, 01 Mar 2026 17:38:21 GMT
+Content-Length: 2
+Content-Type: text/plain; charset=utf-8
+
+Ok

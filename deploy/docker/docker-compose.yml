@@ -1,0 +1,270 @@
+services:
+  redpanda:
+    image: redpandadata/redpanda:v24.1.10
+    command: ["redpanda","start","--overprovisioned","--smp","1","--memory","1G","--reserve-memory","0M","--node-id","0","--check=false","--kafka-addr","PLAINTEXT://0.0.0.0:9092","--advertise-kafka-addr","PLAINTEXT://redpanda:9092"]
+    ports: ["9092:9092"]
+    healthcheck:
+      test: ["CMD","rpk","cluster","info"]
+      interval: 5s
+      timeout: 3s
+      retries: 30
+
+  postgres:
+    image: timescale/timescaledb:2.15.1-pg16
+    environment: {POSTGRES_DB: sentinel, POSTGRES_USER: sentinel, POSTGRES_PASSWORD: sentinel}
+    ports: ["5432:5432"]
+    healthcheck:
+      test: ["CMD-SHELL","pg_isready -U sentinel -d sentinel"]
+      interval: 5s
+      timeout: 3s
+      retries: 30
+
+  redis:
+    image: redis:7
+    ports: ["6379:6379"]
+    healthcheck:
+      test: ["CMD","redis-cli","ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 30
+
+  memcached:
+    image: memcached:1.6
+    profiles: ["optional-cache"]
+    ports: ["11211:11211"]
+
+  migrate:
+    image: timescale/timescaledb:2.15.1-pg16
+    restart: "no"
+    volumes: ["../../sql/migrations:/migrations:ro"]
+    depends_on:
+      postgres: {condition: service_healthy}
+    entrypoint:
+      - /bin/bash
+      - -ec
+      - |
+        for i in $(seq 1 30); do
+          if psql postgresql://sentinel:sentinel@postgres:5432/sentinel?sslmode=disable -c 'select 1' >/dev/null 2>&1; then
+            break
+          fi
+          if [ "$$i" -eq 30 ]; then
+            echo "postgres not ready for migrations" >&2
+            exit 1
+          fi
+          sleep 2
+        done
+        for f in /migrations/*.sql; do
+          echo "Applying $$f"
+          if grep -q '^-- +goose Up' "$$f"; then
+            awk '
+              /^-- \+goose Up/ {in_up=1; next}
+              /^-- \+goose Down/ {in_up=0}
+              in_up {print}
+            ' "$$f" | psql postgresql://sentinel:sentinel@postgres:5432/sentinel?sslmode=disable -v ON_ERROR_STOP=1 -f -
+          else
+            psql postgresql://sentinel:sentinel@postgres:5432/sentinel?sslmode=disable -v ON_ERROR_STOP=1 -f "$$f"
+          fi
+        done
+  topics-init:
+    image: redpandadata/redpanda:v24.1.10
+    restart: "no"
+    depends_on:
+      redpanda: {condition: service_healthy}
+    entrypoint:
+      - /bin/bash
+      - -ec
+      - |
+        topics="raw.ticks derived.candles derived.features derived.scores alerts.created dq.metrics dlq.aggregator dlq.features dlq.inference dlq.alerts"
+        for t in $$topics; do
+          rpk topic create "$$t" --brokers redpanda:9092 --partitions 3 --replicas 1 || true
+        done
+        for t in $$topics; do
+          rpk topic describe "$$t" --brokers redpanda:9092 >/dev/null
+        done
+  gateway-api:
+    build: {context: ../.., dockerfile: deploy/docker/Dockerfile-go, args: {SERVICE: gateway-api}}
+    environment: [APP_ENV=local,HTTP_ADDR=:8080,POSTGRES_URL=postgres://sentinel:sentinel@postgres:5432/sentinel?sslmode=disable,KAFKA_BROKER=redpanda:9092,JWT_PRIVATE_KEY=/app/keys/jwtRS256.key,JWT_PUBLIC_KEY=/app/keys/jwtRS256.key.pub]
+    ports: ["8080:8080"]
+    depends_on:
+      migrate: {condition: service_completed_successfully}
+      topics-init: {condition: service_completed_successfully}
+      postgres: {condition: service_healthy}
+      redpanda: {condition: service_healthy}
+      redis: {condition: service_healthy}
+    healthcheck:
+      test: ["CMD", "/app/service", "healthcheck"]
+      interval: 5s
+      timeout: 2s
+      retries: 24
+      start_period: 10s
+
+  simulator:
+    build: {context: ../.., dockerfile: deploy/docker/Dockerfile-go, args: {SERVICE: simulator}}
+    environment: [HTTP_ADDR=:8086,KAFKA_BROKER=redpanda:9092,SIM_INTERVAL_MS=500,SIM_ANOMALY_EVERY=40]
+    depends_on:
+      topics-init: {condition: service_completed_successfully}
+      redpanda: {condition: service_healthy}
+    healthcheck:
+      test: ["CMD", "/app/service", "healthcheck"]
+      interval: 5s
+      timeout: 2s
+      retries: 24
+      start_period: 10s
+
+  aggregator:
+    build: {context: ../.., dockerfile: deploy/docker/Dockerfile-go, args: {SERVICE: aggregator}}
+    environment: [HTTP_ADDR=:8081,POSTGRES_URL=postgres://sentinel:sentinel@postgres:5432/sentinel?sslmode=disable,KAFKA_BROKER=redpanda:9092]
+    ports: ["8081:8081"]
+    depends_on:
+      migrate: {condition: service_completed_successfully}
+      topics-init: {condition: service_completed_successfully}
+      postgres: {condition: service_healthy}
+      redpanda: {condition: service_healthy}
+      redis: {condition: service_healthy}
+    healthcheck:
+      test: ["CMD", "/app/service", "healthcheck"]
+      interval: 5s
+      timeout: 2s
+      retries: 24
+      start_period: 10s
+
+  features:
+    build: {context: ../.., dockerfile: deploy/docker/Dockerfile-go, args: {SERVICE: features}}
+    environment: [HTTP_ADDR=:8082,POSTGRES_URL=postgres://sentinel:sentinel@postgres:5432/sentinel?sslmode=disable,KAFKA_BROKER=redpanda:9092]
+    ports: ["8082:8082"]
+    depends_on:
+      migrate: {condition: service_completed_successfully}
+      topics-init: {condition: service_completed_successfully}
+      postgres: {condition: service_healthy}
+      redpanda: {condition: service_healthy}
+      redis: {condition: service_healthy}
+    healthcheck:
+      test: ["CMD", "/app/service", "healthcheck"]
+      interval: 5s
+      timeout: 2s
+      retries: 24
+      start_period: 10s
+
+  inference:
+    build: {context: ../.., dockerfile: deploy/docker/Dockerfile.inference}
+    environment: [KAFKA_BROKER=redpanda:9092]
+    ports: ["8090:8090"]
+    depends_on:
+      topics-init: {condition: service_completed_successfully}
+    healthcheck:
+      test: ["CMD-SHELL", "python -c \"import urllib.request; urllib.request.urlopen('http://localhost:8090/healthz')\""]
+      interval: 5s
+      timeout: 3s
+      retries: 30
+
+  alerts:
+    build: {context: ../.., dockerfile: deploy/docker/Dockerfile-go, args: {SERVICE: alerts}}
+    environment: [HTTP_ADDR=:8083,POSTGRES_URL=postgres://sentinel:sentinel@postgres:5432/sentinel?sslmode=disable,KAFKA_BROKER=redpanda:9092,JWT_PUBLIC_KEY=/app/keys/jwtRS256.key.pub]
+    ports: ["8083:8083"]
+    depends_on:
+      migrate: {condition: service_completed_successfully}
+      topics-init: {condition: service_completed_successfully}
+      postgres: {condition: service_healthy}
+      redpanda: {condition: service_healthy}
+      redis: {condition: service_healthy}
+    healthcheck:
+      test: ["CMD", "/app/service", "healthcheck"]
+      interval: 5s
+      timeout: 2s
+      retries: 24
+      start_period: 10s
+
+  governance:
+    build: {context: ../.., dockerfile: deploy/docker/Dockerfile-go, args: {SERVICE: governance}}
+    environment: [HTTP_ADDR=:8084,POSTGRES_URL=postgres://sentinel:sentinel@postgres:5432/sentinel?sslmode=disable,JWT_PUBLIC_KEY=/app/keys/jwtRS256.key.pub]
+    ports: ["8084:8084"]
+    depends_on:
+      migrate: {condition: service_completed_successfully}
+      postgres: {condition: service_healthy}
+    healthcheck:
+      test: ["CMD", "/app/service", "healthcheck"]
+      interval: 5s
+      timeout: 2s
+      retries: 24
+      start_period: 10s
+
+  query:
+    build: {context: ../.., dockerfile: deploy/docker/Dockerfile-go, args: {SERVICE: query}}
+    environment: [HTTP_ADDR=:8085,POSTGRES_URL=postgres://sentinel:sentinel@postgres:5432/sentinel?sslmode=disable]
+    ports: ["8085:8085"]
+    depends_on:
+      migrate: {condition: service_completed_successfully}
+      postgres: {condition: service_healthy}
+    healthcheck:
+      test: ["CMD", "/app/service", "healthcheck"]
+      interval: 5s
+      timeout: 2s
+      retries: 24
+      start_period: 10s
+
+  web:
+    image: node:20-alpine
+    working_dir: /app/web
+    volumes: ["../../:/app"]
+    environment:
+      [
+        NODE_ENV=development,
+        NEXT_TELEMETRY_DISABLED=1,
+        SENTINEL_UPSTREAM_MODE=compose,
+        UPSTREAM_GATEWAY=http://gateway-api:8080,
+        UPSTREAM_GATEWAY_API=http://gateway-api:8080,
+        UPSTREAM_QUERY=http://query:8085,
+        UPSTREAM_ALERTS=http://alerts:8083,
+        UPSTREAM_GOVERNANCE=http://governance:8084,
+        API_QUERY=http://query:8085,
+        API_ALERTS=http://alerts:8083,
+        API_GATEWAY=http://gateway-api:8080
+      ]
+    command: sh -c "npm install --prefer-offline && npm run dev"
+    ports: ["3000:3000"]
+    depends_on:
+      gateway-api: {condition: service_healthy}
+      query: {condition: service_healthy}
+    healthcheck:
+      test: ["CMD", "node", "-e", "fetch('http://127.0.0.1:3000/').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"]
+      interval: 5s
+      timeout: 4s
+      retries: 30
+      start_period: 20s
+
+  playwright:
+    image: mcr.microsoft.com/playwright:v1.53.0-noble
+    profiles: ["e2e"]
+    working_dir: /repo/web
+    volumes:
+      - ../..:/repo
+    environment:
+      CI: "1"
+      PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: "1"
+      npm_config_registry: "https://registry.npmjs.org/"
+      E2E_BASE_URL: "http://web:3000"
+    depends_on:
+      web:
+        condition: service_healthy
+    entrypoint: ["bash","-lc"]
+    command: ["npm ci && npx playwright test"]
+
+  prometheus:
+    image: prom/prometheus:v2.54.1
+    volumes:
+      - ../../prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - ../../prometheus/alert_rules.yml:/etc/prometheus/alert_rules.yml:ro
+    ports: ["9090:9090"]
+
+  grafana:
+    image: grafana/grafana:11.1.4
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=sentinel
+      - GF_AUTH_ANONYMOUS_ENABLED=true
+      - GF_AUTH_ANONYMOUS_ORG_ROLE=Viewer
+    volumes:
+      - "../../grafana/sentinel-dashboard.json:/var/lib/grafana/dashboards/sentinel-dashboard.json:ro"
+      - "../../grafana/provisioning/datasources:/etc/grafana/provisioning/datasources:ro"
+      - "../../grafana/provisioning/dashboards:/etc/grafana/provisioning/dashboards:ro"
+      - "../../grafana/dashboards:/var/lib/grafana/dashboards:ro"
+    ports: ["3001:3000"]

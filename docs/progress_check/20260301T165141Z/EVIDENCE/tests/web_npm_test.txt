@@ -1,0 +1,37 @@
+
+> sentinel-web@0.1.0 test
+> rm -rf .tmp-tests && tsc -p tests/tsconfig.json && node --test .tmp-tests/tests/*.test.js .tmp-tests/tests/**/*.test.js --runInBand
+
+✔ command center renders analytics containers (11.95972ms)
+✔ queue renders recommended actions and priority (0.774269ms)
+✔ incident page renders model and explanation sections and case promotion (0.651056ms)
+✔ case workspace and detail show role-gated workflow (1.429166ms)
+✔ trust page renders trend containers (0.667732ms)
+✔ replay page labels metadata-first mode and deterministic timeline (0.552629ms)
+✔ governance executive about and glossary pages are productized (9.702775ms)
+✔ TrustStrip renders fallback honesty (21.52802ms)
+✔ WorldRiskMap renders legend and empty state scaffolding (12.280684ms)
+✔ role-gated tabs are enforced by role mapping (49.941112ms)
+✔ score summary counts high and critical severities (93.738974ms)
+✔ degraded state component exists (76.863272ms)
+✔ governance page has no JSON dump pre block (8.343061ms)
+✔ layout renders html shell and child content (20.617839ms)
+✔ filterAlerts applies severity status and symbol filters (12.440155ms)
+✔ groupAlerts groups by status and symbol (0.563265ms)
+✔ normalizeAlertCreatedAt prefers created_at and falls back to ts (6.159616ms)
+✔ i18n dictionary provides translated navigation labels (5.329114ms)
+✔ percentile returns bounded value (13.849406ms)
+✔ deriveQuantMetrics computes meaningful positive values (2.013031ms)
+✔ role-gated tabs are enforced by role mapping (15.541403ms)
+✔ capabilities are strictly separated by role (1.243962ms)
+✔ upsert replaces matching row only (24.466257ms)
+✔ governance page retains admin gating text (4.724611ms)
+✔ world map has click binding for filters (7.238269ms)
+ℹ tests 25
+ℹ suites 0
+ℹ pass 25
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1334.470348

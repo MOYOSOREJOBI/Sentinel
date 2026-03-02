@@ -1,0 +1,8 @@
+HTTP/1.1 302 Found
+Content-Type: text/html; charset=utf-8
+Location: /graph
+Date: Sun, 01 Mar 2026 17:38:21 GMT
+Content-Length: 29
+
+<a href="/graph">Found</a>.
+

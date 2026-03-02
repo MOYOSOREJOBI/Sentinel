@@ -1,0 +1,8 @@
+HTTP/1.1 403 Forbidden
+Content-Type: text/plain; charset=utf-8
+X-Content-Type-Options: nosniff
+X-Request-Id: 1c7365f818761bed
+Date: Sun, 01 Mar 2026 18:13:13 GMT
+Content-Length: 10
+
+forbidden

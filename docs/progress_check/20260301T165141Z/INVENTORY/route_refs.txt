@@ -1,0 +1,124 @@
+cmd/aggregator/main.go:21:	"sentinel/internal/metrics"
+cmd/aggregator/main.go:37:		os.Exit(healthcheck.Run(port, "/readyz"))
+cmd/aggregator/main.go:64:	mux.HandleFunc("/healthz", func(w http.ResponseWriter, r *http.Request) { w.Write([]byte("ok")) })
+cmd/aggregator/main.go:67:		_, _ = w.Write([]byte(`{"service":"aggregator","version":"dev","links":["/healthz","/readyz","/metrics","/docs"]}`))
+cmd/aggregator/main.go:69:	mux.HandleFunc("/readyz", func(w http.ResponseWriter, r *http.Request) {
+cmd/aggregator/main.go:86:	mux.HandleFunc("/metrics", metrics.Handler)
+cmd/gateway-api/main.go:27:	"sentinel/internal/metrics"
+cmd/gateway-api/main.go:34:		os.Exit(healthcheck.Run(port, "/readyz"))
+cmd/gateway-api/main.go:59:	r.Get("/healthz", func(w http.ResponseWriter, r *http.Request) { _, _ = w.Write([]byte("ok")) })
+cmd/gateway-api/main.go:60:	r.Get("/", func(w http.ResponseWriter, r *http.Request) {
+cmd/gateway-api/main.go:65:				"healthz": "/healthz",
+cmd/gateway-api/main.go:66:				"readyz":  "/readyz",
+cmd/gateway-api/main.go:67:				"metrics": "/metrics",
+cmd/gateway-api/main.go:72:	r.Get("/readyz", func(w http.ResponseWriter, r *http.Request) {
+cmd/gateway-api/main.go:79:	r.Get("/metrics", metrics.Handler)
+cmd/gateway-api/main.go:128:	r.Get("/me", func(w http.ResponseWriter, r *http.Request) {
+cmd/gateway-api/main.go:150:	if xff := strings.TrimSpace(r.Header.Get("X-Forwarded-For")); xff != "" {
+cmd/gateway-api/main.go:183:		raw, ok, err := loginRedis.Get(context.Background(), key)
+cmd/gateway-api/main.go:238:	if strings.EqualFold(strings.TrimSpace(r.Header.Get("X-Forwarded-Proto")), "http") {
+cmd/gateway-api/main.go:241:	host := strings.TrimSpace(r.Header.Get("X-Forwarded-Host"))
+cmd/governance/main.go:28:	"sentinel/internal/metrics"
+cmd/governance/main.go:36:		os.Exit(healthcheck.Run(port, "/readyz"))
+cmd/governance/main.go:64:	r.Get("/healthz", func(w http.ResponseWriter, r *http.Request) { w.Write([]byte("ok")) })
+cmd/governance/main.go:65:	r.Get("/", func(w http.ResponseWriter, r *http.Request) {
+cmd/governance/main.go:70:				"healthz": "/healthz",
+cmd/governance/main.go:71:				"readyz":  "/readyz",
+cmd/governance/main.go:72:				"metrics": "/metrics",
+cmd/governance/main.go:77:	r.Get("/readyz", readinessHandler(pool))
+cmd/governance/main.go:83:	read.Get("/active-models", func(w http.ResponseWriter, r *http.Request) {
+cmd/governance/main.go:113:	r.Get("/metrics", metrics.Handler)
+cmd/governance/main.go:114:	read.Get("/audit/verify", func(w http.ResponseWriter, r *http.Request) {
+cmd/governance/main.go:192:	read.Get("/models", func(w http.ResponseWriter, r *http.Request) {
+cmd/governance/main.go:213:	read.Get("/escalation-policies", func(w http.ResponseWriter, r *http.Request) {
+cmd/governance/main.go:280:	read.Get("/on-call", func(w http.ResponseWriter, r *http.Request) {
+cmd/governance/main.go:297:	read.Get("/current-oncall", func(w http.ResponseWriter, r *http.Request) {
+cmd/governance/main.go:456:		if authzHeader := r.Header.Get("Authorization"); len(authzHeader) > 7 {
+cmd/query/main.go:25:	"sentinel/internal/metrics"
+cmd/query/main.go:83:		os.Exit(healthcheck.Run(port, "/readyz"))
+cmd/query/main.go:107:	r.Get("/healthz", func(w http.ResponseWriter, r *http.Request) { _, _ = w.Write([]byte("ok")) })
+cmd/query/main.go:108:	r.Get("/", func(w http.ResponseWriter, r *http.Request) {
+cmd/query/main.go:113:				"healthz": "/healthz",
+cmd/query/main.go:114:				"readyz":  "/readyz",
+cmd/query/main.go:115:				"metrics": "/metrics",
+cmd/query/main.go:120:	r.Get("/readyz", func(w http.ResponseWriter, r *http.Request) {
+cmd/query/main.go:127:	r.Get("/metrics", metrics.Handler)
+cmd/query/main.go:135:	r.With(authz.RequirePerm(pub, "read")).Get("/debug/seed-status", debugHandler)
+cmd/query/main.go:139:		pr.Get("/queue", func(w http.ResponseWriter, r *http.Request) {
+cmd/query/main.go:152:		pr.Get("/command-center", func(w http.ResponseWriter, r *http.Request) {
+cmd/query/main.go:165:		pr.Get("/feed", func(w http.ResponseWriter, r *http.Request) {
+cmd/query/main.go:167:			limit := parseFeedLimit(r.URL.Query().Get("limit"), 40, 200)
+cmd/query/main.go:168:			offset := parseFeedLimit(r.URL.Query().Get("offset"), 0, 10000)
+cmd/query/main.go:169:			mode := r.URL.Query().Get("mode")
+cmd/query/main.go:200:		pr.Get("/search-suggest", func(w http.ResponseWriter, r *http.Request) {
+cmd/query/main.go:201:			q := strings.TrimSpace(r.URL.Query().Get("q"))
+cmd/query/main.go:202:			kindFilter := strings.ToLower(strings.TrimSpace(r.URL.Query().Get("k")))
+cmd/query/main.go:203:			limit := parseFeedLimit(r.URL.Query().Get("limit"), 12, 40)
+cmd/query/main.go:300:		pr.Get("/trust", func(w http.ResponseWriter, r *http.Request) {
+cmd/query/main.go:312:		pr.Get("/world-map", func(w http.ResponseWriter, r *http.Request) {
+cmd/query/main.go:324:		pr.Get("/executive-summary", func(w http.ResponseWriter, r *http.Request) {
+cmd/query/main.go:386:		pr.Get("/governance/summary", func(w http.ResponseWriter, r *http.Request) {
+cmd/query/main.go:414:		pr.Get("/replay/{job}", func(w http.ResponseWriter, r *http.Request) {
+cmd/query/main.go:425:			selectedMode := normalizeReplayViewMode(r.URL.Query().Get("mode"))
+cmd/query/main.go:437:		pr.Get("/incident/{id}", func(w http.ResponseWriter, r *http.Request) {
+cmd/query/main.go:451:		pr.Get("/incident/{id}/brief", func(w http.ResponseWriter, r *http.Request) {
+cmd/query/main.go:472:			if strings.EqualFold(r.URL.Query().Get("format"), "md") {
+cmd/query/main.go:479:		pr.Get("/cases", func(w http.ResponseWriter, r *http.Request) {
+cmd/query/main.go:497:		pr.Get("/case/{id}", func(w http.ResponseWriter, r *http.Request) {
+cmd/query/main.go:509:		pr.Get("/scores", func(w http.ResponseWriter, r *http.Request) {
+cmd/query/main.go:510:			symbol := strings.TrimSpace(r.URL.Query().Get("symbol"))
+cmd/query/main.go:511:			window := normalizeWindow(r.URL.Query().Get("window"))
+cmd/query/main.go:515:			maxPoints := parseFeedLimit(r.URL.Query().Get("maxPoints"), 300, 1000)
+cmd/query/main.go:528:		pr.Get("/candles", func(w http.ResponseWriter, r *http.Request) {
+cmd/query/main.go:529:			symbol := strings.TrimSpace(r.URL.Query().Get("symbol"))
+cmd/query/main.go:530:			window := normalizeWindow(r.URL.Query().Get("window"))
+cmd/query/main.go:531:			res := strings.TrimSpace(r.URL.Query().Get("res"))
+cmd/query/main.go:538:			maxPoints := parseFeedLimit(r.URL.Query().Get("maxPoints"), 300, 1000)
+cmd/query/main.go:552:		pr.Get("/forecast", func(w http.ResponseWriter, r *http.Request) {
+cmd/query/main.go:569:		pr.Get("/stream/queue", sseStream(func(ctx context.Context) any {
+cmd/query/main.go:577:		pr.Get("/stream/command-center", sseStream(func(ctx context.Context) any {
+cmd/query/main.go:581:		pr.Get("/stream/trust", sseStream(func(ctx context.Context) any {
+cmd/query/main.go:630:	tw := normalizeWindow(q.Get("window"))
+cmd/query/main.go:632:		tw = normalizeWindow(q.Get("time_window"))
+cmd/query/main.go:637:	from, _ := time.Parse(time.RFC3339, q.Get("from"))
+cmd/query/main.go:638:	to, _ := time.Parse(time.RFC3339, q.Get("to"))
+cmd/query/main.go:639:	country := q.Get("countryCode")
+cmd/query/main.go:641:		country = q.Get("country")
+cmd/query/main.go:643:	return filters{Window: tw, From: from, To: to, CountryCode: country, Region: q.Get("region"), Sector: q.Get("sector"), Industry: q.Get("industry"), Venue: q.Get("venue"), Symbol: q.Get("symbol"), Locale: q.Get("locale")}
+cmd/simulator/main.go:21:	"sentinel/internal/metrics"
+cmd/simulator/main.go:27:		os.Exit(healthcheck.Run(port, "/readyz"))
+cmd/simulator/main.go:62:	mux.HandleFunc("/healthz", func(w http.ResponseWriter, r *http.Request) { _, _ = w.Write([]byte("ok")) })
+cmd/simulator/main.go:65:		_, _ = w.Write([]byte(`{"service":"simulator","version":"dev","links":["/healthz","/readyz","/metrics","/docs"]}`))
+cmd/simulator/main.go:67:	mux.HandleFunc("/readyz", func(w http.ResponseWriter, r *http.Request) {
+cmd/simulator/main.go:76:	mux.HandleFunc("/metrics", metrics.Handler)
+cmd/governance/readiness_test.go:17:	h.ServeHTTP(rr, httptest.NewRequest(http.MethodGet, "/readyz", nil))
+cmd/governance/readiness_test.go:26:	h.ServeHTTP(rr, httptest.NewRequest(http.MethodGet, "/readyz", nil))
+cmd/features/main.go:22:	"sentinel/internal/metrics"
+cmd/features/main.go:67:		os.Exit(healthcheck.Run(port, "/readyz"))
+cmd/features/main.go:101:	mux.HandleFunc("/healthz", func(w http.ResponseWriter, r *http.Request) { _, _ = w.Write([]byte("ok")) })
+cmd/features/main.go:104:		_, _ = w.Write([]byte(`{"service":"features","version":"dev","links":["/healthz","/readyz","/metrics","/docs"]}`))
+cmd/features/main.go:106:	mux.HandleFunc("/readyz", func(w http.ResponseWriter, r *http.Request) {
+cmd/features/main.go:123:	mux.HandleFunc("/metrics", metrics.Handler)
+services/inference/tests/test_readyz.py:13:            resp = self.client.get('/readyz')
+services/inference/tests/test_readyz.py:18:            resp = self.client.get('/readyz')
+services/inference/tests/test_health.py:11:        resp = self.client.get('/healthz')
+services/inference/test_app.py:11:        resp = self.client.get('/metrics')
+cmd/alerts/main.go:31:	"sentinel/internal/metrics"
+cmd/alerts/main.go:45:		os.Exit(healthcheck.Run(port, "/readyz"))
+cmd/alerts/main.go:82:	r.Get("/healthz", func(w http.ResponseWriter, r *http.Request) { w.Write([]byte("ok")) })
+cmd/alerts/main.go:83:	r.Get("/", func(w http.ResponseWriter, r *http.Request) {
+cmd/alerts/main.go:88:				"healthz": "/healthz",
+cmd/alerts/main.go:89:				"readyz":  "/readyz",
+cmd/alerts/main.go:90:				"metrics": "/metrics",
+cmd/alerts/main.go:95:	r.Get("/readyz", func(w http.ResponseWriter, r *http.Request) {
+cmd/alerts/main.go:113:	r.Get("/metrics", metrics.Handler)
+cmd/alerts/main.go:114:	r.With(authz.RequirePerm(pub, "read")).Get("/sse/alerts", sse)
+cmd/alerts/main.go:219:	read.Get("/cases", func(w http.ResponseWriter, r *http.Request) {
+cmd/alerts/main.go:237:	read.Get("/notifications", func(w http.ResponseWriter, r *http.Request) {
+cmd/alerts/main.go:257:	read.Get("/cases/{id}", func(w http.ResponseWriter, r *http.Request) {
+cmd/alerts/main.go:611:		if authzHeader := r.Header.Get("Authorization"); authzHeader != "" {
+services/inference/app.py:246:@app.get("/")
+services/inference/app.py:248:    return jsonify({"service": "inference", "version": "dev", "links": ["/healthz", "/readyz", "/metrics", "/docs"]})
+services/inference/app.py:251:@app.get("/healthz")
+services/inference/app.py:256:@app.get("/readyz")
+services/inference/app.py:274:@app.get("/metrics")

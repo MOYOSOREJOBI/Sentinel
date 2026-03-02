@@ -1,0 +1,7 @@
+HTTP/1.1 200 OK
+Content-Type: application/json
+X-Request-Id: 2ec1f5c78f1449e4
+Date: Sun, 01 Mar 2026 17:38:18 GMT
+Content-Length: 123
+
+{"links":{"docs":"/docs","healthz":"/healthz","metrics":"/metrics","readyz":"/readyz"},"service":"alerts","version":"dev"}

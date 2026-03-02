@@ -1,0 +1,5 @@
+ raw_ticks | candles | features | scores | alerts | incidents 
+-----------+---------+----------+--------+--------+-----------
+         0 |       0 |        0 |      0 |      0 |         0
+(1 row)
+

@@ -1,0 +1,3 @@
+./scripts/doctor.sh
+WARN docker daemon not reachable
+doctor completed with warnings

@@ -1,0 +1,6 @@
+HTTP/1.1 204 No Content
+Set-Cookie: sentinel_token=; Path=/; Max-Age=0; HttpOnly; SameSite=Lax
+Set-Cookie: sentinel_csrf=; Path=/; Max-Age=0; SameSite=Lax
+X-Request-Id: 36afc6df0742c9fe
+Date: Sun, 01 Mar 2026 17:56:27 GMT
+

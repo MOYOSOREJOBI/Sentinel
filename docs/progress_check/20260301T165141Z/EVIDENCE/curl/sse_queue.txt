@@ -1,0 +1,14 @@
+curl: (28) Operation timed out after 5001 milliseconds with 85 bytes received
+HTTP/1.1 200 OK
+vary: RSC, Next-Router-State-Tree, Next-Router-Prefetch
+cache-control: no-cache, no-transform
+connection: keep-alive
+content-type: text/event-stream
+Date: Sun, 01 Mar 2026 18:12:41 GMT
+Transfer-Encoding: chunked
+
+retry: 15000
+
+event: queue_patch
+data: {"type":"degraded","message":"upstream 401"}
+

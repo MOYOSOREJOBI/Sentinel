@@ -1,0 +1,98 @@
+HTTP/1.1 200 OK
+Content-Type: text/plain; version=0.0.4; charset=utf-8; escaping=underscores
+Date: Sun, 01 Mar 2026 17:38:19 GMT
+Transfer-Encoding: chunked
+
+# HELP db_query_duration_seconds Database query latency in seconds.
+# TYPE db_query_duration_seconds histogram
+db_query_duration_seconds_bucket{query="insert_features",service="features",le="0.0005"} 0
+db_query_duration_seconds_bucket{query="insert_features",service="features",le="0.001"} 41
+db_query_duration_seconds_bucket{query="insert_features",service="features",le="0.005"} 159519
+db_query_duration_seconds_bucket{query="insert_features",service="features",le="0.01"} 160405
+db_query_duration_seconds_bucket{query="insert_features",service="features",le="0.025"} 160550
+db_query_duration_seconds_bucket{query="insert_features",service="features",le="0.05"} 160608
+db_query_duration_seconds_bucket{query="insert_features",service="features",le="0.1"} 160628
+db_query_duration_seconds_bucket{query="insert_features",service="features",le="0.25"} 160628
+db_query_duration_seconds_bucket{query="insert_features",service="features",le="0.5"} 160628
+db_query_duration_seconds_bucket{query="insert_features",service="features",le="1"} 160628
+db_query_duration_seconds_bucket{query="insert_features",service="features",le="+Inf"} 160628
+db_query_duration_seconds_sum{query="insert_features",service="features"} 361.17775241000817
+db_query_duration_seconds_count{query="insert_features",service="features"} 160628
+# HELP http_request_duration_seconds HTTP request latency in seconds.
+# TYPE http_request_duration_seconds histogram
+http_request_duration_seconds_bucket{path="/",service="features",le="0.005"} 1
+http_request_duration_seconds_bucket{path="/",service="features",le="0.01"} 1
+http_request_duration_seconds_bucket{path="/",service="features",le="0.025"} 1
+http_request_duration_seconds_bucket{path="/",service="features",le="0.05"} 1
+http_request_duration_seconds_bucket{path="/",service="features",le="0.1"} 1
+http_request_duration_seconds_bucket{path="/",service="features",le="0.25"} 1
+http_request_duration_seconds_bucket{path="/",service="features",le="0.5"} 1
+http_request_duration_seconds_bucket{path="/",service="features",le="1"} 1
+http_request_duration_seconds_bucket{path="/",service="features",le="2.5"} 1
+http_request_duration_seconds_bucket{path="/",service="features",le="5"} 1
+http_request_duration_seconds_bucket{path="/",service="features",le="+Inf"} 1
+http_request_duration_seconds_sum{path="/",service="features"} 2.6926e-05
+http_request_duration_seconds_count{path="/",service="features"} 1
+http_request_duration_seconds_bucket{path="/healthz",service="features",le="0.005"} 1
+http_request_duration_seconds_bucket{path="/healthz",service="features",le="0.01"} 1
+http_request_duration_seconds_bucket{path="/healthz",service="features",le="0.025"} 1
+http_request_duration_seconds_bucket{path="/healthz",service="features",le="0.05"} 1
+http_request_duration_seconds_bucket{path="/healthz",service="features",le="0.1"} 1
+http_request_duration_seconds_bucket{path="/healthz",service="features",le="0.25"} 1
+http_request_duration_seconds_bucket{path="/healthz",service="features",le="0.5"} 1
+http_request_duration_seconds_bucket{path="/healthz",service="features",le="1"} 1
+http_request_duration_seconds_bucket{path="/healthz",service="features",le="2.5"} 1
+http_request_duration_seconds_bucket{path="/healthz",service="features",le="5"} 1
+http_request_duration_seconds_bucket{path="/healthz",service="features",le="+Inf"} 1
+http_request_duration_seconds_sum{path="/healthz",service="features"} 2.44e-05
+http_request_duration_seconds_count{path="/healthz",service="features"} 1
+http_request_duration_seconds_bucket{path="/metrics",service="features",le="0.005"} 219
+http_request_duration_seconds_bucket{path="/metrics",service="features",le="0.01"} 219
+http_request_duration_seconds_bucket{path="/metrics",service="features",le="0.025"} 219
+http_request_duration_seconds_bucket{path="/metrics",service="features",le="0.05"} 219
+http_request_duration_seconds_bucket{path="/metrics",service="features",le="0.1"} 219
+http_request_duration_seconds_bucket{path="/metrics",service="features",le="0.25"} 219
+http_request_duration_seconds_bucket{path="/metrics",service="features",le="0.5"} 219
+http_request_duration_seconds_bucket{path="/metrics",service="features",le="1"} 219
+http_request_duration_seconds_bucket{path="/metrics",service="features",le="2.5"} 219
+http_request_duration_seconds_bucket{path="/metrics",service="features",le="5"} 219
+http_request_duration_seconds_bucket{path="/metrics",service="features",le="+Inf"} 219
+http_request_duration_seconds_sum{path="/metrics",service="features"} 0.17066956800000013
+http_request_duration_seconds_count{path="/metrics",service="features"} 219
+http_request_duration_seconds_bucket{path="/readyz",service="features",le="0.005"} 212
+http_request_duration_seconds_bucket{path="/readyz",service="features",le="0.01"} 214
+http_request_duration_seconds_bucket{path="/readyz",service="features",le="0.025"} 215
+http_request_duration_seconds_bucket{path="/readyz",service="features",le="0.05"} 215
+http_request_duration_seconds_bucket{path="/readyz",service="features",le="0.1"} 215
+http_request_duration_seconds_bucket{path="/readyz",service="features",le="0.25"} 215
+http_request_duration_seconds_bucket{path="/readyz",service="features",le="0.5"} 215
+http_request_duration_seconds_bucket{path="/readyz",service="features",le="1"} 215
+http_request_duration_seconds_bucket{path="/readyz",service="features",le="2.5"} 215
+http_request_duration_seconds_bucket{path="/readyz",service="features",le="5"} 215
+http_request_duration_seconds_bucket{path="/readyz",service="features",le="+Inf"} 215
+http_request_duration_seconds_sum{path="/readyz",service="features"} 0.476097614
+http_request_duration_seconds_count{path="/readyz",service="features"} 215
+# HELP http_requests_total Total HTTP requests handled by Sentinel Go services.
+# TYPE http_requests_total counter
+http_requests_total{method="GET",path="/",service="features",status="200"} 1
+http_requests_total{method="GET",path="/healthz",service="features",status="200"} 1
+http_requests_total{method="GET",path="/metrics",service="features",status="200"} 219
+http_requests_total{method="GET",path="/readyz",service="features",status="200"} 215
+# HELP kafka_messages_consumed_total Kafka messages consumed by Go services.
+# TYPE kafka_messages_consumed_total counter
+kafka_messages_consumed_total{service="features",topic="derived.candles"} 160629
+# HELP kafka_messages_produced_total Kafka messages produced by Go services.
+# TYPE kafka_messages_produced_total counter
+kafka_messages_produced_total{service="features",topic="derived.features"} 160628
+kafka_messages_produced_total{service="features",topic="dq.metrics"} 160628
+# HELP promhttp_metric_handler_requests_in_flight Current number of scrapes being served.
+# TYPE promhttp_metric_handler_requests_in_flight gauge
+promhttp_metric_handler_requests_in_flight 1
+# HELP promhttp_metric_handler_requests_total Total number of scrapes by HTTP status code.
+# TYPE promhttp_metric_handler_requests_total counter
+promhttp_metric_handler_requests_total{code="200"} 219
+promhttp_metric_handler_requests_total{code="500"} 0
+promhttp_metric_handler_requests_total{code="503"} 0
+# HELP sentinel_up Whether the service process is up.
+# TYPE sentinel_up gauge
+sentinel_up{service="features"} 1

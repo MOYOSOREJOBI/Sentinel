@@ -1,0 +1,315 @@
+#1 [internal] load local bake definitions
+#1 reading from stdin 4.03kB done
+#1 DONE 0.0s
+
+#2 [simulator internal] load build definition from Dockerfile-go
+#2 DONE 0.0s
+
+#2 [gateway-api internal] load build definition from Dockerfile-go
+#2 ...
+
+#3 [inference internal] load build definition from Dockerfile.inference
+#3 ...
+
+#2 [gateway-api internal] load build definition from Dockerfile-go
+#2 transferring dockerfile:
+#2 transferring dockerfile: 428B 0.1s done
+#2 DONE 10.4s
+
+#3 [inference internal] load build definition from Dockerfile.inference
+#3 transferring dockerfile: 240B 0.1s done
+#3 DONE 10.4s
+
+#4 [inference internal] load metadata for docker.io/library/python:3.11-slim
+#4 ...
+
+#5 [alerts internal] load metadata for docker.io/library/golang:1.22
+#5 DONE 0.4s
+
+#6 [features internal] load metadata for gcr.io/distroless/static-debian12:latest
+#6 DONE 0.7s
+
+#7 [aggregator internal] load .dockerignore
+#7 ...
+
+#8 [auth] library/python:pull token for registry-1.docker.io
+#8 DONE 0.0s
+
+#7 [aggregator internal] load .dockerignore
+#7 ...
+
+#4 [inference internal] load metadata for docker.io/library/python:3.11-slim
+#4 DONE 1.9s
+
+#7 [inference internal] load .dockerignore
+#7 transferring context:
+#7 transferring context: 2B 0.0s done
+#7 DONE 18.4s
+
+#9 [governance internal] load build context
+#9 ...
+
+#10 [inference 1/5] FROM docker.io/library/python:3.11-slim@sha256:c8271b1f627d0068857dce5b53e14a9558603b527e46f1f901722f935b786a39
+#10 resolve docker.io/library/python:3.11-slim@sha256:c8271b1f627d0068857dce5b53e14a9558603b527e46f1f901722f935b786a39 0.6s done
+#10 DONE 0.7s
+
+#9 [governance internal] load build context
+#9 ...
+
+#11 [query build 1/6] FROM docker.io/library/golang:1.22@sha256:1cf6c45ba39db9fd6db16922041d074a63c935556a05c5ccb62d181034df7f02
+#11 resolve docker.io/library/golang:1.22@sha256:1cf6c45ba39db9fd6db16922041d074a63c935556a05c5ccb62d181034df7f02 0.7s done
+#11 DONE 0.7s
+
+#12 [alerts stage-1 1/5] FROM gcr.io/distroless/static-debian12:latest@sha256:20bc6c0bc4d625a22a8fde3e55f6515709b32055ef8fb9cfbddaa06d1760f838
+#12 resolve gcr.io/distroless/static-debian12:latest@sha256:20bc6c0bc4d625a22a8fde3e55f6515709b32055ef8fb9cfbddaa06d1760f838 0.8s done
+#12 DONE 0.9s
+
+#9 [governance internal] load build context
+#9 transferring context: 15.60MB 4.9s
+#9 transferring context: 44.05MB 9.9s
+#9 ...
+
+#13 [inference internal] load build context
+#13 transferring context: 2.44kB 8.1s done
+#13 ...
+
+#9 [governance internal] load build context
+#9 transferring context: 63.19MB 13.2s
+#9 transferring context: 99.48MB 18.2s
+#9 ...
+
+#13 [inference internal] load build context
+#13 DONE 20.7s
+
+#9 [governance internal] load build context
+#9 ...
+
+#14 [inference 2/5] WORKDIR /app
+#14 CACHED
+
+#15 [inference 3/5] COPY services/inference/requirements.txt .
+#15 CACHED
+
+#16 [inference 4/5] RUN pip install --no-cache-dir -r requirements.txt
+#16 CACHED
+
+#17 [inference 5/5] COPY services/inference .
+#17 CACHED
+
+#9 [governance internal] load build context
+#9 ...
+
+#18 [inference] exporting to image
+#18 exporting layers 0.1s done
+#18 exporting manifest sha256:c3ae6b2df4ab94d42c30e3ab72478c3f1ed88ef64d65dccb002b2474382a6692 0.0s done
+#18 exporting config sha256:58be77d71bd613adb9ce74056a9825989e93fb56ece40ffd473892eccd5e2f83 0.0s done
+#18 exporting attestation manifest sha256:f89df6e6057561c88f18f1c092cb245b3b35867d70dd3cdc5d672c71b51213af 0.4s done
+#18 exporting manifest list sha256:17d148a40763689e362738931d4444542bd675673a9457ac0772ed75e519bd7c 0.1s done
+#18 naming to docker.io/library/docker-inference:latest 0.0s done
+#18 unpacking to docker.io/library/docker-inference:latest 0.3s done
+#18 DONE 1.6s
+
+#9 [governance internal] load build context
+#9 transferring context: 132.75MB 23.4s
+#9 transferring context: 161.33MB 28.6s
+#9 transferring context: 193.68MB 33.6s
+#9 transferring context: 223.46MB 38.6s
+#9 ...
+
+#19 [inference] resolving provenance for metadata file
+#19 DONE 0.2s
+
+#9 [governance internal] load build context
+#9 transferring context: 254.83MB 43.7s
+#9 transferring context: 285.16MB 48.8s
+#9 transferring context: 310.77MB 53.8s
+#9 transferring context: 345.10MB 58.8s
+#9 transferring context: 379.51MB 63.9s
+#9 transferring context: 422.37MB 69.0s
+#9 transferring context: 464.28MB 74.0s
+#9 transferring context: 513.42MB 79.2s
+#9 transferring context: 550.47MB 84.4s
+#9 transferring context: 600.48MB 89.5s
+#9 transferring context: 631.34MB 92.9s done
+#9 transferring context: 631.34MB 92.9s done
+#9 DONE 93.1s
+
+#20 [aggregator build 2/6] WORKDIR /app
+#20 CACHED
+
+#21 [aggregator build 3/6] COPY go.mod go.sum ./
+#21 CACHED
+
+#22 [aggregator build 4/6] RUN go mod download
+#22 CACHED
+
+#21 [features build 3/6] COPY go.mod go.sum ./
+#21 CACHED
+
+#20 [features build 2/6] WORKDIR /app
+#20 CACHED
+
+#23 [simulator build 5/6] COPY . .
+#23 DONE 17.0s
+
+#24 [alerts build 6/6] RUN CGO_ENABLED=0 GOOS=linux go build -o /bin/service ./cmd/alerts
+#24 ...
+
+#25 [gateway-api build 6/6] RUN CGO_ENABLED=0 GOOS=linux go build -o /bin/service ./cmd/gateway-api
+#25 ...
+
+#26 [simulator build 6/6] RUN CGO_ENABLED=0 GOOS=linux go build -o /bin/service ./cmd/simulator
+#26 ...
+
+#27 [governance build 6/6] RUN CGO_ENABLED=0 GOOS=linux go build -o /bin/service ./cmd/governance
+#27 ...
+
+#28 [features build 6/6] RUN CGO_ENABLED=0 GOOS=linux go build -o /bin/service ./cmd/features
+#28 ...
+
+#29 [query build 6/6] RUN CGO_ENABLED=0 GOOS=linux go build -o /bin/service ./cmd/query
+#29 ...
+
+#30 [aggregator build 6/6] RUN CGO_ENABLED=0 GOOS=linux go build -o /bin/service ./cmd/aggregator
+#30 ...
+
+#27 [governance build 6/6] RUN CGO_ENABLED=0 GOOS=linux go build -o /bin/service ./cmd/governance
+#27 DONE 239.8s
+
+#26 [simulator build 6/6] RUN CGO_ENABLED=0 GOOS=linux go build -o /bin/service ./cmd/simulator
+#26 ...
+
+#31 [governance stage-1 2/5] COPY --from=build /bin/service /app/service
+#31 CACHED
+
+#32 [governance stage-1 3/5] COPY --from=build /app/services/inference/models /app/inference-models
+#32 CACHED
+
+#33 [governance stage-1 4/5] WORKDIR /app
+#33 CACHED
+
+#34 [governance stage-1 5/5] COPY keys ./keys
+#34 CACHED
+
+#24 [alerts build 6/6] RUN CGO_ENABLED=0 GOOS=linux go build -o /bin/service ./cmd/alerts
+#24 ...
+
+#35 [governance] exporting to image
+#35 exporting layers
+#35 exporting layers 0.3s done
+#35 exporting manifest sha256:fee7a9015a0c06ec6680cc03f2a1d5eacb90002a98ce2ee071f89e303329b9d6
+#35 exporting manifest sha256:fee7a9015a0c06ec6680cc03f2a1d5eacb90002a98ce2ee071f89e303329b9d6 0.0s done
+#35 exporting config sha256:32e8bcf3b7515eba8483b7a803475cd3997d5a988a252c108057fc28ad4c5f16 0.0s done
+#35 exporting attestation manifest sha256:3405456cf697df7c6496ccfdc975c2662a153a87a18c4f662b8b49e12718015d
+#35 exporting attestation manifest sha256:3405456cf697df7c6496ccfdc975c2662a153a87a18c4f662b8b49e12718015d 0.3s done
+#35 exporting manifest list sha256:6f7dd33b794fb8961ccf4dd138959e9824a1217ddb2fc999eab3e177e5158565
+#35 exporting manifest list sha256:6f7dd33b794fb8961ccf4dd138959e9824a1217ddb2fc999eab3e177e5158565 0.2s done
+#35 naming to docker.io/library/docker-governance:latest
+#35 naming to docker.io/library/docker-governance:latest 0.0s done
+#35 unpacking to docker.io/library/docker-governance:latest
+#35 unpacking to docker.io/library/docker-governance:latest 0.4s done
+#35 ...
+
+#25 [gateway-api build 6/6] RUN CGO_ENABLED=0 GOOS=linux go build -o /bin/service ./cmd/gateway-api
+#25 DONE 245.2s
+
+#35 [governance] exporting to image
+#35 DONE 2.6s
+
+#26 [simulator build 6/6] RUN CGO_ENABLED=0 GOOS=linux go build -o /bin/service ./cmd/simulator
+#26 ...
+
+#36 [gateway-api stage-1 4/5] WORKDIR /app
+#36 CACHED
+
+#37 [gateway-api stage-1 2/5] COPY --from=build /bin/service /app/service
+#37 CACHED
+
+#38 [gateway-api stage-1 3/5] COPY --from=build /app/services/inference/models /app/inference-models
+#38 CACHED
+
+#39 [gateway-api stage-1 5/5] COPY keys ./keys
+#39 CACHED
+
+#26 [simulator build 6/6] RUN CGO_ENABLED=0 GOOS=linux go build -o /bin/service ./cmd/simulator
+#26 ...
+
+#29 [query build 6/6] RUN CGO_ENABLED=0 GOOS=linux go build -o /bin/service ./cmd/query
+#29 DONE 247.1s
+
+#40 [gateway-api] exporting to image
+#40 exporting layers 0.3s done
+#40 exporting manifest sha256:5b413c4a11975146412ce41c0f460a60d35ca78ffd20217d40b4009bfd136f4d
+#40 exporting manifest sha256:5b413c4a11975146412ce41c0f460a60d35ca78ffd20217d40b4009bfd136f4d 0.0s done
+#40 exporting config sha256:b5c5e98addf1121fa0e5bbc8cdebe46f045590b549ed83be37e77ad4109f3825 0.0s done
+#40 exporting attestation manifest sha256:440701743f1c40cf0b8fff7b9ed64910270526c6c1a78b94fad3ca0ee502251c
+#40 exporting attestation manifest sha256:440701743f1c40cf0b8fff7b9ed64910270526c6c1a78b94fad3ca0ee502251c 0.4s done
+#40 exporting manifest list sha256:25fdbe5b9cc1069fca41bba89b7a0e7c2760ea8d0055a3de011b84776aa9ac4f
+#40 exporting manifest list sha256:25fdbe5b9cc1069fca41bba89b7a0e7c2760ea8d0055a3de011b84776aa9ac4f 0.1s done
+#40 naming to docker.io/library/docker-gateway-api:latest
+#40 naming to docker.io/library/docker-gateway-api:latest 0.0s done
+#40 unpacking to docker.io/library/docker-gateway-api:latest
+#40 unpacking to docker.io/library/docker-gateway-api:latest 0.6s done
+#40 ...
+
+#41 [query stage-1 2/5] COPY --from=build /bin/service /app/service
+#41 CACHED
+
+#42 [query stage-1 3/5] COPY --from=build /app/services/inference/models /app/inference-models
+#42 CACHED
+
+#43 [query stage-1 4/5] WORKDIR /app
+#43 CACHED
+
+#44 [query stage-1 5/5] COPY keys ./keys
+#44 CACHED
+
+#26 [simulator build 6/6] RUN CGO_ENABLED=0 GOOS=linux go build -o /bin/service ./cmd/simulator
+#26 ...
+
+#45 [query] exporting to image
+#45 exporting layers 0.3s done
+#45 exporting manifest sha256:6e16273742432eb329b38df693f6f57d3c42d0199f89225b4de0eadb36915019 0.0s done
+#45 exporting config sha256:cb4fd1f752043b71e14235388a6215727d44ceff7c87690d69dd08069723b3df
+#45 exporting config sha256:cb4fd1f752043b71e14235388a6215727d44ceff7c87690d69dd08069723b3df 0.0s done
+#45 ...
+
+#40 [gateway-api] exporting to image
+#40 DONE 3.0s
+
+#26 [simulator build 6/6] RUN CGO_ENABLED=0 GOOS=linux go build -o /bin/service ./cmd/simulator
+#26 ...
+
+#45 [query] exporting to image
+#45 exporting attestation manifest sha256:d57e47a0681ec18429e2a14e54d836f4855053df699b28de1694b04825d62c69
+#45 exporting attestation manifest sha256:d57e47a0681ec18429e2a14e54d836f4855053df699b28de1694b04825d62c69 0.3s done
+#45 exporting manifest list sha256:16d9153a04b52e270dfbdabc72e5f13853b9b05fb92958c4a66f729594af4c79
+#45 exporting manifest list sha256:16d9153a04b52e270dfbdabc72e5f13853b9b05fb92958c4a66f729594af4c79 0.1s done
+#45 naming to docker.io/library/docker-query:latest
+#45 naming to docker.io/library/docker-query:latest 0.1s done
+#45 unpacking to docker.io/library/docker-query:latest
+#45 unpacking to docker.io/library/docker-query:latest 0.6s done
+#45 ...
+
+#46 [governance] resolving provenance for metadata file
+#46 DONE 0.2s
+
+#30 [aggregator build 6/6] RUN CGO_ENABLED=0 GOOS=linux go build -o /bin/service ./cmd/aggregator
+#30 ...
+
+#45 [query] exporting to image
+#45 DONE 3.8s
+
+#24 [alerts build 6/6] RUN CGO_ENABLED=0 GOOS=linux go build -o /bin/service ./cmd/alerts
+#24 ...
+
+#26 [simulator build 6/6] RUN CGO_ENABLED=0 GOOS=linux go build -o /bin/service ./cmd/simulator
+#26 DONE 272.3s
+
+#30 [aggregator build 6/6] RUN CGO_ENABLED=0 GOOS=linux go build -o /bin/service ./cmd/aggregator
+#30 ...
+
+#47 [gateway-api] resolving provenance for metadata file
+#47 DONE 0.2s
+
+#24 [alerts build 6/6] RUN CGO_ENABLED=0 GOOS=linux go build -o /bin/service ./cmd/alerts

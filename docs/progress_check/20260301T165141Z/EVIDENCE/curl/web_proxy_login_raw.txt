@@ -1,0 +1,11 @@
+HTTP/1.1 401 Unauthorized
+vary: RSC, Next-Router-State-Tree, Next-Router-Prefetch
+content-length: 13
+content-type: text/plain; charset=utf-8
+date: Sun, 01 Mar 2026 18:12:39 GMT
+x-content-type-options: nosniff
+x-request-id: 2c8b0749b5ed4cac
+Connection: keep-alive
+Keep-Alive: timeout=5
+
+unauthorized

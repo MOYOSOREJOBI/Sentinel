@@ -1,0 +1,47 @@
+web/components/AppShell.tsx:44:function roleAllowed(userRole: Role, minRole?: Role): boolean {
+web/components/AppShell.tsx:144:          {NAV_ITEMS.filter((i) => roleAllowed(me.role, i.minRole)).map((item) => (
+internal/rbac/rbac_test.go:1:package rbac
+internal/rbac/rbac_test.go:5:func TestAllowed(t *testing.T) {
+internal/rbac/rbac_test.go:6:	if !Allowed("admin", "anything") {
+internal/rbac/rbac_test.go:9:	if !Allowed("admin", "governance:read") {
+internal/rbac/rbac_test.go:12:	if !Allowed("analyst", "alerts:write") {
+internal/rbac/rbac_test.go:15:	if !Allowed("analyst", "replay:write") {
+internal/rbac/rbac_test.go:18:	if Allowed("analyst", "model:deploy") {
+internal/rbac/rbac_test.go:21:	if Allowed("viewer", "alerts:write") {
+internal/rbac/rbac_test.go:24:	if !Allowed("viewer", "read") {
+internal/rbac/rbac_test.go:27:	if Allowed("viewer", "replay:write") {
+internal/rbac/rbac_test.go:33:	if Allowed("viewer", "governance:read") {
+internal/rbac/rbac_test.go:36:	if Allowed("analyst", "governance:read") {
+internal/rbac/rbac_test.go:39:	if !Allowed("admin", "governance:read") {
+internal/rbac/rbac.go:1:package rbac
+internal/rbac/rbac.go:8:var permissions = map[string]map[string]bool{
+internal/rbac/rbac.go:14:func Allowed(role, perm string) bool {
+internal/rbac/rbac.go:15:	p, ok := permissions[strings.ToLower(role)]
+internal/rbac/rbac.go:19:	return p["*"] || p[perm]
+internal/rbac/rbac.go:22:func Require(role, perm string, next http.Handler) http.Handler {
+internal/rbac/rbac.go:24:		if !Allowed(role, perm) {
+internal/rbac/middleware_test.go:1:package rbac
+cmd/query/main.go:28:	"sentinel/internal/rbac"
+cmd/query/main.go:626:func requireRole(pub *rsa.PublicKey, perm string) func(http.Handler) http.Handler {
+cmd/query/main.go:634:			if !rbac.Allowed(claims.Role, perm) {
+cmd/alerts/main.go:32:	"sentinel/internal/rbac"
+cmd/alerts/main.go:123:		if !ok || !(rbac.Allowed(claims.Role, "alerts:write") || rbac.Allowed(claims.Role, "*")) {
+cmd/alerts/main.go:139:		if !ok || !(rbac.Allowed(claims.Role, "alerts:write") || rbac.Allowed(claims.Role, "*")) {
+cmd/alerts/main.go:174:		if !ok || !(rbac.Allowed(claims.Role, "alerts:write") || rbac.Allowed(claims.Role, "*")) {
+cmd/alerts/main.go:191:		if !ok || !(rbac.Allowed(claims.Role, "alerts:write") || rbac.Allowed(claims.Role, "*")) {
+cmd/alerts/main.go:212:		if !ok || !rbac.Allowed(claims.Role, "read") {
+cmd/alerts/main.go:236:		if !ok || !rbac.Allowed(claims.Role, "read") {
+cmd/alerts/main.go:265:		if !ok || !(rbac.Allowed(claims.Role, "alerts:write") || rbac.Allowed(claims.Role, "*")) {
+cmd/alerts/main.go:306:		if !ok || !(rbac.Allowed(claims.Role, "alerts:write") || rbac.Allowed(claims.Role, "*")) {
+cmd/alerts/main.go:329:		if !ok || !(rbac.Allowed(claims.Role, "alerts:write") || rbac.Allowed(claims.Role, "*")) {
+cmd/alerts/main.go:354:		if !ok || !(rbac.Allowed(claims.Role, "alerts:write") || rbac.Allowed(claims.Role, "*")) {
+cmd/governance/main.go:27:	"sentinel/internal/rbac"
+cmd/governance/main.go:83:		if !ok || !rbac.Allowed(claims.Role, "read") {
+cmd/governance/main.go:119:		if !ok || !rbac.Allowed(claims.Role, "read") {
+cmd/governance/main.go:137:		if !ok || !(rbac.Allowed(claims.Role, "*") || rbac.Allowed(claims.Role, "model:deploy")) {
+cmd/governance/main.go:167:		if !ok || !(rbac.Allowed(claims.Role, "replay:write") || rbac.Allowed(claims.Role, "*")) {
+cmd/governance/main.go:210:		if !ok || !rbac.Allowed(claims.Role, "read") {
+cmd/governance/main.go:236:		if !ok || !rbac.Allowed(claims.Role, "read") {
+cmd/governance/main.go:260:		if !ok || !rbac.Allowed(claims.Role, "*") {
+cmd/governance/main.go:298:		if !ok || !rbac.Allowed(claims.Role, "*") {
+cmd/governance/main.go:317:		if !ok || !rbac.Allowed(claims.Role, "read") {

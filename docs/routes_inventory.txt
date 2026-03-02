@@ -1,0 +1,70 @@
+# Route Inventory
+
+## Alerts
+82:	r.Get("/healthz", func(w http.ResponseWriter, r *http.Request) { w.Write([]byte("ok")) })
+83:	r.Get("/", func(w http.ResponseWriter, r *http.Request) {
+95:	r.Get("/readyz", func(w http.ResponseWriter, r *http.Request) {
+113:	r.Get("/metrics", metrics.Handler)
+122:	mutation.Post("/alerts/{id}/ack", func(w http.ResponseWriter, r *http.Request) {
+136:	mutation.Post("/incidents/{id}/transition", func(w http.ResponseWriter, r *http.Request) {
+174:	mutation.Post("/cases", func(w http.ResponseWriter, r *http.Request) {
+187:	mutation.Post("/incidents/{id}/promote-case", func(w http.ResponseWriter, r *http.Request) {
+203:	mutation.Post("/incidents/{id}/notify-oncall", func(w http.ResponseWriter, r *http.Request) {
+219:	read.Get("/cases", func(w http.ResponseWriter, r *http.Request) {
+237:	read.Get("/notifications", func(w http.ResponseWriter, r *http.Request) {
+257:	read.Get("/cases/{id}", func(w http.ResponseWriter, r *http.Request) {
+281:	mutation.Patch("/cases/{id}", func(w http.ResponseWriter, r *http.Request) {
+318:	mutation.Post("/cases/{id}/notes", func(w http.ResponseWriter, r *http.Request) {
+337:	mutation.Post("/cases/{id}/evidence", func(w http.ResponseWriter, r *http.Request) {
+358:	mutation.Post("/cases/{id}/disposition", func(w http.ResponseWriter, r *http.Request) {
+
+## Governance
+64:	r.Get("/healthz", func(w http.ResponseWriter, r *http.Request) { w.Write([]byte("ok")) })
+65:	r.Get("/", func(w http.ResponseWriter, r *http.Request) {
+77:	r.Get("/readyz", readinessHandler(pool))
+83:	read.Get("/active-models", func(w http.ResponseWriter, r *http.Request) {
+113:	r.Get("/metrics", metrics.Handler)
+114:	read.Get("/audit/verify", func(w http.ResponseWriter, r *http.Request) {
+127:	admin.Post("/models/deploy", func(w http.ResponseWriter, r *http.Request) {
+153:	workflow.Post("/replay/start", func(w http.ResponseWriter, r *http.Request) {
+192:	read.Get("/models", func(w http.ResponseWriter, r *http.Request) {
+213:	read.Get("/escalation-policies", func(w http.ResponseWriter, r *http.Request) {
+232:	policyAdmin.Post("/escalation-policies", func(w http.ResponseWriter, r *http.Request) {
+266:	policyAdmin.Delete("/escalation-policies/{id}", func(w http.ResponseWriter, r *http.Request) {
+280:	read.Get("/on-call", func(w http.ResponseWriter, r *http.Request) {
+297:	read.Get("/current-oncall", func(w http.ResponseWriter, r *http.Request) {
+307:	workflow.Post("/forecast/refresh", func(w http.ResponseWriter, r *http.Request) {
+
+## Query
+107:	r.Get("/healthz", func(w http.ResponseWriter, r *http.Request) { _, _ = w.Write([]byte("ok")) })
+108:	r.Get("/", func(w http.ResponseWriter, r *http.Request) {
+120:	r.Get("/readyz", func(w http.ResponseWriter, r *http.Request) {
+127:	r.Get("/metrics", metrics.Handler)
+139:		pr.Get("/queue", func(w http.ResponseWriter, r *http.Request) {
+152:		pr.Get("/command-center", func(w http.ResponseWriter, r *http.Request) {
+165:		pr.Get("/feed", func(w http.ResponseWriter, r *http.Request) {
+200:		pr.Get("/search-suggest", func(w http.ResponseWriter, r *http.Request) {
+300:		pr.Get("/trust", func(w http.ResponseWriter, r *http.Request) {
+312:		pr.Get("/world-map", func(w http.ResponseWriter, r *http.Request) {
+324:		pr.Get("/executive-summary", func(w http.ResponseWriter, r *http.Request) {
+386:		pr.Get("/governance/summary", func(w http.ResponseWriter, r *http.Request) {
+414:		pr.Get("/replay/{job}", func(w http.ResponseWriter, r *http.Request) {
+437:		pr.Get("/incident/{id}", func(w http.ResponseWriter, r *http.Request) {
+451:		pr.Get("/incident/{id}/brief", func(w http.ResponseWriter, r *http.Request) {
+479:		pr.Get("/cases", func(w http.ResponseWriter, r *http.Request) {
+497:		pr.Get("/case/{id}", func(w http.ResponseWriter, r *http.Request) {
+509:		pr.Get("/scores", func(w http.ResponseWriter, r *http.Request) {
+528:		pr.Get("/candles", func(w http.ResponseWriter, r *http.Request) {
+552:		pr.Get("/forecast", func(w http.ResponseWriter, r *http.Request) {
+569:		pr.Get("/stream/queue", sseStream(func(ctx context.Context) any {
+577:		pr.Get("/stream/command-center", sseStream(func(ctx context.Context) any {
+581:		pr.Get("/stream/trust", sseStream(func(ctx context.Context) any {
+
+## Gateway
+59:	r.Get("/healthz", func(w http.ResponseWriter, r *http.Request) { _, _ = w.Write([]byte("ok")) })
+60:	r.Get("/", func(w http.ResponseWriter, r *http.Request) {
+72:	r.Get("/readyz", func(w http.ResponseWriter, r *http.Request) {
+79:	r.Get("/metrics", metrics.Handler)
+81:	r.Post("/auth/login", func(w http.ResponseWriter, r *http.Request) {
+117:	r.Post("/auth/logout", func(w http.ResponseWriter, r *http.Request) {
+128:	r.Get("/me", func(w http.ResponseWriter, r *http.Request) {

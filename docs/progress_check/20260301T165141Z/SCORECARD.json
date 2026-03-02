@@ -1,0 +1,177 @@
+{
+  "ts_dir": "docs/progress_check/20260301T165141Z",
+  "head": "cd4310ec3dc498f6272e798696b6604e429a5586",
+  "demo_completion_percent": 100,
+  "demo_completion_basis": {
+    "result_file": "docs/audit/20260301T163152Z/RESULT.md",
+    "traceability_file": "docs/audit/20260301T163152Z/TRACEABILITY.md",
+    "note": "Latest audit reports PASS with all S1-S10 markers, but traceability still includes stale skip notes."
+  },
+  "production_readiness_percent": 68.4,
+  "production_readiness_basis": "Weighted rubric across 9 scored categories. End-user readiness is tracked separately and is not included in the weighted total because the user-supplied weights sum to 100 without it.",
+  "categories": {
+    "backend_apis": {
+      "weight": 12,
+      "score": 74,
+      "weighted_points": 8.88,
+      "evidence": [
+        "cmd/gateway-api/main.go:71-133",
+        "cmd/alerts/main.go:116-172",
+        "cmd/governance/main.go:78-153",
+        "docs/progress_check/20260301T165141Z/EVIDENCE/curl/security/alerts_ack_unauth.txt",
+        "docs/progress_check/20260301T165141Z/EVIDENCE/curl/security/alerts_ack_viewer.txt"
+      ],
+      "top_blockers": [
+        "Web proxy login currently returns 401, breaking the primary user-facing auth path.",
+        "Some end-to-end browser flows still fail at login.",
+        "CSRF behavior is inconsistent with claimed protection."
+      ]
+    },
+    "data_pipeline": {
+      "weight": 12,
+      "score": 76,
+      "weighted_points": 9.12,
+      "evidence": [
+        "docs/progress_check/20260301T165141Z/EVIDENCE/sql/counts.txt",
+        "docs/progress_check/20260301T165141Z/EVIDENCE/docker/topics.txt",
+        "cmd/features/main.go:175-181",
+        "cmd/alerts/main.go:467-488"
+      ],
+      "top_blockers": [
+        "Features still writes DB then publishes Kafka without a shared transaction.",
+        "End-user proxy path can make a healthy pipeline look broken.",
+        "Replay/dataflow correctness is not re-proven in this audit pass beyond existing non-zero counts."
+      ]
+    },
+    "database_maturity": {
+      "weight": 10,
+      "score": 78,
+      "weighted_points": 7.8,
+      "evidence": [
+        "docs/progress_check/20260301T165141Z/EVIDENCE/sql/tables.txt",
+        "docs/progress_check/20260301T165141Z/EVIDENCE/sql/counts.txt",
+        "sql/migrations/008_scores_lineage.sql",
+        "sql/migrations/010_timescale_rollups.sql"
+      ],
+      "top_blockers": [
+        "Base migrations still need stronger reversibility guarantees across the full stack.",
+        "Schema correctness is implied by runtime, but not stress-tested by migration replay in this pass.",
+        "Some API/DB timestamp naming still differs (`created_at` vs `ts`)."
+      ]
+    },
+    "ml_quant_stack": {
+      "weight": 14,
+      "score": 84,
+      "weighted_points": 11.76,
+      "evidence": [
+        "docs/progress_check/20260301T165141Z/EVIDENCE/metrics/inference_readyz.json",
+        "services/inference/app.py:183-270",
+        "internal/query/trust.go:24-79",
+        "docs/progress_check/20260301T165141Z/INVENTORY/inference_files.txt"
+      ],
+      "top_blockers": [
+        "No separate backtest/calibration run output was executed in this audit pass.",
+        "Model correctness is better evidenced than model quality; bundle metrics are trusted but not rederived here.",
+        "The score pipeline is real, but its strongest proof still relies on runtime counts plus code inspection."
+      ]
+    },
+    "ui_ux": {
+      "weight": 12,
+      "score": 56,
+      "weighted_points": 6.72,
+      "evidence": [
+        "web/components/AppShell.tsx:27-181",
+        "web/lib/filterState.ts:44-139",
+        "docs/progress_check/20260301T165141Z/EVIDENCE/curl/web_proxy_login_raw.txt",
+        "docs/progress_check/20260301T165141Z/EVIDENCE/curl/sse_queue.txt",
+        "docs/progress_check/20260301T165141Z/EVIDENCE/playwright/results.txt"
+      ],
+      "top_blockers": [
+        "Browser login flow fails in Playwright.",
+        "Proxy-auth failure causes degraded SSE and unauthenticated data fetches through the web path.",
+        "Screenshots/traces were not persisted to the host in this run, limiting visual proof."
+      ]
+    },
+    "observability": {
+      "weight": 12,
+      "score": 72,
+      "weighted_points": 8.64,
+      "evidence": [
+        "internal/metrics/metrics.go:17-138",
+        "docs/progress_check/20260301T165141Z/EVIDENCE/metrics/go_metrics_summary.txt",
+        "docs/progress_check/20260301T165141Z/EVIDENCE/metrics/prom_up.json",
+        "docs/progress_check/20260301T165141Z/EVIDENCE/metrics/grafana_search.json"
+      ],
+      "top_blockers": [
+        "README claim that every service exposes `/metrics` is false for `web` and unproven for simulator on the host port used by the audit.",
+        "Gateway/query/governance expose mostly HTTP metrics, not DB/Kafka metrics.",
+        "This pass did not inspect per-panel Grafana query results, only provisioning and live targets."
+      ]
+    },
+    "security": {
+      "weight": 10,
+      "score": 62,
+      "weighted_points": 6.2,
+      "evidence": [
+        "internal/authz/middleware.go:56-85",
+        "internal/middleware/csrf.go:61-84",
+        "docs/progress_check/20260301T165141Z/EVIDENCE/curl/security/alerts_ack_unauth.txt",
+        "docs/progress_check/20260301T165141Z/EVIDENCE/curl/security/alerts_ack_viewer.txt",
+        "docs/progress_check/20260301T165141Z/EVIDENCE/curl/security/gateway_logout_no_csrf.txt",
+        "docs/progress_check/20260301T165141Z/EVIDENCE/curl/security/login_rate_limit_codes.txt"
+      ],
+      "top_blockers": [
+        "Authenticated logout succeeded without CSRF header.",
+        "Rate limiting was not observed triggering in the login probe.",
+        "Cookie/JWT posture remains dev-grade, not hardened production auth."
+      ]
+    },
+    "testing": {
+      "weight": 10,
+      "score": 38,
+      "weighted_points": 3.8,
+      "evidence": [
+        "docs/progress_check/20260301T165141Z/EVIDENCE/tests/cover_func.txt",
+        "docs/progress_check/20260301T165141Z/EVIDENCE/tests/web_npm_test.txt",
+        "docs/progress_check/20260301T165141Z/EVIDENCE/playwright/results.txt"
+      ],
+      "top_blockers": [
+        "Go statement coverage is only 17.5%.",
+        "Critical orchestration paths remain 0.0% covered.",
+        "Playwright end-to-end login currently fails."
+      ]
+    },
+    "production_ops": {
+      "weight": 8,
+      "score": 68,
+      "weighted_points": 5.44,
+      "evidence": [
+        "docs/progress_check/20260301T165141Z/EVIDENCE/docker/compose_up.txt",
+        "docs/progress_check/20260301T165141Z/EVIDENCE/docker/compose_ps.txt",
+        "docs/progress_check/20260301T165141Z/EVIDENCE/docker/migrate_tail.txt",
+        "docs/progress_check/20260301T165141Z/EVIDENCE/curl/web_container_query_dns_wget.txt",
+        "docs/progress_check/20260301T165141Z/EVIDENCE/curl/web_container_query_localhost_wget.txt"
+      ],
+      "top_blockers": [
+        "Current web proxy auth issue prevents the main product path from benefiting from otherwise healthy infra.",
+        "Audit PASS still contains stale traceability notes, which weakens ops trust in the gate.",
+        "Host-level simulator metrics check failed on the audited port."
+      ]
+    },
+    "end_user_readiness": {
+      "weight": 0,
+      "score": 54,
+      "weighted_points": 0,
+      "evidence": [
+        "docs/progress_check/20260301T165141Z/EVIDENCE/curl/web_proxy_login_raw.txt",
+        "docs/progress_check/20260301T165141Z/EVIDENCE/curl/sse_queue.txt",
+        "docs/progress_check/20260301T165141Z/EVIDENCE/playwright/results.txt"
+      ],
+      "top_blockers": [
+        "Primary UI login path is not working in current browser proof.",
+        "Degraded SSE is visible because upstream auth fails.",
+        "The product surface looks richer than the current end-user runtime path delivers."
+      ]
+    }
+  }
+}

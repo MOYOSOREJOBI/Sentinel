@@ -1,0 +1,20 @@
+# Traceability
+
+- ts_dir: docs/audit/20260301T163152Z
+- ran: TS_DIR=docs/audit/20260301T163152Z ./scripts/gate.sh
+- scoring source: proof markers in docs/audit/20260301T163152Z/proofs
+- required markers:
+  - S1_baseline.ok
+  - S2_compose_healthy.ok
+  - S3_root_routes.ok
+  - S4_prom_up.ok
+  - S5_grafana_provisioned.ok
+  - S6_data_warm.ok
+  - S7_i18n.ok
+  - S8_security_truth.ok
+  - S9_replay_parity.ok
+  - S10_playwright.ok
+- skips:
+  - SKIP_DOCKER.txt indicates runtime not executed due missing Docker
+  - SKIP_PLAYWRIGHT_DOCKER.txt indicates Playwright not executed due missing Docker
+- logs: docs/audit/20260301T163152Z/logs

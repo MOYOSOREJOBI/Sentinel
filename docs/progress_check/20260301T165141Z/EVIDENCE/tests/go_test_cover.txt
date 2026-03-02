@@ -1,0 +1,30 @@
+	sentinel/cmd/aggregator		coverage: 0.0% of statements
+ok  	sentinel/cmd/alerts	1.476s	coverage: 0.9% of statements
+ok  	sentinel/cmd/features	3.469s	coverage: 36.6% of statements
+ok  	sentinel/cmd/gateway-api	2.543s	coverage: 20.9% of statements
+ok  	sentinel/cmd/governance	4.756s	coverage: 7.3% of statements
+ok  	sentinel/cmd/query	9.349s	coverage: 9.4% of statements
+ok  	sentinel/cmd/simulator	7.423s	coverage: 3.7% of statements
+ok  	sentinel/internal/audit	5.683s	coverage: 26.5% of statements
+ok  	sentinel/internal/auth	10.333s	coverage: 45.5% of statements
+ok  	sentinel/internal/authz	8.556s	coverage: 67.6% of statements
+ok  	sentinel/internal/cache	13.620s	coverage: 84.2% of statements
+ok  	sentinel/internal/config	10.883s	coverage: 38.1% of statements
+?   	sentinel/internal/contracts	[no test files]
+	sentinel/internal/db		coverage: 0.0% of statements
+ok  	sentinel/internal/healthcheck	11.829s	coverage: 93.8% of statements
+	sentinel/internal/httpx		coverage: 0.0% of statements
+ok  	sentinel/internal/incidents	12.448s	coverage: 3.4% of statements
+ok  	sentinel/internal/kafka	12.894s	coverage: 20.0% of statements
+	sentinel/internal/logging		coverage: 0.0% of statements
+ok  	sentinel/internal/logic	13.504s	coverage: 53.3% of statements
+ok  	sentinel/internal/marketmath	13.447s	coverage: 49.3% of statements
+ok  	sentinel/internal/metrics	12.701s	coverage: 76.7% of statements
+ok  	sentinel/internal/middleware	13.495s	coverage: 57.0% of statements
+ok  	sentinel/internal/pipeline/scoring	13.613s	coverage: 66.7% of statements
+ok  	sentinel/internal/query	12.828s	coverage: 23.8% of statements
+ok  	sentinel/internal/rbac	12.965s	coverage: 77.8% of statements
+	sentinel/internal/rediskv		coverage: 0.0% of statements
+ok  	sentinel/internal/replay	12.398s	coverage: 5.3% of statements
+	sentinel/internal/testredis		coverage: 0.0% of statements
+	sentinel/scripts		coverage: 0.0% of statements

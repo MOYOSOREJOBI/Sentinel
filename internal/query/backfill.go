@@ -1,0 +1,131 @@
+package query
+
+import (
+	"context"
+	"errors"
+	"fmt"
+
+	"github.com/jackc/pgx/v5/pgxpool"
+)
+
+func BackfillHistory(ctx context.Context, db *pgxpool.Pool, years int) error {
+	if years <= 0 {
+		return errors.New("years must be positive")
+	}
+
+	statements := []string{
+		`INSERT INTO raw_ticks (event_id, symbol, price, volume, event_time, replay_run_id, created_at)
+SELECT
+  event_id || '::backfill::' || gs::text,
+  symbol,
+  price,
+  volume,
+  event_time - make_interval(years => gs),
+  replay_run_id,
+  created_at - make_interval(years => gs)
+FROM raw_ticks
+CROSS JOIN generate_series(1, $1) AS gs
+WHERE event_time >= now() - interval '7 days'
+ON CONFLICT (event_id) DO NOTHING`,
+		`INSERT INTO candles (idempotency_key, symbol, bucket, interval, open, high, low, close, volume, replay_run_id, open_event_time, close_event_time)
+SELECT
+  idempotency_key || '::backfill::' || gs::text,
+  symbol,
+  bucket - make_interval(years => gs),
+  interval,
+  open,
+  high,
+  low,
+  close,
+  volume,
+  replay_run_id,
+  CASE WHEN open_event_time IS NULL THEN NULL ELSE open_event_time - make_interval(years => gs) END,
+  CASE WHEN close_event_time IS NULL THEN NULL ELSE close_event_time - make_interval(years => gs) END
+FROM candles
+CROSS JOIN generate_series(1, $1) AS gs
+WHERE bucket >= now() - interval '7 days'
+ON CONFLICT (idempotency_key, bucket) DO NOTHING`,
+		`INSERT INTO features (idempotency_key, symbol, ts, feature_hash, payload, replay_run_id)
+SELECT
+  idempotency_key || '::backfill::' || gs::text,
+  symbol,
+  ts - make_interval(years => gs),
+  feature_hash || '::backfill::' || gs::text,
+  payload,
+  replay_run_id
+FROM features
+CROSS JOIN generate_series(1, $1) AS gs
+WHERE ts >= now() - interval '7 days'
+ON CONFLICT (idempotency_key, ts) DO NOTHING`,
+		`INSERT INTO scores (
+  idempotency_key, symbol, ts, score, severity, explanation, replay_run_id,
+  raw_anomaly_score, normalized_anomaly_score, escalation_probability, priority_score, composite_risk,
+  feature_snapshot_hash, feature_set_version, model_version, calibration_version, explanation_payload,
+  scoring_run_id, produced_at, artifact_hash, model_artifact_hash
+)
+SELECT
+  idempotency_key || '::backfill::' || gs::text,
+  symbol,
+  ts - make_interval(years => gs),
+  score,
+  severity,
+  explanation,
+  replay_run_id,
+  raw_anomaly_score,
+  normalized_anomaly_score,
+  escalation_probability,
+  priority_score,
+  composite_risk,
+  coalesce(feature_snapshot_hash, '') || '::backfill::' || gs::text,
+  feature_set_version,
+  model_version,
+  calibration_version,
+  explanation_payload,
+  gen_random_uuid(),
+  coalesce(produced_at, ts) - make_interval(years => gs),
+  coalesce(artifact_hash, '') || '::backfill::' || gs::text,
+  coalesce(model_artifact_hash, '') || '::backfill::' || gs::text
+FROM scores
+CROSS JOIN generate_series(1, $1) AS gs
+WHERE ts >= now() - interval '7 days'
+ON CONFLICT (idempotency_key, ts) DO NOTHING`,
+		`INSERT INTO incidents (
+  primary_symbol, status, severity_band, priority_score, composite_risk, escalation_probability, confidence,
+  trust_state, feature_snapshot_hash, feature_set_version, model_version, calibration_version,
+  top_driver_1, top_driver_2, top_driver_3, driver_payload,
+  started_at, last_activity_at, owner_name, created_at, updated_at
+)
+SELECT
+  primary_symbol,
+  status,
+  severity_band,
+  priority_score,
+  composite_risk,
+  escalation_probability,
+  confidence,
+  trust_state,
+  feature_snapshot_hash || '::backfill::' || gs::text,
+  feature_set_version,
+  model_version,
+  calibration_version,
+  top_driver_1,
+  top_driver_2,
+  top_driver_3,
+  driver_payload,
+  started_at - make_interval(years => gs),
+  last_activity_at - make_interval(years => gs),
+  owner_name,
+  created_at - make_interval(years => gs),
+  updated_at - make_interval(years => gs)
+FROM incidents
+CROSS JOIN generate_series(1, $1) AS gs
+WHERE last_activity_at >= now() - interval '7 days'`,
+	}
+
+	for _, stmt := range statements {
+		if _, err := db.Exec(ctx, stmt, years); err != nil {
+			return fmt.Errorf("backfill failed: %w", err)
+		}
+	}
+	return nil
+}

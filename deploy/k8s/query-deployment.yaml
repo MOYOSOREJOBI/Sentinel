@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sentinel-query
+spec:
+  replicas: 1
+  selector:
+    matchLabels: { app: sentinel-query }
+  template:
+    metadata:
+      labels: { app: sentinel-query }
+    spec:
+      containers:
+        - name: query
+          image: sentinel/query:latest
+          ports:
+            - containerPort: 8085
+          readinessProbe:
+            httpGet: { path: /readyz, port: 8085 }
+            initialDelaySeconds: 5
+            periodSeconds: 5
+          livenessProbe:
+            httpGet: { path: /healthz, port: 8085 }
+            initialDelaySeconds: 10
+            periodSeconds: 10

@@ -1,0 +1,4 @@
+ id | incident_id | status | reason | owner_name | created_at | updated_at 
+----+-------------+--------+--------+------------+------------+------------
+(0 rows)
+

@@ -1,0 +1,82 @@
+go test -race -count=1 ./...
+# ./...
+pattern ./...: open /Users/mac/Library/Caches/go-build/48/48402d923f4c2352a0e61980075563871eb43ef088463846a999cb9db22246ad-a: operation not permitted
+FAIL	./... [setup failed]
+?   	sentinel/cmd/aggregator	[no test files]
+# sentinel/cmd/features.test
+ld: warning: '/private/var/folders/vk/y7jdn8793b33fkr3q9_b33xc0000gn/T/go-link-708195698/000013.o' has malformed LC_DYSYMTAB, expected 98 undefined symbols to start at index 884, found 95 undefined symbols starting at index 884
+# sentinel/cmd/alerts.test
+ld: warning: '/private/var/folders/vk/y7jdn8793b33fkr3q9_b33xc0000gn/T/go-link-2980340580/000013.o' has malformed LC_DYSYMTAB, expected 98 undefined symbols to start at index 884, found 95 undefined symbols starting at index 884
+ok  	sentinel/cmd/alerts	10.175s
+ok  	sentinel/cmd/features	10.928s
+# sentinel/cmd/gateway-api.test
+ld: warning: '/private/var/folders/vk/y7jdn8793b33fkr3q9_b33xc0000gn/T/go-link-2822306158/000013.o' has malformed LC_DYSYMTAB, expected 98 undefined symbols to start at index 884, found 95 undefined symbols starting at index 884
+# sentinel/cmd/governance.test
+ld: warning: '/private/var/folders/vk/y7jdn8793b33fkr3q9_b33xc0000gn/T/go-link-3732777298/000013.o' has malformed LC_DYSYMTAB, expected 98 undefined symbols to start at index 884, found 95 undefined symbols starting at index 884
+--- FAIL: TestLoginAllowed_UsesRedisWhenEnabled (0.00s)
+    login_rate_limit_test.go:41: start redis stub: listen tcp 127.0.0.1:0: bind: operation not permitted
+FAIL
+FAIL	sentinel/cmd/gateway-api	2.222s
+# sentinel/cmd/query.test
+ld: warning: '/private/var/folders/vk/y7jdn8793b33fkr3q9_b33xc0000gn/T/go-link-2427820440/000013.o' has malformed LC_DYSYMTAB, expected 98 undefined symbols to start at index 884, found 95 undefined symbols starting at index 884
+ok  	sentinel/cmd/governance	2.891s
+# sentinel/cmd/simulator.test
+ld: warning: '/private/var/folders/vk/y7jdn8793b33fkr3q9_b33xc0000gn/T/go-link-4045808467/000013.o' has malformed LC_DYSYMTAB, expected 98 undefined symbols to start at index 884, found 95 undefined symbols starting at index 884
+# sentinel/internal/metrics.test
+ld: warning: '/private/var/folders/vk/y7jdn8793b33fkr3q9_b33xc0000gn/T/go-link-468984467/000013.o' has malformed LC_DYSYMTAB, expected 98 undefined symbols to start at index 884, found 95 undefined symbols starting at index 884
+ok  	sentinel/cmd/query	6.391s
+ok  	sentinel/cmd/simulator	12.225s
+ok  	sentinel/internal/audit	9.066s
+ok  	sentinel/internal/auth	9.873s
+ok  	sentinel/internal/authz	10.337s
+--- FAIL: TestGetOrLoadJSON_RedisTTLExpiry (0.00s)
+    redis_integration_test.go:17: start redis stub: listen tcp 127.0.0.1:0: bind: operation not permitted
+FAIL
+FAIL	sentinel/internal/cache	9.698s
+ok  	sentinel/internal/config	12.695s
+?   	sentinel/internal/contracts	[no test files]
+?   	sentinel/internal/db	[no test files]
+--- FAIL: TestRun (0.00s)
+panic: httptest: failed to listen on a port: listen tcp6 [::1]:0: bind: operation not permitted [recovered, repanicked]
+
+goroutine 5 [running]:
+testing.tRunner.func1.2({0x3bb31e0, 0xc0000284e0})
+	/usr/local/Cellar/go/1.25.7_1/libexec/src/testing/testing.go:1872 +0x419
+testing.tRunner.func1()
+	/usr/local/Cellar/go/1.25.7_1/libexec/src/testing/testing.go:1875 +0x683
+panic({0x3bb31e0?, 0xc0000284e0?})
+	/usr/local/Cellar/go/1.25.7_1/libexec/src/runtime/panic.go:783 +0x132
+net/http/httptest.newLocalListener()
+	/usr/local/Cellar/go/1.25.7_1/libexec/src/net/http/httptest/server.go:71 +0x165
+net/http/httptest.NewUnstartedServer(...)
+	/usr/local/Cellar/go/1.25.7_1/libexec/src/net/http/httptest/server.go:119
+net/http/httptest.NewServer({0x3c387c0, 0x3c34bb8})
+	/usr/local/Cellar/go/1.25.7_1/libexec/src/net/http/httptest/server.go:106 +0x2c
+sentinel/internal/healthcheck.TestRun(0xc000003880)
+	/Users/mac/Desktop/Sentinel/internal/healthcheck/healthcheck_test.go:24 +0x45
+testing.tRunner(0xc000003880, 0x3c34b28)
+	/usr/local/Cellar/go/1.25.7_1/libexec/src/testing/testing.go:1934 +0x21d
+created by testing.(*T).Run in goroutine 1
+	/usr/local/Cellar/go/1.25.7_1/libexec/src/testing/testing.go:1997 +0x9d3
+FAIL	sentinel/internal/healthcheck	10.551s
+?   	sentinel/internal/httpx	[no test files]
+ok  	sentinel/internal/incidents	14.625s
+ok  	sentinel/internal/kafka	13.196s
+?   	sentinel/internal/logging	[no test files]
+ok  	sentinel/internal/logic	13.681s
+ok  	sentinel/internal/marketmath	14.131s
+ok  	sentinel/internal/metrics	14.750s
+--- FAIL: TestCSRF_RedisBackedExpiry (0.00s)
+    redis_backing_test.go:18: start redis stub: listen tcp 127.0.0.1:0: bind: operation not permitted
+--- FAIL: TestRateLimit_RedisBackedBlocking (0.00s)
+    redis_backing_test.go:49: start redis stub: listen tcp 127.0.0.1:0: bind: operation not permitted
+FAIL
+FAIL	sentinel/internal/middleware	14.697s
+ok  	sentinel/internal/pipeline/scoring	15.232s
+ok  	sentinel/internal/query	12.762s
+ok  	sentinel/internal/rbac	13.215s
+?   	sentinel/internal/rediskv	[no test files]
+ok  	sentinel/internal/replay	9.255s
+?   	sentinel/internal/testredis	[no test files]
+FAIL
+make: *** [test] Error 1

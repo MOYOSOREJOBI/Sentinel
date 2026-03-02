@@ -1,0 +1,14 @@
+login_status 401
+set_cookie 
+me_status 401 unauthorized
+
+scores_status 401 unauthorized
+
+trust_status 401 unauthorized
+
+gov_models_status 403 forbidden
+
+unauth_gov_deploy 403 forbidden
+
+unauth_alert_ack 403 forbidden
+

@@ -1,0 +1,10 @@
+HTTP/1.1 200 OK
+vary: RSC, Next-Router-State-Tree, Next-Router-Prefetch
+content-length: 740
+content-type: application/json
+date: Sun, 01 Mar 2026 08:06:10 GMT
+x-request-id: a194b8afa077fe2c
+Connection: keep-alive
+Keep-Alive: timeout=5
+
+{"cacheHealth":"ok","calibration":{"anomaly_stability":0.837725,"auc":0.675797,"brier":0.011114,"history":[{"anomaly_stability":0.837725,"auc":0.675797,"brier":0.011114,"pr_auc":0.017884,"trained_at":"2026-03-01T03:01:18Z"}],"pr_auc":0.017884},"circuitBreakerCount":0,"dqTotals":{"warnings":0},"modelDegradedCount":0,"modelState":{"calibration_version":"platt_v1","fallback_mode":false,"last_trained_at":"2026-03-01T03:01:18Z","latest_produced_at":"2026-03-01T08:06:00Z","latest_scoring_run_id":"e489d929-ef31-47f7-bd69-ff97d9c4711d","model_artifact_hash":"6a873dbd943816987a7d3a0b3280f613977f811edadc87ecce1edde0aa6e681f","model_version":"quant-v1-2026-03-01"},"suppressedAlertCount":0,"trustSummary":{"fallbackRatio":0,"state":"stable"}}

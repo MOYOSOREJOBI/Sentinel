@@ -1,0 +1,30 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: sentinel-migrate
+spec:
+  template:
+    spec:
+      restartPolicy: Never
+      containers:
+        - name: migrate
+          image: timescale/timescaledb:2.15.1-pg16
+          command: ["/bin/bash","-ec"]
+          args:
+            - |
+              for f in /migrations/*.sql; do
+                psql "$POSTGRES_URL" -v ON_ERROR_STOP=1 -f "$f";
+              done
+          env:
+            - name: POSTGRES_URL
+              valueFrom:
+                secretKeyRef:
+                  name: sentinel-secrets
+                  key: postgres_url
+          volumeMounts:
+            - name: migrations
+              mountPath: /migrations
+      volumes:
+        - name: migrations
+          configMap:
+            name: sentinel-migrations

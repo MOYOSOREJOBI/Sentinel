@@ -1,0 +1,1927 @@
+HTTP/1.1 200 OK
+Cache-Control: no-store
+Content-Type: text/plain; version=0.0.4; charset=utf-8; escaping=values
+X-Content-Type-Options: nosniff
+X-Frame-Options: deny
+X-Xss-Protection: 1; mode=block
+Date: Sun, 01 Mar 2026 17:38:22 GMT
+Transfer-Encoding: chunked
+
+# HELP deprecated_flags_inuse_total The number of deprecated flags currently set.
+# TYPE deprecated_flags_inuse_total counter
+deprecated_flags_inuse_total 0
+# HELP go_cgo_go_to_c_calls_calls_total Count of calls made from Go to C by the current process.
+# TYPE go_cgo_go_to_c_calls_calls_total counter
+go_cgo_go_to_c_calls_calls_total 38524
+# HELP go_cpu_classes_gc_mark_assist_cpu_seconds_total Estimated total CPU time goroutines spent performing GC tasks to assist the GC and prevent it from falling behind the application. This metric is an overestimate, and not directly comparable to system CPU time measurements. Compare only with other /cpu/classes metrics.
+# TYPE go_cpu_classes_gc_mark_assist_cpu_seconds_total counter
+go_cpu_classes_gc_mark_assist_cpu_seconds_total 0.013701029
+# HELP go_cpu_classes_gc_mark_dedicated_cpu_seconds_total Estimated total CPU time spent performing GC tasks on processors (as defined by GOMAXPROCS) dedicated to those tasks. This metric is an overestimate, and not directly comparable to system CPU time measurements. Compare only with other /cpu/classes metrics.
+# TYPE go_cpu_classes_gc_mark_dedicated_cpu_seconds_total counter
+go_cpu_classes_gc_mark_dedicated_cpu_seconds_total 0.399544627
+# HELP go_cpu_classes_gc_mark_idle_cpu_seconds_total Estimated total CPU time spent performing GC tasks on spare CPU resources that the Go scheduler could not otherwise find a use for. This should be subtracted from the total GC CPU time to obtain a measure of compulsory GC CPU time. This metric is an overestimate, and not directly comparable to system CPU time measurements. Compare only with other /cpu/classes metrics.
+# TYPE go_cpu_classes_gc_mark_idle_cpu_seconds_total counter
+go_cpu_classes_gc_mark_idle_cpu_seconds_total 0.045007569
+# HELP go_cpu_classes_gc_pause_cpu_seconds_total Estimated total CPU time spent with the application paused by the GC. Even if only one thread is running during the pause, this is computed as GOMAXPROCS times the pause latency because nothing else can be executing. This is the exact sum of samples in /sched/pauses/total/gc:seconds if each sample is multiplied by GOMAXPROCS at the time it is taken. This metric is an overestimate, and not directly comparable to system CPU time measurements. Compare only with other /cpu/classes metrics.
+# TYPE go_cpu_classes_gc_pause_cpu_seconds_total counter
+go_cpu_classes_gc_pause_cpu_seconds_total 0.124105472
+# HELP go_cpu_classes_gc_total_cpu_seconds_total Estimated total CPU time spent performing GC tasks. This metric is an overestimate, and not directly comparable to system CPU time measurements. Compare only with other /cpu/classes metrics. Sum of all metrics in /cpu/classes/gc.
+# TYPE go_cpu_classes_gc_total_cpu_seconds_total counter
+go_cpu_classes_gc_total_cpu_seconds_total 0.582358697
+# HELP go_cpu_classes_idle_cpu_seconds_total Estimated total available CPU time not spent executing any Go or Go runtime code. In other words, the part of /cpu/classes/total:cpu-seconds that was unused. This metric is an overestimate, and not directly comparable to system CPU time measurements. Compare only with other /cpu/classes metrics.
+# TYPE go_cpu_classes_idle_cpu_seconds_total counter
+go_cpu_classes_idle_cpu_seconds_total 17384.93691688
+# HELP go_cpu_classes_scavenge_assist_cpu_seconds_total Estimated total CPU time spent returning unused memory to the underlying platform in response eagerly in response to memory pressure. This metric is an overestimate, and not directly comparable to system CPU time measurements. Compare only with other /cpu/classes metrics.
+# TYPE go_cpu_classes_scavenge_assist_cpu_seconds_total counter
+go_cpu_classes_scavenge_assist_cpu_seconds_total 3.8e-07
+# HELP go_cpu_classes_scavenge_background_cpu_seconds_total Estimated total CPU time spent performing background tasks to return unused memory to the underlying platform. This metric is an overestimate, and not directly comparable to system CPU time measurements. Compare only with other /cpu/classes metrics.
+# TYPE go_cpu_classes_scavenge_background_cpu_seconds_total counter
+go_cpu_classes_scavenge_background_cpu_seconds_total 0.001762779
+# HELP go_cpu_classes_scavenge_total_cpu_seconds_total Estimated total CPU time spent performing tasks that return unused memory to the underlying platform. This metric is an overestimate, and not directly comparable to system CPU time measurements. Compare only with other /cpu/classes metrics. Sum of all metrics in /cpu/classes/scavenge.
+# TYPE go_cpu_classes_scavenge_total_cpu_seconds_total counter
+go_cpu_classes_scavenge_total_cpu_seconds_total 0.001763159
+# HELP go_cpu_classes_total_cpu_seconds_total Estimated total available CPU time for user Go code or the Go runtime, as defined by GOMAXPROCS. In other words, GOMAXPROCS integrated over the wall-clock duration this process has been executing for. This metric is an overestimate, and not directly comparable to system CPU time measurements. Compare only with other /cpu/classes metrics. Sum of all metrics in /cpu/classes.
+# TYPE go_cpu_classes_total_cpu_seconds_total counter
+go_cpu_classes_total_cpu_seconds_total 17393.963809392
+# HELP go_cpu_classes_user_cpu_seconds_total Estimated total CPU time spent running user Go code. This may also include some small amount of time spent in the Go runtime. This metric is an overestimate, and not directly comparable to system CPU time measurements. Compare only with other /cpu/classes metrics.
+# TYPE go_cpu_classes_user_cpu_seconds_total counter
+go_cpu_classes_user_cpu_seconds_total 8.442770656
+# HELP go_gc_cycles_automatic_gc_cycles_total Count of completed GC cycles generated by the Go runtime.
+# TYPE go_gc_cycles_automatic_gc_cycles_total counter
+go_gc_cycles_automatic_gc_cycles_total 14
+# HELP go_gc_cycles_forced_gc_cycles_total Count of completed GC cycles forced by the application.
+# TYPE go_gc_cycles_forced_gc_cycles_total counter
+go_gc_cycles_forced_gc_cycles_total 0
+# HELP go_gc_cycles_total_gc_cycles_total Count of all completed GC cycles.
+# TYPE go_gc_cycles_total_gc_cycles_total counter
+go_gc_cycles_total_gc_cycles_total 14
+# HELP go_gc_duration_seconds A summary of the pause duration of garbage collection cycles.
+# TYPE go_gc_duration_seconds summary
+go_gc_duration_seconds{quantile="0"} 6.7612e-05
+go_gc_duration_seconds{quantile="0.25"} 0.000155052
+go_gc_duration_seconds{quantile="0.5"} 0.000312025
+go_gc_duration_seconds{quantile="0.75"} 0.000751338
+go_gc_duration_seconds{quantile="1"} 0.002845959
+go_gc_duration_seconds_sum 0.007746309
+go_gc_duration_seconds_count 14
+# HELP go_gc_gogc_percent Heap size target percentage configured by the user, otherwise 100. This value is set by the GOGC environment variable, and the runtime/debug.SetGCPercent function.
+# TYPE go_gc_gogc_percent gauge
+go_gc_gogc_percent 100
+# HELP go_gc_gomemlimit_bytes Go runtime memory limit configured by the user, otherwise math.MaxInt64. This value is set by the GOMEMLIMIT environment variable, and the runtime/debug.SetMemoryLimit function.
+# TYPE go_gc_gomemlimit_bytes gauge
+go_gc_gomemlimit_bytes 9.223372036854776e+18
+# HELP go_gc_heap_allocs_by_size_bytes Distribution of heap allocations by approximate size. Bucket counts increase monotonically. Note that this does not include tiny objects as defined by /gc/heap/tiny/allocs:objects, only tiny blocks.
+# TYPE go_gc_heap_allocs_by_size_bytes histogram
+go_gc_heap_allocs_by_size_bytes_bucket{le="8.999999999999998"} 32456
+go_gc_heap_allocs_by_size_bytes_bucket{le="24.999999999999996"} 423017
+go_gc_heap_allocs_by_size_bytes_bucket{le="64.99999999999999"} 707952
+go_gc_heap_allocs_by_size_bytes_bucket{le="144.99999999999997"} 885979
+go_gc_heap_allocs_by_size_bytes_bucket{le="320.99999999999994"} 964054
+go_gc_heap_allocs_by_size_bytes_bucket{le="704.9999999999999"} 986737
+go_gc_heap_allocs_by_size_bytes_bucket{le="1536.9999999999998"} 994057
+go_gc_heap_allocs_by_size_bytes_bucket{le="3200.9999999999995"} 996380
+go_gc_heap_allocs_by_size_bytes_bucket{le="6528.999999999999"} 997523
+go_gc_heap_allocs_by_size_bytes_bucket{le="13568.999999999998"} 997944
+go_gc_heap_allocs_by_size_bytes_bucket{le="27264.999999999996"} 998194
+go_gc_heap_allocs_by_size_bytes_bucket{le="+Inf"} 998315
+go_gc_heap_allocs_by_size_bytes_sum 1.19159368e+08
+go_gc_heap_allocs_by_size_bytes_count 998315
+# HELP go_gc_heap_allocs_bytes_total Cumulative sum of memory allocated to the heap by the application.
+# TYPE go_gc_heap_allocs_bytes_total counter
+go_gc_heap_allocs_bytes_total 1.19159368e+08
+# HELP go_gc_heap_allocs_objects_total Cumulative count of heap allocations triggered by the application. Note that this does not include tiny objects as defined by /gc/heap/tiny/allocs:objects, only tiny blocks.
+# TYPE go_gc_heap_allocs_objects_total counter
+go_gc_heap_allocs_objects_total 998315
+# HELP go_gc_heap_frees_by_size_bytes Distribution of freed heap allocations by approximate size. Bucket counts increase monotonically. Note that this does not include tiny objects as defined by /gc/heap/tiny/allocs:objects, only tiny blocks.
+# TYPE go_gc_heap_frees_by_size_bytes histogram
+go_gc_heap_frees_by_size_bytes_bucket{le="8.999999999999998"} 26894
+go_gc_heap_frees_by_size_bytes_bucket{le="24.999999999999996"} 374507
+go_gc_heap_frees_by_size_bytes_bucket{le="64.99999999999999"} 618271
+go_gc_heap_frees_by_size_bytes_bucket{le="144.99999999999997"} 771818
+go_gc_heap_frees_by_size_bytes_bucket{le="320.99999999999994"} 842707
+go_gc_heap_frees_by_size_bytes_bucket{le="704.9999999999999"} 861936
+go_gc_heap_frees_by_size_bytes_bucket{le="1536.9999999999998"} 868301
+go_gc_heap_frees_by_size_bytes_bucket{le="3200.9999999999995"} 870014
+go_gc_heap_frees_by_size_bytes_bucket{le="6528.999999999999"} 870878
+go_gc_heap_frees_by_size_bytes_bucket{le="13568.999999999998"} 871097
+go_gc_heap_frees_by_size_bytes_bucket{le="27264.999999999996"} 871286
+go_gc_heap_frees_by_size_bytes_bucket{le="+Inf"} 871356
+go_gc_heap_frees_by_size_bytes_sum 8.5076264e+07
+go_gc_heap_frees_by_size_bytes_count 871356
+# HELP go_gc_heap_frees_bytes_total Cumulative sum of heap memory freed by the garbage collector.
+# TYPE go_gc_heap_frees_bytes_total counter
+go_gc_heap_frees_bytes_total 8.5076264e+07
+# HELP go_gc_heap_frees_objects_total Cumulative count of heap allocations whose storage was freed by the garbage collector. Note that this does not include tiny objects as defined by /gc/heap/tiny/allocs:objects, only tiny blocks.
+# TYPE go_gc_heap_frees_objects_total counter
+go_gc_heap_frees_objects_total 871356
+# HELP go_gc_heap_goal_bytes Heap size target for the end of the GC cycle.
+# TYPE go_gc_heap_goal_bytes gauge
+go_gc_heap_goal_bytes 6.5973088e+07
+# HELP go_gc_heap_live_bytes Heap memory occupied by live objects that were marked by the previous GC.
+# TYPE go_gc_heap_live_bytes gauge
+go_gc_heap_live_bytes 3.217204e+07
+# HELP go_gc_heap_objects_objects Number of objects, live or unswept, occupying heap memory.
+# TYPE go_gc_heap_objects_objects gauge
+go_gc_heap_objects_objects 126959
+# HELP go_gc_heap_tiny_allocs_objects_total Count of small allocations that are packed together into blocks. These allocations are counted separately from other allocations because each individual allocation is not tracked by the runtime, only their block. Each block is already accounted for in allocs-by-size and frees-by-size.
+# TYPE go_gc_heap_tiny_allocs_objects_total counter
+go_gc_heap_tiny_allocs_objects_total 78890
+# HELP go_gc_limiter_last_enabled_gc_cycle GC cycle the last time the GC CPU limiter was enabled. This metric is useful for diagnosing the root cause of an out-of-memory error, because the limiter trades memory for CPU time when the GC's CPU time gets too high. This is most likely to occur with use of SetMemoryLimit. The first GC cycle is cycle 1, so a value of 0 indicates that it was never enabled.
+# TYPE go_gc_limiter_last_enabled_gc_cycle gauge
+go_gc_limiter_last_enabled_gc_cycle 0
+# HELP go_gc_pauses_seconds Deprecated. Prefer the identical /sched/pauses/total/gc:seconds.
+# TYPE go_gc_pauses_seconds histogram
+go_gc_pauses_seconds_bucket{le="6.399999999999999e-08"} 0
+go_gc_pauses_seconds_bucket{le="6.399999999999999e-07"} 0
+go_gc_pauses_seconds_bucket{le="7.167999999999999e-06"} 3
+go_gc_pauses_seconds_bucket{le="8.191999999999999e-05"} 13
+go_gc_pauses_seconds_bucket{le="0.0009175039999999999"} 26
+go_gc_pauses_seconds_bucket{le="0.010485759999999998"} 28
+go_gc_pauses_seconds_bucket{le="0.11744051199999998"} 28
+go_gc_pauses_seconds_bucket{le="+Inf"} 28
+go_gc_pauses_seconds_sum 0.0029735680000000002
+go_gc_pauses_seconds_count 28
+# HELP go_gc_scan_globals_bytes The total amount of global variable space that is scannable.
+# TYPE go_gc_scan_globals_bytes gauge
+go_gc_scan_globals_bytes 1.553688e+06
+# HELP go_gc_scan_heap_bytes The total amount of heap space that is scannable.
+# TYPE go_gc_scan_heap_bytes gauge
+go_gc_scan_heap_bytes 2.7129248e+07
+# HELP go_gc_scan_stack_bytes The number of bytes of stack that were scanned last GC cycle.
+# TYPE go_gc_scan_stack_bytes gauge
+go_gc_scan_stack_bytes 75320
+# HELP go_gc_scan_total_bytes The total amount space that is scannable. Sum of all metrics in /gc/scan.
+# TYPE go_gc_scan_total_bytes gauge
+go_gc_scan_total_bytes 2.8758256e+07
+# HELP go_gc_stack_starting_size_bytes The stack size of new goroutines.
+# TYPE go_gc_stack_starting_size_bytes gauge
+go_gc_stack_starting_size_bytes 2048
+# HELP go_godebug_non_default_behavior_execerrdot_events_total The number of non-default behaviors executed by the os/exec package due to a non-default GODEBUG=execerrdot=... setting.
+# TYPE go_godebug_non_default_behavior_execerrdot_events_total counter
+go_godebug_non_default_behavior_execerrdot_events_total 0
+# HELP go_godebug_non_default_behavior_gocachehash_events_total The number of non-default behaviors executed by the cmd/go package due to a non-default GODEBUG=gocachehash=... setting.
+# TYPE go_godebug_non_default_behavior_gocachehash_events_total counter
+go_godebug_non_default_behavior_gocachehash_events_total 0
+# HELP go_godebug_non_default_behavior_gocachetest_events_total The number of non-default behaviors executed by the cmd/go package due to a non-default GODEBUG=gocachetest=... setting.
+# TYPE go_godebug_non_default_behavior_gocachetest_events_total counter
+go_godebug_non_default_behavior_gocachetest_events_total 0
+# HELP go_godebug_non_default_behavior_gocacheverify_events_total The number of non-default behaviors executed by the cmd/go package due to a non-default GODEBUG=gocacheverify=... setting.
+# TYPE go_godebug_non_default_behavior_gocacheverify_events_total counter
+go_godebug_non_default_behavior_gocacheverify_events_total 0
+# HELP go_godebug_non_default_behavior_gotypesalias_events_total The number of non-default behaviors executed by the go/types package due to a non-default GODEBUG=gotypesalias=... setting.
+# TYPE go_godebug_non_default_behavior_gotypesalias_events_total counter
+go_godebug_non_default_behavior_gotypesalias_events_total 0
+# HELP go_godebug_non_default_behavior_http2client_events_total The number of non-default behaviors executed by the net/http package due to a non-default GODEBUG=http2client=... setting.
+# TYPE go_godebug_non_default_behavior_http2client_events_total counter
+go_godebug_non_default_behavior_http2client_events_total 0
+# HELP go_godebug_non_default_behavior_http2server_events_total The number of non-default behaviors executed by the net/http package due to a non-default GODEBUG=http2server=... setting.
+# TYPE go_godebug_non_default_behavior_http2server_events_total counter
+go_godebug_non_default_behavior_http2server_events_total 0
+# HELP go_godebug_non_default_behavior_httplaxcontentlength_events_total The number of non-default behaviors executed by the net/http package due to a non-default GODEBUG=httplaxcontentlength=... setting.
+# TYPE go_godebug_non_default_behavior_httplaxcontentlength_events_total counter
+go_godebug_non_default_behavior_httplaxcontentlength_events_total 0
+# HELP go_godebug_non_default_behavior_httpmuxgo121_events_total The number of non-default behaviors executed by the net/http package due to a non-default GODEBUG=httpmuxgo121=... setting.
+# TYPE go_godebug_non_default_behavior_httpmuxgo121_events_total counter
+go_godebug_non_default_behavior_httpmuxgo121_events_total 0
+# HELP go_godebug_non_default_behavior_installgoroot_events_total The number of non-default behaviors executed by the go/build package due to a non-default GODEBUG=installgoroot=... setting.
+# TYPE go_godebug_non_default_behavior_installgoroot_events_total counter
+go_godebug_non_default_behavior_installgoroot_events_total 0
+# HELP go_godebug_non_default_behavior_jstmpllitinterp_events_total The number of non-default behaviors executed by the html/template package due to a non-default GODEBUG=jstmpllitinterp=... setting.
+# TYPE go_godebug_non_default_behavior_jstmpllitinterp_events_total counter
+go_godebug_non_default_behavior_jstmpllitinterp_events_total 0
+# HELP go_godebug_non_default_behavior_multipartmaxheaders_events_total The number of non-default behaviors executed by the mime/multipart package due to a non-default GODEBUG=multipartmaxheaders=... setting.
+# TYPE go_godebug_non_default_behavior_multipartmaxheaders_events_total counter
+go_godebug_non_default_behavior_multipartmaxheaders_events_total 0
+# HELP go_godebug_non_default_behavior_multipartmaxparts_events_total The number of non-default behaviors executed by the mime/multipart package due to a non-default GODEBUG=multipartmaxparts=... setting.
+# TYPE go_godebug_non_default_behavior_multipartmaxparts_events_total counter
+go_godebug_non_default_behavior_multipartmaxparts_events_total 0
+# HELP go_godebug_non_default_behavior_multipathtcp_events_total The number of non-default behaviors executed by the net package due to a non-default GODEBUG=multipathtcp=... setting.
+# TYPE go_godebug_non_default_behavior_multipathtcp_events_total counter
+go_godebug_non_default_behavior_multipathtcp_events_total 0
+# HELP go_godebug_non_default_behavior_panicnil_events_total The number of non-default behaviors executed by the runtime package due to a non-default GODEBUG=panicnil=... setting.
+# TYPE go_godebug_non_default_behavior_panicnil_events_total counter
+go_godebug_non_default_behavior_panicnil_events_total 0
+# HELP go_godebug_non_default_behavior_randautoseed_events_total The number of non-default behaviors executed by the math/rand package due to a non-default GODEBUG=randautoseed=... setting.
+# TYPE go_godebug_non_default_behavior_randautoseed_events_total counter
+go_godebug_non_default_behavior_randautoseed_events_total 0
+# HELP go_godebug_non_default_behavior_tarinsecurepath_events_total The number of non-default behaviors executed by the archive/tar package due to a non-default GODEBUG=tarinsecurepath=... setting.
+# TYPE go_godebug_non_default_behavior_tarinsecurepath_events_total counter
+go_godebug_non_default_behavior_tarinsecurepath_events_total 0
+# HELP go_godebug_non_default_behavior_tls10server_events_total The number of non-default behaviors executed by the crypto/tls package due to a non-default GODEBUG=tls10server=... setting.
+# TYPE go_godebug_non_default_behavior_tls10server_events_total counter
+go_godebug_non_default_behavior_tls10server_events_total 0
+# HELP go_godebug_non_default_behavior_tlsmaxrsasize_events_total The number of non-default behaviors executed by the crypto/tls package due to a non-default GODEBUG=tlsmaxrsasize=... setting.
+# TYPE go_godebug_non_default_behavior_tlsmaxrsasize_events_total counter
+go_godebug_non_default_behavior_tlsmaxrsasize_events_total 0
+# HELP go_godebug_non_default_behavior_tlsrsakex_events_total The number of non-default behaviors executed by the crypto/tls package due to a non-default GODEBUG=tlsrsakex=... setting.
+# TYPE go_godebug_non_default_behavior_tlsrsakex_events_total counter
+go_godebug_non_default_behavior_tlsrsakex_events_total 0
+# HELP go_godebug_non_default_behavior_tlsunsafeekm_events_total The number of non-default behaviors executed by the crypto/tls package due to a non-default GODEBUG=tlsunsafeekm=... setting.
+# TYPE go_godebug_non_default_behavior_tlsunsafeekm_events_total counter
+go_godebug_non_default_behavior_tlsunsafeekm_events_total 0
+# HELP go_godebug_non_default_behavior_x509sha1_events_total The number of non-default behaviors executed by the crypto/x509 package due to a non-default GODEBUG=x509sha1=... setting.
+# TYPE go_godebug_non_default_behavior_x509sha1_events_total counter
+go_godebug_non_default_behavior_x509sha1_events_total 0
+# HELP go_godebug_non_default_behavior_x509usefallbackroots_events_total The number of non-default behaviors executed by the crypto/x509 package due to a non-default GODEBUG=x509usefallbackroots=... setting.
+# TYPE go_godebug_non_default_behavior_x509usefallbackroots_events_total counter
+go_godebug_non_default_behavior_x509usefallbackroots_events_total 0
+# HELP go_godebug_non_default_behavior_x509usepolicies_events_total The number of non-default behaviors executed by the crypto/x509 package due to a non-default GODEBUG=x509usepolicies=... setting.
+# TYPE go_godebug_non_default_behavior_x509usepolicies_events_total counter
+go_godebug_non_default_behavior_x509usepolicies_events_total 0
+# HELP go_godebug_non_default_behavior_zipinsecurepath_events_total The number of non-default behaviors executed by the archive/zip package due to a non-default GODEBUG=zipinsecurepath=... setting.
+# TYPE go_godebug_non_default_behavior_zipinsecurepath_events_total counter
+go_godebug_non_default_behavior_zipinsecurepath_events_total 0
+# HELP go_goroutines Number of goroutines that currently exist.
+# TYPE go_goroutines gauge
+go_goroutines 147
+# HELP go_info Information about the Go environment.
+# TYPE go_info gauge
+go_info{version="go1.22.4"} 1
+# HELP go_memory_classes_heap_free_bytes Memory that is completely free and eligible to be returned to the underlying system, but has not been. This metric is the runtime's estimate of free address space that is backed by physical memory.
+# TYPE go_memory_classes_heap_free_bytes gauge
+go_memory_classes_heap_free_bytes 3.776512e+06
+# HELP go_memory_classes_heap_objects_bytes Memory occupied by live objects and dead objects that have not yet been marked free by the garbage collector.
+# TYPE go_memory_classes_heap_objects_bytes gauge
+go_memory_classes_heap_objects_bytes 3.4083104e+07
+# HELP go_memory_classes_heap_released_bytes Memory that is completely free and has been returned to the underlying system. This metric is the runtime's estimate of free address space that is still mapped into the process, but is not backed by physical memory.
+# TYPE go_memory_classes_heap_released_bytes gauge
+go_memory_classes_heap_released_bytes 8.183808e+06
+# HELP go_memory_classes_heap_stacks_bytes Memory allocated from the heap that is reserved for stack space, whether or not it is currently in-use. Currently, this represents all stack memory for goroutines. It also includes all OS thread stacks in non-cgo programs. Note that stacks may be allocated differently in the future, and this may change.
+# TYPE go_memory_classes_heap_stacks_bytes gauge
+go_memory_classes_heap_stacks_bytes 2.031616e+06
+# HELP go_memory_classes_heap_unused_bytes Memory that is reserved for heap objects but is not currently used to hold heap objects.
+# TYPE go_memory_classes_heap_unused_bytes gauge
+go_memory_classes_heap_unused_bytes 1.0645216e+07
+# HELP go_memory_classes_metadata_mcache_free_bytes Memory that is reserved for runtime mcache structures, but not in-use.
+# TYPE go_memory_classes_metadata_mcache_free_bytes gauge
+go_memory_classes_metadata_mcache_free_bytes 12000
+# HELP go_memory_classes_metadata_mcache_inuse_bytes Memory that is occupied by runtime mcache structures that are currently being used.
+# TYPE go_memory_classes_metadata_mcache_inuse_bytes gauge
+go_memory_classes_metadata_mcache_inuse_bytes 19200
+# HELP go_memory_classes_metadata_mspan_free_bytes Memory that is reserved for runtime mspan structures, but not in-use.
+# TYPE go_memory_classes_metadata_mspan_free_bytes gauge
+go_memory_classes_metadata_mspan_free_bytes 184320
+# HELP go_memory_classes_metadata_mspan_inuse_bytes Memory that is occupied by runtime mspan structures that are currently being used.
+# TYPE go_memory_classes_metadata_mspan_inuse_bytes gauge
+go_memory_classes_metadata_mspan_inuse_bytes 566400
+# HELP go_memory_classes_metadata_other_bytes Memory that is reserved for or used to hold runtime metadata.
+# TYPE go_memory_classes_metadata_other_bytes gauge
+go_memory_classes_metadata_other_bytes 4.250496e+06
+# HELP go_memory_classes_os_stacks_bytes Stack memory allocated by the underlying operating system. In non-cgo programs this metric is currently zero. This may change in the future.In cgo programs this metric includes OS thread stacks allocated directly from the OS. Currently, this only accounts for one stack in c-shared and c-archive build modes, and other sources of stacks from the OS are not measured. This too may change in the future.
+# TYPE go_memory_classes_os_stacks_bytes gauge
+go_memory_classes_os_stacks_bytes 0
+# HELP go_memory_classes_other_bytes Memory used by execution trace buffers, structures for debugging the runtime, finalizer and profiler specials, and more.
+# TYPE go_memory_classes_other_bytes gauge
+go_memory_classes_other_bytes 2.654728e+06
+# HELP go_memory_classes_profiling_buckets_bytes Memory that is used by the stack trace hash map used for profiling.
+# TYPE go_memory_classes_profiling_buckets_bytes gauge
+go_memory_classes_profiling_buckets_bytes 1.509664e+06
+# HELP go_memory_classes_total_bytes All memory mapped by the Go runtime into the current process as read-write. Note that this does not include memory mapped by code called via cgo or via the syscall package. Sum of all metrics in /memory/classes.
+# TYPE go_memory_classes_total_bytes gauge
+go_memory_classes_total_bytes 6.7917064e+07
+# HELP go_memstats_alloc_bytes Number of bytes allocated and still in use.
+# TYPE go_memstats_alloc_bytes gauge
+go_memstats_alloc_bytes 3.4083104e+07
+# HELP go_memstats_alloc_bytes_total Total number of bytes allocated, even if freed.
+# TYPE go_memstats_alloc_bytes_total counter
+go_memstats_alloc_bytes_total 1.19159368e+08
+# HELP go_memstats_buck_hash_sys_bytes Number of bytes used by the profiling bucket hash table.
+# TYPE go_memstats_buck_hash_sys_bytes gauge
+go_memstats_buck_hash_sys_bytes 1.509664e+06
+# HELP go_memstats_frees_total Total number of frees.
+# TYPE go_memstats_frees_total counter
+go_memstats_frees_total 950246
+# HELP go_memstats_gc_sys_bytes Number of bytes used for garbage collection system metadata.
+# TYPE go_memstats_gc_sys_bytes gauge
+go_memstats_gc_sys_bytes 4.250496e+06
+# HELP go_memstats_heap_alloc_bytes Number of heap bytes allocated and still in use.
+# TYPE go_memstats_heap_alloc_bytes gauge
+go_memstats_heap_alloc_bytes 3.4083104e+07
+# HELP go_memstats_heap_idle_bytes Number of heap bytes waiting to be used.
+# TYPE go_memstats_heap_idle_bytes gauge
+go_memstats_heap_idle_bytes 1.196032e+07
+# HELP go_memstats_heap_inuse_bytes Number of heap bytes that are in use.
+# TYPE go_memstats_heap_inuse_bytes gauge
+go_memstats_heap_inuse_bytes 4.472832e+07
+# HELP go_memstats_heap_objects Number of allocated objects.
+# TYPE go_memstats_heap_objects gauge
+go_memstats_heap_objects 126959
+# HELP go_memstats_heap_released_bytes Number of heap bytes released to OS.
+# TYPE go_memstats_heap_released_bytes gauge
+go_memstats_heap_released_bytes 8.183808e+06
+# HELP go_memstats_heap_sys_bytes Number of heap bytes obtained from system.
+# TYPE go_memstats_heap_sys_bytes gauge
+go_memstats_heap_sys_bytes 5.668864e+07
+# HELP go_memstats_last_gc_time_seconds Number of seconds since 1970 of last garbage collection.
+# TYPE go_memstats_last_gc_time_seconds gauge
+go_memstats_last_gc_time_seconds 1.7723866761280386e+09
+# HELP go_memstats_lookups_total Total number of pointer lookups.
+# TYPE go_memstats_lookups_total counter
+go_memstats_lookups_total 0
+# HELP go_memstats_mallocs_total Total number of mallocs.
+# TYPE go_memstats_mallocs_total counter
+go_memstats_mallocs_total 1.077205e+06
+# HELP go_memstats_mcache_inuse_bytes Number of bytes in use by mcache structures.
+# TYPE go_memstats_mcache_inuse_bytes gauge
+go_memstats_mcache_inuse_bytes 19200
+# HELP go_memstats_mcache_sys_bytes Number of bytes used for mcache structures obtained from system.
+# TYPE go_memstats_mcache_sys_bytes gauge
+go_memstats_mcache_sys_bytes 31200
+# HELP go_memstats_mspan_inuse_bytes Number of bytes in use by mspan structures.
+# TYPE go_memstats_mspan_inuse_bytes gauge
+go_memstats_mspan_inuse_bytes 566400
+# HELP go_memstats_mspan_sys_bytes Number of bytes used for mspan structures obtained from system.
+# TYPE go_memstats_mspan_sys_bytes gauge
+go_memstats_mspan_sys_bytes 750720
+# HELP go_memstats_next_gc_bytes Number of heap bytes when next garbage collection will take place.
+# TYPE go_memstats_next_gc_bytes gauge
+go_memstats_next_gc_bytes 6.5973088e+07
+# HELP go_memstats_other_sys_bytes Number of bytes used for other system allocations.
+# TYPE go_memstats_other_sys_bytes gauge
+go_memstats_other_sys_bytes 2.654728e+06
+# HELP go_memstats_stack_inuse_bytes Number of bytes in use by the stack allocator.
+# TYPE go_memstats_stack_inuse_bytes gauge
+go_memstats_stack_inuse_bytes 2.031616e+06
+# HELP go_memstats_stack_sys_bytes Number of bytes obtained from system for stack allocator.
+# TYPE go_memstats_stack_sys_bytes gauge
+go_memstats_stack_sys_bytes 2.031616e+06
+# HELP go_memstats_sys_bytes Number of bytes obtained from system.
+# TYPE go_memstats_sys_bytes gauge
+go_memstats_sys_bytes 6.7917064e+07
+# HELP go_sched_gomaxprocs_threads The current runtime.GOMAXPROCS setting, or the number of operating system threads that can execute user-level Go code simultaneously.
+# TYPE go_sched_gomaxprocs_threads gauge
+go_sched_gomaxprocs_threads 16
+# HELP go_sched_goroutines_goroutines Count of live goroutines.
+# TYPE go_sched_goroutines_goroutines gauge
+go_sched_goroutines_goroutines 147
+# HELP go_sched_latencies_seconds Distribution of the time goroutines have spent in the scheduler in a runnable state before actually running. Bucket counts increase monotonically.
+# TYPE go_sched_latencies_seconds histogram
+go_sched_latencies_seconds_bucket{le="6.399999999999999e-08"} 6912
+go_sched_latencies_seconds_bucket{le="6.399999999999999e-07"} 7058
+go_sched_latencies_seconds_bucket{le="7.167999999999999e-06"} 7329
+go_sched_latencies_seconds_bucket{le="8.191999999999999e-05"} 7787
+go_sched_latencies_seconds_bucket{le="0.0009175039999999999"} 8420
+go_sched_latencies_seconds_bucket{le="0.010485759999999998"} 8478
+go_sched_latencies_seconds_bucket{le="0.11744051199999998"} 8478
+go_sched_latencies_seconds_bucket{le="+Inf"} 8478
+go_sched_latencies_seconds_sum 0.10853632
+go_sched_latencies_seconds_count 8478
+# HELP go_sched_pauses_stopping_gc_seconds Distribution of individual GC-related stop-the-world stopping latencies. This is the time it takes from deciding to stop the world until all Ps are stopped. This is a subset of the total GC-related stop-the-world time (/sched/pauses/total/gc:seconds). During this time, some threads may be executing. Bucket counts increase monotonically.
+# TYPE go_sched_pauses_stopping_gc_seconds histogram
+go_sched_pauses_stopping_gc_seconds_bucket{le="6.399999999999999e-08"} 0
+go_sched_pauses_stopping_gc_seconds_bucket{le="6.399999999999999e-07"} 0
+go_sched_pauses_stopping_gc_seconds_bucket{le="7.167999999999999e-06"} 19
+go_sched_pauses_stopping_gc_seconds_bucket{le="8.191999999999999e-05"} 19
+go_sched_pauses_stopping_gc_seconds_bucket{le="0.0009175039999999999"} 26
+go_sched_pauses_stopping_gc_seconds_bucket{le="0.010485759999999998"} 28
+go_sched_pauses_stopping_gc_seconds_bucket{le="0.11744051199999998"} 28
+go_sched_pauses_stopping_gc_seconds_bucket{le="+Inf"} 28
+go_sched_pauses_stopping_gc_seconds_sum 0.002420608
+go_sched_pauses_stopping_gc_seconds_count 28
+# HELP go_sched_pauses_stopping_other_seconds Distribution of individual non-GC-related stop-the-world stopping latencies. This is the time it takes from deciding to stop the world until all Ps are stopped. This is a subset of the total non-GC-related stop-the-world time (/sched/pauses/total/other:seconds). During this time, some threads may be executing. Bucket counts increase monotonically.
+# TYPE go_sched_pauses_stopping_other_seconds histogram
+go_sched_pauses_stopping_other_seconds_bucket{le="6.399999999999999e-08"} 0
+go_sched_pauses_stopping_other_seconds_bucket{le="6.399999999999999e-07"} 0
+go_sched_pauses_stopping_other_seconds_bucket{le="7.167999999999999e-06"} 0
+go_sched_pauses_stopping_other_seconds_bucket{le="8.191999999999999e-05"} 0
+go_sched_pauses_stopping_other_seconds_bucket{le="0.0009175039999999999"} 0
+go_sched_pauses_stopping_other_seconds_bucket{le="0.010485759999999998"} 0
+go_sched_pauses_stopping_other_seconds_bucket{le="0.11744051199999998"} 0
+go_sched_pauses_stopping_other_seconds_bucket{le="+Inf"} 0
+go_sched_pauses_stopping_other_seconds_sum 0
+go_sched_pauses_stopping_other_seconds_count 0
+# HELP go_sched_pauses_total_gc_seconds Distribution of individual GC-related stop-the-world pause latencies. This is the time from deciding to stop the world until the world is started again. Some of this time is spent getting all threads to stop (this is measured directly in /sched/pauses/stopping/gc:seconds), during which some threads may still be running. Bucket counts increase monotonically.
+# TYPE go_sched_pauses_total_gc_seconds histogram
+go_sched_pauses_total_gc_seconds_bucket{le="6.399999999999999e-08"} 0
+go_sched_pauses_total_gc_seconds_bucket{le="6.399999999999999e-07"} 0
+go_sched_pauses_total_gc_seconds_bucket{le="7.167999999999999e-06"} 3
+go_sched_pauses_total_gc_seconds_bucket{le="8.191999999999999e-05"} 13
+go_sched_pauses_total_gc_seconds_bucket{le="0.0009175039999999999"} 26
+go_sched_pauses_total_gc_seconds_bucket{le="0.010485759999999998"} 28
+go_sched_pauses_total_gc_seconds_bucket{le="0.11744051199999998"} 28
+go_sched_pauses_total_gc_seconds_bucket{le="+Inf"} 28
+go_sched_pauses_total_gc_seconds_sum 0.0029735680000000002
+go_sched_pauses_total_gc_seconds_count 28
+# HELP go_sched_pauses_total_other_seconds Distribution of individual non-GC-related stop-the-world pause latencies. This is the time from deciding to stop the world until the world is started again. Some of this time is spent getting all threads to stop (measured directly in /sched/pauses/stopping/other:seconds). Bucket counts increase monotonically.
+# TYPE go_sched_pauses_total_other_seconds histogram
+go_sched_pauses_total_other_seconds_bucket{le="6.399999999999999e-08"} 0
+go_sched_pauses_total_other_seconds_bucket{le="6.399999999999999e-07"} 0
+go_sched_pauses_total_other_seconds_bucket{le="7.167999999999999e-06"} 0
+go_sched_pauses_total_other_seconds_bucket{le="8.191999999999999e-05"} 0
+go_sched_pauses_total_other_seconds_bucket{le="0.0009175039999999999"} 0
+go_sched_pauses_total_other_seconds_bucket{le="0.010485759999999998"} 0
+go_sched_pauses_total_other_seconds_bucket{le="0.11744051199999998"} 0
+go_sched_pauses_total_other_seconds_bucket{le="+Inf"} 0
+go_sched_pauses_total_other_seconds_sum 0
+go_sched_pauses_total_other_seconds_count 0
+# HELP go_sql_stats_connections_blocked_seconds The total time blocked waiting for a new connection.
+# TYPE go_sql_stats_connections_blocked_seconds counter
+go_sql_stats_connections_blocked_seconds{db_name="grafana"} 0
+# HELP go_sql_stats_connections_closed_max_idle The total number of connections closed due to SetMaxIdleConns.
+# TYPE go_sql_stats_connections_closed_max_idle counter
+go_sql_stats_connections_closed_max_idle{db_name="grafana"} 10
+# HELP go_sql_stats_connections_closed_max_idle_time The total number of connections closed due to SetConnMaxIdleTime.
+# TYPE go_sql_stats_connections_closed_max_idle_time counter
+go_sql_stats_connections_closed_max_idle_time{db_name="grafana"} 0
+# HELP go_sql_stats_connections_closed_max_lifetime The total number of connections closed due to SetConnMaxLifetime.
+# TYPE go_sql_stats_connections_closed_max_lifetime counter
+go_sql_stats_connections_closed_max_lifetime{db_name="grafana"} 0
+# HELP go_sql_stats_connections_idle The number of idle connections.
+# TYPE go_sql_stats_connections_idle gauge
+go_sql_stats_connections_idle{db_name="grafana"} 2
+# HELP go_sql_stats_connections_in_use The number of connections currently in use.
+# TYPE go_sql_stats_connections_in_use gauge
+go_sql_stats_connections_in_use{db_name="grafana"} 0
+# HELP go_sql_stats_connections_max_open Maximum number of open connections to the database.
+# TYPE go_sql_stats_connections_max_open gauge
+go_sql_stats_connections_max_open{db_name="grafana"} 0
+# HELP go_sql_stats_connections_open The number of established connections both in use and idle.
+# TYPE go_sql_stats_connections_open gauge
+go_sql_stats_connections_open{db_name="grafana"} 2
+# HELP go_sql_stats_connections_waited_for The total number of connections waited for.
+# TYPE go_sql_stats_connections_waited_for counter
+go_sql_stats_connections_waited_for{db_name="grafana"} 0
+# HELP go_sync_mutex_wait_total_seconds_total Approximate cumulative time goroutines have spent blocked on a sync.Mutex, sync.RWMutex, or runtime-internal lock. This metric is useful for identifying global changes in lock contention. Collect a mutex or block profile using the runtime/pprof package for more detailed contention data.
+# TYPE go_sync_mutex_wait_total_seconds_total counter
+go_sync_mutex_wait_total_seconds_total 0.028787352
+# HELP go_threads Number of OS threads created.
+# TYPE go_threads gauge
+go_threads 24
+# HELP grafana_access_evaluation_count number of evaluation calls
+# TYPE grafana_access_evaluation_count counter
+grafana_access_evaluation_count 24
+# HELP grafana_access_evaluation_duration Histogram for the runtime of evaluation function.
+# TYPE grafana_access_evaluation_duration histogram
+grafana_access_evaluation_duration_bucket{le="1e-05"} 9
+grafana_access_evaluation_duration_bucket{le="4e-05"} 21
+grafana_access_evaluation_duration_bucket{le="0.00016"} 24
+grafana_access_evaluation_duration_bucket{le="0.00064"} 24
+grafana_access_evaluation_duration_bucket{le="0.00256"} 24
+grafana_access_evaluation_duration_bucket{le="0.01024"} 24
+grafana_access_evaluation_duration_bucket{le="0.04096"} 24
+grafana_access_evaluation_duration_bucket{le="0.16384"} 24
+grafana_access_evaluation_duration_bucket{le="0.65536"} 24
+grafana_access_evaluation_duration_bucket{le="2.62144"} 24
+grafana_access_evaluation_duration_bucket{le="+Inf"} 24
+grafana_access_evaluation_duration_sum 0.000527611
+grafana_access_evaluation_duration_count 24
+# HELP grafana_access_permissions_cache_usage access control permissions cache hit/miss
+# TYPE grafana_access_permissions_cache_usage counter
+grafana_access_permissions_cache_usage{status="hit"} 0
+grafana_access_permissions_cache_usage{status="miss"} 0
+# HELP grafana_access_permissions_duration Histogram for the runtime of permissions check function.
+# TYPE grafana_access_permissions_duration histogram
+grafana_access_permissions_duration_bucket{le="1e-05"} 0
+grafana_access_permissions_duration_bucket{le="4e-05"} 0
+grafana_access_permissions_duration_bucket{le="0.00016"} 0
+grafana_access_permissions_duration_bucket{le="0.00064"} 0
+grafana_access_permissions_duration_bucket{le="0.00256"} 2
+grafana_access_permissions_duration_bucket{le="0.01024"} 3
+grafana_access_permissions_duration_bucket{le="0.04096"} 3
+grafana_access_permissions_duration_bucket{le="0.16384"} 3
+grafana_access_permissions_duration_bucket{le="0.65536"} 3
+grafana_access_permissions_duration_bucket{le="2.62144"} 3
+grafana_access_permissions_duration_bucket{le="+Inf"} 3
+grafana_access_permissions_duration_sum 0.007149906
+grafana_access_permissions_duration_count 3
+# HELP grafana_access_search_permissions_duration Histogram for the runtime of permissions search function
+# TYPE grafana_access_search_permissions_duration histogram
+grafana_access_search_permissions_duration_bucket{le="0.001"} 0
+grafana_access_search_permissions_duration_bucket{le="0.01"} 0
+grafana_access_search_permissions_duration_bucket{le="0.1"} 0
+grafana_access_search_permissions_duration_bucket{le="1"} 0
+grafana_access_search_permissions_duration_bucket{le="10"} 0
+grafana_access_search_permissions_duration_bucket{le="100"} 0
+grafana_access_search_permissions_duration_bucket{le="+Inf"} 0
+grafana_access_search_permissions_duration_sum 0
+grafana_access_search_permissions_duration_count 0
+# HELP grafana_access_search_user_permissions_cache_usage access control search user permissions cache hit/miss
+# TYPE grafana_access_search_user_permissions_cache_usage counter
+grafana_access_search_user_permissions_cache_usage{status="hit"} 0
+grafana_access_search_user_permissions_cache_usage{status="miss"} 0
+# HELP grafana_aggregator_discovery_aggregation_count_total [ALPHA] Counter of number of times discovery was aggregated
+# TYPE grafana_aggregator_discovery_aggregation_count_total counter
+grafana_aggregator_discovery_aggregation_count_total 0
+# HELP grafana_alerting_active_alerts amount of active alerts
+# TYPE grafana_alerting_active_alerts gauge
+grafana_alerting_active_alerts 0
+# HELP grafana_alerting_active_configurations The number of active Alertmanager configurations.
+# TYPE grafana_alerting_active_configurations gauge
+grafana_alerting_active_configurations 1
+# HELP grafana_alerting_alertmanager_alerts How many alerts by state are in Grafana's Alertmanager.
+# TYPE grafana_alerting_alertmanager_alerts gauge
+grafana_alerting_alertmanager_alerts{org="1",state="active"} 0
+grafana_alerting_alertmanager_alerts{org="1",state="suppressed"} 0
+grafana_alerting_alertmanager_alerts{org="1",state="unprocessed"} 0
+# HELP grafana_alerting_alertmanager_config_hash The hash of the Alertmanager configuration.
+# TYPE grafana_alerting_alertmanager_config_hash gauge
+grafana_alerting_alertmanager_config_hash{org="1"} 1.93130392438226e+14
+# HELP grafana_alerting_alertmanager_config_match The total number of match
+# TYPE grafana_alerting_alertmanager_config_match gauge
+grafana_alerting_alertmanager_config_match 0
+# HELP grafana_alerting_alertmanager_config_match_re The total number of matchRE
+# TYPE grafana_alerting_alertmanager_config_match_re gauge
+grafana_alerting_alertmanager_config_match_re 0
+# HELP grafana_alerting_alertmanager_config_matchers The total number of matchers
+# TYPE grafana_alerting_alertmanager_config_matchers gauge
+grafana_alerting_alertmanager_config_matchers 0
+# HELP grafana_alerting_alertmanager_config_object_matchers The total number of object_matchers
+# TYPE grafana_alerting_alertmanager_config_object_matchers gauge
+grafana_alerting_alertmanager_config_object_matchers 2
+# HELP grafana_alerting_alertmanager_inhibition_rules Number of configured inhibition rules.
+# TYPE grafana_alerting_alertmanager_inhibition_rules gauge
+grafana_alerting_alertmanager_inhibition_rules{org="1"} 0
+# HELP grafana_alerting_alertmanager_integrations Number of configured receivers.
+# TYPE grafana_alerting_alertmanager_integrations gauge
+grafana_alerting_alertmanager_integrations{org="1",type="email"} 1
+# HELP grafana_alerting_alertmanager_receivers Number of configured receivers by state. It is considered active if used within a route.
+# TYPE grafana_alerting_alertmanager_receivers gauge
+grafana_alerting_alertmanager_receivers{org="1",state="active"} 1
+grafana_alerting_alertmanager_receivers{org="1",state="inactive"} 0
+# HELP grafana_alerting_alerts How many alerts by state are in the scheduler.
+# TYPE grafana_alerting_alerts gauge
+grafana_alerting_alerts{state="alerting"} 0
+grafana_alerting_alerts{state="error"} 0
+grafana_alerting_alerts{state="nodata"} 0
+grafana_alerting_alerts{state="normal"} 0
+grafana_alerting_alerts{state="pending"} 0
+# HELP grafana_alerting_alerts_invalid_total The total number of received alerts that were invalid.
+# TYPE grafana_alerting_alerts_invalid_total counter
+grafana_alerting_alerts_invalid_total{org="1"} 0
+# HELP grafana_alerting_alerts_received_total The total number of received alerts.
+# TYPE grafana_alerting_alerts_received_total counter
+grafana_alerting_alerts_received_total{org="1",status="firing"} 0
+grafana_alerting_alerts_received_total{org="1",status="resolved"} 0
+# HELP grafana_alerting_discovered_configurations The number of organizations we've discovered that require an Alertmanager configuration.
+# TYPE grafana_alerting_discovered_configurations gauge
+grafana_alerting_discovered_configurations 1
+# HELP grafana_alerting_dispatcher_aggregation_groups Number of active aggregation groups
+# TYPE grafana_alerting_dispatcher_aggregation_groups gauge
+grafana_alerting_dispatcher_aggregation_groups 0
+# HELP grafana_alerting_dispatcher_alert_processing_duration_seconds Summary of latencies for the processing of alerts.
+# TYPE grafana_alerting_dispatcher_alert_processing_duration_seconds summary
+grafana_alerting_dispatcher_alert_processing_duration_seconds_sum 0
+grafana_alerting_dispatcher_alert_processing_duration_seconds_count 0
+# HELP grafana_alerting_execution_time_milliseconds summary of alert execution duration
+# TYPE grafana_alerting_execution_time_milliseconds summary
+grafana_alerting_execution_time_milliseconds{quantile="0.5"} NaN
+grafana_alerting_execution_time_milliseconds{quantile="0.9"} NaN
+grafana_alerting_execution_time_milliseconds{quantile="0.99"} NaN
+grafana_alerting_execution_time_milliseconds_sum 0
+grafana_alerting_execution_time_milliseconds_count 0
+# HELP grafana_alerting_nflog_gc_duration_seconds Duration of the last notification log garbage collection cycle.
+# TYPE grafana_alerting_nflog_gc_duration_seconds summary
+grafana_alerting_nflog_gc_duration_seconds_sum 1.734e-06
+grafana_alerting_nflog_gc_duration_seconds_count 1
+# HELP grafana_alerting_nflog_gossip_messages_propagated_total Number of received gossip messages that have been further gossiped.
+# TYPE grafana_alerting_nflog_gossip_messages_propagated_total counter
+grafana_alerting_nflog_gossip_messages_propagated_total 0
+# HELP grafana_alerting_nflog_queries_total Number of notification log queries were received.
+# TYPE grafana_alerting_nflog_queries_total counter
+grafana_alerting_nflog_queries_total 0
+# HELP grafana_alerting_nflog_query_duration_seconds Duration of notification log query evaluation.
+# TYPE grafana_alerting_nflog_query_duration_seconds histogram
+grafana_alerting_nflog_query_duration_seconds_bucket{le="0.005"} 0
+grafana_alerting_nflog_query_duration_seconds_bucket{le="0.01"} 0
+grafana_alerting_nflog_query_duration_seconds_bucket{le="0.025"} 0
+grafana_alerting_nflog_query_duration_seconds_bucket{le="0.05"} 0
+grafana_alerting_nflog_query_duration_seconds_bucket{le="0.1"} 0
+grafana_alerting_nflog_query_duration_seconds_bucket{le="0.25"} 0
+grafana_alerting_nflog_query_duration_seconds_bucket{le="0.5"} 0
+grafana_alerting_nflog_query_duration_seconds_bucket{le="1"} 0
+grafana_alerting_nflog_query_duration_seconds_bucket{le="2.5"} 0
+grafana_alerting_nflog_query_duration_seconds_bucket{le="5"} 0
+grafana_alerting_nflog_query_duration_seconds_bucket{le="10"} 0
+grafana_alerting_nflog_query_duration_seconds_bucket{le="+Inf"} 0
+grafana_alerting_nflog_query_duration_seconds_sum 0
+grafana_alerting_nflog_query_duration_seconds_count 0
+# HELP grafana_alerting_nflog_query_errors_total Number notification log received queries that failed.
+# TYPE grafana_alerting_nflog_query_errors_total counter
+grafana_alerting_nflog_query_errors_total 0
+# HELP grafana_alerting_nflog_snapshot_duration_seconds Duration of the last notification log snapshot.
+# TYPE grafana_alerting_nflog_snapshot_duration_seconds summary
+grafana_alerting_nflog_snapshot_duration_seconds_sum 0
+grafana_alerting_nflog_snapshot_duration_seconds_count 0
+# HELP grafana_alerting_nflog_snapshot_size_bytes Size of the last notification log snapshot in bytes.
+# TYPE grafana_alerting_nflog_snapshot_size_bytes gauge
+grafana_alerting_nflog_snapshot_size_bytes 0
+# HELP grafana_alerting_notification_latency_seconds The latency of notifications in seconds.
+# TYPE grafana_alerting_notification_latency_seconds histogram
+grafana_alerting_notification_latency_seconds_bucket{le="+Inf"} 0
+grafana_alerting_notification_latency_seconds_sum 0
+grafana_alerting_notification_latency_seconds_count 0
+# HELP grafana_alerting_remote_alertmanager_configuration_sync_failures_total Total number of failed attempts to sync configurations between Alertmanagers.
+# TYPE grafana_alerting_remote_alertmanager_configuration_sync_failures_total counter
+grafana_alerting_remote_alertmanager_configuration_sync_failures_total 0
+# HELP grafana_alerting_remote_alertmanager_configuration_syncs_total Total number of configuration syncs to the remote Alertmanager.
+# TYPE grafana_alerting_remote_alertmanager_configuration_syncs_total counter
+grafana_alerting_remote_alertmanager_configuration_syncs_total 0
+# HELP grafana_alerting_remote_alertmanager_last_configuration_sync_timestamp_seconds Timestamp of the last successful configuration sync to the remote Alertmanager in seconds.
+# TYPE grafana_alerting_remote_alertmanager_last_configuration_sync_timestamp_seconds gauge
+grafana_alerting_remote_alertmanager_last_configuration_sync_timestamp_seconds 0
+# HELP grafana_alerting_remote_alertmanager_last_readiness_check_timestamp_seconds Timestamp of the last successful readiness check to the remote Alertmanager in seconds.
+# TYPE grafana_alerting_remote_alertmanager_last_readiness_check_timestamp_seconds gauge
+grafana_alerting_remote_alertmanager_last_readiness_check_timestamp_seconds 0
+# HELP grafana_alerting_remote_alertmanager_last_state_sync_timestamp_seconds Timestamp of the last successful state sync to the remote Alertmanager in seconds.
+# TYPE grafana_alerting_remote_alertmanager_last_state_sync_timestamp_seconds gauge
+grafana_alerting_remote_alertmanager_last_state_sync_timestamp_seconds 0
+# HELP grafana_alerting_remote_alertmanager_state_sync_failures_total Total number of failed attempts to sync state between Alertmanagers.
+# TYPE grafana_alerting_remote_alertmanager_state_sync_failures_total counter
+grafana_alerting_remote_alertmanager_state_sync_failures_total 0
+# HELP grafana_alerting_remote_alertmanager_state_syncs_total Total number of state syncs to the remote Alertmanager.
+# TYPE grafana_alerting_remote_alertmanager_state_syncs_total counter
+grafana_alerting_remote_alertmanager_state_syncs_total 0
+# HELP grafana_alerting_schedule_alert_rules The number of alert rules that could be considered for evaluation at the next tick.
+# TYPE grafana_alerting_schedule_alert_rules gauge
+grafana_alerting_schedule_alert_rules 0
+# HELP grafana_alerting_schedule_alert_rules_hash A hash of the alert rules that could be considered for evaluation at the next tick.
+# TYPE grafana_alerting_schedule_alert_rules_hash gauge
+grafana_alerting_schedule_alert_rules_hash 1.4695981039346655e+19
+# HELP grafana_alerting_schedule_periodic_duration_seconds The time taken to run the scheduler.
+# TYPE grafana_alerting_schedule_periodic_duration_seconds histogram
+grafana_alerting_schedule_periodic_duration_seconds_bucket{le="0.1"} 111
+grafana_alerting_schedule_periodic_duration_seconds_bucket{le="0.25"} 111
+grafana_alerting_schedule_periodic_duration_seconds_bucket{le="0.5"} 111
+grafana_alerting_schedule_periodic_duration_seconds_bucket{le="1"} 111
+grafana_alerting_schedule_periodic_duration_seconds_bucket{le="2"} 111
+grafana_alerting_schedule_periodic_duration_seconds_bucket{le="5"} 111
+grafana_alerting_schedule_periodic_duration_seconds_bucket{le="10"} 111
+grafana_alerting_schedule_periodic_duration_seconds_bucket{le="+Inf"} 111
+grafana_alerting_schedule_periodic_duration_seconds_sum 0.09499105399999996
+grafana_alerting_schedule_periodic_duration_seconds_count 111
+# HELP grafana_alerting_schedule_query_alert_rules_duration_seconds The time taken to fetch alert rules from the database.
+# TYPE grafana_alerting_schedule_query_alert_rules_duration_seconds histogram
+grafana_alerting_schedule_query_alert_rules_duration_seconds_bucket{le="0.1"} 111
+grafana_alerting_schedule_query_alert_rules_duration_seconds_bucket{le="0.25"} 111
+grafana_alerting_schedule_query_alert_rules_duration_seconds_bucket{le="0.5"} 111
+grafana_alerting_schedule_query_alert_rules_duration_seconds_bucket{le="1"} 111
+grafana_alerting_schedule_query_alert_rules_duration_seconds_bucket{le="2"} 111
+grafana_alerting_schedule_query_alert_rules_duration_seconds_bucket{le="5"} 111
+grafana_alerting_schedule_query_alert_rules_duration_seconds_bucket{le="10"} 111
+grafana_alerting_schedule_query_alert_rules_duration_seconds_bucket{le="+Inf"} 111
+grafana_alerting_schedule_query_alert_rules_duration_seconds_sum 0.09301058700000003
+grafana_alerting_schedule_query_alert_rules_duration_seconds_count 111
+# HELP grafana_alerting_scheduler_behind_seconds The total number of seconds the scheduler is behind.
+# TYPE grafana_alerting_scheduler_behind_seconds gauge
+grafana_alerting_scheduler_behind_seconds 0.0019103
+# HELP grafana_alerting_silences How many silences by state.
+# TYPE grafana_alerting_silences gauge
+grafana_alerting_silences{org="1",state="active"} 0
+grafana_alerting_silences{org="1",state="expired"} 0
+grafana_alerting_silences{org="1",state="pending"} 0
+# HELP grafana_alerting_silences_gc_duration_seconds Duration of the last silence garbage collection cycle.
+# TYPE grafana_alerting_silences_gc_duration_seconds summary
+grafana_alerting_silences_gc_duration_seconds_sum 0.000259521
+grafana_alerting_silences_gc_duration_seconds_count 1
+# HELP grafana_alerting_silences_gossip_messages_propagated_total Number of received gossip messages that have been further gossiped.
+# TYPE grafana_alerting_silences_gossip_messages_propagated_total counter
+grafana_alerting_silences_gossip_messages_propagated_total 0
+# HELP grafana_alerting_silences_queries_total How many silence queries were received.
+# TYPE grafana_alerting_silences_queries_total counter
+grafana_alerting_silences_queries_total 54
+# HELP grafana_alerting_silences_query_duration_seconds Duration of silence query evaluation.
+# TYPE grafana_alerting_silences_query_duration_seconds histogram
+grafana_alerting_silences_query_duration_seconds_bucket{le="0.005"} 55
+grafana_alerting_silences_query_duration_seconds_bucket{le="0.01"} 55
+grafana_alerting_silences_query_duration_seconds_bucket{le="0.025"} 55
+grafana_alerting_silences_query_duration_seconds_bucket{le="0.05"} 55
+grafana_alerting_silences_query_duration_seconds_bucket{le="0.1"} 55
+grafana_alerting_silences_query_duration_seconds_bucket{le="0.25"} 55
+grafana_alerting_silences_query_duration_seconds_bucket{le="0.5"} 55
+grafana_alerting_silences_query_duration_seconds_bucket{le="1"} 55
+grafana_alerting_silences_query_duration_seconds_bucket{le="2.5"} 55
+grafana_alerting_silences_query_duration_seconds_bucket{le="5"} 55
+grafana_alerting_silences_query_duration_seconds_bucket{le="10"} 55
+grafana_alerting_silences_query_duration_seconds_bucket{le="+Inf"} 55
+grafana_alerting_silences_query_duration_seconds_sum 0.00014916499999999996
+grafana_alerting_silences_query_duration_seconds_count 55
+# HELP grafana_alerting_silences_query_errors_total How many silence received queries did not succeed.
+# TYPE grafana_alerting_silences_query_errors_total counter
+grafana_alerting_silences_query_errors_total 0
+# HELP grafana_alerting_silences_snapshot_duration_seconds Duration of the last silence snapshot.
+# TYPE grafana_alerting_silences_snapshot_duration_seconds summary
+grafana_alerting_silences_snapshot_duration_seconds_sum 0
+grafana_alerting_silences_snapshot_duration_seconds_count 0
+# HELP grafana_alerting_silences_snapshot_size_bytes Size of the last silence snapshot in bytes.
+# TYPE grafana_alerting_silences_snapshot_size_bytes gauge
+grafana_alerting_silences_snapshot_size_bytes 0
+# HELP grafana_alerting_state_calculation_duration_seconds The duration of calculation of a single state.
+# TYPE grafana_alerting_state_calculation_duration_seconds histogram
+grafana_alerting_state_calculation_duration_seconds_bucket{le="0.01"} 0
+grafana_alerting_state_calculation_duration_seconds_bucket{le="0.1"} 0
+grafana_alerting_state_calculation_duration_seconds_bucket{le="1"} 0
+grafana_alerting_state_calculation_duration_seconds_bucket{le="2"} 0
+grafana_alerting_state_calculation_duration_seconds_bucket{le="5"} 0
+grafana_alerting_state_calculation_duration_seconds_bucket{le="10"} 0
+grafana_alerting_state_calculation_duration_seconds_bucket{le="+Inf"} 0
+grafana_alerting_state_calculation_duration_seconds_sum 0
+grafana_alerting_state_calculation_duration_seconds_count 0
+# HELP grafana_alerting_state_full_sync_duration_seconds The duration of fully synchronizing the state with the database.
+# TYPE grafana_alerting_state_full_sync_duration_seconds histogram
+grafana_alerting_state_full_sync_duration_seconds_bucket{le="0.01"} 0
+grafana_alerting_state_full_sync_duration_seconds_bucket{le="0.1"} 0
+grafana_alerting_state_full_sync_duration_seconds_bucket{le="1"} 0
+grafana_alerting_state_full_sync_duration_seconds_bucket{le="2"} 0
+grafana_alerting_state_full_sync_duration_seconds_bucket{le="5"} 0
+grafana_alerting_state_full_sync_duration_seconds_bucket{le="10"} 0
+grafana_alerting_state_full_sync_duration_seconds_bucket{le="60"} 0
+grafana_alerting_state_full_sync_duration_seconds_bucket{le="+Inf"} 0
+grafana_alerting_state_full_sync_duration_seconds_sum 0
+grafana_alerting_state_full_sync_duration_seconds_count 0
+# HELP grafana_alerting_state_history_info Information about the state history store.
+# TYPE grafana_alerting_state_history_info gauge
+grafana_alerting_state_history_info{backend="annotations"} 1
+# HELP grafana_alerting_state_history_writes_bytes_total The total number of bytes sent within a batch to the state history store. Only valid when using the Loki store.
+# TYPE grafana_alerting_state_history_writes_bytes_total counter
+grafana_alerting_state_history_writes_bytes_total 0
+# HELP grafana_alerting_ticker_interval_seconds Interval at which the ticker is meant to tick.
+# TYPE grafana_alerting_ticker_interval_seconds gauge
+grafana_alerting_ticker_interval_seconds 10
+# HELP grafana_alerting_ticker_last_consumed_tick_timestamp_seconds Timestamp of the last consumed tick in seconds.
+# TYPE grafana_alerting_ticker_last_consumed_tick_timestamp_seconds gauge
+grafana_alerting_ticker_last_consumed_tick_timestamp_seconds 1.7723867e+09
+# HELP grafana_alerting_ticker_next_tick_timestamp_seconds Timestamp of the next tick in seconds before it is consumed.
+# TYPE grafana_alerting_ticker_next_tick_timestamp_seconds gauge
+grafana_alerting_ticker_next_tick_timestamp_seconds 1.77238671e+09
+# HELP grafana_api_admin_user_created_total api admin user created counter
+# TYPE grafana_api_admin_user_created_total counter
+grafana_api_admin_user_created_total 0
+# HELP grafana_api_dashboard_get_milliseconds summary for dashboard get duration
+# TYPE grafana_api_dashboard_get_milliseconds summary
+grafana_api_dashboard_get_milliseconds{quantile="0.5"} NaN
+grafana_api_dashboard_get_milliseconds{quantile="0.9"} NaN
+grafana_api_dashboard_get_milliseconds{quantile="0.99"} NaN
+grafana_api_dashboard_get_milliseconds_sum 0
+grafana_api_dashboard_get_milliseconds_count 0
+# HELP grafana_api_dashboard_save_milliseconds summary for dashboard save duration
+# TYPE grafana_api_dashboard_save_milliseconds summary
+grafana_api_dashboard_save_milliseconds{quantile="0.5"} NaN
+grafana_api_dashboard_save_milliseconds{quantile="0.9"} NaN
+grafana_api_dashboard_save_milliseconds{quantile="0.99"} NaN
+grafana_api_dashboard_save_milliseconds_sum 0
+grafana_api_dashboard_save_milliseconds_count 0
+# HELP grafana_api_dashboard_search_milliseconds summary for dashboard search duration
+# TYPE grafana_api_dashboard_search_milliseconds summary
+grafana_api_dashboard_search_milliseconds{quantile="0.5"} NaN
+grafana_api_dashboard_search_milliseconds{quantile="0.9"} NaN
+grafana_api_dashboard_search_milliseconds{quantile="0.99"} NaN
+grafana_api_dashboard_search_milliseconds_sum 0
+grafana_api_dashboard_search_milliseconds_count 0
+# HELP grafana_api_dashboard_snapshot_create_total dashboard snapshots created
+# TYPE grafana_api_dashboard_snapshot_create_total counter
+grafana_api_dashboard_snapshot_create_total 0
+# HELP grafana_api_dashboard_snapshot_external_total external dashboard snapshots created
+# TYPE grafana_api_dashboard_snapshot_external_total counter
+grafana_api_dashboard_snapshot_external_total 0
+# HELP grafana_api_dashboard_snapshot_get_total loaded dashboards
+# TYPE grafana_api_dashboard_snapshot_get_total counter
+grafana_api_dashboard_snapshot_get_total 0
+# HELP grafana_api_dataproxy_request_all_milliseconds summary for dataproxy request duration
+# TYPE grafana_api_dataproxy_request_all_milliseconds summary
+grafana_api_dataproxy_request_all_milliseconds{quantile="0.5"} NaN
+grafana_api_dataproxy_request_all_milliseconds{quantile="0.9"} NaN
+grafana_api_dataproxy_request_all_milliseconds{quantile="0.99"} NaN
+grafana_api_dataproxy_request_all_milliseconds_sum 0
+grafana_api_dataproxy_request_all_milliseconds_count 0
+# HELP grafana_api_login_oauth_total api login oauth counter
+# TYPE grafana_api_login_oauth_total counter
+grafana_api_login_oauth_total 0
+# HELP grafana_api_login_post_total api login post counter
+# TYPE grafana_api_login_post_total counter
+grafana_api_login_post_total 0
+# HELP grafana_api_login_saml_total api login saml counter
+# TYPE grafana_api_login_saml_total counter
+grafana_api_login_saml_total 0
+# HELP grafana_api_models_dashboard_insert_total dashboards inserted 
+# TYPE grafana_api_models_dashboard_insert_total counter
+grafana_api_models_dashboard_insert_total 1
+# HELP grafana_api_org_create_total api org created counter
+# TYPE grafana_api_org_create_total counter
+grafana_api_org_create_total 0
+# HELP grafana_api_response_status_total api http response status
+# TYPE grafana_api_response_status_total counter
+grafana_api_response_status_total{code="200"} 0
+grafana_api_response_status_total{code="404"} 0
+grafana_api_response_status_total{code="500"} 0
+grafana_api_response_status_total{code="unknown"} 0
+# HELP grafana_api_user_signup_completed_total amount of users who completed the signup flow
+# TYPE grafana_api_user_signup_completed_total counter
+grafana_api_user_signup_completed_total 0
+# HELP grafana_api_user_signup_invite_total amount of users who have been invited
+# TYPE grafana_api_user_signup_invite_total counter
+grafana_api_user_signup_invite_total 0
+# HELP grafana_api_user_signup_started_total amount of users who started the signup flow
+# TYPE grafana_api_user_signup_started_total counter
+grafana_api_user_signup_started_total 0
+# HELP grafana_apiserver_audit_event_total [ALPHA] Counter of audit events generated and sent to the audit backend.
+# TYPE grafana_apiserver_audit_event_total counter
+grafana_apiserver_audit_event_total 0
+# HELP grafana_apiserver_audit_requests_rejected_total [ALPHA] Counter of apiserver requests rejected due to an error in audit logging backend.
+# TYPE grafana_apiserver_audit_requests_rejected_total counter
+grafana_apiserver_audit_requests_rejected_total 0
+# HELP grafana_apiserver_client_certificate_expiration_seconds [ALPHA] Distribution of the remaining lifetime on the certificate used to authenticate a request.
+# TYPE grafana_apiserver_client_certificate_expiration_seconds histogram
+grafana_apiserver_client_certificate_expiration_seconds_bucket{le="0"} 0
+grafana_apiserver_client_certificate_expiration_seconds_bucket{le="1800"} 0
+grafana_apiserver_client_certificate_expiration_seconds_bucket{le="3600"} 0
+grafana_apiserver_client_certificate_expiration_seconds_bucket{le="7200"} 0
+grafana_apiserver_client_certificate_expiration_seconds_bucket{le="21600"} 0
+grafana_apiserver_client_certificate_expiration_seconds_bucket{le="43200"} 0
+grafana_apiserver_client_certificate_expiration_seconds_bucket{le="86400"} 0
+grafana_apiserver_client_certificate_expiration_seconds_bucket{le="172800"} 0
+grafana_apiserver_client_certificate_expiration_seconds_bucket{le="345600"} 0
+grafana_apiserver_client_certificate_expiration_seconds_bucket{le="604800"} 0
+grafana_apiserver_client_certificate_expiration_seconds_bucket{le="2.592e+06"} 0
+grafana_apiserver_client_certificate_expiration_seconds_bucket{le="7.776e+06"} 0
+grafana_apiserver_client_certificate_expiration_seconds_bucket{le="1.5552e+07"} 0
+grafana_apiserver_client_certificate_expiration_seconds_bucket{le="3.1104e+07"} 0
+grafana_apiserver_client_certificate_expiration_seconds_bucket{le="+Inf"} 0
+grafana_apiserver_client_certificate_expiration_seconds_sum 0
+grafana_apiserver_client_certificate_expiration_seconds_count 0
+# HELP grafana_apiserver_current_inflight_requests [STABLE] Maximal number of currently used inflight request limit of this apiserver per request kind in last second.
+# TYPE grafana_apiserver_current_inflight_requests gauge
+grafana_apiserver_current_inflight_requests{request_kind="mutating"} 0
+grafana_apiserver_current_inflight_requests{request_kind="readOnly"} 0
+# HELP grafana_apiserver_envelope_encryption_dek_cache_fill_percent [ALPHA] Percent of the cache slots currently occupied by cached DEKs.
+# TYPE grafana_apiserver_envelope_encryption_dek_cache_fill_percent gauge
+grafana_apiserver_envelope_encryption_dek_cache_fill_percent 0
+# HELP grafana_apiserver_flowcontrol_read_vs_write_current_requests EXPERIMENTAL: [ALPHA] Observations, at the end of every nanosecond, of the number of requests (as a fraction of the relevant limit) waiting or in regular stage of execution
+# TYPE grafana_apiserver_flowcontrol_read_vs_write_current_requests histogram
+grafana_apiserver_flowcontrol_read_vs_write_current_requests_bucket{phase="executing",request_kind="readOnly",le="0"} 3.8106371e+07
+grafana_apiserver_flowcontrol_read_vs_write_current_requests_bucket{phase="executing",request_kind="readOnly",le="0.001"} 3.8106371e+07
+grafana_apiserver_flowcontrol_read_vs_write_current_requests_bucket{phase="executing",request_kind="readOnly",le="0.01"} 3.9056519e+07
+grafana_apiserver_flowcontrol_read_vs_write_current_requests_bucket{phase="executing",request_kind="readOnly",le="0.1"} 3.9056519e+07
+grafana_apiserver_flowcontrol_read_vs_write_current_requests_bucket{phase="executing",request_kind="readOnly",le="0.2"} 3.9056519e+07
+grafana_apiserver_flowcontrol_read_vs_write_current_requests_bucket{phase="executing",request_kind="readOnly",le="0.3"} 3.9056519e+07
+grafana_apiserver_flowcontrol_read_vs_write_current_requests_bucket{phase="executing",request_kind="readOnly",le="0.4"} 3.9056519e+07
+grafana_apiserver_flowcontrol_read_vs_write_current_requests_bucket{phase="executing",request_kind="readOnly",le="0.5"} 3.9056519e+07
+grafana_apiserver_flowcontrol_read_vs_write_current_requests_bucket{phase="executing",request_kind="readOnly",le="0.6"} 3.9056519e+07
+grafana_apiserver_flowcontrol_read_vs_write_current_requests_bucket{phase="executing",request_kind="readOnly",le="0.7"} 3.9056519e+07
+grafana_apiserver_flowcontrol_read_vs_write_current_requests_bucket{phase="executing",request_kind="readOnly",le="0.8"} 3.9056519e+07
+grafana_apiserver_flowcontrol_read_vs_write_current_requests_bucket{phase="executing",request_kind="readOnly",le="0.9"} 3.9056519e+07
+grafana_apiserver_flowcontrol_read_vs_write_current_requests_bucket{phase="executing",request_kind="readOnly",le="0.95"} 3.9056519e+07
+grafana_apiserver_flowcontrol_read_vs_write_current_requests_bucket{phase="executing",request_kind="readOnly",le="0.99"} 3.9056519e+07
+grafana_apiserver_flowcontrol_read_vs_write_current_requests_bucket{phase="executing",request_kind="readOnly",le="1"} 3.9056519e+07
+grafana_apiserver_flowcontrol_read_vs_write_current_requests_bucket{phase="executing",request_kind="readOnly",le="+Inf"} 3.9056519e+07
+grafana_apiserver_flowcontrol_read_vs_write_current_requests_sum{phase="executing",request_kind="readOnly"} 2375.37
+grafana_apiserver_flowcontrol_read_vs_write_current_requests_count{phase="executing",request_kind="readOnly"} 3.9056519e+07
+# HELP grafana_apiserver_flowcontrol_seat_fair_frac [ALPHA] Fair fraction of server's concurrency to allocate to each priority level that can use it
+# TYPE grafana_apiserver_flowcontrol_seat_fair_frac gauge
+grafana_apiserver_flowcontrol_seat_fair_frac 0
+# HELP grafana_apiserver_kube_aggregator_x509_insecure_sha1_total [ALPHA] Counts the number of requests to servers with insecure SHA1 signatures in their serving certificate OR the number of connection failures due to the insecure SHA1 signatures (either/or, based on the runtime environment)
+# TYPE grafana_apiserver_kube_aggregator_x509_insecure_sha1_total counter
+grafana_apiserver_kube_aggregator_x509_insecure_sha1_total 0
+# HELP grafana_apiserver_kube_aggregator_x509_missing_san_total [ALPHA] Counts the number of requests to servers missing SAN extension in their serving certificate OR the number of connection failures due to the lack of x509 certificate SAN extension missing (either/or, based on the runtime environment)
+# TYPE grafana_apiserver_kube_aggregator_x509_missing_san_total counter
+grafana_apiserver_kube_aggregator_x509_missing_san_total 0
+# HELP grafana_apiserver_request_duration_seconds [STABLE] Response latency distribution in seconds for each verb, dry run value, group, version, resource, subresource, scope and component.
+# TYPE grafana_apiserver_request_duration_seconds histogram
+grafana_apiserver_request_duration_seconds_bucket{component="",dry_run="",group="",resource="",scope="",subresource="/readyz",verb="GET",version="",le="0.005"} 1
+grafana_apiserver_request_duration_seconds_bucket{component="",dry_run="",group="",resource="",scope="",subresource="/readyz",verb="GET",version="",le="0.025"} 1
+grafana_apiserver_request_duration_seconds_bucket{component="",dry_run="",group="",resource="",scope="",subresource="/readyz",verb="GET",version="",le="0.05"} 1
+grafana_apiserver_request_duration_seconds_bucket{component="",dry_run="",group="",resource="",scope="",subresource="/readyz",verb="GET",version="",le="0.1"} 1
+grafana_apiserver_request_duration_seconds_bucket{component="",dry_run="",group="",resource="",scope="",subresource="/readyz",verb="GET",version="",le="0.2"} 1
+grafana_apiserver_request_duration_seconds_bucket{component="",dry_run="",group="",resource="",scope="",subresource="/readyz",verb="GET",version="",le="0.4"} 1
+grafana_apiserver_request_duration_seconds_bucket{component="",dry_run="",group="",resource="",scope="",subresource="/readyz",verb="GET",version="",le="0.6"} 1
+grafana_apiserver_request_duration_seconds_bucket{component="",dry_run="",group="",resource="",scope="",subresource="/readyz",verb="GET",version="",le="0.8"} 1
+grafana_apiserver_request_duration_seconds_bucket{component="",dry_run="",group="",resource="",scope="",subresource="/readyz",verb="GET",version="",le="1"} 1
+grafana_apiserver_request_duration_seconds_bucket{component="",dry_run="",group="",resource="",scope="",subresource="/readyz",verb="GET",version="",le="1.25"} 1
+grafana_apiserver_request_duration_seconds_bucket{component="",dry_run="",group="",resource="",scope="",subresource="/readyz",verb="GET",version="",le="1.5"} 1
+grafana_apiserver_request_duration_seconds_bucket{component="",dry_run="",group="",resource="",scope="",subresource="/readyz",verb="GET",version="",le="2"} 1
+grafana_apiserver_request_duration_seconds_bucket{component="",dry_run="",group="",resource="",scope="",subresource="/readyz",verb="GET",version="",le="3"} 1
+grafana_apiserver_request_duration_seconds_bucket{component="",dry_run="",group="",resource="",scope="",subresource="/readyz",verb="GET",version="",le="4"} 1
+grafana_apiserver_request_duration_seconds_bucket{component="",dry_run="",group="",resource="",scope="",subresource="/readyz",verb="GET",version="",le="5"} 1
+grafana_apiserver_request_duration_seconds_bucket{component="",dry_run="",group="",resource="",scope="",subresource="/readyz",verb="GET",version="",le="6"} 1
+grafana_apiserver_request_duration_seconds_bucket{component="",dry_run="",group="",resource="",scope="",subresource="/readyz",verb="GET",version="",le="8"} 1
+grafana_apiserver_request_duration_seconds_bucket{component="",dry_run="",group="",resource="",scope="",subresource="/readyz",verb="GET",version="",le="10"} 1
+grafana_apiserver_request_duration_seconds_bucket{component="",dry_run="",group="",resource="",scope="",subresource="/readyz",verb="GET",version="",le="15"} 1
+grafana_apiserver_request_duration_seconds_bucket{component="",dry_run="",group="",resource="",scope="",subresource="/readyz",verb="GET",version="",le="20"} 1
+grafana_apiserver_request_duration_seconds_bucket{component="",dry_run="",group="",resource="",scope="",subresource="/readyz",verb="GET",version="",le="30"} 1
+grafana_apiserver_request_duration_seconds_bucket{component="",dry_run="",group="",resource="",scope="",subresource="/readyz",verb="GET",version="",le="45"} 1
+grafana_apiserver_request_duration_seconds_bucket{component="",dry_run="",group="",resource="",scope="",subresource="/readyz",verb="GET",version="",le="60"} 1
+grafana_apiserver_request_duration_seconds_bucket{component="",dry_run="",group="",resource="",scope="",subresource="/readyz",verb="GET",version="",le="+Inf"} 1
+grafana_apiserver_request_duration_seconds_sum{component="",dry_run="",group="",resource="",scope="",subresource="/readyz",verb="GET",version=""} 0.001106179
+grafana_apiserver_request_duration_seconds_count{component="",dry_run="",group="",resource="",scope="",subresource="/readyz",verb="GET",version=""} 1
+# HELP grafana_apiserver_request_filter_duration_seconds [ALPHA] Request filter latency distribution in seconds, for each filter type
+# TYPE grafana_apiserver_request_filter_duration_seconds histogram
+grafana_apiserver_request_filter_duration_seconds_bucket{filter="audit",le="0.0001"} 1
+grafana_apiserver_request_filter_duration_seconds_bucket{filter="audit",le="0.0003"} 1
+grafana_apiserver_request_filter_duration_seconds_bucket{filter="audit",le="0.001"} 1
+grafana_apiserver_request_filter_duration_seconds_bucket{filter="audit",le="0.003"} 1
+grafana_apiserver_request_filter_duration_seconds_bucket{filter="audit",le="0.01"} 1
+grafana_apiserver_request_filter_duration_seconds_bucket{filter="audit",le="0.03"} 1
+grafana_apiserver_request_filter_duration_seconds_bucket{filter="audit",le="0.1"} 1
+grafana_apiserver_request_filter_duration_seconds_bucket{filter="audit",le="0.3"} 1
+grafana_apiserver_request_filter_duration_seconds_bucket{filter="audit",le="1"} 1
+grafana_apiserver_request_filter_duration_seconds_bucket{filter="audit",le="5"} 1
+grafana_apiserver_request_filter_duration_seconds_bucket{filter="audit",le="10"} 1
+grafana_apiserver_request_filter_duration_seconds_bucket{filter="audit",le="15"} 1
+grafana_apiserver_request_filter_duration_seconds_bucket{filter="audit",le="30"} 1
+grafana_apiserver_request_filter_duration_seconds_bucket{filter="audit",le="+Inf"} 1
+grafana_apiserver_request_filter_duration_seconds_sum{filter="audit"} 3.72e-07
+grafana_apiserver_request_filter_duration_seconds_count{filter="audit"} 1
+grafana_apiserver_request_filter_duration_seconds_bucket{filter="authentication",le="0.0001"} 1
+grafana_apiserver_request_filter_duration_seconds_bucket{filter="authentication",le="0.0003"} 1
+grafana_apiserver_request_filter_duration_seconds_bucket{filter="authentication",le="0.001"} 1
+grafana_apiserver_request_filter_duration_seconds_bucket{filter="authentication",le="0.003"} 1
+grafana_apiserver_request_filter_duration_seconds_bucket{filter="authentication",le="0.01"} 1
+grafana_apiserver_request_filter_duration_seconds_bucket{filter="authentication",le="0.03"} 1
+grafana_apiserver_request_filter_duration_seconds_bucket{filter="authentication",le="0.1"} 1
+grafana_apiserver_request_filter_duration_seconds_bucket{filter="authentication",le="0.3"} 1
+grafana_apiserver_request_filter_duration_seconds_bucket{filter="authentication",le="1"} 1
+grafana_apiserver_request_filter_duration_seconds_bucket{filter="authentication",le="5"} 1
+grafana_apiserver_request_filter_duration_seconds_bucket{filter="authentication",le="10"} 1
+grafana_apiserver_request_filter_duration_seconds_bucket{filter="authentication",le="15"} 1
+grafana_apiserver_request_filter_duration_seconds_bucket{filter="authentication",le="30"} 1
+grafana_apiserver_request_filter_duration_seconds_bucket{filter="authentication",le="+Inf"} 1
+grafana_apiserver_request_filter_duration_seconds_sum{filter="authentication"} 8.2484e-05
+grafana_apiserver_request_filter_duration_seconds_count{filter="authentication"} 1
+grafana_apiserver_request_filter_duration_seconds_bucket{filter="authorization",le="0.0001"} 1
+grafana_apiserver_request_filter_duration_seconds_bucket{filter="authorization",le="0.0003"} 1
+grafana_apiserver_request_filter_duration_seconds_bucket{filter="authorization",le="0.001"} 1
+grafana_apiserver_request_filter_duration_seconds_bucket{filter="authorization",le="0.003"} 1
+grafana_apiserver_request_filter_duration_seconds_bucket{filter="authorization",le="0.01"} 1
+grafana_apiserver_request_filter_duration_seconds_bucket{filter="authorization",le="0.03"} 1
+grafana_apiserver_request_filter_duration_seconds_bucket{filter="authorization",le="0.1"} 1
+grafana_apiserver_request_filter_duration_seconds_bucket{filter="authorization",le="0.3"} 1
+grafana_apiserver_request_filter_duration_seconds_bucket{filter="authorization",le="1"} 1
+grafana_apiserver_request_filter_duration_seconds_bucket{filter="authorization",le="5"} 1
+grafana_apiserver_request_filter_duration_seconds_bucket{filter="authorization",le="10"} 1
+grafana_apiserver_request_filter_duration_seconds_bucket{filter="authorization",le="15"} 1
+grafana_apiserver_request_filter_duration_seconds_bucket{filter="authorization",le="30"} 1
+grafana_apiserver_request_filter_duration_seconds_bucket{filter="authorization",le="+Inf"} 1
+grafana_apiserver_request_filter_duration_seconds_sum{filter="authorization"} 8.774e-06
+grafana_apiserver_request_filter_duration_seconds_count{filter="authorization"} 1
+grafana_apiserver_request_filter_duration_seconds_bucket{filter="impersonation",le="0.0001"} 1
+grafana_apiserver_request_filter_duration_seconds_bucket{filter="impersonation",le="0.0003"} 1
+grafana_apiserver_request_filter_duration_seconds_bucket{filter="impersonation",le="0.001"} 1
+grafana_apiserver_request_filter_duration_seconds_bucket{filter="impersonation",le="0.003"} 1
+grafana_apiserver_request_filter_duration_seconds_bucket{filter="impersonation",le="0.01"} 1
+grafana_apiserver_request_filter_duration_seconds_bucket{filter="impersonation",le="0.03"} 1
+grafana_apiserver_request_filter_duration_seconds_bucket{filter="impersonation",le="0.1"} 1
+grafana_apiserver_request_filter_duration_seconds_bucket{filter="impersonation",le="0.3"} 1
+grafana_apiserver_request_filter_duration_seconds_bucket{filter="impersonation",le="1"} 1
+grafana_apiserver_request_filter_duration_seconds_bucket{filter="impersonation",le="5"} 1
+grafana_apiserver_request_filter_duration_seconds_bucket{filter="impersonation",le="10"} 1
+grafana_apiserver_request_filter_duration_seconds_bucket{filter="impersonation",le="15"} 1
+grafana_apiserver_request_filter_duration_seconds_bucket{filter="impersonation",le="30"} 1
+grafana_apiserver_request_filter_duration_seconds_bucket{filter="impersonation",le="+Inf"} 1
+grafana_apiserver_request_filter_duration_seconds_sum{filter="impersonation"} 1.764e-06
+grafana_apiserver_request_filter_duration_seconds_count{filter="impersonation"} 1
+# HELP grafana_apiserver_request_sli_duration_seconds [ALPHA] Response latency distribution (not counting webhook duration and priority & fairness queue wait times) in seconds for each verb, group, version, resource, subresource, scope and component.
+# TYPE grafana_apiserver_request_sli_duration_seconds histogram
+grafana_apiserver_request_sli_duration_seconds_bucket{component="",group="",resource="",scope="",subresource="/readyz",verb="GET",version="",le="0.05"} 1
+grafana_apiserver_request_sli_duration_seconds_bucket{component="",group="",resource="",scope="",subresource="/readyz",verb="GET",version="",le="0.1"} 1
+grafana_apiserver_request_sli_duration_seconds_bucket{component="",group="",resource="",scope="",subresource="/readyz",verb="GET",version="",le="0.2"} 1
+grafana_apiserver_request_sli_duration_seconds_bucket{component="",group="",resource="",scope="",subresource="/readyz",verb="GET",version="",le="0.4"} 1
+grafana_apiserver_request_sli_duration_seconds_bucket{component="",group="",resource="",scope="",subresource="/readyz",verb="GET",version="",le="0.6"} 1
+grafana_apiserver_request_sli_duration_seconds_bucket{component="",group="",resource="",scope="",subresource="/readyz",verb="GET",version="",le="0.8"} 1
+grafana_apiserver_request_sli_duration_seconds_bucket{component="",group="",resource="",scope="",subresource="/readyz",verb="GET",version="",le="1"} 1
+grafana_apiserver_request_sli_duration_seconds_bucket{component="",group="",resource="",scope="",subresource="/readyz",verb="GET",version="",le="1.25"} 1
+grafana_apiserver_request_sli_duration_seconds_bucket{component="",group="",resource="",scope="",subresource="/readyz",verb="GET",version="",le="1.5"} 1
+grafana_apiserver_request_sli_duration_seconds_bucket{component="",group="",resource="",scope="",subresource="/readyz",verb="GET",version="",le="2"} 1
+grafana_apiserver_request_sli_duration_seconds_bucket{component="",group="",resource="",scope="",subresource="/readyz",verb="GET",version="",le="3"} 1
+grafana_apiserver_request_sli_duration_seconds_bucket{component="",group="",resource="",scope="",subresource="/readyz",verb="GET",version="",le="4"} 1
+grafana_apiserver_request_sli_duration_seconds_bucket{component="",group="",resource="",scope="",subresource="/readyz",verb="GET",version="",le="5"} 1
+grafana_apiserver_request_sli_duration_seconds_bucket{component="",group="",resource="",scope="",subresource="/readyz",verb="GET",version="",le="6"} 1
+grafana_apiserver_request_sli_duration_seconds_bucket{component="",group="",resource="",scope="",subresource="/readyz",verb="GET",version="",le="8"} 1
+grafana_apiserver_request_sli_duration_seconds_bucket{component="",group="",resource="",scope="",subresource="/readyz",verb="GET",version="",le="10"} 1
+grafana_apiserver_request_sli_duration_seconds_bucket{component="",group="",resource="",scope="",subresource="/readyz",verb="GET",version="",le="15"} 1
+grafana_apiserver_request_sli_duration_seconds_bucket{component="",group="",resource="",scope="",subresource="/readyz",verb="GET",version="",le="20"} 1
+grafana_apiserver_request_sli_duration_seconds_bucket{component="",group="",resource="",scope="",subresource="/readyz",verb="GET",version="",le="30"} 1
+grafana_apiserver_request_sli_duration_seconds_bucket{component="",group="",resource="",scope="",subresource="/readyz",verb="GET",version="",le="45"} 1
+grafana_apiserver_request_sli_duration_seconds_bucket{component="",group="",resource="",scope="",subresource="/readyz",verb="GET",version="",le="60"} 1
+grafana_apiserver_request_sli_duration_seconds_bucket{component="",group="",resource="",scope="",subresource="/readyz",verb="GET",version="",le="+Inf"} 1
+grafana_apiserver_request_sli_duration_seconds_sum{component="",group="",resource="",scope="",subresource="/readyz",verb="GET",version=""} 0.001106179
+grafana_apiserver_request_sli_duration_seconds_count{component="",group="",resource="",scope="",subresource="/readyz",verb="GET",version=""} 1
+# HELP grafana_apiserver_request_slo_duration_seconds [ALPHA] Response latency distribution (not counting webhook duration and priority & fairness queue wait times) in seconds for each verb, group, version, resource, subresource, scope and component.
+# TYPE grafana_apiserver_request_slo_duration_seconds histogram
+grafana_apiserver_request_slo_duration_seconds_bucket{component="",group="",resource="",scope="",subresource="/readyz",verb="GET",version="",le="0.05"} 1
+grafana_apiserver_request_slo_duration_seconds_bucket{component="",group="",resource="",scope="",subresource="/readyz",verb="GET",version="",le="0.1"} 1
+grafana_apiserver_request_slo_duration_seconds_bucket{component="",group="",resource="",scope="",subresource="/readyz",verb="GET",version="",le="0.2"} 1
+grafana_apiserver_request_slo_duration_seconds_bucket{component="",group="",resource="",scope="",subresource="/readyz",verb="GET",version="",le="0.4"} 1
+grafana_apiserver_request_slo_duration_seconds_bucket{component="",group="",resource="",scope="",subresource="/readyz",verb="GET",version="",le="0.6"} 1
+grafana_apiserver_request_slo_duration_seconds_bucket{component="",group="",resource="",scope="",subresource="/readyz",verb="GET",version="",le="0.8"} 1
+grafana_apiserver_request_slo_duration_seconds_bucket{component="",group="",resource="",scope="",subresource="/readyz",verb="GET",version="",le="1"} 1
+grafana_apiserver_request_slo_duration_seconds_bucket{component="",group="",resource="",scope="",subresource="/readyz",verb="GET",version="",le="1.25"} 1
+grafana_apiserver_request_slo_duration_seconds_bucket{component="",group="",resource="",scope="",subresource="/readyz",verb="GET",version="",le="1.5"} 1
+grafana_apiserver_request_slo_duration_seconds_bucket{component="",group="",resource="",scope="",subresource="/readyz",verb="GET",version="",le="2"} 1
+grafana_apiserver_request_slo_duration_seconds_bucket{component="",group="",resource="",scope="",subresource="/readyz",verb="GET",version="",le="3"} 1
+grafana_apiserver_request_slo_duration_seconds_bucket{component="",group="",resource="",scope="",subresource="/readyz",verb="GET",version="",le="4"} 1
+grafana_apiserver_request_slo_duration_seconds_bucket{component="",group="",resource="",scope="",subresource="/readyz",verb="GET",version="",le="5"} 1
+grafana_apiserver_request_slo_duration_seconds_bucket{component="",group="",resource="",scope="",subresource="/readyz",verb="GET",version="",le="6"} 1
+grafana_apiserver_request_slo_duration_seconds_bucket{component="",group="",resource="",scope="",subresource="/readyz",verb="GET",version="",le="8"} 1
+grafana_apiserver_request_slo_duration_seconds_bucket{component="",group="",resource="",scope="",subresource="/readyz",verb="GET",version="",le="10"} 1
+grafana_apiserver_request_slo_duration_seconds_bucket{component="",group="",resource="",scope="",subresource="/readyz",verb="GET",version="",le="15"} 1
+grafana_apiserver_request_slo_duration_seconds_bucket{component="",group="",resource="",scope="",subresource="/readyz",verb="GET",version="",le="20"} 1
+grafana_apiserver_request_slo_duration_seconds_bucket{component="",group="",resource="",scope="",subresource="/readyz",verb="GET",version="",le="30"} 1
+grafana_apiserver_request_slo_duration_seconds_bucket{component="",group="",resource="",scope="",subresource="/readyz",verb="GET",version="",le="45"} 1
+grafana_apiserver_request_slo_duration_seconds_bucket{component="",group="",resource="",scope="",subresource="/readyz",verb="GET",version="",le="60"} 1
+grafana_apiserver_request_slo_duration_seconds_bucket{component="",group="",resource="",scope="",subresource="/readyz",verb="GET",version="",le="+Inf"} 1
+grafana_apiserver_request_slo_duration_seconds_sum{component="",group="",resource="",scope="",subresource="/readyz",verb="GET",version=""} 0.001106179
+grafana_apiserver_request_slo_duration_seconds_count{component="",group="",resource="",scope="",subresource="/readyz",verb="GET",version=""} 1
+# HELP grafana_apiserver_request_total [STABLE] Counter of apiserver requests broken out for each verb, dry run value, group, version, resource, scope, component, and HTTP response code.
+# TYPE grafana_apiserver_request_total counter
+grafana_apiserver_request_total{code="200",component="",dry_run="",group="",resource="",scope="",subresource="/readyz",verb="GET",version=""} 1
+# HELP grafana_apiserver_response_sizes [STABLE] Response size distribution in bytes for each group, version, verb, resource, subresource, scope and component.
+# TYPE grafana_apiserver_response_sizes histogram
+grafana_apiserver_response_sizes_bucket{component="",group="",resource="",scope="",subresource="/readyz",verb="GET",version="",le="1000"} 1
+grafana_apiserver_response_sizes_bucket{component="",group="",resource="",scope="",subresource="/readyz",verb="GET",version="",le="10000"} 1
+grafana_apiserver_response_sizes_bucket{component="",group="",resource="",scope="",subresource="/readyz",verb="GET",version="",le="100000"} 1
+grafana_apiserver_response_sizes_bucket{component="",group="",resource="",scope="",subresource="/readyz",verb="GET",version="",le="1e+06"} 1
+grafana_apiserver_response_sizes_bucket{component="",group="",resource="",scope="",subresource="/readyz",verb="GET",version="",le="1e+07"} 1
+grafana_apiserver_response_sizes_bucket{component="",group="",resource="",scope="",subresource="/readyz",verb="GET",version="",le="1e+08"} 1
+grafana_apiserver_response_sizes_bucket{component="",group="",resource="",scope="",subresource="/readyz",verb="GET",version="",le="1e+09"} 1
+grafana_apiserver_response_sizes_bucket{component="",group="",resource="",scope="",subresource="/readyz",verb="GET",version="",le="+Inf"} 1
+grafana_apiserver_response_sizes_sum{component="",group="",resource="",scope="",subresource="/readyz",verb="GET",version=""} 2
+grafana_apiserver_response_sizes_count{component="",group="",resource="",scope="",subresource="/readyz",verb="GET",version=""} 1
+# HELP grafana_apiserver_storage_data_key_generation_duration_seconds [ALPHA] Latencies in seconds of data encryption key(DEK) generation operations.
+# TYPE grafana_apiserver_storage_data_key_generation_duration_seconds histogram
+grafana_apiserver_storage_data_key_generation_duration_seconds_bucket{le="5e-06"} 0
+grafana_apiserver_storage_data_key_generation_duration_seconds_bucket{le="1e-05"} 0
+grafana_apiserver_storage_data_key_generation_duration_seconds_bucket{le="2e-05"} 0
+grafana_apiserver_storage_data_key_generation_duration_seconds_bucket{le="4e-05"} 0
+grafana_apiserver_storage_data_key_generation_duration_seconds_bucket{le="8e-05"} 0
+grafana_apiserver_storage_data_key_generation_duration_seconds_bucket{le="0.00016"} 0
+grafana_apiserver_storage_data_key_generation_duration_seconds_bucket{le="0.00032"} 0
+grafana_apiserver_storage_data_key_generation_duration_seconds_bucket{le="0.00064"} 0
+grafana_apiserver_storage_data_key_generation_duration_seconds_bucket{le="0.00128"} 0
+grafana_apiserver_storage_data_key_generation_duration_seconds_bucket{le="0.00256"} 0
+grafana_apiserver_storage_data_key_generation_duration_seconds_bucket{le="0.00512"} 0
+grafana_apiserver_storage_data_key_generation_duration_seconds_bucket{le="0.01024"} 0
+grafana_apiserver_storage_data_key_generation_duration_seconds_bucket{le="0.02048"} 0
+grafana_apiserver_storage_data_key_generation_duration_seconds_bucket{le="0.04096"} 0
+grafana_apiserver_storage_data_key_generation_duration_seconds_bucket{le="+Inf"} 0
+grafana_apiserver_storage_data_key_generation_duration_seconds_sum 0
+grafana_apiserver_storage_data_key_generation_duration_seconds_count 0
+# HELP grafana_apiserver_storage_data_key_generation_failures_total [ALPHA] Total number of failed data encryption key(DEK) generation operations.
+# TYPE grafana_apiserver_storage_data_key_generation_failures_total counter
+grafana_apiserver_storage_data_key_generation_failures_total 0
+# HELP grafana_apiserver_storage_envelope_transformation_cache_misses_total [ALPHA] Total number of cache misses while accessing key decryption key(KEK).
+# TYPE grafana_apiserver_storage_envelope_transformation_cache_misses_total counter
+grafana_apiserver_storage_envelope_transformation_cache_misses_total 0
+# HELP grafana_apiserver_tls_handshake_errors_total [ALPHA] Number of requests dropped with 'TLS handshake error from' error
+# TYPE grafana_apiserver_tls_handshake_errors_total counter
+grafana_apiserver_tls_handshake_errors_total 0
+# HELP grafana_apiserver_webhooks_x509_insecure_sha1_total [ALPHA] Counts the number of requests to servers with insecure SHA1 signatures in their serving certificate OR the number of connection failures due to the insecure SHA1 signatures (either/or, based on the runtime environment)
+# TYPE grafana_apiserver_webhooks_x509_insecure_sha1_total counter
+grafana_apiserver_webhooks_x509_insecure_sha1_total 0
+# HELP grafana_apiserver_webhooks_x509_missing_san_total [ALPHA] Counts the number of requests to servers missing SAN extension in their serving certificate OR the number of connection failures due to the lack of x509 certificate SAN extension missing (either/or, based on the runtime environment)
+# TYPE grafana_apiserver_webhooks_x509_missing_san_total counter
+grafana_apiserver_webhooks_x509_missing_san_total 0
+# HELP grafana_authenticated_user_requests [ALPHA] Counter of authenticated requests broken out by username.
+# TYPE grafana_authenticated_user_requests counter
+grafana_authenticated_user_requests{username="other"} 1
+# HELP grafana_authentication_attempts [ALPHA] Counter of authenticated attempts.
+# TYPE grafana_authentication_attempts counter
+grafana_authentication_attempts{result="success"} 1
+# HELP grafana_authentication_duration_seconds [ALPHA] Authentication duration in seconds broken out by result.
+# TYPE grafana_authentication_duration_seconds histogram
+grafana_authentication_duration_seconds_bucket{result="success",le="0.001"} 1
+grafana_authentication_duration_seconds_bucket{result="success",le="0.002"} 1
+grafana_authentication_duration_seconds_bucket{result="success",le="0.004"} 1
+grafana_authentication_duration_seconds_bucket{result="success",le="0.008"} 1
+grafana_authentication_duration_seconds_bucket{result="success",le="0.016"} 1
+grafana_authentication_duration_seconds_bucket{result="success",le="0.032"} 1
+grafana_authentication_duration_seconds_bucket{result="success",le="0.064"} 1
+grafana_authentication_duration_seconds_bucket{result="success",le="0.128"} 1
+grafana_authentication_duration_seconds_bucket{result="success",le="0.256"} 1
+grafana_authentication_duration_seconds_bucket{result="success",le="0.512"} 1
+grafana_authentication_duration_seconds_bucket{result="success",le="1.024"} 1
+grafana_authentication_duration_seconds_bucket{result="success",le="2.048"} 1
+grafana_authentication_duration_seconds_bucket{result="success",le="4.096"} 1
+grafana_authentication_duration_seconds_bucket{result="success",le="8.192"} 1
+grafana_authentication_duration_seconds_bucket{result="success",le="16.384"} 1
+grafana_authentication_duration_seconds_bucket{result="success",le="+Inf"} 1
+grafana_authentication_duration_seconds_sum{result="success"} 6.0804e-05
+grafana_authentication_duration_seconds_count{result="success"} 1
+# HELP grafana_authn_authn_failed_authentication_total Number of failed authentications
+# TYPE grafana_authn_authn_failed_authentication_total counter
+grafana_authn_authn_failed_authentication_total 0
+# HELP grafana_authn_authn_successful_authentication_total Number of successful authentications
+# TYPE grafana_authn_authn_successful_authentication_total counter
+grafana_authn_authn_successful_authentication_total{client="auth.client.anonymous"} 2
+# HELP grafana_authorization_attempts_total [ALPHA] Counter of authorization attempts broken down by result. It can be either 'allowed', 'denied', 'no-opinion' or 'error'.
+# TYPE grafana_authorization_attempts_total counter
+grafana_authorization_attempts_total{result="allowed"} 1
+# HELP grafana_authorization_duration_seconds [ALPHA] Authorization duration in seconds broken out by result.
+# TYPE grafana_authorization_duration_seconds histogram
+grafana_authorization_duration_seconds_bucket{result="allowed",le="0.001"} 1
+grafana_authorization_duration_seconds_bucket{result="allowed",le="0.002"} 1
+grafana_authorization_duration_seconds_bucket{result="allowed",le="0.004"} 1
+grafana_authorization_duration_seconds_bucket{result="allowed",le="0.008"} 1
+grafana_authorization_duration_seconds_bucket{result="allowed",le="0.016"} 1
+grafana_authorization_duration_seconds_bucket{result="allowed",le="0.032"} 1
+grafana_authorization_duration_seconds_bucket{result="allowed",le="0.064"} 1
+grafana_authorization_duration_seconds_bucket{result="allowed",le="0.128"} 1
+grafana_authorization_duration_seconds_bucket{result="allowed",le="0.256"} 1
+grafana_authorization_duration_seconds_bucket{result="allowed",le="0.512"} 1
+grafana_authorization_duration_seconds_bucket{result="allowed",le="1.024"} 1
+grafana_authorization_duration_seconds_bucket{result="allowed",le="2.048"} 1
+grafana_authorization_duration_seconds_bucket{result="allowed",le="4.096"} 1
+grafana_authorization_duration_seconds_bucket{result="allowed",le="8.192"} 1
+grafana_authorization_duration_seconds_bucket{result="allowed",le="16.384"} 1
+grafana_authorization_duration_seconds_bucket{result="allowed",le="+Inf"} 1
+grafana_authorization_duration_seconds_sum{result="allowed"} 6.472e-06
+grafana_authorization_duration_seconds_count{result="allowed"} 1
+# HELP grafana_build_info A metric with a constant '1' value labeled by version, revision, branch, and goversion from which Grafana was built
+# TYPE grafana_build_info gauge
+grafana_build_info{branch="v11.1.x",edition="oss",goversion="go1.22.4",revision="13173c9874af312fe75545f52aa6539af02076ac",version="11.1.4"} 1
+# HELP grafana_build_timestamp A metric exposing when the binary was built in epoch
+# TYPE grafana_build_timestamp gauge
+grafana_build_timestamp{branch="v11.1.x",edition="oss",goversion="go1.22.4",revision="13173c9874af312fe75545f52aa6539af02076ac",version="11.1.4"} 1.772385589e+09
+# HELP grafana_cardinality_enforcement_unexpected_categorizations_total [ALPHA] The count of unexpected categorizations during cardinality enforcement.
+# TYPE grafana_cardinality_enforcement_unexpected_categorizations_total counter
+grafana_cardinality_enforcement_unexpected_categorizations_total 0
+# HELP grafana_database_conn_idle The number of idle connections
+# TYPE grafana_database_conn_idle gauge
+grafana_database_conn_idle 2
+# HELP grafana_database_conn_in_use The number of connections currently in use
+# TYPE grafana_database_conn_in_use gauge
+grafana_database_conn_in_use 0
+# HELP grafana_database_conn_max_idle_closed_seconds The total number of connections closed due to SetConnMaxIdleTime
+# TYPE grafana_database_conn_max_idle_closed_seconds counter
+grafana_database_conn_max_idle_closed_seconds 0
+# HELP grafana_database_conn_max_idle_closed_total The total number of connections closed due to SetMaxIdleConns
+# TYPE grafana_database_conn_max_idle_closed_total counter
+grafana_database_conn_max_idle_closed_total 10
+# HELP grafana_database_conn_max_lifetime_closed_total The total number of connections closed due to SetConnMaxLifetime
+# TYPE grafana_database_conn_max_lifetime_closed_total counter
+grafana_database_conn_max_lifetime_closed_total 0
+# HELP grafana_database_conn_max_open Maximum number of open connections to the database
+# TYPE grafana_database_conn_max_open gauge
+grafana_database_conn_max_open 0
+# HELP grafana_database_conn_open The number of established connections both in use and idle
+# TYPE grafana_database_conn_open gauge
+grafana_database_conn_open 2
+# HELP grafana_database_conn_wait_count_total The total number of connections waited for
+# TYPE grafana_database_conn_wait_count_total counter
+grafana_database_conn_wait_count_total 0
+# HELP grafana_database_conn_wait_duration_seconds The total time blocked waiting for a new connection
+# TYPE grafana_database_conn_wait_duration_seconds counter
+grafana_database_conn_wait_duration_seconds 0
+# HELP grafana_db_datasource_query_by_id_total counter for getting datasource by id
+# TYPE grafana_db_datasource_query_by_id_total counter
+grafana_db_datasource_query_by_id_total 3
+# HELP grafana_disabled_metrics_total [BETA] The count of disabled metrics.
+# TYPE grafana_disabled_metrics_total counter
+grafana_disabled_metrics_total 0
+# HELP grafana_emails_sent_failed Number of emails Grafana failed to send
+# TYPE grafana_emails_sent_failed counter
+grafana_emails_sent_failed 0
+# HELP grafana_emails_sent_total Number of emails sent by Grafana
+# TYPE grafana_emails_sent_total counter
+grafana_emails_sent_total 0
+# HELP grafana_encryption_cache_reads_total A counter for encryption cache reads
+# TYPE grafana_encryption_cache_reads_total counter
+grafana_encryption_cache_reads_total{hit="false",method="byId"} 0
+grafana_encryption_cache_reads_total{hit="false",method="byLabel"} 2
+grafana_encryption_cache_reads_total{hit="false",method="byName"} 0
+grafana_encryption_cache_reads_total{hit="true",method="byId"} 0
+grafana_encryption_cache_reads_total{hit="true",method="byName"} 0
+# HELP grafana_encryption_ops_total A counter for encryption operations
+# TYPE grafana_encryption_ops_total counter
+grafana_encryption_ops_total{operation="decrypt",success="false"} 0
+grafana_encryption_ops_total{operation="decrypt",success="true"} 0
+grafana_encryption_ops_total{operation="encrypt",success="false"} 0
+grafana_encryption_ops_total{operation="encrypt",success="true"} 2
+# HELP grafana_environment_info A metric with a constant '1' value labeled by environment information about the running instance.
+# TYPE grafana_environment_info gauge
+grafana_environment_info{commit="13173c9874af312fe75545f52aa6539af02076ac",version="11.1.4"} 1
+# HELP grafana_feature_toggles_info info metric that exposes what feature toggles are enabled or not
+# TYPE grafana_feature_toggles_info gauge
+grafana_feature_toggles_info{name="accessActionSets"} 0
+grafana_feature_toggles_info{name="accessControlOnCall"} 0
+grafana_feature_toggles_info{name="addFieldFromCalculationStatFunctions"} 0
+grafana_feature_toggles_info{name="aiGeneratedDashboardChanges"} 0
+grafana_feature_toggles_info{name="alertStateHistoryLokiOnly"} 0
+grafana_feature_toggles_info{name="alertStateHistoryLokiPrimary"} 0
+grafana_feature_toggles_info{name="alertStateHistoryLokiSecondary"} 0
+grafana_feature_toggles_info{name="alertingBacktesting"} 0
+grafana_feature_toggles_info{name="alertingCentralAlertHistory"} 0
+grafana_feature_toggles_info{name="alertingDisableSendAlertsExternal"} 0
+grafana_feature_toggles_info{name="alertingInsights"} 1
+grafana_feature_toggles_info{name="alertingListViewV2"} 0
+grafana_feature_toggles_info{name="alertingNoDataErrorExecution"} 1
+grafana_feature_toggles_info{name="alertingNoNormalState"} 0
+grafana_feature_toggles_info{name="alertingQueryOptimization"} 0
+grafana_feature_toggles_info{name="alertingSaveStatePeriodic"} 0
+grafana_feature_toggles_info{name="alertingSimplifiedRouting"} 1
+grafana_feature_toggles_info{name="alertmanagerRemoteOnly"} 0
+grafana_feature_toggles_info{name="alertmanagerRemotePrimary"} 0
+grafana_feature_toggles_info{name="alertmanagerRemoteSecondary"} 0
+grafana_feature_toggles_info{name="angularDeprecationUI"} 1
+grafana_feature_toggles_info{name="annotationPermissionUpdate"} 1
+grafana_feature_toggles_info{name="authAPIAccessTokenAuth"} 0
+grafana_feature_toggles_info{name="autoMigrateGraphPanel"} 0
+grafana_feature_toggles_info{name="autoMigrateOldPanels"} 0
+grafana_feature_toggles_info{name="autoMigratePiechartPanel"} 0
+grafana_feature_toggles_info{name="autoMigrateStatPanel"} 0
+grafana_feature_toggles_info{name="autoMigrateTablePanel"} 0
+grafana_feature_toggles_info{name="autoMigrateWorldmapPanel"} 0
+grafana_feature_toggles_info{name="autoMigrateXYChartPanel"} 0
+grafana_feature_toggles_info{name="autofixDSUID"} 0
+grafana_feature_toggles_info{name="awsAsyncQueryCaching"} 1
+grafana_feature_toggles_info{name="awsDatasourcesNewFormStyling"} 1
+grafana_feature_toggles_info{name="awsDatasourcesTempCredentials"} 0
+grafana_feature_toggles_info{name="azureMonitorPrometheusExemplars"} 0
+grafana_feature_toggles_info{name="betterPageScrolling"} 1
+grafana_feature_toggles_info{name="cachingOptimizeSerializationMemoryUsage"} 0
+grafana_feature_toggles_info{name="canvasPanelNesting"} 0
+grafana_feature_toggles_info{name="canvasPanelPanZoom"} 0
+grafana_feature_toggles_info{name="cloudRBACRoles"} 0
+grafana_feature_toggles_info{name="cloudWatchBatchQueries"} 0
+grafana_feature_toggles_info{name="cloudWatchCrossAccountQuerying"} 1
+grafana_feature_toggles_info{name="cloudWatchNewLabelParsing"} 1
+grafana_feature_toggles_info{name="configurableSchedulerTick"} 0
+grafana_feature_toggles_info{name="correlations"} 1
+grafana_feature_toggles_info{name="dashboardRestore"} 0
+grafana_feature_toggles_info{name="dashboardScene"} 0
+grafana_feature_toggles_info{name="dashboardSceneForViewers"} 0
+grafana_feature_toggles_info{name="dashboardSceneSolo"} 0
+grafana_feature_toggles_info{name="dashgpt"} 1
+grafana_feature_toggles_info{name="dataplaneFrontendFallback"} 1
+grafana_feature_toggles_info{name="datasourceProxyDisableRBAC"} 0
+grafana_feature_toggles_info{name="datasourceQueryMultiStatus"} 0
+grafana_feature_toggles_info{name="datasourceQueryTypes"} 0
+grafana_feature_toggles_info{name="disableAngular"} 0
+grafana_feature_toggles_info{name="disableEnvelopeEncryption"} 0
+grafana_feature_toggles_info{name="disableNumericMetricsSortingInExpressions"} 0
+grafana_feature_toggles_info{name="disableSSEDataplane"} 0
+grafana_feature_toggles_info{name="disableSecretsCompatibility"} 0
+grafana_feature_toggles_info{name="editPanelCSVDragAndDrop"} 0
+grafana_feature_toggles_info{name="enableDatagridEditing"} 0
+grafana_feature_toggles_info{name="enableNativeHTTPHistogram"} 0
+grafana_feature_toggles_info{name="exploreContentOutline"} 1
+grafana_feature_toggles_info{name="exploreMetrics"} 1
+grafana_feature_toggles_info{name="expressionParser"} 0
+grafana_feature_toggles_info{name="externalCorePlugins"} 0
+grafana_feature_toggles_info{name="externalServiceAccounts"} 0
+grafana_feature_toggles_info{name="extraThemes"} 0
+grafana_feature_toggles_info{name="extractFieldsNameDeduplication"} 0
+grafana_feature_toggles_info{name="faroDatasourceSelector"} 0
+grafana_feature_toggles_info{name="featureHighlights"} 0
+grafana_feature_toggles_info{name="featureToggleAdminPage"} 0
+grafana_feature_toggles_info{name="flameGraphItemCollapsing"} 0
+grafana_feature_toggles_info{name="formatString"} 0
+grafana_feature_toggles_info{name="frontendSandboxMonitorOnly"} 0
+grafana_feature_toggles_info{name="grafanaManagedRecordingRules"} 0
+grafana_feature_toggles_info{name="groupByVariable"} 0
+grafana_feature_toggles_info{name="groupToNestedTableTransformation"} 0
+grafana_feature_toggles_info{name="grpcServer"} 0
+grafana_feature_toggles_info{name="idForwarding"} 0
+grafana_feature_toggles_info{name="individualCookiePreferences"} 0
+grafana_feature_toggles_info{name="influxdbBackendMigration"} 1
+grafana_feature_toggles_info{name="influxdbRunQueriesInParallel"} 0
+grafana_feature_toggles_info{name="influxqlStreamingParser"} 0
+grafana_feature_toggles_info{name="jitterAlertRulesWithinGroups"} 0
+grafana_feature_toggles_info{name="kubernetesAggregator"} 0
+grafana_feature_toggles_info{name="kubernetesDashboards"} 0
+grafana_feature_toggles_info{name="kubernetesFeatureToggles"} 0
+grafana_feature_toggles_info{name="kubernetesPlaylists"} 1
+grafana_feature_toggles_info{name="kubernetesSnapshots"} 0
+grafana_feature_toggles_info{name="libraryPanelRBAC"} 0
+grafana_feature_toggles_info{name="live-service-web-worker"} 0
+grafana_feature_toggles_info{name="logRequestsInstrumentedAsUnknown"} 0
+grafana_feature_toggles_info{name="logRowsPopoverMenu"} 1
+grafana_feature_toggles_info{name="logsContextDatasourceUi"} 1
+grafana_feature_toggles_info{name="logsExploreTableDefaultVisualization"} 0
+grafana_feature_toggles_info{name="logsExploreTableVisualisation"} 1
+grafana_feature_toggles_info{name="logsInfiniteScrolling"} 1
+grafana_feature_toggles_info{name="lokiExperimentalStreaming"} 0
+grafana_feature_toggles_info{name="lokiLogsDataplane"} 0
+grafana_feature_toggles_info{name="lokiMetricDataplane"} 1
+grafana_feature_toggles_info{name="lokiPredefinedOperations"} 0
+grafana_feature_toggles_info{name="lokiQueryHints"} 1
+grafana_feature_toggles_info{name="lokiQuerySplitting"} 1
+grafana_feature_toggles_info{name="lokiQuerySplittingConfig"} 0
+grafana_feature_toggles_info{name="lokiRunQueriesInParallel"} 0
+grafana_feature_toggles_info{name="lokiStructuredMetadata"} 1
+grafana_feature_toggles_info{name="managedPluginsInstall"} 1
+grafana_feature_toggles_info{name="metricsSummary"} 0
+grafana_feature_toggles_info{name="mlExpressions"} 0
+grafana_feature_toggles_info{name="mysqlAnsiQuotes"} 0
+grafana_feature_toggles_info{name="nestedFolders"} 1
+grafana_feature_toggles_info{name="newDashboardSharingComponent"} 0
+grafana_feature_toggles_info{name="newDashboardWithFiltersAndGroupBy"} 0
+grafana_feature_toggles_info{name="newFolderPicker"} 0
+grafana_feature_toggles_info{name="newPDFRendering"} 0
+grafana_feature_toggles_info{name="nodeGraphDotLayout"} 0
+grafana_feature_toggles_info{name="notificationBanner"} 0
+grafana_feature_toggles_info{name="oauthRequireSubClaim"} 0
+grafana_feature_toggles_info{name="onPremToCloudMigrations"} 0
+grafana_feature_toggles_info{name="panelFilterVariable"} 0
+grafana_feature_toggles_info{name="panelMonitoring"} 1
+grafana_feature_toggles_info{name="panelTitleSearch"} 0
+grafana_feature_toggles_info{name="pdfTables"} 0
+grafana_feature_toggles_info{name="permissionsFilterRemoveSubquery"} 0
+grafana_feature_toggles_info{name="pluginProxyPreserveTrailingSlash"} 0
+grafana_feature_toggles_info{name="pluginsAPIMetrics"} 0
+grafana_feature_toggles_info{name="pluginsFrontendSandbox"} 0
+grafana_feature_toggles_info{name="pluginsSkipHostEnvVars"} 0
+grafana_feature_toggles_info{name="preserveDashboardStateWhenNavigating"} 0
+grafana_feature_toggles_info{name="promQLScope"} 0
+grafana_feature_toggles_info{name="prometheusAzureOverrideAudience"} 1
+grafana_feature_toggles_info{name="prometheusCodeModeMetricNamesSearch"} 0
+grafana_feature_toggles_info{name="prometheusConfigOverhaulAuth"} 1
+grafana_feature_toggles_info{name="prometheusDataplane"} 1
+grafana_feature_toggles_info{name="prometheusIncrementalQueryInstrumentation"} 0
+grafana_feature_toggles_info{name="prometheusMetricEncyclopedia"} 1
+grafana_feature_toggles_info{name="prometheusPromQAIL"} 0
+grafana_feature_toggles_info{name="publicDashboards"} 1
+grafana_feature_toggles_info{name="publicDashboardsEmailSharing"} 0
+grafana_feature_toggles_info{name="publicDashboardsScene"} 0
+grafana_feature_toggles_info{name="queryLibrary"} 0
+grafana_feature_toggles_info{name="queryOverLive"} 0
+grafana_feature_toggles_info{name="queryService"} 0
+grafana_feature_toggles_info{name="queryServiceFromUI"} 0
+grafana_feature_toggles_info{name="queryServiceRewrite"} 0
+grafana_feature_toggles_info{name="recordedQueriesMulti"} 1
+grafana_feature_toggles_info{name="recoveryThreshold"} 1
+grafana_feature_toggles_info{name="refactorVariablesTimeRange"} 0
+grafana_feature_toggles_info{name="regressionTransformation"} 0
+grafana_feature_toggles_info{name="renderAuthJWT"} 0
+grafana_feature_toggles_info{name="reportingRetries"} 0
+grafana_feature_toggles_info{name="scenes"} 0
+grafana_feature_toggles_info{name="scopeFilters"} 0
+grafana_feature_toggles_info{name="showDashboardValidationWarnings"} 0
+grafana_feature_toggles_info{name="sqlDatasourceDatabaseSelection"} 0
+grafana_feature_toggles_info{name="sqlExpressions"} 0
+grafana_feature_toggles_info{name="sseGroupByDatasource"} 0
+grafana_feature_toggles_info{name="ssoSettingsApi"} 1
+grafana_feature_toggles_info{name="ssoSettingsSAML"} 0
+grafana_feature_toggles_info{name="storage"} 0
+grafana_feature_toggles_info{name="tableSharedCrosshair"} 0
+grafana_feature_toggles_info{name="teamHttpHeaders"} 0
+grafana_feature_toggles_info{name="tlsMemcached"} 0
+grafana_feature_toggles_info{name="topnav"} 1
+grafana_feature_toggles_info{name="traceQLStreaming"} 0
+grafana_feature_toggles_info{name="transformationsRedesign"} 1
+grafana_feature_toggles_info{name="transformationsVariableSupport"} 0
+grafana_feature_toggles_info{name="unifiedRequestLog"} 0
+grafana_feature_toggles_info{name="unifiedStorage"} 0
+grafana_feature_toggles_info{name="vizAndWidgetSplit"} 0
+grafana_feature_toggles_info{name="wargamesTesting"} 0
+# HELP grafana_field_validation_request_duration_seconds [ALPHA] Response latency distribution in seconds for each field validation value
+# TYPE grafana_field_validation_request_duration_seconds histogram
+grafana_field_validation_request_duration_seconds_bucket{field_validation="",le="0.05"} 0
+grafana_field_validation_request_duration_seconds_bucket{field_validation="",le="0.1"} 0
+grafana_field_validation_request_duration_seconds_bucket{field_validation="",le="0.2"} 0
+grafana_field_validation_request_duration_seconds_bucket{field_validation="",le="0.4"} 0
+grafana_field_validation_request_duration_seconds_bucket{field_validation="",le="0.6"} 0
+grafana_field_validation_request_duration_seconds_bucket{field_validation="",le="0.8"} 0
+grafana_field_validation_request_duration_seconds_bucket{field_validation="",le="1"} 0
+grafana_field_validation_request_duration_seconds_bucket{field_validation="",le="1.25"} 0
+grafana_field_validation_request_duration_seconds_bucket{field_validation="",le="1.5"} 0
+grafana_field_validation_request_duration_seconds_bucket{field_validation="",le="2"} 0
+grafana_field_validation_request_duration_seconds_bucket{field_validation="",le="3"} 0
+grafana_field_validation_request_duration_seconds_bucket{field_validation="",le="4"} 0
+grafana_field_validation_request_duration_seconds_bucket{field_validation="",le="5"} 0
+grafana_field_validation_request_duration_seconds_bucket{field_validation="",le="6"} 0
+grafana_field_validation_request_duration_seconds_bucket{field_validation="",le="8"} 0
+grafana_field_validation_request_duration_seconds_bucket{field_validation="",le="10"} 0
+grafana_field_validation_request_duration_seconds_bucket{field_validation="",le="15"} 0
+grafana_field_validation_request_duration_seconds_bucket{field_validation="",le="20"} 0
+grafana_field_validation_request_duration_seconds_bucket{field_validation="",le="30"} 0
+grafana_field_validation_request_duration_seconds_bucket{field_validation="",le="45"} 0
+grafana_field_validation_request_duration_seconds_bucket{field_validation="",le="60"} 0
+grafana_field_validation_request_duration_seconds_bucket{field_validation="",le="+Inf"} 0
+grafana_field_validation_request_duration_seconds_sum{field_validation=""} 0
+grafana_field_validation_request_duration_seconds_count{field_validation=""} 0
+# HELP grafana_folder_id_api_count counter for folder id usage in api package
+# TYPE grafana_folder_id_api_count counter
+grafana_folder_id_api_count{method="GetAlerts"} 0
+grafana_folder_id_api_count{method="GetDashboard"} 0
+grafana_folder_id_api_count{method="GetFolderByID"} 0
+grafana_folder_id_api_count{method="GetFolderDescendantCounts"} 0
+grafana_folder_id_api_count{method="GetFolderPermissionList"} 0
+grafana_folder_id_api_count{method="GetFolders"} 0
+grafana_folder_id_api_count{method="RestoreDashboardVersion"} 0
+grafana_folder_id_api_count{method="Search"} 0
+grafana_folder_id_api_count{method="UpdateFolderPermissions"} 0
+grafana_folder_id_api_count{method="getDashboardACL"} 0
+grafana_folder_id_api_count{method="getFolderACL"} 0
+grafana_folder_id_api_count{method="newToFolderDto"} 0
+grafana_folder_id_api_count{method="searchFolders"} 0
+# HELP grafana_folder_id_service_count counter for folder id usage in service package
+# TYPE grafana_folder_id_service_count counter
+grafana_folder_id_service_count{service="Search"} 0
+grafana_folder_id_service_count{service="accesscontrol"} 0
+grafana_folder_id_service_count{service="dashboardimport"} 0
+grafana_folder_id_service_count{service="dashboards"} 7
+grafana_folder_id_service_count{service="folder"} 0
+grafana_folder_id_service_count{service="guardian"} 0
+grafana_folder_id_service_count{service="libraryelements"} 0
+grafana_folder_id_service_count{service="librarypanels"} 0
+grafana_folder_id_service_count{service="ngalert"} 0
+grafana_folder_id_service_count{service="provisioning"} 333
+grafana_folder_id_service_count{service="publicdashboards"} 0
+# HELP grafana_frontend_boot_css_time_seconds Frontend boot initial css load
+# TYPE grafana_frontend_boot_css_time_seconds histogram
+grafana_frontend_boot_css_time_seconds_bucket{le="0.1"} 0
+grafana_frontend_boot_css_time_seconds_bucket{le="0.25"} 0
+grafana_frontend_boot_css_time_seconds_bucket{le="0.5"} 0
+grafana_frontend_boot_css_time_seconds_bucket{le="1"} 0
+grafana_frontend_boot_css_time_seconds_bucket{le="1.5"} 0
+grafana_frontend_boot_css_time_seconds_bucket{le="2"} 0
+grafana_frontend_boot_css_time_seconds_bucket{le="5"} 0
+grafana_frontend_boot_css_time_seconds_bucket{le="10"} 0
+grafana_frontend_boot_css_time_seconds_bucket{le="20"} 0
+grafana_frontend_boot_css_time_seconds_bucket{le="40"} 0
+grafana_frontend_boot_css_time_seconds_bucket{le="+Inf"} 0
+grafana_frontend_boot_css_time_seconds_sum 0
+grafana_frontend_boot_css_time_seconds_count 0
+# HELP grafana_frontend_boot_first_contentful_paint_time_seconds Frontend boot first contentful paint
+# TYPE grafana_frontend_boot_first_contentful_paint_time_seconds histogram
+grafana_frontend_boot_first_contentful_paint_time_seconds_bucket{le="0.1"} 0
+grafana_frontend_boot_first_contentful_paint_time_seconds_bucket{le="0.25"} 0
+grafana_frontend_boot_first_contentful_paint_time_seconds_bucket{le="0.5"} 0
+grafana_frontend_boot_first_contentful_paint_time_seconds_bucket{le="1"} 0
+grafana_frontend_boot_first_contentful_paint_time_seconds_bucket{le="1.5"} 0
+grafana_frontend_boot_first_contentful_paint_time_seconds_bucket{le="2"} 0
+grafana_frontend_boot_first_contentful_paint_time_seconds_bucket{le="5"} 0
+grafana_frontend_boot_first_contentful_paint_time_seconds_bucket{le="10"} 0
+grafana_frontend_boot_first_contentful_paint_time_seconds_bucket{le="20"} 0
+grafana_frontend_boot_first_contentful_paint_time_seconds_bucket{le="40"} 0
+grafana_frontend_boot_first_contentful_paint_time_seconds_bucket{le="+Inf"} 0
+grafana_frontend_boot_first_contentful_paint_time_seconds_sum 0
+grafana_frontend_boot_first_contentful_paint_time_seconds_count 0
+# HELP grafana_frontend_boot_first_paint_time_seconds Frontend boot first paint
+# TYPE grafana_frontend_boot_first_paint_time_seconds histogram
+grafana_frontend_boot_first_paint_time_seconds_bucket{le="0.1"} 0
+grafana_frontend_boot_first_paint_time_seconds_bucket{le="0.25"} 0
+grafana_frontend_boot_first_paint_time_seconds_bucket{le="0.5"} 0
+grafana_frontend_boot_first_paint_time_seconds_bucket{le="1"} 0
+grafana_frontend_boot_first_paint_time_seconds_bucket{le="1.5"} 0
+grafana_frontend_boot_first_paint_time_seconds_bucket{le="2"} 0
+grafana_frontend_boot_first_paint_time_seconds_bucket{le="5"} 0
+grafana_frontend_boot_first_paint_time_seconds_bucket{le="10"} 0
+grafana_frontend_boot_first_paint_time_seconds_bucket{le="20"} 0
+grafana_frontend_boot_first_paint_time_seconds_bucket{le="40"} 0
+grafana_frontend_boot_first_paint_time_seconds_bucket{le="+Inf"} 0
+grafana_frontend_boot_first_paint_time_seconds_sum 0
+grafana_frontend_boot_first_paint_time_seconds_count 0
+# HELP grafana_frontend_boot_js_done_time_seconds Frontend boot initial js load
+# TYPE grafana_frontend_boot_js_done_time_seconds histogram
+grafana_frontend_boot_js_done_time_seconds_bucket{le="0.1"} 0
+grafana_frontend_boot_js_done_time_seconds_bucket{le="0.25"} 0
+grafana_frontend_boot_js_done_time_seconds_bucket{le="0.5"} 0
+grafana_frontend_boot_js_done_time_seconds_bucket{le="1"} 0
+grafana_frontend_boot_js_done_time_seconds_bucket{le="1.5"} 0
+grafana_frontend_boot_js_done_time_seconds_bucket{le="2"} 0
+grafana_frontend_boot_js_done_time_seconds_bucket{le="5"} 0
+grafana_frontend_boot_js_done_time_seconds_bucket{le="10"} 0
+grafana_frontend_boot_js_done_time_seconds_bucket{le="20"} 0
+grafana_frontend_boot_js_done_time_seconds_bucket{le="40"} 0
+grafana_frontend_boot_js_done_time_seconds_bucket{le="+Inf"} 0
+grafana_frontend_boot_js_done_time_seconds_sum 0
+grafana_frontend_boot_js_done_time_seconds_count 0
+# HELP grafana_frontend_boot_load_time_seconds Frontend boot time measurement
+# TYPE grafana_frontend_boot_load_time_seconds histogram
+grafana_frontend_boot_load_time_seconds_bucket{le="0.1"} 0
+grafana_frontend_boot_load_time_seconds_bucket{le="0.25"} 0
+grafana_frontend_boot_load_time_seconds_bucket{le="0.5"} 0
+grafana_frontend_boot_load_time_seconds_bucket{le="1"} 0
+grafana_frontend_boot_load_time_seconds_bucket{le="1.5"} 0
+grafana_frontend_boot_load_time_seconds_bucket{le="2"} 0
+grafana_frontend_boot_load_time_seconds_bucket{le="5"} 0
+grafana_frontend_boot_load_time_seconds_bucket{le="10"} 0
+grafana_frontend_boot_load_time_seconds_bucket{le="20"} 0
+grafana_frontend_boot_load_time_seconds_bucket{le="40"} 0
+grafana_frontend_boot_load_time_seconds_bucket{le="+Inf"} 0
+grafana_frontend_boot_load_time_seconds_sum 0
+grafana_frontend_boot_load_time_seconds_count 0
+# HELP grafana_frontend_plugins_preload_ms Frontend preload plugin time measurement
+# TYPE grafana_frontend_plugins_preload_ms histogram
+grafana_frontend_plugins_preload_ms_bucket{le="0.1"} 0
+grafana_frontend_plugins_preload_ms_bucket{le="0.25"} 0
+grafana_frontend_plugins_preload_ms_bucket{le="0.5"} 0
+grafana_frontend_plugins_preload_ms_bucket{le="1"} 0
+grafana_frontend_plugins_preload_ms_bucket{le="1.5"} 0
+grafana_frontend_plugins_preload_ms_bucket{le="2"} 0
+grafana_frontend_plugins_preload_ms_bucket{le="5"} 0
+grafana_frontend_plugins_preload_ms_bucket{le="10"} 0
+grafana_frontend_plugins_preload_ms_bucket{le="20"} 0
+grafana_frontend_plugins_preload_ms_bucket{le="40"} 0
+grafana_frontend_plugins_preload_ms_bucket{le="+Inf"} 0
+grafana_frontend_plugins_preload_ms_sum 0
+grafana_frontend_plugins_preload_ms_count 0
+# HELP grafana_hidden_metrics_total [BETA] The count of hidden metrics.
+# TYPE grafana_hidden_metrics_total counter
+grafana_hidden_metrics_total 0
+# HELP grafana_http_request_duration_seconds Histogram of latencies for HTTP requests.
+# TYPE grafana_http_request_duration_seconds histogram
+grafana_http_request_duration_seconds_bucket{handler="/",method="GET",slo_group="high-fast",status_code="200",status_source="server",le="0.005"} 0
+grafana_http_request_duration_seconds_bucket{handler="/",method="GET",slo_group="high-fast",status_code="200",status_source="server",le="0.01"} 0
+grafana_http_request_duration_seconds_bucket{handler="/",method="GET",slo_group="high-fast",status_code="200",status_source="server",le="0.025"} 0
+grafana_http_request_duration_seconds_bucket{handler="/",method="GET",slo_group="high-fast",status_code="200",status_source="server",le="0.05"} 1
+grafana_http_request_duration_seconds_bucket{handler="/",method="GET",slo_group="high-fast",status_code="200",status_source="server",le="0.1"} 1
+grafana_http_request_duration_seconds_bucket{handler="/",method="GET",slo_group="high-fast",status_code="200",status_source="server",le="0.25"} 1
+grafana_http_request_duration_seconds_bucket{handler="/",method="GET",slo_group="high-fast",status_code="200",status_source="server",le="0.5"} 1
+grafana_http_request_duration_seconds_bucket{handler="/",method="GET",slo_group="high-fast",status_code="200",status_source="server",le="1"} 1
+grafana_http_request_duration_seconds_bucket{handler="/",method="GET",slo_group="high-fast",status_code="200",status_source="server",le="2.5"} 1
+grafana_http_request_duration_seconds_bucket{handler="/",method="GET",slo_group="high-fast",status_code="200",status_source="server",le="5"} 1
+grafana_http_request_duration_seconds_bucket{handler="/",method="GET",slo_group="high-fast",status_code="200",status_source="server",le="10"} 1
+grafana_http_request_duration_seconds_bucket{handler="/",method="GET",slo_group="high-fast",status_code="200",status_source="server",le="25"} 1
+grafana_http_request_duration_seconds_bucket{handler="/",method="GET",slo_group="high-fast",status_code="200",status_source="server",le="+Inf"} 1
+grafana_http_request_duration_seconds_sum{handler="/",method="GET",slo_group="high-fast",status_code="200",status_source="server"} 0.029342151
+grafana_http_request_duration_seconds_count{handler="/",method="GET",slo_group="high-fast",status_code="200",status_source="server"} 1
+grafana_http_request_duration_seconds_bucket{handler="/healthz",method="GET",slo_group="high-fast",status_code="200",status_source="server",le="0.005"} 1
+grafana_http_request_duration_seconds_bucket{handler="/healthz",method="GET",slo_group="high-fast",status_code="200",status_source="server",le="0.01"} 1
+grafana_http_request_duration_seconds_bucket{handler="/healthz",method="GET",slo_group="high-fast",status_code="200",status_source="server",le="0.025"} 1
+grafana_http_request_duration_seconds_bucket{handler="/healthz",method="GET",slo_group="high-fast",status_code="200",status_source="server",le="0.05"} 1
+grafana_http_request_duration_seconds_bucket{handler="/healthz",method="GET",slo_group="high-fast",status_code="200",status_source="server",le="0.1"} 1
+grafana_http_request_duration_seconds_bucket{handler="/healthz",method="GET",slo_group="high-fast",status_code="200",status_source="server",le="0.25"} 1
+grafana_http_request_duration_seconds_bucket{handler="/healthz",method="GET",slo_group="high-fast",status_code="200",status_source="server",le="0.5"} 1
+grafana_http_request_duration_seconds_bucket{handler="/healthz",method="GET",slo_group="high-fast",status_code="200",status_source="server",le="1"} 1
+grafana_http_request_duration_seconds_bucket{handler="/healthz",method="GET",slo_group="high-fast",status_code="200",status_source="server",le="2.5"} 1
+grafana_http_request_duration_seconds_bucket{handler="/healthz",method="GET",slo_group="high-fast",status_code="200",status_source="server",le="5"} 1
+grafana_http_request_duration_seconds_bucket{handler="/healthz",method="GET",slo_group="high-fast",status_code="200",status_source="server",le="10"} 1
+grafana_http_request_duration_seconds_bucket{handler="/healthz",method="GET",slo_group="high-fast",status_code="200",status_source="server",le="25"} 1
+grafana_http_request_duration_seconds_bucket{handler="/healthz",method="GET",slo_group="high-fast",status_code="200",status_source="server",le="+Inf"} 1
+grafana_http_request_duration_seconds_sum{handler="/healthz",method="GET",slo_group="high-fast",status_code="200",status_source="server"} 0.000135886
+grafana_http_request_duration_seconds_count{handler="/healthz",method="GET",slo_group="high-fast",status_code="200",status_source="server"} 1
+grafana_http_request_duration_seconds_bucket{handler="/readyz/",method="GET",slo_group="high-fast",status_code="200",status_source="server",le="0.005"} 1
+grafana_http_request_duration_seconds_bucket{handler="/readyz/",method="GET",slo_group="high-fast",status_code="200",status_source="server",le="0.01"} 1
+grafana_http_request_duration_seconds_bucket{handler="/readyz/",method="GET",slo_group="high-fast",status_code="200",status_source="server",le="0.025"} 1
+grafana_http_request_duration_seconds_bucket{handler="/readyz/",method="GET",slo_group="high-fast",status_code="200",status_source="server",le="0.05"} 1
+grafana_http_request_duration_seconds_bucket{handler="/readyz/",method="GET",slo_group="high-fast",status_code="200",status_source="server",le="0.1"} 1
+grafana_http_request_duration_seconds_bucket{handler="/readyz/",method="GET",slo_group="high-fast",status_code="200",status_source="server",le="0.25"} 1
+grafana_http_request_duration_seconds_bucket{handler="/readyz/",method="GET",slo_group="high-fast",status_code="200",status_source="server",le="0.5"} 1
+grafana_http_request_duration_seconds_bucket{handler="/readyz/",method="GET",slo_group="high-fast",status_code="200",status_source="server",le="1"} 1
+grafana_http_request_duration_seconds_bucket{handler="/readyz/",method="GET",slo_group="high-fast",status_code="200",status_source="server",le="2.5"} 1
+grafana_http_request_duration_seconds_bucket{handler="/readyz/",method="GET",slo_group="high-fast",status_code="200",status_source="server",le="5"} 1
+grafana_http_request_duration_seconds_bucket{handler="/readyz/",method="GET",slo_group="high-fast",status_code="200",status_source="server",le="10"} 1
+grafana_http_request_duration_seconds_bucket{handler="/readyz/",method="GET",slo_group="high-fast",status_code="200",status_source="server",le="25"} 1
+grafana_http_request_duration_seconds_bucket{handler="/readyz/",method="GET",slo_group="high-fast",status_code="200",status_source="server",le="+Inf"} 1
+grafana_http_request_duration_seconds_sum{handler="/readyz/",method="GET",slo_group="high-fast",status_code="200",status_source="server"} 0.004042191
+grafana_http_request_duration_seconds_count{handler="/readyz/",method="GET",slo_group="high-fast",status_code="200",status_source="server"} 1
+# HELP grafana_http_request_in_flight A gauge of requests currently being served by Grafana.
+# TYPE grafana_http_request_in_flight gauge
+grafana_http_request_in_flight 1
+# HELP grafana_idforwarding_idforwarding_failed_token_signing_total Number of failed token signings
+# TYPE grafana_idforwarding_idforwarding_failed_token_signing_total counter
+grafana_idforwarding_idforwarding_failed_token_signing_total 0
+# HELP grafana_idforwarding_idforwarding_token_signing_duration_seconds Histogram of token signing duration
+# TYPE grafana_idforwarding_idforwarding_token_signing_duration_seconds histogram
+grafana_idforwarding_idforwarding_token_signing_duration_seconds_bucket{le="0.1"} 0
+grafana_idforwarding_idforwarding_token_signing_duration_seconds_bucket{le="0.25"} 0
+grafana_idforwarding_idforwarding_token_signing_duration_seconds_bucket{le="0.5"} 0
+grafana_idforwarding_idforwarding_token_signing_duration_seconds_bucket{le="1"} 0
+grafana_idforwarding_idforwarding_token_signing_duration_seconds_bucket{le="2"} 0
+grafana_idforwarding_idforwarding_token_signing_duration_seconds_bucket{le="5"} 0
+grafana_idforwarding_idforwarding_token_signing_duration_seconds_bucket{le="10"} 0
+grafana_idforwarding_idforwarding_token_signing_duration_seconds_bucket{le="+Inf"} 0
+grafana_idforwarding_idforwarding_token_signing_duration_seconds_sum 0
+grafana_idforwarding_idforwarding_token_signing_duration_seconds_count 0
+# HELP grafana_idforwarding_idforwarding_token_signing_from_cache_total Number of signed tokens retrieved from cache
+# TYPE grafana_idforwarding_idforwarding_token_signing_from_cache_total counter
+grafana_idforwarding_idforwarding_token_signing_from_cache_total 0
+# HELP grafana_idforwarding_idforwarding_token_signing_total Number of token signings
+# TYPE grafana_idforwarding_idforwarding_token_signing_total counter
+grafana_idforwarding_idforwarding_token_signing_total 0
+# HELP grafana_instance_start_total counter for started instances
+# TYPE grafana_instance_start_total counter
+grafana_instance_start_total 1
+# HELP grafana_ldap_users_sync_execution_time summary for LDAP users sync execution duration
+# TYPE grafana_ldap_users_sync_execution_time summary
+grafana_ldap_users_sync_execution_time{quantile="0.5"} NaN
+grafana_ldap_users_sync_execution_time{quantile="0.9"} NaN
+grafana_ldap_users_sync_execution_time{quantile="0.99"} NaN
+grafana_ldap_users_sync_execution_time_sum 0
+grafana_ldap_users_sync_execution_time_count 0
+# HELP grafana_live_client_command_duration_seconds Client command duration summary.
+# TYPE grafana_live_client_command_duration_seconds summary
+grafana_live_client_command_duration_seconds{method="connect",quantile="0.5"} NaN
+grafana_live_client_command_duration_seconds{method="connect",quantile="0.99"} NaN
+grafana_live_client_command_duration_seconds{method="connect",quantile="0.999"} NaN
+grafana_live_client_command_duration_seconds_sum{method="connect"} 0
+grafana_live_client_command_duration_seconds_count{method="connect"} 0
+grafana_live_client_command_duration_seconds{method="history",quantile="0.5"} NaN
+grafana_live_client_command_duration_seconds{method="history",quantile="0.99"} NaN
+grafana_live_client_command_duration_seconds{method="history",quantile="0.999"} NaN
+grafana_live_client_command_duration_seconds_sum{method="history"} 0
+grafana_live_client_command_duration_seconds_count{method="history"} 0
+grafana_live_client_command_duration_seconds{method="ping",quantile="0.5"} NaN
+grafana_live_client_command_duration_seconds{method="ping",quantile="0.99"} NaN
+grafana_live_client_command_duration_seconds{method="ping",quantile="0.999"} NaN
+grafana_live_client_command_duration_seconds_sum{method="ping"} 0
+grafana_live_client_command_duration_seconds_count{method="ping"} 0
+grafana_live_client_command_duration_seconds{method="presence",quantile="0.5"} NaN
+grafana_live_client_command_duration_seconds{method="presence",quantile="0.99"} NaN
+grafana_live_client_command_duration_seconds{method="presence",quantile="0.999"} NaN
+grafana_live_client_command_duration_seconds_sum{method="presence"} 0
+grafana_live_client_command_duration_seconds_count{method="presence"} 0
+grafana_live_client_command_duration_seconds{method="presence_stats",quantile="0.5"} NaN
+grafana_live_client_command_duration_seconds{method="presence_stats",quantile="0.99"} NaN
+grafana_live_client_command_duration_seconds{method="presence_stats",quantile="0.999"} NaN
+grafana_live_client_command_duration_seconds_sum{method="presence_stats"} 0
+grafana_live_client_command_duration_seconds_count{method="presence_stats"} 0
+grafana_live_client_command_duration_seconds{method="publish",quantile="0.5"} NaN
+grafana_live_client_command_duration_seconds{method="publish",quantile="0.99"} NaN
+grafana_live_client_command_duration_seconds{method="publish",quantile="0.999"} NaN
+grafana_live_client_command_duration_seconds_sum{method="publish"} 0
+grafana_live_client_command_duration_seconds_count{method="publish"} 0
+grafana_live_client_command_duration_seconds{method="refresh",quantile="0.5"} NaN
+grafana_live_client_command_duration_seconds{method="refresh",quantile="0.99"} NaN
+grafana_live_client_command_duration_seconds{method="refresh",quantile="0.999"} NaN
+grafana_live_client_command_duration_seconds_sum{method="refresh"} 0
+grafana_live_client_command_duration_seconds_count{method="refresh"} 0
+grafana_live_client_command_duration_seconds{method="rpc",quantile="0.5"} NaN
+grafana_live_client_command_duration_seconds{method="rpc",quantile="0.99"} NaN
+grafana_live_client_command_duration_seconds{method="rpc",quantile="0.999"} NaN
+grafana_live_client_command_duration_seconds_sum{method="rpc"} 0
+grafana_live_client_command_duration_seconds_count{method="rpc"} 0
+grafana_live_client_command_duration_seconds{method="send",quantile="0.5"} NaN
+grafana_live_client_command_duration_seconds{method="send",quantile="0.99"} NaN
+grafana_live_client_command_duration_seconds{method="send",quantile="0.999"} NaN
+grafana_live_client_command_duration_seconds_sum{method="send"} 0
+grafana_live_client_command_duration_seconds_count{method="send"} 0
+grafana_live_client_command_duration_seconds{method="sub_refresh",quantile="0.5"} NaN
+grafana_live_client_command_duration_seconds{method="sub_refresh",quantile="0.99"} NaN
+grafana_live_client_command_duration_seconds{method="sub_refresh",quantile="0.999"} NaN
+grafana_live_client_command_duration_seconds_sum{method="sub_refresh"} 0
+grafana_live_client_command_duration_seconds_count{method="sub_refresh"} 0
+grafana_live_client_command_duration_seconds{method="subscribe",quantile="0.5"} NaN
+grafana_live_client_command_duration_seconds{method="subscribe",quantile="0.99"} NaN
+grafana_live_client_command_duration_seconds{method="subscribe",quantile="0.999"} NaN
+grafana_live_client_command_duration_seconds_sum{method="subscribe"} 0
+grafana_live_client_command_duration_seconds_count{method="subscribe"} 0
+grafana_live_client_command_duration_seconds{method="unknown",quantile="0.5"} NaN
+grafana_live_client_command_duration_seconds{method="unknown",quantile="0.99"} NaN
+grafana_live_client_command_duration_seconds{method="unknown",quantile="0.999"} NaN
+grafana_live_client_command_duration_seconds_sum{method="unknown"} 0
+grafana_live_client_command_duration_seconds_count{method="unknown"} 0
+grafana_live_client_command_duration_seconds{method="unsubscribe",quantile="0.5"} NaN
+grafana_live_client_command_duration_seconds{method="unsubscribe",quantile="0.99"} NaN
+grafana_live_client_command_duration_seconds{method="unsubscribe",quantile="0.999"} NaN
+grafana_live_client_command_duration_seconds_sum{method="unsubscribe"} 0
+grafana_live_client_command_duration_seconds_count{method="unsubscribe"} 0
+# HELP grafana_live_client_recover Count of recover operations.
+# TYPE grafana_live_client_recover counter
+grafana_live_client_recover{recovered="no"} 0
+grafana_live_client_recover{recovered="yes"} 0
+# HELP grafana_live_node_action_count Number of node actions called.
+# TYPE grafana_live_node_action_count counter
+grafana_live_node_action_count{action="add_client"} 0
+grafana_live_node_action_count{action="add_presence"} 0
+grafana_live_node_action_count{action="add_subscription"} 0
+grafana_live_node_action_count{action="history"} 0
+grafana_live_node_action_count{action="history_recover"} 0
+grafana_live_node_action_count{action="history_remove"} 0
+grafana_live_node_action_count{action="history_stream_top"} 0
+grafana_live_node_action_count{action="notify"} 0
+grafana_live_node_action_count{action="presence"} 0
+grafana_live_node_action_count{action="presence_stats"} 0
+grafana_live_node_action_count{action="remove_client"} 0
+grafana_live_node_action_count{action="remove_presence"} 0
+grafana_live_node_action_count{action="remove_subscription"} 0
+grafana_live_node_action_count{action="survey"} 0
+# HELP grafana_live_node_build Node build info.
+# TYPE grafana_live_node_build gauge
+grafana_live_node_build{version="_"} 1
+# HELP grafana_live_node_messages_received_count Number of messages received.
+# TYPE grafana_live_node_messages_received_count counter
+grafana_live_node_messages_received_count{type="control"} 369
+grafana_live_node_messages_received_count{type="join"} 0
+grafana_live_node_messages_received_count{type="leave"} 0
+grafana_live_node_messages_received_count{type="publication"} 0
+# HELP grafana_live_node_messages_sent_count Number of messages sent.
+# TYPE grafana_live_node_messages_sent_count counter
+grafana_live_node_messages_sent_count{type="control"} 369
+grafana_live_node_messages_sent_count{type="join"} 0
+grafana_live_node_messages_sent_count{type="leave"} 0
+grafana_live_node_messages_sent_count{type="publication"} 0
+# HELP grafana_live_node_num_channels Number of channels with one or more subscribers.
+# TYPE grafana_live_node_num_channels gauge
+grafana_live_node_num_channels 0
+# HELP grafana_live_node_num_clients Number of clients connected.
+# TYPE grafana_live_node_num_clients gauge
+grafana_live_node_num_clients 0
+# HELP grafana_live_node_num_nodes Number of nodes in cluster.
+# TYPE grafana_live_node_num_nodes gauge
+grafana_live_node_num_nodes 1
+# HELP grafana_live_node_num_subscriptions Number of subscriptions.
+# TYPE grafana_live_node_num_subscriptions gauge
+grafana_live_node_num_subscriptions 0
+# HELP grafana_live_node_num_users Number of unique users connected.
+# TYPE grafana_live_node_num_users gauge
+grafana_live_node_num_users 0
+# HELP grafana_live_transport_connect_count Number of connections to specific transport.
+# TYPE grafana_live_transport_connect_count counter
+grafana_live_transport_connect_count{transport="http_stream"} 0
+grafana_live_transport_connect_count{transport="sockjs"} 0
+grafana_live_transport_connect_count{transport="sse"} 0
+grafana_live_transport_connect_count{transport="websocket"} 0
+# HELP grafana_live_transport_messages_sent Number of messages sent over specific transport.
+# TYPE grafana_live_transport_messages_sent counter
+grafana_live_transport_messages_sent{transport="http_stream"} 0
+grafana_live_transport_messages_sent{transport="sockjs"} 0
+grafana_live_transport_messages_sent{transport="sse"} 0
+grafana_live_transport_messages_sent{transport="websocket"} 0
+# HELP grafana_page_response_status_total page http response status
+# TYPE grafana_page_response_status_total counter
+grafana_page_response_status_total{code="200"} 3
+grafana_page_response_status_total{code="404"} 0
+grafana_page_response_status_total{code="500"} 0
+grafana_page_response_status_total{code="unknown"} 0
+# HELP grafana_process_cpu_seconds_total Total user and system CPU time spent in seconds.
+# TYPE grafana_process_cpu_seconds_total counter
+grafana_process_cpu_seconds_total 6.73
+# HELP grafana_process_max_fds Maximum number of open file descriptors.
+# TYPE grafana_process_max_fds gauge
+grafana_process_max_fds 1.048576e+06
+# HELP grafana_process_open_fds Number of open file descriptors.
+# TYPE grafana_process_open_fds gauge
+grafana_process_open_fds 10
+# HELP grafana_process_resident_memory_bytes Resident memory size in bytes.
+# TYPE grafana_process_resident_memory_bytes gauge
+grafana_process_resident_memory_bytes 1.65052416e+08
+# HELP grafana_process_start_time_seconds Start time of the process since unix epoch in seconds.
+# TYPE grafana_process_start_time_seconds gauge
+grafana_process_start_time_seconds 1.77238558821e+09
+# HELP grafana_process_virtual_memory_bytes Virtual memory size in bytes.
+# TYPE grafana_process_virtual_memory_bytes gauge
+grafana_process_virtual_memory_bytes 1.636040704e+09
+# HELP grafana_process_virtual_memory_max_bytes Maximum amount of virtual memory available in bytes.
+# TYPE grafana_process_virtual_memory_max_bytes gauge
+grafana_process_virtual_memory_max_bytes 1.8446744073709552e+19
+# HELP grafana_proxy_response_status_total proxy http response status
+# TYPE grafana_proxy_response_status_total counter
+grafana_proxy_response_status_total{code="200"} 0
+grafana_proxy_response_status_total{code="404"} 0
+grafana_proxy_response_status_total{code="500"} 0
+grafana_proxy_response_status_total{code="unknown"} 0
+# HELP grafana_public_dashboard_request_count counter for public dashboards requests
+# TYPE grafana_public_dashboard_request_count counter
+grafana_public_dashboard_request_count 0
+# HELP grafana_registered_metrics_total [BETA] The count of registered metrics broken by stability level and deprecation version.
+# TYPE grafana_registered_metrics_total counter
+grafana_registered_metrics_total{deprecated_version="",stability_level="ALPHA"} 124
+grafana_registered_metrics_total{deprecated_version="",stability_level="BETA"} 11
+grafana_registered_metrics_total{deprecated_version="",stability_level="STABLE"} 12
+grafana_registered_metrics_total{deprecated_version="1.27.0",stability_level="ALPHA"} 1
+grafana_registered_metrics_total{deprecated_version="1.28.0",stability_level="ALPHA"} 1
+grafana_registered_metrics_total{deprecated_version="1.30.0",stability_level="ALPHA"} 1
+grafana_registered_metrics_total{deprecated_version="1.31.0",stability_level="ALPHA"} 1
+# HELP grafana_rendering_queue_size size of rendering queue
+# TYPE grafana_rendering_queue_size gauge
+grafana_rendering_queue_size 0
+# HELP grafana_search_dashboard_search_failures_duration_seconds 
+# TYPE grafana_search_dashboard_search_failures_duration_seconds histogram
+grafana_search_dashboard_search_failures_duration_seconds_bucket{le="0.005"} 0
+grafana_search_dashboard_search_failures_duration_seconds_bucket{le="0.01"} 0
+grafana_search_dashboard_search_failures_duration_seconds_bucket{le="0.025"} 0
+grafana_search_dashboard_search_failures_duration_seconds_bucket{le="0.05"} 0
+grafana_search_dashboard_search_failures_duration_seconds_bucket{le="0.1"} 0
+grafana_search_dashboard_search_failures_duration_seconds_bucket{le="0.25"} 0
+grafana_search_dashboard_search_failures_duration_seconds_bucket{le="0.5"} 0
+grafana_search_dashboard_search_failures_duration_seconds_bucket{le="1"} 0
+grafana_search_dashboard_search_failures_duration_seconds_bucket{le="2.5"} 0
+grafana_search_dashboard_search_failures_duration_seconds_bucket{le="5"} 0
+grafana_search_dashboard_search_failures_duration_seconds_bucket{le="10"} 0
+grafana_search_dashboard_search_failures_duration_seconds_bucket{le="25"} 0
+grafana_search_dashboard_search_failures_duration_seconds_bucket{le="50"} 0
+grafana_search_dashboard_search_failures_duration_seconds_bucket{le="100"} 0
+grafana_search_dashboard_search_failures_duration_seconds_bucket{le="+Inf"} 0
+grafana_search_dashboard_search_failures_duration_seconds_sum 0
+grafana_search_dashboard_search_failures_duration_seconds_count 0
+# HELP grafana_search_dashboard_search_successes_duration_seconds 
+# TYPE grafana_search_dashboard_search_successes_duration_seconds histogram
+grafana_search_dashboard_search_successes_duration_seconds_bucket{le="0.005"} 0
+grafana_search_dashboard_search_successes_duration_seconds_bucket{le="0.01"} 0
+grafana_search_dashboard_search_successes_duration_seconds_bucket{le="0.025"} 0
+grafana_search_dashboard_search_successes_duration_seconds_bucket{le="0.05"} 0
+grafana_search_dashboard_search_successes_duration_seconds_bucket{le="0.1"} 0
+grafana_search_dashboard_search_successes_duration_seconds_bucket{le="0.25"} 0
+grafana_search_dashboard_search_successes_duration_seconds_bucket{le="0.5"} 0
+grafana_search_dashboard_search_successes_duration_seconds_bucket{le="1"} 0
+grafana_search_dashboard_search_successes_duration_seconds_bucket{le="2.5"} 0
+grafana_search_dashboard_search_successes_duration_seconds_bucket{le="5"} 0
+grafana_search_dashboard_search_successes_duration_seconds_bucket{le="10"} 0
+grafana_search_dashboard_search_successes_duration_seconds_bucket{le="25"} 0
+grafana_search_dashboard_search_successes_duration_seconds_bucket{le="50"} 0
+grafana_search_dashboard_search_successes_duration_seconds_bucket{le="100"} 0
+grafana_search_dashboard_search_successes_duration_seconds_bucket{le="+Inf"} 0
+grafana_search_dashboard_search_successes_duration_seconds_sum 0
+grafana_search_dashboard_search_successes_duration_seconds_count 0
+# HELP grafana_stat_active_users number of active users
+# TYPE grafana_stat_active_users gauge
+grafana_stat_active_users 0
+# HELP grafana_stat_total_orgs total amount of orgs
+# TYPE grafana_stat_total_orgs gauge
+grafana_stat_total_orgs 1
+# HELP grafana_stat_total_playlists total amount of playlists
+# TYPE grafana_stat_total_playlists gauge
+grafana_stat_total_playlists 0
+# HELP grafana_stat_total_service_account_tokens total amount of service account tokens
+# TYPE grafana_stat_total_service_account_tokens gauge
+grafana_stat_total_service_account_tokens 0
+# HELP grafana_stat_total_service_accounts total amount of service accounts
+# TYPE grafana_stat_total_service_accounts gauge
+grafana_stat_total_service_accounts 0
+# HELP grafana_stat_total_service_accounts_role_none total amount of service accounts with no role
+# TYPE grafana_stat_total_service_accounts_role_none gauge
+grafana_stat_total_service_accounts_role_none 0
+# HELP grafana_stat_total_teams total amount of teams
+# TYPE grafana_stat_total_teams gauge
+grafana_stat_total_teams 0
+# HELP grafana_stat_total_users total amount of users
+# TYPE grafana_stat_total_users gauge
+grafana_stat_total_users 1
+# HELP grafana_stat_totals_active_admins total amount of active admins
+# TYPE grafana_stat_totals_active_admins gauge
+grafana_stat_totals_active_admins 0
+# HELP grafana_stat_totals_active_editors total amount of active editors
+# TYPE grafana_stat_totals_active_editors gauge
+grafana_stat_totals_active_editors 0
+# HELP grafana_stat_totals_active_viewers total amount of active viewers
+# TYPE grafana_stat_totals_active_viewers gauge
+grafana_stat_totals_active_viewers 0
+# HELP grafana_stat_totals_admins total amount of admins
+# TYPE grafana_stat_totals_admins gauge
+grafana_stat_totals_admins 1
+# HELP grafana_stat_totals_alert_rules total amount of alert rules in the database
+# TYPE grafana_stat_totals_alert_rules gauge
+grafana_stat_totals_alert_rules 0
+# HELP grafana_stat_totals_annotations total amount of annotations in the database
+# TYPE grafana_stat_totals_annotations gauge
+grafana_stat_totals_annotations 0
+# HELP grafana_stat_totals_correlations total amount of correlations
+# TYPE grafana_stat_totals_correlations gauge
+grafana_stat_totals_correlations 0
+# HELP grafana_stat_totals_dashboard total amount of dashboards
+# TYPE grafana_stat_totals_dashboard gauge
+grafana_stat_totals_dashboard 1
+# HELP grafana_stat_totals_dashboard_versions total amount of dashboard versions in the database
+# TYPE grafana_stat_totals_dashboard_versions gauge
+grafana_stat_totals_dashboard_versions 1
+# HELP grafana_stat_totals_data_keys total amount of data keys in the database
+# TYPE grafana_stat_totals_data_keys gauge
+grafana_stat_totals_data_keys{active="false"} 0
+grafana_stat_totals_data_keys{active="true"} 1
+# HELP grafana_stat_totals_datasource total number of defined datasources, labeled by pluginId
+# TYPE grafana_stat_totals_datasource gauge
+grafana_stat_totals_datasource{plugin_id="prometheus"} 1
+# HELP grafana_stat_totals_editors total amount of editors
+# TYPE grafana_stat_totals_editors gauge
+grafana_stat_totals_editors 0
+# HELP grafana_stat_totals_folder total amount of folders
+# TYPE grafana_stat_totals_folder gauge
+grafana_stat_totals_folder 0
+# HELP grafana_stat_totals_library_panels total amount of library panels in the database
+# TYPE grafana_stat_totals_library_panels gauge
+grafana_stat_totals_library_panels 0
+# HELP grafana_stat_totals_library_variables total amount of library variables in the database
+# TYPE grafana_stat_totals_library_variables gauge
+grafana_stat_totals_library_variables 0
+# HELP grafana_stat_totals_public_dashboard total amount of public dashboards
+# TYPE grafana_stat_totals_public_dashboard gauge
+grafana_stat_totals_public_dashboard 0
+# HELP grafana_stat_totals_rule_groups total amount of alert rule groups in the database
+# TYPE grafana_stat_totals_rule_groups gauge
+grafana_stat_totals_rule_groups 0
+# HELP grafana_stat_totals_viewers total amount of viewers
+# TYPE grafana_stat_totals_viewers gauge
+grafana_stat_totals_viewers 0
+# HELP plugins_active_instances The number of active plugin instances
+# TYPE plugins_active_instances gauge
+plugins_active_instances 0
+# HELP plugins_datasource_instances_total The total number of data source instances created
+# TYPE plugins_datasource_instances_total counter
+plugins_datasource_instances_total 0
+# HELP process_cpu_seconds_total Total user and system CPU time spent in seconds.
+# TYPE process_cpu_seconds_total counter
+process_cpu_seconds_total 6.73
+# HELP process_max_fds Maximum number of open file descriptors.
+# TYPE process_max_fds gauge
+process_max_fds 1.048576e+06
+# HELP process_open_fds Number of open file descriptors.
+# TYPE process_open_fds gauge
+process_open_fds 10
+# HELP process_resident_memory_bytes Resident memory size in bytes.
+# TYPE process_resident_memory_bytes gauge
+process_resident_memory_bytes 1.65052416e+08
+# HELP process_start_time_seconds Start time of the process since unix epoch in seconds.
+# TYPE process_start_time_seconds gauge
+process_start_time_seconds 1.77238558821e+09
+# HELP process_virtual_memory_bytes Virtual memory size in bytes.
+# TYPE process_virtual_memory_bytes gauge
+process_virtual_memory_bytes 1.636040704e+09
+# HELP process_virtual_memory_max_bytes Maximum amount of virtual memory available in bytes.
+# TYPE process_virtual_memory_max_bytes gauge
+process_virtual_memory_max_bytes 1.8446744073709552e+19
+# HELP prometheus_template_text_expansion_failures_total The total number of template text expansion failures.
+# TYPE prometheus_template_text_expansion_failures_total counter
+prometheus_template_text_expansion_failures_total 0
+# HELP prometheus_template_text_expansions_total The total number of template text expansions.
+# TYPE prometheus_template_text_expansions_total counter
+prometheus_template_text_expansions_total 0
+# HELP promhttp_metric_handler_requests_in_flight Current number of scrapes being served.
+# TYPE promhttp_metric_handler_requests_in_flight gauge
+promhttp_metric_handler_requests_in_flight 0
+# HELP promhttp_metric_handler_requests_total Total number of scrapes by HTTP status code.
+# TYPE promhttp_metric_handler_requests_total counter
+promhttp_metric_handler_requests_total{code="200"} 0
+promhttp_metric_handler_requests_total{code="500"} 0
+promhttp_metric_handler_requests_total{code="503"} 0

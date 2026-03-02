@@ -1,0 +1,10 @@
+queue_24h_count=2
+queue_24h_xx_count=0
+search_sector_items=1
+candles_5m_res=5m
+candles_1h_res=1h
+candles_5m_points=12
+candles_1h_points=12
+command_center_ttfb=0.122503
+command_center_total=0.123321
+next_static_size=31M

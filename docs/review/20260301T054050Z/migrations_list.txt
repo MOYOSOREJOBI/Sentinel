@@ -1,0 +1,8 @@
+sql/migrations/001_init.sql
+sql/migrations/002_indexes.sql
+sql/migrations/003_incidents_cases_lineage.sql
+sql/migrations/004_replay_jobs.sql
+sql/migrations/005_model_deployments.sql
+sql/migrations/006_watchlists_and_preferences.sql
+sql/migrations/007_escalation_oncall.sql
+sql/migrations/008_scores_lineage.sql

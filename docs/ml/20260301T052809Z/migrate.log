@@ -1,0 +1,200 @@
+migrate-1  | CREATE FUNCTION
+migrate-1  | DROP TRIGGER
+migrate-1  | psql:<stdin>:126: NOTICE:  trigger "trg_audit_no_update" for relation "audit_log" does not exist, skipping
+migrate-1  | DROP TRIGGER
+migrate-1  | psql:<stdin>:127: NOTICE:  trigger "trg_audit_no_delete" for relation "audit_log" does not exist, skipping
+migrate-1  | CREATE TRIGGER
+migrate-1  | CREATE TRIGGER
+migrate-1  | Applying /migrations/002_indexes.sql
+migrate-1  | CREATE INDEX
+migrate-1  | CREATE INDEX
+migrate-1  | CREATE INDEX
+migrate-1  | CREATE INDEX
+migrate-1  | CREATE INDEX
+migrate-1  | CREATE INDEX
+migrate-1  | Applying /migrations/003_incidents_cases_lineage.sql
+migrate-1  | ALTER TABLE
+migrate-1  | ALTER TABLE
+migrate-1  | CREATE TABLE
+migrate-1  | CREATE TABLE
+migrate-1  | CREATE TABLE
+migrate-1  | CREATE TABLE
+migrate-1  | CREATE TABLE
+migrate-1  | CREATE TABLE
+migrate-1  | CREATE TABLE
+migrate-1  | ALTER TABLE
+migrate-1  | CREATE INDEX
+migrate-1  | psql:<stdin>:99: NOTICE:  constraint "alerts_incident_id_fkey" of relation "alerts" does not exist, skipping
+migrate-1  | ALTER TABLE
+migrate-1  | ALTER TABLE
+migrate-1  | CREATE INDEX
+migrate-1  | CREATE INDEX
+migrate-1  | CREATE INDEX
+migrate-1  | Applying /migrations/004_replay_jobs.sql
+migrate-1  | CREATE TABLE
+migrate-1  | CREATE INDEX
+migrate-1  | Applying /migrations/005_model_deployments.sql
+migrate-1  | CREATE TABLE
+migrate-1  | CREATE INDEX
+migrate-1  | Applying /migrations/006_watchlists_and_preferences.sql
+migrate-1  | CREATE TABLE
+migrate-1  | CREATE TABLE
+migrate-1  | CREATE TABLE
+migrate-1  | ALTER TABLE
+migrate-1  | Applying /migrations/007_escalation_oncall.sql
+migrate-1  | CREATE TABLE
+migrate-1  | CREATE INDEX
+migrate-1  | CREATE TABLE
+migrate-1  | CREATE INDEX
+migrate-1  | Applying /migrations/008_scores_lineage.sql
+migrate-1  | psql:<stdin>:13: ERROR:  cannot create a unique index without the column "ts" (used in partitioning)
+migrate-1  | CONTEXT:  SQL statement "ALTER TABLE scores
+migrate-1  |       ADD CONSTRAINT scores_id_pk PRIMARY KEY (id)"
+migrate-1  | PL/pgSQL function inline_code_block line 9 at SQL statement
+migrate-1  | Applying /migrations/001_init.sql
+migrate-1  | psql:<stdin>:11: NOTICE:  extension "timescaledb" already exists, skipping
+migrate-1  | DO
+migrate-1  | psql:<stdin>:19: NOTICE:  relation "users" already exists, skipping
+migrate-1  | CREATE TABLE
+migrate-1  | psql:<stdin>:29: NOTICE:  relation "raw_ticks" already exists, skipping
+migrate-1  | CREATE TABLE
+migrate-1  | psql:<stdin>:43: NOTICE:  relation "candles" already exists, skipping
+migrate-1  | CREATE TABLE
+migrate-1  |  create_hypertable 
+migrate-1  | psql:<stdin>:44: NOTICE:  table "candles" is already a hypertable, skipping
+migrate-1  | -------------------
+migrate-1  |  (1,f)
+migrate-1  | (1 row)
+migrate-1  | 
+migrate-1  | CREATE INDEX
+migrate-1  | psql:<stdin>:45: NOTICE:  relation "candles_idempotency_bucket_uq" already exists, skipping
+migrate-1  | psql:<stdin>:46: NOTICE:  relation "candles_id_idx" already exists, skipping
+migrate-1  | CREATE INDEX
+migrate-1  | psql:<stdin>:56: NOTICE:  relation "features" already exists, skipping
+migrate-1  | CREATE TABLE
+migrate-1  |  create_hypertable 
+migrate-1  | -------------------
+migrate-1  |  (2,f)
+migrate-1  | (1 row)
+migrate-1  | 
+migrate-1  | psql:<stdin>:57: NOTICE:  table "features" is already a hypertable, skipping
+migrate-1  | CREATE INDEX
+migrate-1  | psql:<stdin>:58: NOTICE:  relation "features_idempotency_ts_uq" already exists, skipping
+migrate-1  | CREATE INDEX
+migrate-1  | psql:<stdin>:59: NOTICE:  relation "features_id_idx" already exists, skipping
+migrate-1  | psql:<stdin>:70: NOTICE:  relation "scores" already exists, skipping
+migrate-1  | CREATE TABLE
+migrate-1  | psql:<stdin>:71: NOTICE:  table "scores" is already a hypertable, skipping
+migrate-1  |  create_hypertable 
+migrate-1  | -------------------
+migrate-1  |  (3,f)
+migrate-1  | (1 row)
+migrate-1  | 
+migrate-1  | CREATE INDEX
+migrate-1  | psql:<stdin>:72: NOTICE:  relation "scores_idempotency_ts_uq" already exists, skipping
+migrate-1  | CREATE INDEX
+migrate-1  | psql:<stdin>:73: NOTICE:  relation "scores_id_idx" already exists, skipping
+migrate-1  | psql:<stdin>:83: NOTICE:  relation "alerts" already exists, skipping
+migrate-1  | CREATE TABLE
+migrate-1  | CREATE TABLE
+migrate-1  | psql:<stdin>:90: NOTICE:  relation "circuit_suppression" already exists, skipping
+migrate-1  | psql:<stdin>:99: NOTICE:  relation "model_registry" already exists, skipping
+migrate-1  | CREATE TABLE
+migrate-1  | psql:<stdin>:108: NOTICE:  relation "replay_runs" already exists, skipping
+migrate-1  | CREATE TABLE
+migrate-1  | psql:<stdin>:118: NOTICE:  relation "audit_log" already exists, skipping
+migrate-1  | CREATE TABLE
+migrate-1  | CREATE FUNCTION
+migrate-1  | DROP TRIGGER
+migrate-1  | DROP TRIGGER
+migrate-1  | CREATE TRIGGER
+migrate-1  | CREATE TRIGGER
+migrate-1  | Applying /migrations/002_indexes.sql
+migrate-1  | psql:<stdin>:1: NOTICE:  relation "idx_alerts_symbol_created_at" already exists, skipping
+migrate-1  | CREATE INDEX
+migrate-1  | psql:<stdin>:2: NOTICE:  relation "idx_alerts_status_created_at" already exists, skipping
+migrate-1  | CREATE INDEX
+migrate-1  | CREATE INDEX
+migrate-1  | psql:<stdin>:3: NOTICE:  relation "idx_scores_symbol_ts" already exists, skipping
+migrate-1  | psql:<stdin>:4: NOTICE:  relation "idx_features_symbol_ts" already exists, skipping
+migrate-1  | CREATE INDEX
+migrate-1  | CREATE INDEX
+migrate-1  | psql:<stdin>:5: NOTICE:  relation "idx_candles_symbol_bucket_interval" already exists, skipping
+migrate-1  | psql:<stdin>:6: NOTICE:  relation "idx_audit_created_at" already exists, skipping
+migrate-1  | CREATE INDEX
+migrate-1  | Applying /migrations/003_incidents_cases_lineage.sql
+migrate-1  | psql:<stdin>:3: NOTICE:  column "open_event_time" of relation "candles" already exists, skipping
+migrate-1  | psql:<stdin>:3: NOTICE:  column "close_event_time" of relation "candles" already exists, skipping
+migrate-1  | ALTER TABLE
+migrate-1  | psql:<stdin>:15: NOTICE:  column "raw_anomaly_score" of relation "scores" already exists, skipping
+migrate-1  | psql:<stdin>:15: NOTICE:  column "normalized_anomaly_score" of relation "scores" already exists, skipping
+migrate-1  | psql:<stdin>:15: NOTICE:  column "escalation_probability" of relation "scores" already exists, skipping
+migrate-1  | psql:<stdin>:15: NOTICE:  column "priority_score" of relation "scores" already exists, skipping
+migrate-1  | psql:<stdin>:15: NOTICE:  column "composite_risk" of relation "scores" already exists, skipping
+migrate-1  | psql:<stdin>:15: NOTICE:  column "feature_snapshot_hash" of relation "scores" already exists, skipping
+migrate-1  | psql:<stdin>:15: NOTICE:  column "feature_set_version" of relation "scores" already exists, skipping
+migrate-1  | psql:<stdin>:15: NOTICE:  column "model_version" of relation "scores" already exists, skipping
+migrate-1  | psql:<stdin>:15: NOTICE:  column "calibration_version" of relation "scores" already exists, skipping
+migrate-1  | psql:<stdin>:15: NOTICE:  column "explanation_payload" of relation "scores" already exists, skipping
+migrate-1  | ALTER TABLE
+migrate-1  | psql:<stdin>:40: NOTICE:  relation "incidents" already exists, skipping
+migrate-1  | CREATE TABLE
+migrate-1  | psql:<stdin>:47: NOTICE:  relation "incident_alert_links" already exists, skipping
+migrate-1  | CREATE TABLE
+migrate-1  | psql:<stdin>:57: NOTICE:  relation "cases" already exists, skipping
+migrate-1  | CREATE TABLE
+migrate-1  | psql:<stdin>:65: NOTICE:  relation "case_notes" already exists, skipping
+migrate-1  | CREATE TABLE
+migrate-1  | psql:<stdin>:74: NOTICE:  relation "case_actions" already exists, skipping
+migrate-1  | CREATE TABLE
+migrate-1  | psql:<stdin>:83: NOTICE:  relation "case_evidence" already exists, skipping
+migrate-1  | CREATE TABLE
+migrate-1  | psql:<stdin>:95: NOTICE:  relation "instrument_metadata" already exists, skipping
+migrate-1  | CREATE TABLE
+migrate-1  | psql:<stdin>:97: NOTICE:  column "incident_id" of relation "alerts" already exists, skipping
+migrate-1  | ALTER TABLE
+migrate-1  | psql:<stdin>:98: NOTICE:  relation "alerts_score_id_idx" already exists, skipping
+migrate-1  | CREATE INDEX
+migrate-1  | ALTER TABLE
+migrate-1  | ALTER TABLE
+migrate-1  | psql:<stdin>:102: NOTICE:  relation "idx_incidents_queue" already exists, skipping
+migrate-1  | CREATE INDEX
+migrate-1  | psql:<stdin>:103: NOTICE:  relation "idx_incidents_symbol_time" already exists, skipping
+migrate-1  | CREATE INDEX
+migrate-1  | CREATE INDEX
+migrate-1  | psql:<stdin>:104: NOTICE:  relation "idx_instrument_metadata_geo" already exists, skipping
+migrate-1  | Applying /migrations/004_replay_jobs.sql
+migrate-1  | psql:<stdin>:18: NOTICE:  relation "replay_jobs" already exists, skipping
+migrate-1  | CREATE TABLE
+migrate-1  | psql:<stdin>:21: NOTICE:  relation "idx_replay_jobs_status_req" already exists, skipping
+migrate-1  | CREATE INDEX
+migrate-1  | Applying /migrations/005_model_deployments.sql
+migrate-1  | psql:<stdin>:19: NOTICE:  relation "model_deployments" already exists, skipping
+migrate-1  | CREATE TABLE
+migrate-1  | CREATE INDEX
+migrate-1  | psql:<stdin>:22: NOTICE:  relation "idx_model_deployments_status" already exists, skipping
+migrate-1  | Applying /migrations/006_watchlists_and_preferences.sql
+migrate-1  | psql:<stdin>:6: NOTICE:  relation "watchlists" already exists, skipping
+migrate-1  | CREATE TABLE
+migrate-1  | psql:<stdin>:12: NOTICE:  relation "watchlist_items" already exists, skipping
+migrate-1  | CREATE TABLE
+migrate-1  | CREATE TABLE
+migrate-1  | psql:<stdin>:21: NOTICE:  relation "user_preferences" already exists, skipping
+migrate-1  | psql:<stdin>:26: NOTICE:  column "country_code" of relation "instrument_metadata" already exists, skipping
+migrate-1  | psql:<stdin>:26: NOTICE:  column "country_name" of relation "instrument_metadata" already exists, skipping
+migrate-1  | psql:<stdin>:26: NOTICE:  column "timezone" of relation "instrument_metadata" already exists, skipping
+migrate-1  | ALTER TABLE
+migrate-1  | Applying /migrations/007_escalation_oncall.sql
+migrate-1  | psql:/migrations/007_escalation_oncall.sql:12: NOTICE:  relation "escalation_policies" already exists, skipping
+migrate-1  | CREATE TABLE
+migrate-1  | psql:/migrations/007_escalation_oncall.sql:13: NOTICE:  relation "idx_escalation_policies_severity" already exists, skipping
+migrate-1  | CREATE INDEX
+migrate-1  | CREATE TABLE
+migrate-1  | psql:/migrations/007_escalation_oncall.sql:24: NOTICE:  relation "on_call_rotations" already exists, skipping
+migrate-1  | psql:/migrations/007_escalation_oncall.sql:25: NOTICE:  relation "idx_on_call_rotations_name" already exists, skipping
+migrate-1  | CREATE INDEX
+migrate-1  | Applying /migrations/008_scores_lineage.sql
+migrate-1  | psql:<stdin>:13: ERROR:  cannot create a unique index without the column "ts" (used in partitioning)
+migrate-1  | CONTEXT:  SQL statement "ALTER TABLE scores
+migrate-1  |       ADD CONSTRAINT scores_id_pk PRIMARY KEY (id)"
+migrate-1  | PL/pgSQL function inline_code_block line 9 at SQL statement

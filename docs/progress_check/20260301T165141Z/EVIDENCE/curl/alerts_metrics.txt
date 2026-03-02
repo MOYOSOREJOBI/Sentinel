@@ -1,0 +1,124 @@
+HTTP/1.1 200 OK
+Content-Type: text/plain; version=0.0.4; charset=utf-8; escaping=underscores
+X-Request-Id: 6532f808f22d6c43
+Date: Sun, 01 Mar 2026 17:38:18 GMT
+Transfer-Encoding: chunked
+
+# HELP db_query_duration_seconds Database query latency in seconds.
+# TYPE db_query_duration_seconds histogram
+db_query_duration_seconds_bucket{query="insert_alerts",service="alerts",le="0.0005"} 0
+db_query_duration_seconds_bucket{query="insert_alerts",service="alerts",le="0.001"} 0
+db_query_duration_seconds_bucket{query="insert_alerts",service="alerts",le="0.005"} 26
+db_query_duration_seconds_bucket{query="insert_alerts",service="alerts",le="0.01"} 29
+db_query_duration_seconds_bucket{query="insert_alerts",service="alerts",le="0.025"} 30
+db_query_duration_seconds_bucket{query="insert_alerts",service="alerts",le="0.05"} 30
+db_query_duration_seconds_bucket{query="insert_alerts",service="alerts",le="0.1"} 30
+db_query_duration_seconds_bucket{query="insert_alerts",service="alerts",le="0.25"} 30
+db_query_duration_seconds_bucket{query="insert_alerts",service="alerts",le="0.5"} 30
+db_query_duration_seconds_bucket{query="insert_alerts",service="alerts",le="1"} 30
+db_query_duration_seconds_bucket{query="insert_alerts",service="alerts",le="+Inf"} 30
+db_query_duration_seconds_sum{query="insert_alerts",service="alerts"} 0.09102741499999996
+db_query_duration_seconds_count{query="insert_alerts",service="alerts"} 30
+db_query_duration_seconds_bucket{query="upsert_incidents",service="alerts",le="0.0005"} 0
+db_query_duration_seconds_bucket{query="upsert_incidents",service="alerts",le="0.001"} 0
+db_query_duration_seconds_bucket{query="upsert_incidents",service="alerts",le="0.005"} 27
+db_query_duration_seconds_bucket{query="upsert_incidents",service="alerts",le="0.01"} 29
+db_query_duration_seconds_bucket{query="upsert_incidents",service="alerts",le="0.025"} 30
+db_query_duration_seconds_bucket{query="upsert_incidents",service="alerts",le="0.05"} 30
+db_query_duration_seconds_bucket{query="upsert_incidents",service="alerts",le="0.1"} 30
+db_query_duration_seconds_bucket{query="upsert_incidents",service="alerts",le="0.25"} 30
+db_query_duration_seconds_bucket{query="upsert_incidents",service="alerts",le="0.5"} 30
+db_query_duration_seconds_bucket{query="upsert_incidents",service="alerts",le="1"} 30
+db_query_duration_seconds_bucket{query="upsert_incidents",service="alerts",le="+Inf"} 30
+db_query_duration_seconds_sum{query="upsert_incidents",service="alerts"} 0.09826820900000001
+db_query_duration_seconds_count{query="upsert_incidents",service="alerts"} 30
+db_query_duration_seconds_bucket{query="upsert_scores",service="alerts",le="0.0005"} 0
+db_query_duration_seconds_bucket{query="upsert_scores",service="alerts",le="0.001"} 0
+db_query_duration_seconds_bucket{query="upsert_scores",service="alerts",le="0.005"} 154857
+db_query_duration_seconds_bucket{query="upsert_scores",service="alerts",le="0.01"} 160152
+db_query_duration_seconds_bucket{query="upsert_scores",service="alerts",le="0.025"} 160463
+db_query_duration_seconds_bucket{query="upsert_scores",service="alerts",le="0.05"} 160550
+db_query_duration_seconds_bucket{query="upsert_scores",service="alerts",le="0.1"} 160573
+db_query_duration_seconds_bucket{query="upsert_scores",service="alerts",le="0.25"} 160574
+db_query_duration_seconds_bucket{query="upsert_scores",service="alerts",le="0.5"} 160574
+db_query_duration_seconds_bucket{query="upsert_scores",service="alerts",le="1"} 160574
+db_query_duration_seconds_bucket{query="upsert_scores",service="alerts",le="+Inf"} 160574
+db_query_duration_seconds_sum{query="upsert_scores",service="alerts"} 512.797221795007
+db_query_duration_seconds_count{query="upsert_scores",service="alerts"} 160574
+# HELP http_request_duration_seconds HTTP request latency in seconds.
+# TYPE http_request_duration_seconds histogram
+http_request_duration_seconds_bucket{path="/",service="alerts",le="0.005"} 1
+http_request_duration_seconds_bucket{path="/",service="alerts",le="0.01"} 1
+http_request_duration_seconds_bucket{path="/",service="alerts",le="0.025"} 1
+http_request_duration_seconds_bucket{path="/",service="alerts",le="0.05"} 1
+http_request_duration_seconds_bucket{path="/",service="alerts",le="0.1"} 1
+http_request_duration_seconds_bucket{path="/",service="alerts",le="0.25"} 1
+http_request_duration_seconds_bucket{path="/",service="alerts",le="0.5"} 1
+http_request_duration_seconds_bucket{path="/",service="alerts",le="1"} 1
+http_request_duration_seconds_bucket{path="/",service="alerts",le="2.5"} 1
+http_request_duration_seconds_bucket{path="/",service="alerts",le="5"} 1
+http_request_duration_seconds_bucket{path="/",service="alerts",le="+Inf"} 1
+http_request_duration_seconds_sum{path="/",service="alerts"} 0.000212273
+http_request_duration_seconds_count{path="/",service="alerts"} 1
+http_request_duration_seconds_bucket{path="/healthz",service="alerts",le="0.005"} 1
+http_request_duration_seconds_bucket{path="/healthz",service="alerts",le="0.01"} 1
+http_request_duration_seconds_bucket{path="/healthz",service="alerts",le="0.025"} 1
+http_request_duration_seconds_bucket{path="/healthz",service="alerts",le="0.05"} 1
+http_request_duration_seconds_bucket{path="/healthz",service="alerts",le="0.1"} 1
+http_request_duration_seconds_bucket{path="/healthz",service="alerts",le="0.25"} 1
+http_request_duration_seconds_bucket{path="/healthz",service="alerts",le="0.5"} 1
+http_request_duration_seconds_bucket{path="/healthz",service="alerts",le="1"} 1
+http_request_duration_seconds_bucket{path="/healthz",service="alerts",le="2.5"} 1
+http_request_duration_seconds_bucket{path="/healthz",service="alerts",le="5"} 1
+http_request_duration_seconds_bucket{path="/healthz",service="alerts",le="+Inf"} 1
+http_request_duration_seconds_sum{path="/healthz",service="alerts"} 3.6441e-05
+http_request_duration_seconds_count{path="/healthz",service="alerts"} 1
+http_request_duration_seconds_bucket{path="/metrics",service="alerts",le="0.005"} 197
+http_request_duration_seconds_bucket{path="/metrics",service="alerts",le="0.01"} 219
+http_request_duration_seconds_bucket{path="/metrics",service="alerts",le="0.025"} 219
+http_request_duration_seconds_bucket{path="/metrics",service="alerts",le="0.05"} 219
+http_request_duration_seconds_bucket{path="/metrics",service="alerts",le="0.1"} 219
+http_request_duration_seconds_bucket{path="/metrics",service="alerts",le="0.25"} 219
+http_request_duration_seconds_bucket{path="/metrics",service="alerts",le="0.5"} 219
+http_request_duration_seconds_bucket{path="/metrics",service="alerts",le="1"} 219
+http_request_duration_seconds_bucket{path="/metrics",service="alerts",le="2.5"} 219
+http_request_duration_seconds_bucket{path="/metrics",service="alerts",le="5"} 219
+http_request_duration_seconds_bucket{path="/metrics",service="alerts",le="+Inf"} 219
+http_request_duration_seconds_sum{path="/metrics",service="alerts"} 0.5530775310000001
+http_request_duration_seconds_count{path="/metrics",service="alerts"} 219
+http_request_duration_seconds_bucket{path="/readyz",service="alerts",le="0.005"} 199
+http_request_duration_seconds_bucket{path="/readyz",service="alerts",le="0.01"} 212
+http_request_duration_seconds_bucket{path="/readyz",service="alerts",le="0.025"} 214
+http_request_duration_seconds_bucket{path="/readyz",service="alerts",le="0.05"} 214
+http_request_duration_seconds_bucket{path="/readyz",service="alerts",le="0.1"} 214
+http_request_duration_seconds_bucket{path="/readyz",service="alerts",le="0.25"} 214
+http_request_duration_seconds_bucket{path="/readyz",service="alerts",le="0.5"} 214
+http_request_duration_seconds_bucket{path="/readyz",service="alerts",le="1"} 214
+http_request_duration_seconds_bucket{path="/readyz",service="alerts",le="2.5"} 214
+http_request_duration_seconds_bucket{path="/readyz",service="alerts",le="5"} 214
+http_request_duration_seconds_bucket{path="/readyz",service="alerts",le="+Inf"} 214
+http_request_duration_seconds_sum{path="/readyz",service="alerts"} 0.6849764100000001
+http_request_duration_seconds_count{path="/readyz",service="alerts"} 214
+# HELP http_requests_total Total HTTP requests handled by Sentinel Go services.
+# TYPE http_requests_total counter
+http_requests_total{method="GET",path="/",service="alerts",status="200"} 1
+http_requests_total{method="GET",path="/healthz",service="alerts",status="200"} 1
+http_requests_total{method="GET",path="/metrics",service="alerts",status="200"} 219
+http_requests_total{method="GET",path="/readyz",service="alerts",status="200"} 214
+# HELP kafka_messages_consumed_total Kafka messages consumed by Go services.
+# TYPE kafka_messages_consumed_total counter
+kafka_messages_consumed_total{service="alerts",topic="derived.scores"} 160575
+# HELP kafka_messages_produced_total Kafka messages produced by Go services.
+# TYPE kafka_messages_produced_total counter
+kafka_messages_produced_total{service="alerts",topic="alerts.created"} 30
+# HELP promhttp_metric_handler_requests_in_flight Current number of scrapes being served.
+# TYPE promhttp_metric_handler_requests_in_flight gauge
+promhttp_metric_handler_requests_in_flight 1
+# HELP promhttp_metric_handler_requests_total Total number of scrapes by HTTP status code.
+# TYPE promhttp_metric_handler_requests_total counter
+promhttp_metric_handler_requests_total{code="200"} 219
+promhttp_metric_handler_requests_total{code="500"} 0
+promhttp_metric_handler_requests_total{code="503"} 0
+# HELP sentinel_up Whether the service process is up.
+# TYPE sentinel_up gauge
+sentinel_up{service="alerts"} 1

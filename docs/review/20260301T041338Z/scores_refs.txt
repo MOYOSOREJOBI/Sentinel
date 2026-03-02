@@ -1,0 +1,62 @@
+web/e2e/sentinel.spec.ts:85:test('T4: candle-risk-panel renders and /scores returns data', async ({ page }) => {
+web/e2e/sentinel.spec.ts:86:  // Intercept the /scores proxy request before loading the page
+web/e2e/sentinel.spec.ts:88:    r => r.url().includes('/proxy/query/scores') && r.status() === 200,
+sql/migrations/001_init.sql:62:CREATE TABLE IF NOT EXISTS scores (
+sql/migrations/001_init.sql:72:SELECT create_hypertable('scores', by_range('ts'), if_not_exists=>TRUE);
+sql/migrations/001_init.sql:73:CREATE UNIQUE INDEX IF NOT EXISTS scores_idempotency_ts_uq ON scores(idempotency_key, ts);
+sql/migrations/001_init.sql:74:CREATE INDEX IF NOT EXISTS scores_id_idx ON scores(id);
+sql/migrations/002_indexes.sql:4:CREATE INDEX IF NOT EXISTS idx_scores_symbol_ts ON scores(symbol, ts DESC);
+web/lib/roles.ts:2:export type Tab = 'overview' | 'alerts' | 'scores' | 'governance'
+web/lib/roles.ts:18:  if (role === 'admin') return ['overview', 'alerts', 'scores', 'governance']
+web/lib/roles.ts:19:  if (role === 'analyst') return ['overview', 'alerts', 'scores']
+web/lib/roles.ts:20:  return ['overview', 'scores']
+sql/migrations/008_scores_lineage.sql:8:      AND conrelid = 'scores'::regclass
+sql/migrations/008_scores_lineage.sql:10:    ALTER TABLE scores
+sql/migrations/008_scores_lineage.sql:16:ALTER TABLE scores
+sql/migrations/008_scores_lineage.sql:22:CREATE INDEX IF NOT EXISTS idx_scores_scoring_run_id ON scores (scoring_run_id);
+sql/migrations/008_scores_lineage.sql:23:CREATE INDEX IF NOT EXISTS idx_scores_produced_at_desc ON scores (produced_at DESC);
+sql/migrations/008_scores_lineage.sql:24:CREATE INDEX IF NOT EXISTS idx_scores_model_version ON scores (model_version);
+sql/migrations/008_scores_lineage.sql:25:CREATE INDEX IF NOT EXISTS idx_scores_artifact_hash ON scores (artifact_hash);
+sql/migrations/008_scores_lineage.sql:32:  FOREIGN KEY (score_id) REFERENCES scores(id) ON DELETE RESTRICT;
+sql/migrations/008_scores_lineage.sql:43:ALTER TABLE scores
+sql/migrations/008_scores_lineage.sql:49:ALTER TABLE scores
+sql/migrations/003_incidents_cases_lineage.sql:6:ALTER TABLE scores
+sql/migrations/003_incidents_cases_lineage.sql:125:ALTER TABLE scores
+cmd/query/main_test.go:94:		"scores":    14,
+services/inference/app.py:34:PRODUCER_TOPIC = os.getenv("PRODUCER_TOPIC", "derived.scores")
+services/inference/train/train_models.py:82:    FROM scores s
+services/inference/train/train_models.py:177:    anomaly_scores = [(-score + 0.10) / 0.60 for score in model.decision_function(train_rows)]
+services/inference/train/train_models.py:178:    stability = max(0.0, 1.0-min(statistics.pstdev(anomaly_scores) if len(anomaly_scores) > 1 else 0.0, 1.0))
+cmd/query/main.go:47:	{Name: "scores", Query: "SELECT count(*) FROM scores"},
+cmd/query/main.go:467:		pr.Get("/scores", func(w http.ResponseWriter, r *http.Request) {
+web/lib/api.ts:56:  scores: (symbol = '', window = '24h', maxPoints = 300) =>
+web/lib/api.ts:57:    apiFetch(API_QUERY, `/scores?symbol=${encodeURIComponent(symbol)}&window=${window}&maxPoints=${maxPoints}`)
+web/lib/risk.ts:3:export function summarizeScoreSeverity(scores: Array<{ severity: ScoreSeverity }>) {
+web/lib/risk.ts:6:  for (const score of scores) {
+web/components/CandleRiskPanel.tsx:85:          api.scores(symbol, window, 300),
+web/components/CandleRiskPanel.tsx:144:          No scores yet. Chart standby — renders when data arrives.
+internal/query/scores.go:90:			FROM scores
+internal/query/trust.go:15:	_ = db.QueryRow(ctx, `SELECT count(s.id) FROM scores s LEFT JOIN incidents i ON i.primary_symbol=s.symbol LEFT JOIN instrument_metadata m ON m.instrument_id=i.primary_symbol WHERE coalesce(s.priority_score,0)<1 AND `+where, args...).Scan(&dq)
+internal/query/trust.go:16:	_ = db.QueryRow(ctx, `SELECT count(s.id) FROM scores s LEFT JOIN incidents i ON i.primary_symbol=s.symbol LEFT JOIN instrument_metadata m ON m.instrument_id=i.primary_symbol WHERE `+where, args...).Scan(&total)
+internal/query/trust.go:17:	_ = db.QueryRow(ctx, `SELECT count(s.id) FROM scores s LEFT JOIN incidents i ON i.primary_symbol=s.symbol LEFT JOIN instrument_metadata m ON m.instrument_id=i.primary_symbol WHERE coalesce(s.model_version,'') LIKE '%fallback%' AND `+where, args...).Scan(&fallback)
+internal/query/trust.go:26:	_ = db.QueryRow(ctx, `SELECT coalesce(s.model_version,''), coalesce(s.model_artifact_hash,''), coalesce(s.scoring_run_id::text,''), coalesce(s.produced_at, s.ts) FROM scores s LEFT JOIN incidents i ON i.primary_symbol=s.symbol LEFT JOIN instrument_metadata m ON m.instrument_id=i.primary_symbol WHERE `+where+` ORDER BY coalesce(s.produced_at, s.ts) DESC LIMIT 1`, args...).Scan(&latestModelVersion, &latestModelArtifactHash, &latestScoringRunID, &latestProducedAt)
+cmd/alerts/main.go:64:	c, err := kafka.New(cfg.KafkaBrokers, "alerts", "derived.scores")
+cmd/alerts/main.go:463:			if err := pool.QueryRow(ctx, `INSERT INTO scores(idempotency_key,symbol,ts,score,severity,explanation,raw_anomaly_score,normalized_anomaly_score,escalation_probability,priority_score,composite_risk,feature_snapshot_hash,feature_set_version,model_version,calibration_version,scoring_run_id,produced_at,artifact_hash,model_artifact_hash,explanation_payload) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,COALESCE(NULLIF($16,''), gen_random_uuid()::text)::uuid,$17,$18,$19,$20) ON CONFLICT (idempotency_key,ts) DO UPDATE SET score=EXCLUDED.score,normalized_anomaly_score=EXCLUDED.normalized_anomaly_score,composite_risk=EXCLUDED.composite_risk,feature_snapshot_hash=EXCLUDED.feature_snapshot_hash,feature_set_version=EXCLUDED.feature_set_version,model_version=EXCLUDED.model_version,calibration_version=EXCLUDED.calibration_version,scoring_run_id=EXCLUDED.scoring_run_id,produced_at=EXCLUDED.produced_at,artifact_hash=EXCLUDED.artifact_hash,model_artifact_hash=EXCLUDED.model_artifact_hash RETURNING id`, idempotency, symbol, ts, score, sev, explanation, rawAnomaly, normAnomaly, escalation, priorityScore, compositeRisk, featureHash, featureSetVersion, modelVersion, calibrationVersion, scoringRunID, producedAt, artifactHash, modelArtifactHash, map[string]any{"explanation": explanation, "top_drivers": m["top_drivers"]}).Scan(&scoreID); err != nil {
+web/tests/lib/roles.test.ts:6:  assert.deepEqual(navItemsForRole('viewer'), ['overview', 'scores'])
+web/tests/lib/roles.test.ts:7:  assert.deepEqual(navItemsForRole('analyst'), ['overview', 'alerts', 'scores'])
+web/tests/lib/roles.test.ts:8:  assert.deepEqual(navItemsForRole('admin'), ['overview', 'alerts', 'scores', 'governance'])
+web/tests/risk.test.mjs:4:function summarizeScoreSeverity(scores) {
+web/tests/risk.test.mjs:5:  return scores.reduce((acc, score) => {
+web/tests/components/nav.test.tsx:6:  assert.deepEqual(navItemsForRole('viewer'), ['overview', 'scores'])
+web/tests/components/nav.test.tsx:7:  assert.deepEqual(navItemsForRole('analyst'), ['overview', 'alerts', 'scores'])
+web/tests/components/nav.test.tsx:8:  assert.deepEqual(navItemsForRole('admin'), ['overview', 'alerts', 'scores', 'governance'])
+web/app/viz/page.tsx:26:function RiskHistogram({ scores }: { scores: number[] }) {
+web/app/viz/page.tsx:29:  scores.forEach(s => { const i = Math.min(buckets - 1, Math.floor(clamp(s) * buckets)); counts[i]++ })
+web/app/viz/page.tsx:50:      <div className='muted' style={{ fontSize: 11 }}>{scores.length} score samples · composite risk [0–1]</div>
+web/app/viz/page.tsx:110:  const [scores, setScores] = useState<number[]>([])
+web/app/viz/page.tsx:115:    api.scores('', filters.window || '24h', 500).then(r => {
+web/app/viz/page.tsx:135:          <RiskHistogram scores={scores} />
+web/app/viz/page.tsx:142:          All charts populated from live backend: /scores, /candles, /world-map, /queue. Updates every page load.
+internal/replay/runner.go:70:		_, _ = db.Exec(ctx, `INSERT INTO scores(idempotency_key,symbol,ts,score,severity,explanation,replay_run_id,model_version,feature_set_version) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9) ON CONFLICT DO NOTHING`, fmt.Sprintf("replay:score:%s:%s", job.ID, t.EventID), t.Symbol, t.EventTime, s, sev, explanation, job.ID, job.ModelVersion, job.FeatureSetVersion)
+internal/replay/runner.go:91:	if err := db.QueryRow(ctx, `SELECT count(*),coalesce(avg(score),0),count(*) FILTER (WHERE severity in ('high','critical')) FROM scores WHERE ts BETWEEN $1 AND $2 AND coalesce(replay_run_id,'')=''`, job.TimeWindowStart, job.TimeWindowEnd).Scan(&as.Count, &as.AvgScore, &as.HighOrHigher); err != nil {
+internal/replay/runner.go:94:	if err := db.QueryRow(ctx, `SELECT count(*),coalesce(avg(score),0),count(*) FILTER (WHERE severity in ('high','critical')) FROM scores WHERE replay_run_id=$1`, job.ID).Scan(&rec.Count, &rec.AvgScore, &rec.HighOrHigher); err != nil {

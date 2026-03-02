@@ -1,0 +1,44 @@
+?   	sentinel/cmd/aggregator	[no test files]
+# sentinel/cmd/alerts.test
+ld: warning: '/private/var/folders/vk/y7jdn8793b33fkr3q9_b33xc0000gn/T/go-link-29793325/000013.o' has malformed LC_DYSYMTAB, expected 98 undefined symbols to start at index 884, found 95 undefined symbols starting at index 884
+# sentinel/cmd/features.test
+ld: warning: '/private/var/folders/vk/y7jdn8793b33fkr3q9_b33xc0000gn/T/go-link-569855247/000013.o' has malformed LC_DYSYMTAB, expected 98 undefined symbols to start at index 884, found 95 undefined symbols starting at index 884
+ok  	sentinel/cmd/alerts	2.631s
+ok  	sentinel/cmd/features	2.967s
+# sentinel/cmd/gateway-api.test
+ld: warning: '/private/var/folders/vk/y7jdn8793b33fkr3q9_b33xc0000gn/T/go-link-1200494589/000013.o' has malformed LC_DYSYMTAB, expected 98 undefined symbols to start at index 884, found 95 undefined symbols starting at index 884
+# sentinel/cmd/governance.test
+ld: warning: '/private/var/folders/vk/y7jdn8793b33fkr3q9_b33xc0000gn/T/go-link-1325375648/000013.o' has malformed LC_DYSYMTAB, expected 98 undefined symbols to start at index 884, found 95 undefined symbols starting at index 884
+ok  	sentinel/cmd/gateway-api	1.678s
+ok  	sentinel/cmd/governance	1.865s
+# sentinel/cmd/query.test
+ld: warning: '/private/var/folders/vk/y7jdn8793b33fkr3q9_b33xc0000gn/T/go-link-1078083161/000013.o' has malformed LC_DYSYMTAB, expected 98 undefined symbols to start at index 884, found 95 undefined symbols starting at index 884
+# sentinel/cmd/simulator.test
+ld: warning: '/private/var/folders/vk/y7jdn8793b33fkr3q9_b33xc0000gn/T/go-link-3530132415/000013.o' has malformed LC_DYSYMTAB, expected 98 undefined symbols to start at index 884, found 95 undefined symbols starting at index 884
+ok  	sentinel/cmd/query	1.646s
+ok  	sentinel/cmd/simulator	2.048s
+# sentinel/internal/metrics.test
+ld: warning: '/private/var/folders/vk/y7jdn8793b33fkr3q9_b33xc0000gn/T/go-link-1643208000/000013.o' has malformed LC_DYSYMTAB, expected 98 undefined symbols to start at index 884, found 95 undefined symbols starting at index 884
+ok  	sentinel/internal/audit	3.414s
+ok  	sentinel/internal/auth	2.700s
+ok  	sentinel/internal/authz	3.294s
+ok  	sentinel/internal/cache	5.094s
+ok  	sentinel/internal/config	3.910s
+?   	sentinel/internal/contracts	[no test files]
+?   	sentinel/internal/db	[no test files]
+ok  	sentinel/internal/healthcheck	4.369s
+?   	sentinel/internal/httpx	[no test files]
+ok  	sentinel/internal/incidents	4.113s
+ok  	sentinel/internal/kafka	4.332s
+?   	sentinel/internal/logging	[no test files]
+ok  	sentinel/internal/logic	5.079s
+ok  	sentinel/internal/marketmath	4.717s
+ok  	sentinel/internal/metrics	4.744s
+ok  	sentinel/internal/middleware	5.266s
+ok  	sentinel/internal/pipeline/scoring	5.407s
+ok  	sentinel/internal/query	5.696s
+ok  	sentinel/internal/rbac	6.052s
+?   	sentinel/internal/rediskv	[no test files]
+ok  	sentinel/internal/replay	5.697s
+?   	sentinel/internal/testredis	[no test files]
+?   	sentinel/scripts	[no test files]

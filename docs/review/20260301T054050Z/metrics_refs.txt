@@ -1,0 +1,22 @@
+cmd/gateway-api/main.go:27:	"sentinel/internal/metrics"
+cmd/gateway-api/main.go:66:				"metrics": "/metrics",
+cmd/gateway-api/main.go:78:	r.Get("/metrics", metrics.Handler)
+cmd/query/main.go:25:	"sentinel/internal/metrics"
+cmd/query/main.go:115:				"metrics": "/metrics",
+cmd/query/main.go:127:	r.Get("/metrics", metrics.Handler)
+cmd/governance/main.go:25:	"sentinel/internal/metrics"
+cmd/governance/main.go:75:				"metrics": "/metrics",
+cmd/governance/main.go:116:	r.Get("/metrics", metrics.Handler)
+cmd/alerts/main.go:30:	"sentinel/internal/metrics"
+cmd/alerts/main.go:95:				"metrics": "/metrics",
+cmd/alerts/main.go:118:	r.Get("/metrics", metrics.Handler)
+cmd/features/main.go:22:	"sentinel/internal/metrics"
+cmd/features/main.go:104:		_, _ = w.Write([]byte(`{"service":"features","version":"dev","links":["/healthz","/readyz","/metrics","/docs"]}`))
+cmd/features/main.go:123:	mux.HandleFunc("/metrics", metrics.Handler)
+cmd/aggregator/main.go:21:	"sentinel/internal/metrics"
+cmd/aggregator/main.go:67:		_, _ = w.Write([]byte(`{"service":"aggregator","version":"dev","links":["/healthz","/readyz","/metrics","/docs"]}`))
+cmd/aggregator/main.go:86:	mux.HandleFunc("/metrics", metrics.Handler)
+internal/metrics/metrics_test.go:12:	Handler(rr, httptest.NewRequest(http.MethodGet, "/metrics", nil))
+cmd/simulator/main.go:21:	"sentinel/internal/metrics"
+cmd/simulator/main.go:65:		_, _ = w.Write([]byte(`{"service":"simulator","version":"dev","links":["/healthz","/readyz","/metrics","/docs"]}`))
+cmd/simulator/main.go:76:	mux.HandleFunc("/metrics", metrics.Handler)

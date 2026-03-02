@@ -1,0 +1,23 @@
+{
+  "extends": "../tsconfig.json",
+  "compilerOptions": {
+    "module": "commonjs",
+    "target": "es2020",
+    "jsx": "react-jsx",
+    "outDir": "../.tmp-tests",
+    "noEmit": false,
+    "types": [
+      "node"
+    ],
+    "declaration": false,
+    "sourceMap": false,
+    "moduleResolution": "node"
+  },
+  "include": [
+    "./**/*.ts",
+    "./**/*.tsx",
+    "../app/**/*.tsx",
+    "../lib/**/*.ts",
+    "../setupTests.ts"
+  ]
+}

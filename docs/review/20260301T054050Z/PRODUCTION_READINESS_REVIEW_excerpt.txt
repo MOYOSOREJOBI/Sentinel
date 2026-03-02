@@ -1,0 +1,218 @@
+     1	# Skeptical Production-Readiness Review (Fact-Based)
+     2	
+     3	## Quant/ML production-mode updates (2026-03-01)
+     4	- `scores` persistence is now a real runtime path in `alerts`, and the writer stores `scoring_run_id`, `produced_at`, `artifact_hash`, `model_artifact_hash`, `feature_snapshot_hash`, and `model_version`.
+     5	- `/scores` now returns populated lineage fields for each score row, including `model_version`, `produced_at`, and `scoring_run_id`.
+     6	- The inference service now loads bundled model artifacts from `services/inference/models/` by default, exposes `fallback_mode`, `model_version`, `model_artifact_hash`, and `trained_at` on `/readyz`, and emits calibration metrics on `/metrics`.
+     7	- Model bundle metadata now includes calibration metrics (`auc`, `brier`, `pr_auc`) plus anomaly stability, and `/trust` surfaces that metadata for the UI.
+     8	- `integration/ml_scores_persist_test.sh` enforces a clean-boot invariant that `scores.count > 0`, at least one non-fallback model row exists, and lineage columns are non-null before writing `docs/audit/_latest/proofs/S4_ml_real.ok`.
+     9	
+    10	## A. High-level architecture summary
+    11	- Current implemented pipeline is effectively:
+    12	  - `simulator` produces to `raw.ticks`.
+    13	  - `aggregator` consumes `raw.ticks`, writes `raw_ticks` + `candles`, produces `derived.candles`.
+    14	  - `features` consumes `derived.candles`, writes `features`, produces `derived.features`.
+    15	  - `inference` consumes `derived.features`, produces `derived.scores` only.
+    16	  - `alerts` consumes `derived.scores`, writes `scores` + `alerts`, emits SSE + Kafka `alerts.created`.
+    17	  - `query` reads from Postgres (`alerts`, `scores`) for frontend.
+    18	- Current gating risk: migration `008_scores_lineage.sql` must stay idempotent and compatible with the `scores` hypertable, otherwise the score writer never starts on a clean boot.
+    19	
+    20	## B. Known working paths
+    21	- Health endpoints are present for services and return static `ok` for many services.
+    22	- Alert creation path appears to work at least superficially:
+    23	  - `alerts` consumes `derived.scores` and inserts `alerts` rows on medium/high/critical severities.
+    24	  - SSE endpoint (`/sse/alerts`) broadcasts the consumed score payload to clients.
+    25	- Login and `/me` work with JWT cookie-based auth in gateway.
+    26	- `audit_log` append-only protection is present at DB trigger level.
+    27	
+    28	## C. Concrete risks grouped by severity
+    29	
+    30	### Critical
+    31	1. **Scores pipeline clean-boot reliability depends on migration correctness.**
+    32	   - Root cause: the score writer is implemented in `alerts`, but a broken migration can prevent the writer from starting.
+    33	   - Blast radius: `/scores` remains empty after a fresh boot even though the write path exists in code.
+    34	   - User impact: UI suggests model output is absent/inconsistent; trust erosion.
+    35	   - Ops impact: impossible to investigate historical score generation on cold start.
+    36	   - Fix: keep the lineage migration compatible with the `scores` hypertable and retain the idempotent `alerts` writer.
+    37	
+    38	2. **Privileged and state-changing endpoints lack auth/RBAC enforcement.**
+    39	   - Root cause: `alerts` ack and governance routes do not validate JWT/role.
+    40	   - Blast radius: any caller can acknowledge alerts, deploy models, start replay.
+    41	   - User impact: unauthorized state changes and governance compromise.
+    42	   - Ops impact: incident forensics and compliance invalidated.
+    43	   - Fix: enforce JWT auth middleware + role checks on alerts/governance service entrypoints.
+    44	
+    45	3. **Startup race on Kafka topic readiness causing dropped/failed production attempts.**
+    46	   - Root cause: simulator starts with compose service health, but topic creation runs later (`run-demo` creates topics after services already running).
+    47	   - Blast radius: early ticks fail with `UNKNOWN_TOPIC_OR_PARTITION`; data loss at startup window.
+    48	   - User impact: intermittent empty/slow data at startup.
+    49	   - Ops impact: nondeterministic boot behavior; flaky demos and deployments.
+    50	   - Fix: gate producers on topic existence or auto-create with retries/backoff and readiness probe.
+    51	
+    52	### Major
+    53	1. **False-negative infrastructure health (memcached).**
+    54	   - Root cause: memcached healthcheck uses `nc` not installed in image.
+    55	   - Blast radius: stack reports unhealthy even if memcached process itself is fine.
+    56	   - User impact: noisy/unreliable operational status.
+    57	   - Ops impact: alert fatigue; unclear dependency criticality.
+    58	   - Fix: use `memcached-tool`/`bash /dev/tcp`/install netcat explicitly; or remove service if unused.
+    59	
+    60	2. **Metrics contract broken for inference.**
+    61	   - Root cause: Prometheus scrapes default `/metrics`; inference exposes only `/healthz` and `/readyz`.
+    62	   - Blast radius: inference observability is blind.
+    63	   - User impact: failures/perf regressions undetected.
+    64	   - Ops impact: cannot track lag, throughput, errors.
+    65	   - Fix: add `/metrics` with Prometheus client and instrument Kafka loop.
+    66	
+    67	3. **Audit trail coverage gaps.**
+    68	   - Root cause: `alerts/{id}/ack` and governance actions lack authenticated actor identity and some flows not audited with true principal.
+    69	   - Blast radius: audit chain exists but may not cover real privileged actor attribution.
+    70	   - Fix: require identity and append audited actor for ack/model/replay actions.
+    71	
+    72	4. **Query service lacks request-path observability.**
+    73	   - Root cause: only startup/shutdown logs; no request/latency/status logs.
+    74	   - Blast radius: production debugging and SLO validation are weak.
+    75	   - Fix: middleware for structured request logging + DB query error counters/latency histograms.
+    76	
+    77	### Minor
+    78	1. **Timestamp naming inconsistency (`created_at` in DB vs `ts` in API projection).**
+    79	   - Not a runtime break in query service (it maps `created_at` -> JSON `ts`), but manual SQL using `alerts.ts` fails, causing operator confusion.
+    80	   - Fix: standardize API/DB naming (`created_at` everywhere, or explicit docs/compat alias).
+    81	
+    82	2. **RBAC package exists but is not integrated.**
+    83	   - Indicates intended controls are currently bypassed at runtime.
+    84	
+    85	3. **Frontend presents empty scores as benign "No scores yet" without degradation signal.**
+    86	   - Distinguishes neither startup lag nor broken score writer.
+    87	
+    88	## D. File-by-file review targets (inspect first)
+    89	1. `cmd/alerts/main.go`: score->alert behavior, SSE, ack auth/audit gap.
+    90	2. `cmd/query/main.go`: `/alerts` and `/scores` DB reads, timestamp projection, logging gaps.
+    91	3. `services/inference/app.py`: `derived.features`->`derived.scores`, missing `/metrics`.
+    92	4. `cmd/simulator/main.go` + `scripts/run-demo.sh` + `scripts/create-topics.sh`: startup race and topic readiness.
+    93	5. `deploy/docker/docker-compose.yml`: dependency health, memcached probe correctness, startup assumptions.
+    94	6. `sql/migrations/001_init.sql` and `002_indexes.sql`: schema truth, timestamp canonical columns, audit append-only trigger.
+    95	7. `cmd/gateway-api/main.go` and `internal/auth/auth.go`: cookie/JWT security posture.
+    96	8. `cmd/governance/main.go`: privileged operations without auth.
+    97	9. `web/app/page.tsx`: handling of empty scores vs active alerts and partial failures.
+    98	
+    99	## E. Contract checks between services
+   100	- Topic contract appears aligned by name (`raw.ticks`, `derived.candles`, `derived.features`, `derived.scores`), and the persistence contract is now handled by the `alerts` consumer writing the `scores` table.
+   101	- Inference emits payload fields `symbol`, `score`, `severity`, `explanation`, `ts` as unix epoch float; no explicit schema versioning.
+   102	- Alerts consumes untyped JSON map; no strict validation beyond `symbol` and `severity`, so producer drift can silently break alerting semantics.
+   103	- Query `/alerts` emits `ts` sourced from `created_at`, while DB has no `alerts.ts`; operator docs/queries are drift-prone.
+   104	- SSE emits raw score payload from Kafka record, not a stable typed alert envelope.
+   105	
+   106	## F. Database and migration review
+   107	- `001_init.sql` creates base schema and append-only audit triggers; currently no `-- +goose Down` section in this file (partial reversibility concern).
+   108	- `002_indexes.sql` has Up/Down separation and is reversible.
+   109	- Canonical time columns are mixed:
+   110	  - `alerts.created_at` (not `ts`)
+   111	  - `scores.ts`, `features.ts`, `candles.bucket`
+   112	- System still allows some partial-success risk if the stack fails before `alerts` starts, but the runtime path now persists `scores` before creating `alerts`.
+   113	- Recommendation: keep persisted `scores` as the prerequisite for alert creation and preserve the current idempotent upsert contract.
+   114	
+   115	## G. Auth / RBAC / audit review
+   116	- Gateway login sets cookie with `HttpOnly` but `Secure=false` (acceptable dev default; not prod-safe).
+   117	- JWT expiration set to 24h, no refresh token mechanism.
+   118	- `auth.Parse` usage has no explicit issuer/audience validation policy.
+   119	- Governance endpoints (`/models/deploy`, `/replay/start`) are now auth + RBAC gated.
+   120	- Alerts ack endpoint is now auth + RBAC gated and audited.
+   121	- Audit chain integrity mechanism is present and good, but privileged route coverage is incomplete.
+   122	
+   123	## H. Frontend contract and UX review
+   124	- Frontend polls `/alerts` and `/scores` every 5s and connects SSE.
+   125	- Empty `/scores` is rendered as normal empty-state text, which masks broken scoring persistence.
+   126	- SSE failure/reconnect/error state is not surfaced to user.
+   127	- Alert acknowledge call does not enforce authenticated user in UI flow because backend does not require it.
+   128	- No explicit degraded-state banner when alerts are flowing but score history is empty.
+   129	
+   130	## I. Infra / Docker / scripts / observability review
+   131	- Compose health check for memcached is objectively broken due missing `nc` binary.
+   132	- `run-demo.sh` starts all services before topic creation; simulator can hit non-existent topic partitions early.
+   133	- Prometheus scrapes inference target and inference now exposes `/metrics` with scoring latency, fallback mode, and calibration gauges.
+   134	- Integration script validates only infra + migration, not end-to-end dataflow.
+   135	- Query logging is insufficient for request-level diagnostics.
+   136	
+   137	## J. Test coverage gaps
+   138	- `go test -race` passes but almost all packages have no tests.
+   139	- Missing highest-value tests:
+   140	  1. End-to-end test proving `ticks -> scores persisted -> alerts`.
+   141	  2. Contract tests for Kafka payload schemas and field names.
+   142	  3. Migration regression tests (including Up/Down safety and rerun idempotency).
+   143	  4. Auth/RBAC tests for governance and alert ack permissions.
+   144	  5. Observability tests ensuring every service exposes `/metrics` if configured in Prometheus.
+   145	  6. Startup-order chaos test: services up before topic creation should self-recover with retries.
+   146	
+   147	## K. Exact improvements to make it more unique
+   148	1. Add alert explainability object linking score, feature contributors, and threshold decisions.
+   149	2. Add investigation timeline per symbol (raw tick -> candle -> feature -> score -> alert trace IDs).
+   150	3. Add drift monitor dashboard: feature distribution drift + model version drift + alert precision proxy.
+   151	4. Add replay comparator UI showing baseline vs replayed outcomes with diff summaries.
+   152	5. Add operator controls for suppression with mandatory rationale + expiration.
+   153	
+   154	## L. Exact improvements to make it more production-ready
+   155	1. Keep the existing `alerts`-hosted score writer healthy on clean boot and continue persisting `derived.scores` into `scores` with idempotency and retries.
+   156	2. Enforce auth middleware and RBAC on alerts/governance, plus audit actor attribution.
+   157	3. Fix memcached healthcheck or remove memcached if unused.
+   158	4. Add inference `/metrics` and align Prometheus scrape paths.
+   159	5. Rework startup determinism:
+   160	   - create topics before producers start, or
+   161	   - producers retry with exponential backoff until metadata ready.
+   162	6. Add request/response logging middleware with correlation IDs across all HTTP services.
+   163	7. Add CI checks for schema-query alignment and API contract tests.
+   164	8. Address critical npm vulnerability in web container and pin patched dependency versions.
+   165	
+   166	## M. Prioritized fix order
+   167	
+   168	### First 1 hour
+   169	1. Fix memcached healthcheck command.
+   170	2. Add explicit degraded warning in UI when alerts>0 and scores=0.
+   171	3. Add request logging middleware to query service.
+   172	4. Disable inference target in Prometheus until `/metrics` exists, or add stub `/metrics` immediately.
+   173	
+   174	### First 1 day
+   175	1. Implement score persistence consumer/service and wire `/scores` to real data.
+   176	2. Add auth/RBAC on governance + alert ack and audit those actions.
+   177	3. Fix startup order: topics before simulator start; add produce retry/backoff.
+   178	4. Add integration smoke test that fails if scores table remains empty while alerts grow.
+   179	
+   180	### First 1 week
+   181	1. Full contract-test suite for Kafka message schemas and API payloads.
+   182	2. Production-grade telemetry (metrics, tracing, structured logs, dashboards, alerts).
+   183	3. Migration harness with up/down/idempotency checks in CI.
+   184	4. Governance hardening (model state machine, approvals, signed deployment records).
+   185	
+   186	## N. Specific code changes to make, with file paths and rationale
+   187	1. **Persist scores**
+   188	   - Add `cmd/score-writer/main.go` to consume `derived.scores` and `INSERT INTO scores(...) ON CONFLICT DO NOTHING`.
+   189	   - Rationale: remove alerts/scores inconsistency and enable historical analysis.
+   190	
+   191	2. **Protect privileged routes**
+   192	   - `cmd/alerts/main.go`: require JWT + role for `/alerts/{id}/ack`; append audit with real actor.
+   193	   - `cmd/governance/main.go`: require admin role for `/models/deploy`, analyst/admin for `/replay/start`.
+   194	   - Rationale: close unauthorized state-change vulnerability.
+   195	
+   196	3. **Fix startup determinism**
+   197	   - `scripts/run-demo.sh`: run `create-topics.sh` before starting producer services, or split compose profiles.
+   198	   - `internal/kafka/kafka.go`: add retry/backoff helper for produce on unknown-topic metadata failures.
+   199	
+   200	4. **Observability**
+   201	   - `services/inference/app.py`: add `/metrics` via `prometheus_client` and counters for consumed/produced/errors.
+   202	   - `cmd/query/main.go`: add request logging middleware + per-handler error logs with route context.
+   203	   - `prometheus/prometheus.yml`: align scrape path declarations and only scrape endpoints that exist.
+   204	
+   205	5. **Healthcheck correctness**
+   206	   - `deploy/docker/docker-compose.yml`: replace memcached probe command with one supported in image, or remove service.
+   207	   - Rationale: health reflects reality.
+   208	
+   209	6. **Frontend degraded-state clarity**
+   210	   - `web/app/page.tsx`: add explicit warning panel when `alerts.length>0 && scores.length==0` and SSE disconnected states.
+   211	   - Rationale: avoid false confidence in model pipeline health.
+   212	
+   213	## O. Contradictions to resolve immediately before trusting the demo
+   214	1. **"Core flows pass" vs `scores` table stays empty**: currently consistent with code because score persistence is missing.
+   215	2. **"Memcached logs look fine" vs container unhealthy**: healthcheck is broken independently of logs.
+   216	3. **Healthz green vs metrics 404**: readiness checks are shallow and do not prove observability readiness.
+   217	4. **Alerts API works vs SQL query on `alerts.ts` fails**: canonical DB column is `created_at`; API re-labels it to `ts`.
+   218	5. **Tests green vs production confidence low**: most packages are untested; green result is mostly "no tests executed".

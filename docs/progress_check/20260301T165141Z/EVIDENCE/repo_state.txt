@@ -1,0 +1,136 @@
+HEAD:
+cd4310ec3dc498f6272e798696b6604e429a5586
+
+STATUS:
+ M Makefile
+ M README.md
+ M cmd/aggregator/main.go
+ M cmd/alerts/main.go
+ M cmd/features/main.go
+ M cmd/gateway-api/main.go
+ M cmd/governance/main.go
+ M cmd/query/main.go
+ M cmd/simulator/main.go
+ M deploy/docker/Dockerfile-go
+ M deploy/docker/docker-compose.yml
+ M docs/PRODUCTION_READINESS_REVIEW.md
+ M go.mod
+ M go.sum
+ M grafana/dashboards/sentinel-dashboard.json
+ M grafana/sentinel-dashboard.json
+ M integration/replay_equivalence_test.sh
+ M integration/startup_ordering_test.sh
+ M internal/incidents/incidents.go
+ M internal/metrics/metrics.go
+ M internal/metrics/metrics_test.go
+ M internal/middleware/csrf.go
+ M internal/query/trust.go
+ M prometheus/prometheus.yml
+ M scripts/runtime-proof.sh
+ M services/inference/app.py
+ M services/inference/src/artifacts.py
+ M services/inference/src/models.py
+ M web/app/command-center/page.tsx
+ M web/app/feed/page.tsx
+ M web/app/globals.css
+ M web/app/incident/[id]/page.tsx
+ M web/app/queue/page.tsx
+ M web/app/trust/page.tsx
+ M web/components/AppShell.tsx
+ M web/components/CandleRiskPanel.tsx
+ M web/components/RiskGlobe.tsx
+ M web/components/WorldRiskMap.tsx
+ M web/e2e/sentinel.spec.ts
+ M web/lib/api.ts
+ M web/lib/filters.ts
+ M web/lib/useSSE.ts
+ M web/package-lock.json
+ M web/package.json
+?? .claude/
+?? alerts
+?? cmd/alerts/authz_test.go
+?? docs/Asset-Manager/
+?? docs/ml/
+?? docs/progress_check/
+?? docs/review/
+?? docs/ui_perf/
+?? integration/ml_scores_persist_test.sh
+?? internal/authz/
+?? internal/query/model_bundle.go
+?? internal/query/scores.go
+?? prometheus/alert_rules.yml
+?? prometheus/alerts.yml
+?? query
+?? scripts/boot-repeat.sh
+?? scripts/perf-smoke.sh
+?? scripts/prod-readiness.sh
+?? scripts/route-inventory.sh
+?? services/inference/models/
+?? services/inference/src/feature_schema.py
+?? services/inference/src/simple_models.py
+?? services/inference/tests/test_model_bundle.py
+?? services/inference/train/
+?? sql/migrations/008_scores_lineage.sql
+?? sql/migrations/009_incident_ops.sql
+?? sql/migrations/010_timescale_rollups.sql
+?? web/app/viz/
+?? web/components/FilterCombobox.tsx
+?? web/components/RealtimeStatus.tsx
+?? web/lib/filterState.ts
+
+LOG:
+cd4310e feat: Phase 0-12 complete — proxy fix, auth, filters, Risk Feed, escalation ops, Playwright T2+T3
+0d07e55 Finalize runtime proof and frontend integration
+f4e86ca Fix: add snappy codec and infinite message poll timeout to inference service
+a74ea0b docs: add FINAL_CONSOLIDATION_REPORT (comprehensive Phase 0-1 summary + Phase 2-6 roadmap)
+fe14c1a docs: add Phase 4-6 execution roadmap (quant/ML stack + UI polish)
+1d7af5d docs: update CODEBASE_STATUS to reflect Phase 0-1 status and roadmap
+256d5a9 fix(middleware): make CORS origins configurable via ALLOWED_ORIGINS env var
+f9607aa chore: sentinel baseline - core services, ML stack (skeletal), web UI, Docker compose, CI gates
+
+DIFFSTAT:
+ Makefile                                   |  20 +-
+ README.md                                  |  25 +
+ cmd/aggregator/main.go                     |  11 +-
+ cmd/alerts/main.go                         | 236 +++++---
+ cmd/features/main.go                       |  13 +-
+ cmd/gateway-api/main.go                    |   1 +
+ cmd/governance/main.go                     | 195 ++++---
+ cmd/query/main.go                          | 175 ++++--
+ cmd/simulator/main.go                      |   4 +-
+ deploy/docker/Dockerfile-go                |   3 +-
+ deploy/docker/docker-compose.yml           |   4 +-
+ docs/PRODUCTION_READINESS_REVIEW.md        |  37 +-
+ go.mod                                     |  19 +-
+ go.sum                                     |  51 +-
+ grafana/dashboards/sentinel-dashboard.json |  65 ++-
+ grafana/sentinel-dashboard.json            |  65 ++-
+ integration/replay_equivalence_test.sh     |  13 +-
+ integration/startup_ordering_test.sh       |  44 ++
+ internal/incidents/incidents.go            |   4 +
+ internal/metrics/metrics.go                | 137 ++++-
+ internal/metrics/metrics_test.go           |  27 +-
+ internal/middleware/csrf.go                |   2 +-
+ internal/query/trust.go                    |  53 +-
+ prometheus/prometheus.yml                  |   6 +
+ scripts/runtime-proof.sh                   |  46 +-
+ services/inference/app.py                  | 299 +++++++---
+ services/inference/src/artifacts.py        |  49 +-
+ services/inference/src/models.py           |  45 ++
+ web/app/command-center/page.tsx            |  36 +-
+ web/app/feed/page.tsx                      |  89 ++-
+ web/app/globals.css                        | 164 +++++-
+ web/app/incident/[id]/page.tsx             | 136 ++++-
+ web/app/queue/page.tsx                     |  30 +-
+ web/app/trust/page.tsx                     |  46 ++
+ web/components/AppShell.tsx                | 184 +++---
+ web/components/CandleRiskPanel.tsx         | 255 ++++++++-
+ web/components/RiskGlobe.tsx               | 233 +++++++-
+ web/components/WorldRiskMap.tsx            |   9 +-
+ web/e2e/sentinel.spec.ts                   |  47 +-
+ web/lib/api.ts                             |  27 +-
+ web/lib/filters.ts                         |  23 +-
+ web/lib/useSSE.ts                          |  28 +-
+ web/package-lock.json                      | 889 ++++++++++++++++++++++++++++-
+ web/package.json                           |  14 +-
+ 44 files changed, 3232 insertions(+), 627 deletions(-)

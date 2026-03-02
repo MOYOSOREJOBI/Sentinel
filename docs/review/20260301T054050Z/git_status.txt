@@ -1,0 +1,37 @@
+ M Makefile
+ M cmd/alerts/main.go
+ M cmd/query/main.go
+ M deploy/docker/Dockerfile-go
+ M docs/PRODUCTION_READINESS_REVIEW.md
+ M grafana/dashboards/sentinel-dashboard.json
+ M internal/query/trust.go
+ M scripts/runtime-proof.sh
+ M services/inference/app.py
+ M services/inference/src/artifacts.py
+ M services/inference/src/models.py
+ M web/app/command-center/page.tsx
+ M web/app/feed/page.tsx
+ M web/app/trust/page.tsx
+ M web/components/AppShell.tsx
+ M web/components/CandleRiskPanel.tsx
+ M web/components/RiskGlobe.tsx
+ M web/e2e/sentinel.spec.ts
+ M web/lib/api.ts
+ M web/package-lock.json
+ M web/package.json
+?? .claude/
+?? alerts
+?? docs/Asset-Manager/
+?? docs/ml/
+?? docs/review/
+?? integration/ml_scores_persist_test.sh
+?? internal/query/model_bundle.go
+?? internal/query/scores.go
+?? query
+?? services/inference/models/
+?? services/inference/src/feature_schema.py
+?? services/inference/src/simple_models.py
+?? services/inference/tests/test_model_bundle.py
+?? services/inference/train/
+?? sql/migrations/008_scores_lineage.sql
+?? web/app/viz/

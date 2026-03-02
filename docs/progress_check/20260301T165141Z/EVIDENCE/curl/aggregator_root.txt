@@ -1,0 +1,6 @@
+HTTP/1.1 200 OK
+Content-Type: application/json
+Date: Sun, 01 Mar 2026 17:38:19 GMT
+Content-Length: 90
+
+{"service":"aggregator","version":"dev","links":["/healthz","/readyz","/metrics","/docs"]}

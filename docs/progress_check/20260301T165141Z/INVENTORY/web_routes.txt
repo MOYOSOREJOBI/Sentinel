@@ -1,0 +1,9 @@
+-- proxy routes --
+web/app/api/proxy/[service]/[...path]/route.ts
+
+-- sse routes --
+web/app/api/sse/alerts/route.ts
+web/app/api/sse/command-center/route.ts
+web/app/api/sse/proxy.ts
+web/app/api/sse/queue/route.ts
+web/app/api/sse/trust/route.ts

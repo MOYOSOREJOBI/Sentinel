@@ -1,0 +1,126 @@
+{
+  "title": "Sentinel Ops",
+  "uid": "sentinel-ops",
+  "schemaVersion": 39,
+  "panels": [
+    {
+      "id": 1,
+      "type": "timeseries",
+      "title": "Service Health",
+      "gridPos": {"h": 8, "w": 8, "x": 0, "y": 0},
+      "targets": [
+        {
+          "expr": "up{job=~\"gateway|aggregator|features|alerts|governance|query|inference|simulator\"}",
+          "legendFormat": "{{job}}",
+          "refId": "A"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "type": "timeseries",
+      "title": "HTTP Request Rate",
+      "gridPos": {"h": 8, "w": 8, "x": 8, "y": 0},
+      "targets": [
+        {
+          "expr": "sum by (service, path) (rate(http_requests_total[1m]))",
+          "legendFormat": "{{service}} {{path}}",
+          "refId": "A"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "type": "timeseries",
+      "title": "HTTP p95 Latency",
+      "gridPos": {"h": 8, "w": 8, "x": 16, "y": 0},
+      "targets": [
+        {
+          "expr": "histogram_quantile(0.95, sum by (le, service, path) (rate(http_request_duration_seconds_bucket[5m])))",
+          "legendFormat": "{{service}} {{path}}",
+          "refId": "A"
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "type": "timeseries",
+      "title": "HTTP Error Rate",
+      "gridPos": {"h": 8, "w": 8, "x": 0, "y": 8},
+      "targets": [
+        {
+          "expr": "sum by (service, path) (rate(http_requests_total{status=~\"5..\"}[5m]))",
+          "legendFormat": "{{service}} {{path}}",
+          "refId": "A"
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "type": "timeseries",
+      "title": "Kafka Throughput",
+      "gridPos": {"h": 8, "w": 8, "x": 8, "y": 8},
+      "targets": [
+        {
+          "expr": "sum by (service, topic) (rate(kafka_messages_consumed_total[1m]))",
+          "legendFormat": "consume {{service}} {{topic}}",
+          "refId": "A"
+        },
+        {
+          "expr": "sum by (service, topic) (rate(kafka_messages_produced_total[1m]))",
+          "legendFormat": "produce {{service}} {{topic}}",
+          "refId": "B"
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "type": "timeseries",
+      "title": "Inference Model State",
+      "gridPos": {"h": 8, "w": 8, "x": 16, "y": 8},
+      "targets": [
+        {
+          "expr": "inference_fallback_mode",
+          "legendFormat": "fallback",
+          "refId": "A"
+        },
+        {
+          "expr": "inference_escalation_auc",
+          "legendFormat": "auc",
+          "refId": "B"
+        },
+        {
+          "expr": "inference_escalation_brier",
+          "legendFormat": "brier",
+          "refId": "C"
+        }
+      ]
+    },
+    {
+      "id": 7,
+      "type": "timeseries",
+      "title": "Case Mutations",
+      "gridPos": {"h": 8, "w": 12, "x": 0, "y": 16},
+      "targets": [
+        {
+          "expr": "sum by (service, action) (rate(case_mutations_total[5m]))",
+          "legendFormat": "{{service}} {{action}}",
+          "refId": "A"
+        }
+      ]
+    },
+    {
+      "id": 8,
+      "type": "timeseries",
+      "title": "Replay Job Events",
+      "gridPos": {"h": 8, "w": 12, "x": 12, "y": 16},
+      "targets": [
+        {
+          "expr": "sum by (service, status) (rate(replay_job_events_total[5m]))",
+          "legendFormat": "{{service}} {{status}}",
+          "refId": "A"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,6 @@
+services:
+  simulator:
+    environment:
+      SIM_SYMBOLS: AAPL,MSFT
+      SIM_INTERVAL_MS: 1200
+      SIM_ANOMALY_EVERY: 20

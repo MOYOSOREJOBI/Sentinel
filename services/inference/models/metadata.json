@@ -1,0 +1,15 @@
+{
+  "model_version": "quant-v1-2026-03-01",
+  "trained_at": "2026-03-01T03:01:18Z",
+  "dataset_window": "30d",
+  "features_version": "v2",
+  "artifact_hash": "6a873dbd943816987a7d3a0b3280f613977f811edadc87ecce1edde0aa6e681f",
+  "fallback_mode": false,
+  "calibration_version": "platt_v1",
+  "metrics": {
+    "auc": 0.675797,
+    "brier": 0.011114,
+    "pr_auc": 0.017884,
+    "anomaly_stability": 0.837725
+  }
+}

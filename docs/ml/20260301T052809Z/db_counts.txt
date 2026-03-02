@@ -1,0 +1,10 @@
+ features_count 
+----------------
+              0
+(1 row)
+
+ scores_count 
+--------------
+            0
+(1 row)
+

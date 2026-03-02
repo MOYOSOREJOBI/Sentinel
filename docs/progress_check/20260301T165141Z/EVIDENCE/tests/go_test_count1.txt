@@ -1,0 +1,66 @@
+# ./...
+pattern ./...: open /Users/mac/Library/Caches/go-build/48/48402d923f4c2352a0e61980075563871eb43ef088463846a999cb9db22246ad-a: operation not permitted
+FAIL	./... [setup failed]
+?   	sentinel/cmd/aggregator	[no test files]
+ok  	sentinel/cmd/alerts	2.227s
+ok  	sentinel/cmd/features	3.024s
+--- FAIL: TestLoginAllowed_UsesRedisWhenEnabled (0.00s)
+    login_rate_limit_test.go:41: start redis stub: listen tcp 127.0.0.1:0: bind: operation not permitted
+FAIL
+FAIL	sentinel/cmd/gateway-api	7.406s
+ok  	sentinel/cmd/governance	8.915s
+ok  	sentinel/cmd/query	6.055s
+ok  	sentinel/cmd/simulator	14.774s
+ok  	sentinel/internal/audit	10.585s
+ok  	sentinel/internal/auth	13.322s
+ok  	sentinel/internal/authz	9.812s
+--- FAIL: TestGetOrLoadJSON_RedisTTLExpiry (0.00s)
+    redis_integration_test.go:17: start redis stub: listen tcp 127.0.0.1:0: bind: operation not permitted
+FAIL
+FAIL	sentinel/internal/cache	4.366s
+ok  	sentinel/internal/config	11.692s
+?   	sentinel/internal/contracts	[no test files]
+?   	sentinel/internal/db	[no test files]
+--- FAIL: TestRun (0.00s)
+panic: httptest: failed to listen on a port: listen tcp6 [::1]:0: bind: operation not permitted [recovered, repanicked]
+
+goroutine 20 [running]:
+testing.tRunner.func1.2({0x4829380, 0xc0001224d0})
+	/usr/local/Cellar/go/1.25.7_1/libexec/src/testing/testing.go:1872 +0x237
+testing.tRunner.func1()
+	/usr/local/Cellar/go/1.25.7_1/libexec/src/testing/testing.go:1875 +0x35b
+panic({0x4829380?, 0xc0001224d0?})
+	/usr/local/Cellar/go/1.25.7_1/libexec/src/runtime/panic.go:783 +0x132
+net/http/httptest.newLocalListener()
+	/usr/local/Cellar/go/1.25.7_1/libexec/src/net/http/httptest/server.go:71 +0xda
+net/http/httptest.NewUnstartedServer(...)
+	/usr/local/Cellar/go/1.25.7_1/libexec/src/net/http/httptest/server.go:119
+net/http/httptest.NewServer({0x48aa000, 0x48a66f8})
+	/usr/local/Cellar/go/1.25.7_1/libexec/src/net/http/httptest/server.go:106 +0x25
+sentinel/internal/healthcheck.TestRun(0xc000102c40)
+	/Users/mac/Desktop/Sentinel/internal/healthcheck/healthcheck_test.go:24 +0x39
+testing.tRunner(0xc000102c40, 0x48a6668)
+	/usr/local/Cellar/go/1.25.7_1/libexec/src/testing/testing.go:1934 +0xea
+created by testing.(*T).Run in goroutine 1
+	/usr/local/Cellar/go/1.25.7_1/libexec/src/testing/testing.go:1997 +0x465
+FAIL	sentinel/internal/healthcheck	15.712s
+?   	sentinel/internal/httpx	[no test files]
+ok  	sentinel/internal/incidents	17.256s
+ok  	sentinel/internal/kafka	17.904s
+?   	sentinel/internal/logging	[no test files]
+ok  	sentinel/internal/logic	18.856s
+ok  	sentinel/internal/marketmath	19.196s
+ok  	sentinel/internal/metrics	18.272s
+--- FAIL: TestCSRF_RedisBackedExpiry (0.00s)
+    redis_backing_test.go:18: start redis stub: listen tcp 127.0.0.1:0: bind: operation not permitted
+--- FAIL: TestRateLimit_RedisBackedBlocking (0.00s)
+    redis_backing_test.go:49: start redis stub: listen tcp 127.0.0.1:0: bind: operation not permitted
+FAIL
+FAIL	sentinel/internal/middleware	18.569s
+ok  	sentinel/internal/pipeline/scoring	18.049s
+ok  	sentinel/internal/query	17.264s
+ok  	sentinel/internal/rbac	16.540s
+?   	sentinel/internal/rediskv	[no test files]
+ok  	sentinel/internal/replay	16.407s
+?   	sentinel/internal/testredis	[no test files]
+FAIL

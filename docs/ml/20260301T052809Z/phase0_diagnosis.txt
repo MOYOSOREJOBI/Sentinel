@@ -1,0 +1,6 @@
+scores=0 after Phase 0 because clean boot failed before the score writer started.
+Proof chain:
+- INSERT INTO scores exists in cmd/alerts/main.go and internal/replay/runner.go
+- migrate fails in sql/migrations/008_scores_lineage.sql on PRIMARY KEY(id) for the scores hypertable
+- alerts/query/aggregator/features never start, so the INSERT is never called on clean boot
+- /scores stays empty because it reads FROM scores and scores remains at count 0

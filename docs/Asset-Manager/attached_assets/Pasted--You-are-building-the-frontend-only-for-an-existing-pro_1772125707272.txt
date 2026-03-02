@@ -1,0 +1,1429 @@
+
+
+You are building the **frontend only** for an existing product called **Sentinel**.
+
+Sentinel is a streaming-native, replay-native, evidence-first risk intelligence platform.
+It turns real-time market activity into ranked, explainable, auditable incidents and cases.
+
+This is **not** a toy dashboard.
+This is **not** a generic admin panel.
+This is **not** a chart dump.
+
+This frontend must feel like:
+
+* a serious operator console
+* a premium, modern product
+* simple enough for first-time users
+* deep enough for analysts and admins
+* readable for executives, policymakers, and older users
+* globally ready
+* multilingual
+* fast under live updates
+* trustworthy
+* visually clean, smooth, and intentional
+
+You must implement **every promised frontend feature** in a coherent, production-grade way.
+
+Do not invent fake workflows.
+Do not add fake controls.
+Do not render raw JSON dumps.
+Do not build disconnected visual fluff.
+
+If a backend endpoint is missing or partially implemented, the UI must:
+
+* detect that honestly
+* show a polished degraded state
+* preserve layout and usability
+* never fabricate fake data
+
+---
+
+## 1. FRONTEND MISSION
+
+Build a **complete, route-based, multilingual, role-aware, live-updating Sentinel frontend** that fully supports:
+
+* Command Center
+* Ranked Incident Queue
+* Incident Detail
+* Case Workspace
+* Replay / Reconstruction
+* Data Quality / Trust
+* Governance / Admin
+* Executive Summary
+* Symbol Drilldown
+* About
+* Glossary
+* Watchlists
+* Real World Risk Map
+* Global filters
+* Live streaming updates
+* Strong accessibility
+* Multi-language UX
+* Arabic RTL support
+* Progressive disclosure by role
+
+The frontend must make Sentinel feel:
+
+* premium
+* fast
+* globally aware
+* operationally useful
+* evidence-led
+* credible to serious reviewers
+
+---
+
+## 2. NON-NEGOTIABLE PRODUCT TRUTH
+
+The frontend must preserve this product logic:
+
+### Product identity
+
+Sentinel is first and foremost:
+
+* a risk analysis and market surveillance platform
+* an incident triage workbench
+* a replay and evidence system
+* a trust and governance console
+
+It is **not**:
+
+* a news terminal
+* a crypto meme dashboard
+* a trading app
+* a generic BI dashboard
+
+### Core workflow
+
+The primary operator flow is:
+
+**Command Center → Ranked Queue → Incident Detail → Replay → Disposition / Promote to Case → Export Bundle**
+
+The frontend must make this flo
+
+### Role split
+
+Support three experience levels:
+
+#### Viewer
+
+* Command Center
+* Executive Summary
+* Read-only Incident Queue
+* Read-only Incident Detail
+* About
+* Glossary
+* Watchlists
+* World Map
+* No write actions
+
+#### Analyst
+
+* Ranked Incident Queue
+* Incident Detail
+* Case Workspace
+* Replay / Reconstruction
+* Symbol Drilldown
+* Data Quality / Trust
+* Glossary
+* Can triage, assign, disposition, promote to case, pin evidence
+
+#### Admin
+
+* Governance / Admin
+* Data Quality / Trust
+* Case Workspace (audit view)
+* Executive Summary
+* About / Audit exports
+* Can manage thresholds/model visibility/governance actions
+
+These role defaults and visible nav patt 
+
+---
+
+## 3. REQUIRED FRONTEND STACK
+
+Use this exact frontend stack unless the repo already has an equivalent and keeping it is safer:
+
+* **Next.js App Router**
+* **TypeScript**
+* **Tailwind CSS**
+* **shadcn/ui** for consistent primitives
+* **next-intl** for localization and locale routing
+* **react-simple-maps** for the flat interactive world map
+* **EventSource / SSE** for live queue/summary/trust patches
+* **Recharts** for charts
+* **Framer Motion** for tasteful micro-motion only
+* **lucide-react** for icons
+* **zod** for client-side contract validation
+* **clsx** + `tailwind-merge` for styling hygiene
+
+Use `next-intl` because the app must support App Router-compatible localized UX and route-aware locales. ([next-intl.dev][1])
+Use `react-simple-maps` because the map must be a real interactive SVG geography surface, not a fake button grid. ([react-simple-maps.io][2])
+Use `EventSource` because live queue/trust updates are one-way server-to-client streams and SSE is a good fit for that. ([MDN Web Docs][3])
+
+---
+
+## 4. MULTI-LANGUAGE REQUIREMENTS
+
+This frontend must ship with **9 locales**:
+
+1. **English** — `en` (default)
+2. **French** — `fr`
+3. **Spanish** — `es`
+4. **Portuguese (Brazil-first)** — `pt-BR`
+5. **Chinese (Simplified)** — `zh-CN`
+6. **Arabic** — `ar`
+7. **German** — `de`
+8. **Japanese** — `ja`
+9. **Hindi** — `hi`
+
+### Language requirements
+
+* Every user-facing label, heading, button, tooltip, empty state, error state, trust phrase, glossary item, chart legend, table label, and filter label must be localized.
+* No English-only leftovers in the final UI shell.
+* Format numbers, dates, percentages, currencies, and relative times per locale.
+* Use locale-aware compact number formatting for dashboards.
+* Use locale-aware date/time formatting with timezone support.
+
+### Arabic / RTL
+
+Arabic must be fully supported as RTL:
+
+* set root `dir="rtl"` when locale is `ar`
+* mirror layout where appropriate
+* flip chevrons, side drawers, and timeline alignment as needed
+* keep charts readable (numeric data can remain LTR where practical)
+* test sticky filters, table alignment, drawers, and map tooltips in RTL
+
+HTML `dir` supports `ltr` and `rtl`, and Arabic is a right-to-left language that should switch directionality accordingly. ([MDN Web Docs][4])
+
+### Locale detection
+
+Use:
+
+* browser `Accept-Language`
+* saved language preference cookie
+* explicit manual language switcher
+
+### Locale persistence
+
+Persist selected locale in:
+
+* a cookie
+* user preferences if authenticated
+
+### Translation architecture
+
+Use:
+
+* `messages/en.json`
+* `messages/fr.json`
+* `messages/es.json`
+* `messages/pt-BR.json`
+* `messages/zh-CN.json`
+* `messages/ar.json`
+* `messages/de.json`
+* `messages/ja.json`
+* `messages/hi.json`
+
+Organize namespaces:
+
+* `common`
+* `nav`
+* `filters`
+* `commandCenter`
+* `queue`
+* `incident`
+* `case`
+* `replay`
+* `trust`
+* `governance`
+* `executive`
+* `about`
+* `glossary`
+* `errors`
+* `empty`
+* `tooltips`
+
+### No lazy translation hacks
+
+Do not use machine-translation placeholders like:
+
+* `TODO_TRANSLATE`
+* English fallback for half the interface
+* mixed-language labels
+
+Build the frontend so translation coverage is complete and maintainable.
+
+---
+
+## 5. APP STRUCTURE AND ROUTING
+
+Use locale-prefixed routing with App Router.
+
+Preferred route shape:
+
+* `/{locale}/command-center`
+* `/{locale}/queue`
+* `/{locale}/incident/[id]`
+* `/{locale}/case/[id]`
+* `/{locale}/replay/[job]`
+* `/{locale}/trust`
+* `/{locale}/governance`
+* `/{locale}/executive`
+* `/{locale}/symbol/[symbol]`
+* `/{locale}/watchlists`
+* `/{locale}/about`
+* `/{locale}/glossary`
+* `/{locale}/settings`
+
+Use a route group layout for the app shell so nav/filter chrome is shared.
+
+### Required filesystem structure
+
+Create or refactor into a clean structure like:
+
+* `app/[locale]/layout.tsx`
+* `app/[locale]/(app)/command-center/page.tsx`
+* `app/[locale]/(app)/queue/page.tsx`
+* `app/[locale]/(app)/incident/[id]/page.tsx`
+* `app/[locale]/(app)/case/[id]/page.tsx`
+* `app/[locale]/(app)/replay/[job]/page.tsx`
+* `app/[locale]/(app)/trust/page.tsx`
+* `app/[locale]/(app)/governance/page.tsx`
+* `app/[locale]/(app)/executive/page.tsx`
+* `app/[locale]/(app)/symbol/[symbol]/page.tsx`
+* `app/[locale]/(app)/watchlists/page.tsx`
+* `app/[locale]/about/page.tsx`
+* `app/[locale]/glossary/page.tsx`
+* `app/[locale]/settings/page.tsx`
+
+---
+
+## 6. GLOBAL APP SHELL
+
+Build a premium application shell with:
+
+### Left navigation rail
+
+Persistent, clean, slim, icon + label nav:
+
+* brand mark
+* product name
+* role badge
+* page links
+* language switcher
+* theme toggle
+* user menu
+
+### Sticky top filter bar
+
+Global, sticky filters must persist across core pages. This is a direct requirement from the product research. 
+
+Required sticky filters:
+
+* Time Window (`Now`, `1h`, `24h`, `7d`, `Custom`)
+* Asset Class
+  / Region
+* Severity
+* Trust State
+* Search (symbol / incident / case)
+* Optional advanced drawer trigger
+
+### Trust strip
+
+A first-class, always-visible trust strip on:
+
+* Command Center
+* Queue
+* Incident Detail
+* Replay
+* Trust
+* Governance
+* Executive Summary
+
+Trust strip must show:
+
+* feed health
+* late data
+* model availability
+* drift warning
+* cache health
+* degraded mode flag
+
+The research explicitly says not to bury trust; it should sit across the top and be easy to see.  
+
+### Right inspect drawer
+
+A reusable right-side drawer foryevidence preview
+
+* glossary peek
+* locale preview of export text
+
+Do not force full route changes for every tiny detail.
+
+### Global command/search palette
+
+Implement a keyboard-openable palette (`⌘K` / `Ctrl+K`) for:
+
+* open incident by ID
+* jump to symbol
+* switch page
+* switch locale
+* open glossary entry
+* open watchlist
+
+---
+
+## 7. DESIGN SYSTEM
+
+### Visual style
+
+Use:
+
+* premium dark mode as primary
+* clean, high-contrast light mode
+* subtle glass / layered panels
+* crisp typography
+* generous whitespace
+* rounded-xl / 2xl cards
+* restrained motion
+* no gimmicky overanimation
+
+### Typography
+
+Choose a readable sans stack optimized for dashboards.
+Support:
+
+* standard density
+* large text mode
+* accessible line height
+* clean numeric alignment
+
+### Color model
+
+Use a semantic palette, not random colors.
+
+Core semantic colors:
+
+* Stable: green
+* Elevated: amber
+* High Risk: orange
+* Critical: red
+* Data Unreliable: slate / gray-blue
+* Informational / neutral: blue or muted cyan
+
+### Motion
+
+Use Framer Motion only for:
+
+* hover emphasis
+* panel transitions
+* drawer transitions
+* row insertion/removal
+* map tooltip polish
+
+Do not animate charts or lists excessively under live updates.
+
+### Accessibility
+
+Must support:
+
+* full keyboard navigation
+* focus outlines
+* high contrast
+* reduced motion mode
+* large text mode
+* semantic headings
+* aria labels for controls
+* accessible table headers
+* tooltips that work without mouse-only assumptions
+
+---
+
+## 8. DATA FLOW AND FRONTEND CONTRACT RULES
+
+### Frontend must be contract-driven
+
+Create typed frontend contracts and validate them with `zod`.
+
+Required files:
+
+* `lib/api.ts`
+* `lib/types.ts`
+* `lib/schemas.ts`
+* `lib/filters.ts`
+* `lib/stream.ts`
+* `lib/i18n.ts`
+* `lib/format.ts`
+
+### Contract rule
+
+Do not render backend payloads directly into the UI.
+Instead:
+
+* fetch
+* validate
+* normalize
+* map to presentation models
+
+### If backend is partial
+
+If an endpoint is incomplete or returns partial data:
+
+* render a polished degraded card
+* show what is unavailable
+* keep layout stable
+* never show fake success data
+
+---
+
+## 9. REAL-TIME UPDATE ARCHITECTURE
+
+Use **SSE / EventSource** for live updates.
+
+Implement:
+
+* queue patch stream
+* command center patch stream
+* trust patch stream
+
+### Streaming behavior
+
+* initial page uses normal fetch
+* stream applies patch-by-ID or patch-by-section updates
+* no full-page reload flicker
+* rows update calmly
+* keep sort order stable
+* reconnect automatically on disconnect
+* show stream status in a subtle UI badge
+
+`EventSource` opens a persistent `text/event-stream` connection and is designed for server-to-client updates. ([MDN Web Docs][3])
+
+### Required live behaviors
+
+#### Queue
+
+* insert new incidents
+* update priority score
+* update trust badge
+* update owner/status
+* remove/close resolved items if filtered out
+
+#### Command Center
+
+* update top incidents
+* update “what changed”
+* update incident pressure
+* update trust strip
+
+#### Trust
+
+* update feed health
+* update late-data rate
+* update degraded feeds
+* update model status
+
+### No high-jank polling
+
+If polling exists today, replace it with:
+
+* initial fetch
+* SSE incremental patches
+* optional slow fallback refresh only if stream is unavailable
+
+---
+
+## 10. WORLD MAP / GLOBAL RISK MAP
+
+This is non-negotiable.
+
+Build a **real interactive world map**, not a button grid.
+
+Use `react-simple-maps` with a real topojson or geojson world file.
+It must render countries as actual geographic shapes. ([react-simple-maps.io][2])
+
+### Required behavior
+
+The world map must:
+
+* show 150+ countries minimum
+* support choropleth-style coloring by max safety level
+* show hover tooltip with:
+
+  * country
+  * incident count
+  * average composite risk
+  * max safety level
+  * trust state
+  * top sector / industry
+* click to filter:
+
+  * Command Center
+  * Queue
+  * Executive Summary
+* support region grouping
+* support time window filtering
+* support industry filter
+* support watchlist overlays if available
+
+### Required visual modes
+
+1. **Flat Map (mandatory)**
+2. **Globe mode (optional)**
+
+   * only if lazy-loaded
+   * only if performance remains strong
+   * must not block first paint
+
+### Color mapping
+
+Use a strict safety mapping:
+
+* Stable → green
+* Elevated → amber
+* High Risk → orange
+* Critical → red
+* Data Unreliable → slate
+
+### Map UX
+
+* smooth hover state
+* pinned selected country
+* tooltip follows keyboard selection too
+* mobile fallback as country list + region chips
+* do not depend on mouse-only interactions
+
+### Map data handling
+
+* map should consume country aggregates from backend
+* backend should provide country code mappings
+* frontend should reconcile missing countries gracefully
+
+### Do not do this
+
+* no fake hotspots
+* no random pulsing countries
+* no static background image pretending to be a map
+* no meaningless globe spin animation
+
+---
+
+## 11. REQUIRED PAGES AND EXACT FEATURES
+
+### A. COMMAND CENTER
+
+This is the default home for Viewer, and an accessible overview for all users.
+
+Must include:
+
+* trust strip
+* top incidents now (ranked)
+* “what changed” summary
+* backlog delta
+* severity distribution snapshot
+* top countries
+* top industries
+* real world map panel
+* one-click entry to queue
+* one-click entry to executive summary
+
+Widgets:
+
+* TopIncidentsRail
+* WhatChangedCard
+* TrustStrip
+* SeverityMixChart
+* CountryConcentrationCard
+* IndustryConcentrationCard
+* WorldRiskMap
+* QuickActionsBar
+
+The Command Center should be action-first, not dashboard-first. 
+
+---
+
+### B. RANKED INCIDENT QUEUE
+
+This is the Analyst home.
+
+Must include:
+
+* sortable ranked table / virtualized list
+* priority score
+* sarust badge
+* top drivers
+* country / region
+* venue
+* asset class
+* incident type
+* owner
+* age / SLA
+* watchlist badge
+* recommended action
+
+Required interactions:
+
+* assign / claim
+* change status
+* promote to case
+* open incident
+* open replay
+* bulk actions
+* filter chips
+* advanced filter drawer
+
+Required filters on page:
+
+* case/incident status
+* analyst owner
+* incident type
+* watchlist membership
+* model version (advanced)
+* trust state
+* severity
+* time window
+* country / region / venue / asset class / symbol
+
+These queue-level filters are explicitly called out in the research. 
+
+### Queue UX rules
+
+* no full table rerender on one row change
+* preserve scroll position during patches
+* highlight changed rows subtly
+* ddable badges
+* support compact mode and comfortable mode
+
+---
+
+### C. INCIDENT DETAIL
+
+This is where Sentinel proves its value.
+
+Must include:
+
+* score header
+* composite risk
+* escalation probability
+* confidence
+* trust penalty
+* safety level
+* severity band
+* top drivers
+* “Why this fired” panel
+* delta vs baseline
+* context: venue / geography / sector
+* related incidents
+* recent timeline
+* evidence pins
+* replay launch
+* promote-to-case action
+
+Must show explanations in:
+
+* expert mode (numeric + driver details)
+* plain-language mode (human wording)
+* localized wording for all supported languages
+
+### Why-this-fired panel
+
+Create a reusable component:
+
+* `WhyThisFiredPanel`
+* supports:
+
+  * top drivers
+  * contribution values
+  * delta vs baseline
+  * plain-language summary
+  * caveats / degraded flags
+
+### No raw JSON
+
+Never dump raw payload objects on this page.
+
+---
+
+### D. CASE WORKSPACE
+
+Must include:
+
+* case header
+* linked incidents
+* structured notes
+* evidence list
+* pinned replay moments
+* status history
+* owner
+* disposition
+* export readiness
+* audit note panel
+* attachments / evidence metadata
+* approvals (if role allows)
+
+Actions:
+
+* add note
+* pin evidence
+* update disposition
+* assign owner
+* change status
+* export bundle
+
+Viewer sees read-only; Analyst/Admin get actions based on role.
+
+---
+
+### E. REPLAY / RECONSTRUCTION
+
+This page must feel serious and honest.
+
+Must include:
+
+* replay job status
+* provenance summary:
+
+  * model version
+  * feature set version
+  * watermark policy
+  * time window
+  * allowed lateness
+* “As Scored” vs “Recomputed” toggle
+* synchronized lanes:
+
+  * price/candles
+  * anomaly/composite score
+  * incident markers
+  * trust / DQ markers
+* event-time scrubber
+* evidence pin controls
+
+If recompute is partial:
+
+* show a clear limitation banner
+* keep the page useful
+* do not pretend parity
+
+### Required replay visuals
+
+* candlestick or line + event markers
+* score band timeline
+* trust degradation markers
+* incident cluster windows
+* hover crosshair
+
+---
+
+### F. DATA QUALITY / TRUST
+
+This is a first-class page, not a hidden admin screen.
+
+Must include:
+
+* feed health
+* staleness
+* missingness
+* late events
+* duplicate ratio
+* out-of-order ratio
+* model degraded state
+* drift alerts
+* circuit breaker activity
+* impact on incidents
+* count of DQ-routed incidents
+
+Views:
+
+* summary cards
+* trend charts
+* degraded feeds table
+* issue routing list
+
+Trust must be visible, understandable, and actionable. 
+
+---
+
+### G. GOVERNANCE / ADMIN
+
+This page must be structured, not raw.
+
+Must include:
+
+* model registry table
+* deployment history
+* featuresions
+* threshold change history
+* replay jobs list
+* audit export actions
+* trust health summary
+* change windows
+* model status badges
+
+Must not:
+
+* dump JSON
+* mix in noisy queue views by default
+
+This matches the Admin role emphasis: control, auditability, evidence, operational safety. 
+
+---
+
+### H. EXECUTIVE SUMMARY
+
+This is for non-experts, leaders, policy reviewers, and quick-read use.
+
+Must include:
+
+* top 5 risks
+* what c
+* industry concentration
+* trust summary
+* plain-language incident summaries
+* exportable “risk memo” view
+
+This page must be:
+
+* readable
+* calm
+* not jargon-heavy
+* available in all locales
+* easy to screenshot / export
+
+---
+
+### I. SYMBOL DRILLDOWN
+
+Must include:
+
+* current status
+* incident history
+* recent price/candle context
+* feature trend mini-panels
+* trust context
+* related incidents
+* watchlist toggle
+* replay shortcut
+
+---
+
+### J. WATCHLISTS
+
+Must include:
+
+* saved watchlists
+* list of tracked symbols / countries / industries
+* quick digest settings
+* watchlist-filtered queue
+* per-watchlist health summary
+
+---
+
+### K. ABOUT
+
+This is a clean persuasive page that explains:
+
+* what Sentinel is
+* who it is for
+* why trust matters
+* how replay works
+* what evidence-first means
+* how role modes differ
+
+Must be beautifully designed and localized.
+
+---
+
+### L. GLOSSARY
+
+Build a usable, searchable glossary that explains:
+
+* anomaly score
+* escalation probability
+* trust penalty
+* z-score
+* EWMA volatility
+* replay
+* severity
+* data quality incident
+* case
+* evidence pin
+* confidence
+* watchlist
+
+Each entry must have:
+
+* simple explanation
+* advanced explanation
+* “why it matters”
+* links to where it appears in the app
+
+This is especially important for broad demographic usability.
+
+---
+
+## 12. GLOBAL FILTER SYSTEM
+
+Implement a robust filter architecture with:
+
+* sticky global filters
+* page-specific filters
+* advanced filter drawer
+* URL-state persistence
+* role-safe defaults
+
+### Global sticky filters
+
+Always visible on core pages:
+
+* Time window
+* Asset class
+* Exchange / Venue
+* Country / Region
+* Severity
+* Trust state
+
+### Page-local filters
+
+#### Queue
+
+* incident status
+* case status
+* owner
+* incident type
+* watchlist membership
+* model version (advanced)
+* symbol
+
+#### Cases
+
+* case status
+* owner
+* export readiness
+* SLA breach
+
+#### Governance
+
+* model version
+* feature set version
+* calibration version
+* change window
+
+### Advanced filters
+
+Put in drawer, not cluttering top bar:
+
+* state/province
+* model version
+* context availability
+* advanced trust flags
+* routing hint
+* locale of export
+* replay mode
+
+This filter placement logic is directly aligned with the research. 
+
+### Filter behavior rules
+
+* persist in URL
+* preserve across page nav where meaningful
+* reset intentionally, not unexpectedly
+* support kepses to sheets/drawers
+
+---
+
+## 13. FRONTEND COMPONENT INVENTORY
+
+Build a reusable component system, not page-specific chaos.
+
+Required components:
+
+* `AppShell`
+* `SideNav`
+* `TopFilterBar`
+* `GlobalSearch`
+* `LocaleSwitcher`
+* `ThemeSwitcher`
+* `TrustStrip`
+* `WorldRiskMap`
+* `MapLegend`
+* `MapTooltip`
+* `IncidentTable`
+* `IncidentRow`
+* `PriorityBadge`
+* `SafetyLevelBadge`
+* `TrustBadge`
+* `WhyThisFiredPanel`
+* `IncidentScoreHeader`
+* `EvidencePanel`
+* `ReplayTimeline`
+* `ReplayScrubber`
+* `CaseNotesPanel`
+* `CaseEvidenceList`
+* `ModelRegistryTable`
+* `ReplayJobsTable`
+* `ThresholdChangesTable`
+* `SummaryCard`
+* `DeltaStatCard`
+* `SeverityMixChart`
+* `IndustryBreakdownChart`
+* `CountryBreakdownChart`
+* `EmptyState`
+* `LoadingState`
+* `DegradedState`
+* `InlineErrorState`
+* `CommandPalette`
+
+Keep components:
+
+* typed
+* composable
+* localizable
+* accessible
+* visually consistent
+
+---
+
+## 14. CHARTS AND VISUALIZATION RULES
+
+Use charts only where they help decisions.
+
+Required charts:
+
+* Severity mix chart
+* Incident pressure trend
+* Trust degradation trend
+* Country concentration
+* Industry concentration
+* Replay score timeline
+* Symbol trend line/candle context
+* DQ trend chart
+
+### Do not overbuild
+
+Do not add:
+
+* vanity analytics
+* decorative 3D chart nonsense
+* unreadable mini charts everywhere
+
+### Chart behavior
+
+* locale-aware formatting
+* responsive
+* accessible legends
+* empty states
+* skeleton loading
+* clear axis labels
+* stable during live updates
+
+---
+
+## 15. PERFORMANCE RULES
+
+This must feel fast and premium.
+
+### Rendering strategy
+
+* use Server Components where possible for shell/static framing
+* use Client Components only for interactive/live sections
+* lazy-load heavy charts and map
+* virtualize large queue tables
+* memoize expensive row rendering
+* patch live updates instead of full refetch
+
+### Network strategy
+
+* fetch initial data once
+* use SSE for patching
+* debounce global search
+* cache repeated fetches in the client where safe
+* avoid overfetching on locale switch
+
+### Loading rules
+
+* no blank screens
+* skeletons for page-level content
+* instant shell paint
+* preserve layout during loading
+
+### Mobile / smaller screens
+
+* collapse side nav
+* collapse filters into a sheet
+* keep trust strip readable
+* map can switch to list mode if necessary
+
+---
+
+## 16. ERROR / EMPTY / DEGRADED STATES
+
+Build dedicated polished states for:
+
+* loading
+* empty
+* no results
+* partial backend support
+* stream disconnected
+* replay unavailable
+* permissions denied
+* data degraded
+* endpoint missing
+
+Required components:
+
+* `LoadingState`
+* `EmptyState`
+* `DegradedState`
+
+### Degraded state rules
+
+If backend endpoint missing:
+
+* show a real card
+* explain unavailable capability
+* maintain page layout
+* never replace with fake numbers
+
+### Stream disconnected state
+
+If SSE drops:
+
+* show subtle live-status warning
+* fall back to manual refresh or slow polling if absolutely necessary
+* do not crash the page
+
+---
+
+## 17. ROLE-BASED GATING RULES
+
+Gate nav, buttons, and actions based on role:
+
+* Viewer: no write buttons
+* Analyst: triage + case workflow
+* Admin: governance + audit + approvals
+
+### Important rule
+
+Do not only hide controls visually.
+The frontend must:
+
+* also disable unreachable actions in state and flow design
+* show explanatory tooltips when something is unavailable due to permissions
+
+### Example
+
+Viewer opening Incident Detail should still see:
+
+* explanation
+* trust
+* replay summary
+* history
+  But not:
+* assign
+* disposition
+* promote to case
+
+---
+
+## 18. FRONTEND I18N UX DETAILS
+
+### Language switcher
+
+Put it in:
+
+* global nav
+* settings page
+* optional footer/menu access
+
+Show:
+
+* native language names
+* localized names
+* current selection
+* direction preview for Arabic
+
+### Translation style
+
+Use plain, clear language.
+Avoid jargon overload on:
+
+* Viewer
+* Executive
+* About
+* Glossary
+
+### Formatting rules
+
+* dates localized
+* numbers localized
+* percentages localized
+* compact metrics localized
+* risk memo export localized
+
+### Locale-aware export text
+
+Executive Summary export should render in the active locale.
+
+---
+
+## 19. FILES YOU MUST CREATE / REFACTOR
+
+Create or refactor these frontend files at minimum:
+
+### Core libs
+
+* `web/lib/api.ts`
+* `web/lib/types.ts`
+* `web/lib/schemas.ts`
+* `web/lib/filters.ts`
+* `web/lib/stream.ts`
+* `web/lib/format.ts`
+* `web/lib/i18n.ts`
+
+### Providers
+
+* `web/components/providers/IntlProvider.tsx`
+* `web/components/providers/ThemeProvider.tsx`
+* `web/components/providers/StreamProvider.tsx`
+
+### Common UI
+
+* `web/components/AppShell.tsx`
+* `web/components/SideNav.tsx`
+* `web/components/TopFilterBar.tsx`
+* `web/components/TrustStrip.tsx`
+* `web/components/LocaleSwitcher.tsx`
+* `web/components/LoadingState.tsx`
+* `web/components/EmptyState.tsx`
+* `web/components/DegradedState.tsx`
+
+### Map
+
+* `web/components/WorldRiskMap.tsx`
+* `web/components/MapLegend.tsx`
+* `web/components/MapTooltip.tsx`
+
+### Incident flow
+
+* `web/components/IncidentTable.tsx`
+* `web/components/IncidentRow.tsx`
+* `web/components/IncidentScoreHeader.tsx`
+* `web/components/WhyThisFiredPanel.tsx`
+* `web/components/EvidencePanel.tsx`
+
+### Replay
+
+* `web/components/ReplayTimeline.tsx`
+* `web/components/ReplayScrubber.tsx`
+
+### Governance
+
+* `web/components/ModelRegistryTable.tsx`
+* `web/components/ReplayJobsTable.tsx`
+* `web/components/ThresholdChangesTable.tsx`
+
+### Pages
+
+* all route pages described above
+
+### Localization
+
+* `messages/en.json`
+* `messages/fr.json`
+* `messages/es.json`
+* `messages/pt-BR.json`
+* `messages/zh-CN.json`
+* `messages/ar.json`
+* `messages/de.json`
+* `messages/ja.json`
+* `messages/hi.json`
+
+---
+
+## 20. WHAT YOU MUST NOT DO
+
+Do not:
+
+* dump raw JSON in the final UI
+* leave untranslated English strings
+* use fake data to fill missing backend gaps
+* create dead buttons
+* use a fake map grid
+* overanimate live data
+* overload the UI with tiny unreadable cards
+* bury trust in secondary views
+* make Viewer mode useless
+* make Arabic partially translated and call it done
+* store auth tokens in localStorage in frontend logic
+
+The production architecture research explicitly favors HttpOnly cookie-based auth and warns against unsafe frontend token handling for admin-capable systems. 
+
+---
+
+## 21. DEFINITION OF DONE
+
+The frontend is only done when:
+
+1. All required pages exist.
+2. All required pages are localized in 9 loca. Viewer / Analyst / Admin experiences are clearly different.
+3. Global sticky filters work.
+4. Queue-specific and page-specific filters work.
+5. World map is real, interactive, and filter-connected.
+6. Live updates use SSE and patch state cleanly.
+7. Trust strip is visible and meaningful.
+8. No raw JSON dumps remain.
+9. No fake or dead actions remain.
+10. Every fetch state has loading / empty / degraded handling.
+11. Visual quality is premium and consistent.
+12. Mobile behavior is usable.
+13. Accessibility is strong.
+14. The app feels complete, not like a partially wired prototype.
+
+---
+
+## 22. FINAL OUTPUT REQUIRED FROM REPLIT
+
+When finished, provide:
+
+1. Exact files created
+2. Exact files modified
+3. Route map
+4. Component map
+5. Locale map
+6. Any dependencies added
+7. Which pages support live SSE patches
+8. Which pages support map-linked filters
+9. Any backend assumptions or missing endpoints
+10. A short demo path:
+
+* switch locale
+* open Command Center
+* filter by country on map
+* open Queue
+* open Incident
+* open Replay
+* open Governance
+* switch to Arabic
+* verify RTL
+* switch to Executive view
+
+Build this frontend as if it will be used daily by:
+
+* analysts
+* admins
+* executives
+* first-time users
+* multilingual global users
+
+Make it strict, elegant, truthful, and production-quality.
+
+---
+
+
+
+[1]: https://next-intl.dev/ "https://next-intl.dev/"
+[2]: https://www.react-simple-maps.io/ "https://www.react-simple-maps.io/"
+[3]: https://developer.mozilla.org/docs/Web/API/EventSource "https://developer.mozilla.org/docs/Web/API/EventSource"
+[4]: https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes/dir "https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes/dir"

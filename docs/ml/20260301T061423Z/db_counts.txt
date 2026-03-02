@@ -1,0 +1,15 @@
+ features_count 
+----------------
+         439033
+(1 row)
+
+ scores_count 
+--------------
+       439045
+(1 row)
+
+ users_count 
+-------------
+           0
+(1 row)
+

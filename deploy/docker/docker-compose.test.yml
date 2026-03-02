@@ -1,0 +1,6 @@
+services:
+  test:
+    image: golang:1.22
+    working_dir: /src
+    volumes: ["../../:/src"]
+    command: sh -c "go test -race -count=1 ./..."

@@ -1,0 +1,2 @@
+unauth_scores 401 unauthorized
+

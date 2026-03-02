@@ -1,0 +1,6 @@
+total 24
+drwxr-xr-x@  5 mac  staff  160 Feb 28 20:01 .
+drwxrwxr-x@ 10 mac  staff  320 Feb 28 18:46 ..
+-rw-r--r--@  1 mac  staff  675 Feb 28 20:01 anomaly.pkl
+-rw-r--r--@  1 mac  staff  983 Feb 28 20:01 escalation.pkl
+-rw-r--r--@  1 mac  staff  412 Feb 28 20:01 metadata.json

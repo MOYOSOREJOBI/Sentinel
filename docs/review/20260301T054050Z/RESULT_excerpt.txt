@@ -1,0 +1,12 @@
+     1	COMPLETION: 100%
+     2	STATUS: PASS
+     3	RUNTIME COVERAGE: FULL
+     4	REASON: all proofs present
+     5	
+     6	S1=1 S2=1 S3=1 S4=1 S5=1 S6=1 S7=1 S8=1 S9=1 S10=1
+     7	
+     8	GATE_EXIT=0
+     9	PROOFS=docs/audit/20260228T224025Z/proofs
+    10	LOGS=docs/audit/20260228T224025Z/logs
+    11	STATUS_LINE=STATUS=PASS
+    12	REASON_LINE=REASON=all proofs present

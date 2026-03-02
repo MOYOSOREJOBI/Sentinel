@@ -1,0 +1,77 @@
+HTTP/1.1 200 OK
+Content-Type: text/plain; version=0.0.4; charset=utf-8; escaping=underscores
+X-Request-Id: b535e6518a743e85
+Date: Sun, 01 Mar 2026 17:38:18 GMT
+Transfer-Encoding: chunked
+
+# HELP http_request_duration_seconds HTTP request latency in seconds.
+# TYPE http_request_duration_seconds histogram
+http_request_duration_seconds_bucket{path="/",service="gateway_api",le="0.005"} 1
+http_request_duration_seconds_bucket{path="/",service="gateway_api",le="0.01"} 1
+http_request_duration_seconds_bucket{path="/",service="gateway_api",le="0.025"} 1
+http_request_duration_seconds_bucket{path="/",service="gateway_api",le="0.05"} 1
+http_request_duration_seconds_bucket{path="/",service="gateway_api",le="0.1"} 1
+http_request_duration_seconds_bucket{path="/",service="gateway_api",le="0.25"} 1
+http_request_duration_seconds_bucket{path="/",service="gateway_api",le="0.5"} 1
+http_request_duration_seconds_bucket{path="/",service="gateway_api",le="1"} 1
+http_request_duration_seconds_bucket{path="/",service="gateway_api",le="2.5"} 1
+http_request_duration_seconds_bucket{path="/",service="gateway_api",le="5"} 1
+http_request_duration_seconds_bucket{path="/",service="gateway_api",le="+Inf"} 1
+http_request_duration_seconds_sum{path="/",service="gateway_api"} 0.001147055
+http_request_duration_seconds_count{path="/",service="gateway_api"} 1
+http_request_duration_seconds_bucket{path="/healthz",service="gateway_api",le="0.005"} 1
+http_request_duration_seconds_bucket{path="/healthz",service="gateway_api",le="0.01"} 1
+http_request_duration_seconds_bucket{path="/healthz",service="gateway_api",le="0.025"} 1
+http_request_duration_seconds_bucket{path="/healthz",service="gateway_api",le="0.05"} 1
+http_request_duration_seconds_bucket{path="/healthz",service="gateway_api",le="0.1"} 1
+http_request_duration_seconds_bucket{path="/healthz",service="gateway_api",le="0.25"} 1
+http_request_duration_seconds_bucket{path="/healthz",service="gateway_api",le="0.5"} 1
+http_request_duration_seconds_bucket{path="/healthz",service="gateway_api",le="1"} 1
+http_request_duration_seconds_bucket{path="/healthz",service="gateway_api",le="2.5"} 1
+http_request_duration_seconds_bucket{path="/healthz",service="gateway_api",le="5"} 1
+http_request_duration_seconds_bucket{path="/healthz",service="gateway_api",le="+Inf"} 1
+http_request_duration_seconds_sum{path="/healthz",service="gateway_api"} 6.1899e-05
+http_request_duration_seconds_count{path="/healthz",service="gateway_api"} 1
+http_request_duration_seconds_bucket{path="/metrics",service="gateway_api",le="0.005"} 218
+http_request_duration_seconds_bucket{path="/metrics",service="gateway_api",le="0.01"} 219
+http_request_duration_seconds_bucket{path="/metrics",service="gateway_api",le="0.025"} 219
+http_request_duration_seconds_bucket{path="/metrics",service="gateway_api",le="0.05"} 219
+http_request_duration_seconds_bucket{path="/metrics",service="gateway_api",le="0.1"} 219
+http_request_duration_seconds_bucket{path="/metrics",service="gateway_api",le="0.25"} 219
+http_request_duration_seconds_bucket{path="/metrics",service="gateway_api",le="0.5"} 219
+http_request_duration_seconds_bucket{path="/metrics",service="gateway_api",le="1"} 219
+http_request_duration_seconds_bucket{path="/metrics",service="gateway_api",le="2.5"} 219
+http_request_duration_seconds_bucket{path="/metrics",service="gateway_api",le="5"} 219
+http_request_duration_seconds_bucket{path="/metrics",service="gateway_api",le="+Inf"} 219
+http_request_duration_seconds_sum{path="/metrics",service="gateway_api"} 0.11874155700000004
+http_request_duration_seconds_count{path="/metrics",service="gateway_api"} 219
+http_request_duration_seconds_bucket{path="/readyz",service="gateway_api",le="0.005"} 213
+http_request_duration_seconds_bucket{path="/readyz",service="gateway_api",le="0.01"} 213
+http_request_duration_seconds_bucket{path="/readyz",service="gateway_api",le="0.025"} 213
+http_request_duration_seconds_bucket{path="/readyz",service="gateway_api",le="0.05"} 214
+http_request_duration_seconds_bucket{path="/readyz",service="gateway_api",le="0.1"} 214
+http_request_duration_seconds_bucket{path="/readyz",service="gateway_api",le="0.25"} 214
+http_request_duration_seconds_bucket{path="/readyz",service="gateway_api",le="0.5"} 214
+http_request_duration_seconds_bucket{path="/readyz",service="gateway_api",le="1"} 214
+http_request_duration_seconds_bucket{path="/readyz",service="gateway_api",le="2.5"} 214
+http_request_duration_seconds_bucket{path="/readyz",service="gateway_api",le="5"} 214
+http_request_duration_seconds_bucket{path="/readyz",service="gateway_api",le="+Inf"} 214
+http_request_duration_seconds_sum{path="/readyz",service="gateway_api"} 0.28385258700000016
+http_request_duration_seconds_count{path="/readyz",service="gateway_api"} 214
+# HELP http_requests_total Total HTTP requests handled by Sentinel Go services.
+# TYPE http_requests_total counter
+http_requests_total{method="GET",path="/",service="gateway_api",status="200"} 1
+http_requests_total{method="GET",path="/healthz",service="gateway_api",status="200"} 1
+http_requests_total{method="GET",path="/metrics",service="gateway_api",status="200"} 219
+http_requests_total{method="GET",path="/readyz",service="gateway_api",status="200"} 214
+# HELP promhttp_metric_handler_requests_in_flight Current number of scrapes being served.
+# TYPE promhttp_metric_handler_requests_in_flight gauge
+promhttp_metric_handler_requests_in_flight 1
+# HELP promhttp_metric_handler_requests_total Total number of scrapes by HTTP status code.
+# TYPE promhttp_metric_handler_requests_total counter
+promhttp_metric_handler_requests_total{code="200"} 219
+promhttp_metric_handler_requests_total{code="500"} 0
+promhttp_metric_handler_requests_total{code="503"} 0
+# HELP sentinel_up Whether the service process is up.
+# TYPE sentinel_up gauge
+sentinel_up{service="gateway_api"} 1

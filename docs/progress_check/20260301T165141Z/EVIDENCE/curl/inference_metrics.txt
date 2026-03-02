@@ -1,0 +1,97 @@
+HTTP/1.1 200 OK
+Server: Werkzeug/3.1.6 Python/3.11.14
+Date: Sun, 01 Mar 2026 17:38:19 GMT
+Content-Type: text/plain; version=0.0.4; charset=utf-8; charset=utf-8
+Content-Length: 5033
+Connection: close
+
+# HELP python_gc_objects_collected_total Objects collected during gc
+# TYPE python_gc_objects_collected_total counter
+python_gc_objects_collected_total{generation="0"} 2.588177e+06
+python_gc_objects_collected_total{generation="1"} 292004.0
+python_gc_objects_collected_total{generation="2"} 7365.0
+# HELP python_gc_objects_uncollectable_total Uncollectable objects found during GC
+# TYPE python_gc_objects_uncollectable_total counter
+python_gc_objects_uncollectable_total{generation="0"} 0.0
+python_gc_objects_uncollectable_total{generation="1"} 0.0
+python_gc_objects_uncollectable_total{generation="2"} 0.0
+# HELP python_gc_collections_total Number of times this generation was collected
+# TYPE python_gc_collections_total counter
+python_gc_collections_total{generation="0"} 3638.0
+python_gc_collections_total{generation="1"} 330.0
+python_gc_collections_total{generation="2"} 4.0
+# HELP python_info Python platform information
+# TYPE python_info gauge
+python_info{implementation="CPython",major="3",minor="11",patchlevel="14",version="3.11.14"} 1.0
+# HELP process_virtual_memory_bytes Virtual memory size in bytes.
+# TYPE process_virtual_memory_bytes gauge
+process_virtual_memory_bytes 3.5506176e+08
+# HELP process_resident_memory_bytes Resident memory size in bytes.
+# TYPE process_resident_memory_bytes gauge
+process_resident_memory_bytes 4.0218624e+07
+# HELP process_start_time_seconds Start time of the process since unix epoch in seconds.
+# TYPE process_start_time_seconds gauge
+process_start_time_seconds 1.77238560137e+09
+# HELP process_cpu_seconds_total Total user and system CPU time spent in seconds.
+# TYPE process_cpu_seconds_total counter
+process_cpu_seconds_total 641.6700000000001
+# HELP process_open_fds Number of open file descriptors.
+# TYPE process_open_fds gauge
+process_open_fds 15.0
+# HELP process_max_fds Maximum number of open file descriptors.
+# TYPE process_max_fds gauge
+process_max_fds 1.048576e+06
+# HELP inference_messages_consumed_total Total consumed feature messages
+# TYPE inference_messages_consumed_total counter
+inference_messages_consumed_total 160666.0
+# HELP inference_messages_consumed_created Total consumed feature messages
+# TYPE inference_messages_consumed_created gauge
+inference_messages_consumed_created 1.7723856030148892e+09
+# HELP inference_messages_produced_total Total produced score messages
+# TYPE inference_messages_produced_total counter
+inference_messages_produced_total 160665.0
+# HELP inference_messages_produced_created Total produced score messages
+# TYPE inference_messages_produced_created gauge
+inference_messages_produced_created 1.7723856030149353e+09
+# HELP inference_processing_errors_total Total inference processing errors
+# TYPE inference_processing_errors_total counter
+# HELP inference_loop_running Inference consumer loop running state (1/0)
+# TYPE inference_loop_running gauge
+inference_loop_running 1.0
+# HELP inference_scoring_latency_seconds End-to-end scoring latency per message
+# TYPE inference_scoring_latency_seconds histogram
+inference_scoring_latency_seconds_bucket{le="0.001"} 160358.0
+inference_scoring_latency_seconds_bucket{le="0.005"} 160658.0
+inference_scoring_latency_seconds_bucket{le="0.01"} 160662.0
+inference_scoring_latency_seconds_bucket{le="0.025"} 160665.0
+inference_scoring_latency_seconds_bucket{le="0.05"} 160666.0
+inference_scoring_latency_seconds_bucket{le="0.1"} 160666.0
+inference_scoring_latency_seconds_bucket{le="0.25"} 160666.0
+inference_scoring_latency_seconds_bucket{le="0.5"} 160666.0
+inference_scoring_latency_seconds_bucket{le="1.0"} 160666.0
+inference_scoring_latency_seconds_bucket{le="2.5"} 160666.0
+inference_scoring_latency_seconds_bucket{le="+Inf"} 160666.0
+inference_scoring_latency_seconds_count 160666.0
+inference_scoring_latency_seconds_sum 40.85732913017273
+# HELP inference_scoring_latency_seconds_created End-to-end scoring latency per message
+# TYPE inference_scoring_latency_seconds_created gauge
+inference_scoring_latency_seconds_created 1.7723856030150933e+09
+# HELP inference_model_loaded Whether the model is loaded (1) or in fallback (0)
+# TYPE inference_model_loaded gauge
+inference_model_loaded{model_type="anomaly"} 1.0
+inference_model_loaded{model_type="escalation"} 1.0
+# HELP inference_fallback_mode Whether inference is currently using deterministic fallback scoring
+# TYPE inference_fallback_mode gauge
+inference_fallback_mode 0.0
+# HELP inference_escalation_auc Escalation model ROC AUC from the active bundle
+# TYPE inference_escalation_auc gauge
+inference_escalation_auc 0.675797
+# HELP inference_escalation_brier Escalation model Brier score from the active bundle
+# TYPE inference_escalation_brier gauge
+inference_escalation_brier 0.011114
+# HELP inference_escalation_pr_auc Escalation model PR-AUC from the active bundle
+# TYPE inference_escalation_pr_auc gauge
+inference_escalation_pr_auc 0.017884
+# HELP inference_anomaly_stability_score Stability score for the active anomaly model bundle
+# TYPE inference_anomaly_stability_score gauge
+inference_anomaly_stability_score 0.837725

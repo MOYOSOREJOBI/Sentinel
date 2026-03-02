@@ -1,0 +1,34 @@
+# Go build/test artifacts
+bin/
+*.test
+*.out
+
+# Frontend dependencies and build artifacts
+node_modules/
+web/node_modules/
+web/.next/
+web/dist/
+web/*.tsbuildinfo
+web/.tmp-tests/
+web/test-results/
+
+# Environment and local secrets
+.env
+keys/
+
+# OS/editor files
+.DS_Store
+Thumbs.db
+__pycache__/
+
+# Generated audit/progress artifacts (kept as CI artifacts, not in git)
+docs/audit/**
+docs/progress/**
+!docs/audit/README.md
+!docs/progress/README.md
+
+# Cleanup reports are local working notes, not source-of-truth docs
+docs/cleanup/**
+!docs/cleanup/README.md
+
+.github/workflows/

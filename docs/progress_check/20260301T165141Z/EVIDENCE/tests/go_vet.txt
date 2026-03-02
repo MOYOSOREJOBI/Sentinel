@@ -1,0 +1,1 @@
+pattern ./...: open /Users/mac/Library/Caches/go-build/48/48402d923f4c2352a0e61980075563871eb43ef088463846a999cb9db22246ad-a: operation not permitted

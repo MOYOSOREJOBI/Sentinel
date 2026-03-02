@@ -1,0 +1,9 @@
+gateway_health 200 ok
+inference_readyz 200 {"fallback_mode":false,"model_artifact_hash":"6a873dbd943816987a7d3a0b3280f613977f811edadc87ecce1edde0aa6e681f","model_version":"quant-v1-2026-03-01","ready":true,"trained_at":"2026-03-01T03:01:18Z"}
+
+query_metrics 200 # HELP sentinel_up service process is up
+# TYPE sentinel_up gauge
+sentinel_up 1
+
+query_seed_status 200 {"alerts":0,"candles":53106,"cases":0,"features":49959,"incidents":0,"raw_ticks":49953,"scores":49961}
+
