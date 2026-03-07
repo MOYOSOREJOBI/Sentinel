@@ -1,0 +1,13 @@
+//line /Users/mac/Desktop/Sentinel/internal/httpx/httpx.go:1:1
+package httpx
+
+import (
+	"encoding/json"
+	"net/http"
+)
+
+func JSON(w http.ResponseWriter, code int, v any) {goCover_41eecd6b5b94__0[0] = 1 ; goCover_41eecd6b5b94__0[1] = goCover_41eecd6b5b94_P ; goCover_41eecd6b5b94__0[2] = 0 ; goCover_41eecd6b5b94__0[3] = 1;
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(code)
+	_ = json.NewEncoder(w).Encode(v)
+}

@@ -1,0 +1,12 @@
+covervars.go
+backfill.cover.go
+command_center.cover.go
+feed.cover.go
+model_bundle.cover.go
+queue.cover.go
+scores.cover.go
+trust.cover.go
+world_map.cover.go
+./feed_test.go
+./queue_filters_test.go
+./world_map_test.go

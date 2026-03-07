@@ -1,0 +1,4 @@
+covervars.go
+incidents.cover.go
+severity.cover.go
+./severity_test.go

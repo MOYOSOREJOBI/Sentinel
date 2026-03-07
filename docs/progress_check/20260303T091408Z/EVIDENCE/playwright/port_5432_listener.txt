@@ -1,0 +1,2 @@
+COMMAND     PID USER   FD   TYPE             DEVICE SIZE/OFF NODE NAME
+com.docke 85295  mac  133u  IPv6 0x4cb83dd5dd75088d      0t0  TCP *:5432 (LISTEN)

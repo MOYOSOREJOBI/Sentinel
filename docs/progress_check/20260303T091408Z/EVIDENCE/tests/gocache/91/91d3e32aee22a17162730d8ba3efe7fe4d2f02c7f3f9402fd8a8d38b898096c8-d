@@ -1,0 +1,8 @@
+covervars.go
+invalidation.cover.go
+keys.cover.go
+redis.cover.go
+./invalidation_test.go
+./keys_test.go
+./redis_integration_test.go
+./redis_test.go

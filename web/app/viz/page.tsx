@@ -120,7 +120,7 @@ export default function VizPage() {
 
   const countries = useMemo(() => (map.countries || []).map((c: any) => ({
     name: c.countryName || c.country_name || c.name || 'Unknown',
-    iso2: (c.countryCode || c.country_code || c.iso2 || 'XX').toUpperCase(),
+    iso2: (c.countryIso2 || c.countryCode || c.country_code || c.iso2 || 'XX').toUpperCase(),
     risk: Number(c.avgCompositeRisk || c.avg_risk || c.risk || 0),
     count: Number(c.incidentCount || c.incident_count || c.highRisk || 0),
   })).sort((a: any, b: any) => b.risk - a.risk), [map])

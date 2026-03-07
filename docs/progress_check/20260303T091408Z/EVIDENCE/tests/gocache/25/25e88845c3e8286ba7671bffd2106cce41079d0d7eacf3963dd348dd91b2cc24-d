@@ -1,0 +1,51 @@
+//line /Users/mac/Desktop/Sentinel/internal/cache/redis.go:1:1
+package cache
+
+import (
+	"context"
+	"encoding/json"
+	"sync"
+	"time"
+
+	"sentinel/internal/rediskv"
+)
+
+type entry struct {
+	b   []byte
+	exp time.Time
+}
+
+var mem sync.Map
+var redisClient = rediskv.NewFromEnv()
+
+func GetOrLoadJSON[T any](ctx context.Context, key string, ttl time.Duration, loader func() (T, error)) (T, error) {goCover_6b3c91dd9e60__7[0] = 14 ; goCover_6b3c91dd9e60__7[1] = goCover_6b3c91dd9e60_P ; goCover_6b3c91dd9e60__7[2] = 7 ; goCover_6b3c91dd9e60__7[3] = 1;
+	var zero T
+	if redisClient != nil && redisClient.Enabled() {goCover_6b3c91dd9e60__7[8] = 1;
+		if raw, ok, err := redisClient.Get(ctx, key); err == nil && ok {goCover_6b3c91dd9e60__7[9] = 1;
+			var out T
+			if json.Unmarshal([]byte(raw), &out) == nil {goCover_6b3c91dd9e60__7[10] = 1;
+				return out, nil
+			}
+		}
+	}
+	goCover_6b3c91dd9e60__7[4] = 1;if v, ok := mem.Load(key); ok {goCover_6b3c91dd9e60__7[11] = 1;
+		e := v.(entry)
+		if time.Now().Before(e.exp) {goCover_6b3c91dd9e60__7[12] = 1;
+			var out T
+			if json.Unmarshal(e.b, &out) == nil {goCover_6b3c91dd9e60__7[13] = 1;
+				return out, nil
+			}
+		}
+	}
+	goCover_6b3c91dd9e60__7[5] = 1;out, err := loader()
+	if err != nil {goCover_6b3c91dd9e60__7[14] = 1;
+		return zero, err
+	}
+	goCover_6b3c91dd9e60__7[6] = 1;if b, err := json.Marshal(out); err == nil {goCover_6b3c91dd9e60__7[15] = 1;
+		mem.Store(key, entry{b: b, exp: time.Now().Add(ttl)})
+		if redisClient != nil && redisClient.Enabled() {goCover_6b3c91dd9e60__7[16] = 1;
+			_ = redisClient.SetEX(ctx, key, string(b), ttl)
+		}
+	}
+	goCover_6b3c91dd9e60__7[7] = 1;return out, nil
+}

@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { api } from '../lib/api'
+import { applyLocale, localeFromStorage, withLocalePath } from '../lib/i18n'
 
 export default function LoginScreen() {
   const router = useRouter()
@@ -16,8 +17,10 @@ export default function LoginScreen() {
     setLoading(true)
     try {
       await api.login(email, password)
-      await api.me()
-      router.replace('/command-center')
+      const me = await api.me()
+      const preferred = me?.preferredLocale || localeFromStorage()
+      applyLocale(preferred)
+      router.replace(withLocalePath('/command-center', preferred))
     } catch (e: any) {
       setError(e.message || 'Authentication failed')
     } finally {

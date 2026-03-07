@@ -1,0 +1,2 @@
+  501 74866 59065   0 12:53PM ??         0:00.14 bash ./scripts/run-demo.sh default
+  501 78544 74866   0 12:56PM ??         0:00.13 docker compose -f deploy/docker/docker-compose.yml up -d --build gateway-api simulator aggregator features inference alerts governance query web prometheus grafana

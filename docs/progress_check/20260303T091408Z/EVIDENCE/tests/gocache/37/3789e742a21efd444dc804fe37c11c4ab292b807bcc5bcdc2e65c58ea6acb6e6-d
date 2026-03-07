@@ -1,0 +1,77 @@
+//line /Users/mac/Desktop/Sentinel/internal/audit/audit.go:1:1
+package audit
+
+import (
+	"context"
+	"crypto/sha256"
+	"encoding/hex"
+	"fmt"
+
+	"github.com/jackc/pgx/v5/pgxpool"
+)
+
+type chainEntry struct {
+	id       int
+	actor    string
+	action   string
+	details  string
+	prevHash string
+	entry    string
+}
+
+func Append(ctx context.Context, db *pgxpool.Pool, actor, action, details string) error {goCover_28375bc9569a__0[0] = 7 ; goCover_28375bc9569a__0[1] = goCover_28375bc9569a_P ; goCover_28375bc9569a__0[2] = 0 ; goCover_28375bc9569a__0[3] = 1;
+	tx, err := db.Begin(ctx)
+	if err != nil {goCover_28375bc9569a__0[7] = 1;
+		return err
+	}
+	goCover_28375bc9569a__0[4] = 1;defer tx.Rollback(ctx)
+
+	if _, err := tx.Exec(ctx, `SELECT pg_advisory_xact_lock($1)`, int64(731103)); err != nil {goCover_28375bc9569a__0[8] = 1;
+		return err
+	}
+
+	goCover_28375bc9569a__0[5] = 1;var prev string
+	_ = tx.QueryRow(ctx, `SELECT COALESCE(entry_hash,'') FROM audit_log ORDER BY id DESC LIMIT 1`).Scan(&prev)
+	entry := hashFor(prev, actor, action, details)
+	if _, err := tx.Exec(ctx, `INSERT INTO audit_log(actor,action,details,prev_hash,entry_hash) VALUES($1,$2,$3,$4,$5)`, actor, action, details, prev, entry); err != nil {goCover_28375bc9569a__0[9] = 1;
+		return err
+	}
+	goCover_28375bc9569a__0[6] = 1;return tx.Commit(ctx)
+}
+
+func Verify(ctx context.Context, db *pgxpool.Pool) (bool, string, error) {goCover_28375bc9569a__1[0] = 7 ; goCover_28375bc9569a__1[1] = goCover_28375bc9569a_P ; goCover_28375bc9569a__1[2] = 1 ; goCover_28375bc9569a__1[3] = 1;
+	rows, err := db.Query(ctx, `SELECT id, actor, action, details, prev_hash, entry_hash FROM audit_log ORDER BY id ASC`)
+	if err != nil {goCover_28375bc9569a__1[6] = 1;
+		return false, "", err
+	}
+	goCover_28375bc9569a__1[4] = 1;defer rows.Close()
+	entries := make([]chainEntry, 0)
+	for rows.Next() {goCover_28375bc9569a__1[7] = 1;
+		var e chainEntry
+		if err := rows.Scan(&e.id, &e.actor, &e.action, &e.details, &e.prevHash, &e.entry); err != nil {goCover_28375bc9569a__1[9] = 1;
+			return false, "", err
+		}
+		goCover_28375bc9569a__1[8] = 1;entries = append(entries, e)
+	}
+	goCover_28375bc9569a__1[5] = 1;ok, msg := verifyChain(entries)
+	return ok, msg, nil
+}
+
+func hashFor(prev, actor, action, details string) string {goCover_28375bc9569a__2[0] = 1 ; goCover_28375bc9569a__2[1] = goCover_28375bc9569a_P ; goCover_28375bc9569a__2[2] = 2 ; goCover_28375bc9569a__2[3] = 1;
+	h := sha256.Sum256([]byte(prev + "|" + actor + "|" + action + "|" + details))
+	return hex.EncodeToString(h[:])
+}
+
+func verifyChain(entries []chainEntry) (bool, string) {goCover_28375bc9569a__3[0] = 7 ; goCover_28375bc9569a__3[1] = goCover_28375bc9569a_P ; goCover_28375bc9569a__3[2] = 3 ; goCover_28375bc9569a__3[3] = 1;
+	prev := ""
+	for _, e := range entries {goCover_28375bc9569a__3[5] = 1;
+		if e.prevHash != prev {goCover_28375bc9569a__3[8] = 1;
+			return false, fmt.Sprintf("chain break at id %d", e.id)
+		}
+		goCover_28375bc9569a__3[6] = 1;if hashFor(prev, e.actor, e.action, e.details) != e.entry {goCover_28375bc9569a__3[9] = 1;
+			return false, fmt.Sprintf("hash mismatch at id %d", e.id)
+		}
+		goCover_28375bc9569a__3[7] = 1;prev = e.entry
+	}
+	goCover_28375bc9569a__3[4] = 1;return true, "ok"
+}

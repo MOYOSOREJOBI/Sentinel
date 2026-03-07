@@ -34,16 +34,19 @@ WHERE `+featureWhere, featureArgs...).Scan(&missingness, &duplicates, &lateEvent
 	var latestModelVersion, latestModelArtifactHash, latestScoringRunID string
 	var latestProducedAt any
 	_ = db.QueryRow(ctx, `SELECT coalesce(s.model_version,''), coalesce(s.model_artifact_hash,''), coalesce(s.scoring_run_id::text,''), coalesce(s.produced_at, s.ts) FROM scores s LEFT JOIN incidents i ON i.primary_symbol=s.symbol LEFT JOIN instrument_metadata m ON m.instrument_id=i.primary_symbol WHERE `+where+` ORDER BY coalesce(s.produced_at, s.ts) DESC LIMIT 1`, args...).Scan(&latestModelVersion, &latestModelArtifactHash, &latestScoringRunID, &latestProducedAt)
+	var activeModelVersion, activeArtifactHash string
+	var activeDeployedAt any
+	_ = db.QueryRow(ctx, `SELECT model_version, artifact_hash, coalesce(deployed_at, created_at) FROM model_deployments WHERE status='deployed' ORDER BY coalesce(deployed_at, created_at) DESC NULLS LAST, created_at DESC LIMIT 1`).Scan(&activeModelVersion, &activeArtifactHash, &activeDeployedAt)
 
 	fallbackMode := meta.FallbackMode
 	if latestModelVersion != "" {
 		fallbackMode = strings.Contains(strings.ToLower(latestModelVersion), "fallback")
 	}
-	modelVersion := latestModelVersion
+	modelVersion := firstNonEmptyString(activeModelVersion, latestModelVersion)
 	if modelVersion == "" {
 		modelVersion = meta.ModelVersion
 	}
-	modelArtifactHash := latestModelArtifactHash
+	modelArtifactHash := firstNonEmptyString(activeArtifactHash, latestModelArtifactHash)
 	if modelArtifactHash == "" {
 		modelArtifactHash = meta.ArtifactHash
 	}
@@ -71,8 +74,11 @@ WHERE `+featureWhere, featureArgs...).Scan(&missingness, &duplicates, &lateEvent
 		"modelState": map[string]any{
 			"fallback_mode":         fallbackMode,
 			"model_version":         modelVersion,
+			"active_model_version":  modelVersion,
 			"last_trained_at":       meta.TrainedAt,
 			"model_artifact_hash":   modelArtifactHash,
+			"active_artifact_hash":  modelArtifactHash,
+			"active_deployed_at":    activeDeployedAt,
 			"latest_scoring_run_id": latestScoringRunID,
 			"latest_produced_at":    latestProducedAt,
 			"calibration_version":   meta.CalibrationVersion,
@@ -141,4 +147,13 @@ func ratioInt(a, b int) float64 {
 		return 0
 	}
 	return float64(a) / float64(b)
+}
+
+func firstNonEmptyString(values ...string) string {
+	for _, value := range values {
+		if strings.TrimSpace(value) != "" {
+			return value
+		}
+	}
+	return ""
 }

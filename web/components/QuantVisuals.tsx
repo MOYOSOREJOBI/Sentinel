@@ -2,16 +2,32 @@
 
 import { useMemo } from 'react'
 
-function bucketIndex(v: number) {
-  if (v < 20) return 0
-  if (v < 40) return 1
-  if (v < 60) return 2
-  if (v < 80) return 3
+export function normalizeRiskValue(v: number) {
+  if (Number.isNaN(v) || v < 0) return 0
+  if (v > 1) return Math.min(v / 100, 1)
+  return v
+}
+
+export function bucketIndex(v: number) {
+  const normalized = normalizeRiskValue(v)
+  if (normalized < 0.2) return 0
+  if (normalized < 0.4) return 1
+  if (normalized < 0.6) return 2
+  if (normalized < 0.8) return 3
   return 4
 }
 
-export default function QuantVisuals({ queue, mapRows }: { queue: any[]; mapRows: any[] }) {
-  const severity = useMemo(() => {
+export function summarizeQuantVisuals(queue: any[], mapRows: any[], rollups?: any) {
+  const severity = (() => {
+    const seeded = rollups?.severityBreakdown
+    if (seeded && typeof seeded === 'object') {
+      return {
+        critical: Number(seeded.critical || 0),
+        high: Number(seeded.high || 0),
+        elevated: Number(seeded.elevated || 0),
+        stable: Number(seeded.stable || 0),
+      }
+    }
     const out = { critical: 0, high: 0, elevated: 0, stable: 0 }
     for (const r of queue) {
       const raw = String(r.severityBand || r.severity || 'stable').toLowerCase()
@@ -21,26 +37,38 @@ export default function QuantVisuals({ queue, mapRows }: { queue: any[]; mapRows
       else out.stable += 1
     }
     return out
-  }, [queue])
+  })()
 
-  const histogram = useMemo(() => {
+  const histogram = (() => {
+    if (Array.isArray(rollups?.compositeHistogram) && rollups.compositeHistogram.length === 5) {
+      return rollups.compositeHistogram.map((v: any) => Number(v || 0))
+    }
     const bins = [0, 0, 0, 0, 0]
     for (const r of queue) {
       const risk = Number(r.compositeRisk || r.composite_risk || 0)
       bins[bucketIndex(risk)] += 1
     }
     return bins
-  }, [queue])
+  })()
 
-  const topCountries = useMemo(() => {
-    return (mapRows || [])
+  const topCountries = (() => {
+    const seeded = Array.isArray(rollups?.topCountries) ? rollups.topCountries : mapRows
+    return (seeded || [])
       .map((r: any) => ({
-        label: String(r.countryCode || r.country_code || r.countryName || r.country_name || 'XX'),
+        label: String(r.countryName || r.country_name || r.countryIso2 || r.countryCode || r.country_code || '').trim(),
+        code: String(r.countryIso2 || r.countryCode || r.country_code || '').trim().toUpperCase(),
         count: Number(r.incidentCount || r.incident_count || 0),
       }))
+      .filter((r: any) => r.count > 0 && r.code !== 'XX' && r.label.toLowerCase() !== 'unknown')
       .sort((a: any, b: any) => b.count - a.count)
-      .slice(0, 6)
-  }, [mapRows])
+      .slice(0, 8)
+  })()
+
+  return { severity, histogram, topCountries }
+}
+
+export default function QuantVisuals({ queue, mapRows, rollups }: { queue: any[]; mapRows: any[]; rollups?: any }) {
+  const { severity, histogram, topCountries } = useMemo(() => summarizeQuantVisuals(queue, mapRows, rollups), [mapRows, queue, rollups])
 
   const totalSeverity = Math.max(1, severity.critical + severity.high + severity.elevated + severity.stable)
   const sevSeries = [
@@ -84,7 +112,7 @@ export default function QuantVisuals({ queue, mapRows }: { queue: any[]; mapRows
           {histogram.map((v, i) => (
             <div key={i} className="hist-col">
               <div className="hist-bar" style={{ height: `${Math.max(6, v * 18)}px` }} />
-              <span>{['0-20','20-40','40-60','60-80','80-100'][i]}</span>
+              <span>{['0-20%','20-40%','40-60%','60-80%','80-100%'][i]}</span>
               <strong>{v}</strong>
             </div>
           ))}

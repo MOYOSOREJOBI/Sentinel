@@ -1,0 +1,322 @@
+//line /Users/mac/Desktop/Sentinel/cmd/features/main.go:1:1
+package main; import _ "runtime/coverage"
+
+import (
+	"context"
+	"encoding/json"
+	"log"
+	"math"
+	"net/http"
+	"os"
+	"os/signal"
+	"sync"
+	"syscall"
+	"time"
+
+	"sentinel/internal/config"
+	"sentinel/internal/contracts"
+	"sentinel/internal/db"
+	"sentinel/internal/healthcheck"
+	"sentinel/internal/kafka"
+	"sentinel/internal/logging"
+	"sentinel/internal/marketmath"
+	"sentinel/internal/metrics"
+
+	"github.com/twmb/franz-go/pkg/kgo"
+)
+
+const eps = 1e-9
+
+type symbolState struct {
+	LastPrice float64
+	LastEvent time.Time
+
+	Ret60     *marketmath.Ring
+	Ret300    *marketmath.Ring
+	Vol60     *marketmath.Ring
+	Log300    *marketmath.Ring
+	PriceHist *marketmath.Ring
+
+	EWMA60  *marketmath.EWMA
+	EWMA300 *marketmath.EWMA
+
+	TotalEvents     float64
+	LateEvents      float64
+	OutOfOrder      float64
+	DuplicateEvents float64
+	MissingEvents   float64
+
+	RecentAnomaly *marketmath.Ring
+}
+
+func newSymbolState() *symbolState {goCover_3043ebaafa84__0[0] = 1 ; goCover_3043ebaafa84__0[1] = goCover_3043ebaafa84_P ; goCover_3043ebaafa84__0[2] = 0 ; goCover_3043ebaafa84__0[3] = 1;
+	return &symbolState{
+		Ret60:         marketmath.NewRing(60),
+		Ret300:        marketmath.NewRing(300),
+		Vol60:         marketmath.NewRing(60),
+		Log300:        marketmath.NewRing(300),
+		EWMA60:        marketmath.NewEWMA(0.94),
+		EWMA300:       marketmath.NewEWMA(0.97),
+		RecentAnomaly: marketmath.NewRing(300),
+		PriceHist:     marketmath.NewRing(301),
+	}
+}
+
+func main() {goCover_3043ebaafa84__1[0] = 46 ; goCover_3043ebaafa84__1[1] = goCover_3043ebaafa84_P ; goCover_3043ebaafa84__1[2] = 1 ; goCover_3043ebaafa84__1[3] = 1;
+	if len(os.Args) > 1 && os.Args[1] == "healthcheck" {goCover_3043ebaafa84__1[14] = 1;
+		port := healthcheck.MustPort("PORT", 8082)
+		os.Exit(healthcheck.Run(port, "/readyz"))
+	}
+
+	goCover_3043ebaafa84__1[4] = 1;ctx, cancel := context.WithCancel(context.Background())
+	defer cancel()
+
+	logger := logging.New("features")
+	cfg := config.Load("features")
+	if err := config.Validate(cfg); err != nil {goCover_3043ebaafa84__1[15] = 1;
+		log.Fatalf("features: invalid config: %v", err)
+	}
+
+	goCover_3043ebaafa84__1[5] = 1;pool, err := db.Connect(ctx, cfg.PostgresURL)
+	if err != nil {goCover_3043ebaafa84__1[16] = 1;
+		log.Fatalf("features: failed to connect to database: %v", err)
+	}
+	goCover_3043ebaafa84__1[6] = 1;defer pool.Close()
+
+	c, err := kafka.New(cfg.KafkaBrokers, "features", "derived.candles")
+	if err != nil {goCover_3043ebaafa84__1[17] = 1;
+		log.Fatalf("features: failed to create kafka consumer: %v", err)
+	}
+	goCover_3043ebaafa84__1[7] = 1;defer c.Close()
+
+	p, err := kafka.New(cfg.KafkaBrokers, "")
+	if err != nil {goCover_3043ebaafa84__1[18] = 1;
+		log.Fatalf("features: failed to create kafka producer: %v", err)
+	}
+	goCover_3043ebaafa84__1[8] = 1;defer p.Close()
+
+	states := map[string]*symbolState{}
+	var mu sync.Mutex
+
+	mux := http.NewServeMux()
+	mux.HandleFunc("/healthz", func(w http.ResponseWriter, r *http.Request) {goCover_3043ebaafa84__1[19] = 1; _, _ = w.Write([]byte("ok")) })
+	goCover_3043ebaafa84__1[9] = 1;mux.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {goCover_3043ebaafa84__1[20] = 1;
+		w.Header().Set("Content-Type", "application/json")
+		_, _ = w.Write([]byte(`{"service":"features","version":"dev","links":["/healthz","/readyz","/metrics","/docs"]}`))
+	})
+	goCover_3043ebaafa84__1[10] = 1;mux.HandleFunc("/readyz", func(w http.ResponseWriter, r *http.Request) {goCover_3043ebaafa84__1[21] = 1;
+		probeCtx, probeCancel := context.WithTimeout(r.Context(), 2*time.Second)
+		defer probeCancel()
+		if err := pool.Ping(probeCtx); err != nil {goCover_3043ebaafa84__1[25] = 1;
+			http.Error(w, "database not ready", http.StatusServiceUnavailable)
+			return
+		}
+		goCover_3043ebaafa84__1[22] = 1;if err := c.Ping(probeCtx); err != nil {goCover_3043ebaafa84__1[26] = 1;
+			http.Error(w, "kafka consumer not ready", http.StatusServiceUnavailable)
+			return
+		}
+		goCover_3043ebaafa84__1[23] = 1;if err := p.Ping(probeCtx); err != nil {goCover_3043ebaafa84__1[27] = 1;
+			http.Error(w, "kafka producer not ready", http.StatusServiceUnavailable)
+			return
+		}
+		goCover_3043ebaafa84__1[24] = 1;_, _ = w.Write([]byte("ok"))
+	})
+	goCover_3043ebaafa84__1[11] = 1;mux.HandleFunc("/metrics", metrics.Handler)
+	srv := &http.Server{Addr: cfg.HTTPAddr, Handler: metrics.Wrap("features", mux), ReadTimeout: 10 * time.Second, WriteTimeout: 10 * time.Second}
+	go func() {goCover_3043ebaafa84__1[28] = 1;
+		logger.Info("starting health server", map[string]any{"addr": cfg.HTTPAddr})
+		if err := srv.ListenAndServe(); err != nil && err != http.ErrServerClosed {goCover_3043ebaafa84__1[29] = 1;
+			log.Fatalf("features: health server error: %v", err)
+		}
+	}()
+
+	goCover_3043ebaafa84__1[12] = 1;go func() {goCover_3043ebaafa84__1[30] = 1;
+		for {goCover_3043ebaafa84__1[31] = 1;
+			f := c.PollFetches(ctx)
+			if ctx.Err() != nil {goCover_3043ebaafa84__1[33] = 1;
+				return
+			}
+			goCover_3043ebaafa84__1[32] = 1;f.EachRecord(func(rec *kgo.Record) {goCover_3043ebaafa84__1[34] = 1;
+				metrics.IncKafkaConsumed("features", rec.Topic)
+				var m map[string]any
+				if err := json.Unmarshal(rec.Value, &m); err != nil {goCover_3043ebaafa84__1[41] = 1;
+					return
+				}
+				goCover_3043ebaafa84__1[35] = 1;symbol, _ := m["symbol"].(string)
+				price, _ := m["price"].(float64)
+				vol, _ := m["volume"].(float64)
+				if symbol == "" || price <= 0 {goCover_3043ebaafa84__1[42] = 1;
+					return
+				}
+				goCover_3043ebaafa84__1[36] = 1;eventAt := time.Now().UTC()
+				if raw, ok := m["event_time"].(string); ok {goCover_3043ebaafa84__1[43] = 1;
+					if ts, err := time.Parse(time.RFC3339Nano, raw); err == nil {goCover_3043ebaafa84__1[44] = 1;
+						eventAt = ts
+					}
+				}
+
+				goCover_3043ebaafa84__1[37] = 1;mu.Lock()
+				st := states[symbol]
+				if st == nil {goCover_3043ebaafa84__1[45] = 1;
+					st = newSymbolState()
+					states[symbol] = st
+				}
+				goCover_3043ebaafa84__1[38] = 1;payload, dq := computeFeatures(st, price, vol, eventAt)
+				mu.Unlock()
+
+				ordered := []string{"ret_1s", "ret_1m", "ret_5m", "log_ret_1s", "log_ret_1m", "log_ret_5m", "mean_ret_60", "std_ret_60", "z_ret_60", "mean_ret_300", "std_ret_300", "z_ret_300", "ewma_var_60", "ewma_var_300", "ewma_vol_60", "ewma_vol_300", "realized_var_300", "realized_vol_300", "mean_vol_60", "std_vol_60", "volume_ratio_60", "volume_surprise_60", "anomaly_density_300", "tick_gap_s", "staleness_score", "missingness_ratio", "out_of_order_ratio", "duplicate_ratio", "late_ratio", "dq_penalty"}
+				hash, err := marketmath.StableFeatureHash(payload, ordered)
+				if err != nil {goCover_3043ebaafa84__1[46] = 1;
+					return
+				}
+				goCover_3043ebaafa84__1[39] = 1;msg := contracts.FeatureVector{Symbol: symbol, EventTime: eventAt, FeatureSetVersion: "v2", AllowedLatenessMS: 5000, WatermarkPolicyID: "wm_v1", FeatureSnapshotHash: hash, Payload: payload}
+				pb, _ := json.Marshal(msg)
+				id := symbol + hash[:16]
+				start := time.Now()
+				_, _ = pool.Exec(ctx, `INSERT INTO features(idempotency_key,symbol,ts,feature_hash,payload) VALUES($1,$2,$3,$4,$5) ON CONFLICT DO NOTHING`, id, symbol, eventAt, hash, pb)
+				metrics.ObserveDBQuery("features", "insert features", time.Since(start))
+				if err := kafka.ProduceJSON(ctx, p, "derived.features", symbol, map[string]any{"symbol": symbol, "payload": payload, "feature_hash": hash, "event_time": eventAt, "feature_set_version": "v2"}); err == nil {goCover_3043ebaafa84__1[47] = 1;
+					metrics.IncKafkaProduced("features", "derived.features")
+				}
+				goCover_3043ebaafa84__1[40] = 1;if err := kafka.ProduceJSON(ctx, p, "dq.metrics", symbol, map[string]any{"symbol": symbol, "dq_penalty": dq, "event_time": eventAt}); err == nil {goCover_3043ebaafa84__1[48] = 1;
+					metrics.IncKafkaProduced("features", "dq.metrics")
+				}
+			})
+		}
+	}()
+
+	goCover_3043ebaafa84__1[13] = 1;quit := make(chan os.Signal, 1)
+	signal.Notify(quit, syscall.SIGINT, syscall.SIGTERM)
+	<-quit
+	cancel()
+	shutdownCtx, shutdownCancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer shutdownCancel()
+	_ = srv.Shutdown(shutdownCtx)
+}
+
+func computeFeatures(st *symbolState, price, vol float64, eventAt time.Time) (map[string]float64, float64) {goCover_3043ebaafa84__2[0] = 16 ; goCover_3043ebaafa84__2[1] = goCover_3043ebaafa84_P ; goCover_3043ebaafa84__2[2] = 2 ; goCover_3043ebaafa84__2[3] = 1;
+	st.TotalEvents++
+	if !st.LastEvent.IsZero() {goCover_3043ebaafa84__2[8] = 1;
+		if !eventAt.After(st.LastEvent) {goCover_3043ebaafa84__2[12] = 1;
+			st.OutOfOrder++
+		}
+		goCover_3043ebaafa84__2[9] = 1;if eventAt.Equal(st.LastEvent) {goCover_3043ebaafa84__2[13] = 1;
+			st.DuplicateEvents++
+		}
+		goCover_3043ebaafa84__2[10] = 1;if eventAt.Sub(st.LastEvent) > 2*time.Second {goCover_3043ebaafa84__2[14] = 1;
+			st.MissingEvents++
+		}
+		goCover_3043ebaafa84__2[11] = 1;if eventAt.Before(st.LastEvent.Add(-5 * time.Second)) {goCover_3043ebaafa84__2[15] = 1;
+			st.LateEvents++
+		}
+	}
+
+	goCover_3043ebaafa84__2[4] = 1;ret := horizonReturn(st.PriceHist, price, 1)
+	ret1m := horizonReturn(st.PriceHist, price, 60)
+	ret5m := horizonReturn(st.PriceHist, price, 300)
+	logRet := horizonLogReturn(st.PriceHist, price, 1)
+	logRet1m := horizonLogReturn(st.PriceHist, price, 60)
+	logRet5m := horizonLogReturn(st.PriceHist, price, 300)
+	tickGap := 0.0
+	if !st.LastEvent.IsZero() {goCover_3043ebaafa84__2[16] = 1;
+		tickGap = math.Max(0, eventAt.Sub(st.LastEvent).Seconds())
+	}
+	goCover_3043ebaafa84__2[5] = 1;staleness := marketmath.Clip(tickGap/30.0, 0, 1)
+
+	st.Ret60.Push(ret)
+	st.Ret300.Push(ret)
+	st.Vol60.Push(vol)
+	st.Log300.Push(logRet)
+	st.EWMA60.Update(ret)
+	st.EWMA300.Update(ret)
+
+	meanRet60 := st.Ret60.Mean()
+	stdRet60 := st.Ret60.Std()
+	meanRet300 := st.Ret300.Mean()
+	stdRet300 := st.Ret300.Std()
+	meanVol60 := st.Vol60.Mean()
+	stdVol60 := st.Vol60.Std()
+	z60 := marketmath.ZScore(ret, meanRet60, stdRet60)
+	z300 := marketmath.ZScore(ret, meanRet300, stdRet300)
+	volSurprise := marketmath.VolumeSurprise(vol, meanVol60, stdVol60)
+	anomaly := 0.0
+	if math.Abs(z60) > 2 || math.Abs(volSurprise) > 2 {goCover_3043ebaafa84__2[17] = 1;
+		anomaly = 1
+	}
+	goCover_3043ebaafa84__2[6] = 1;st.RecentAnomaly.Push(anomaly)
+
+	lateRatio := ratio(st.LateEvents, st.TotalEvents)
+	ooRatio := ratio(st.OutOfOrder, st.TotalEvents)
+	dupRatio := ratio(st.DuplicateEvents, st.TotalEvents)
+	missRatio := ratio(st.MissingEvents, st.TotalEvents)
+	dq := marketmath.DQPenalty(staleness, lateRatio, ooRatio, dupRatio, missRatio)
+
+	st.LastPrice = price
+	st.PriceHist.Push(price)
+	if eventAt.After(st.LastEvent) {goCover_3043ebaafa84__2[18] = 1;
+		st.LastEvent = eventAt
+	}
+
+	goCover_3043ebaafa84__2[7] = 1;payload := map[string]float64{
+		"ret_1s":              ret,
+		"ret_1m":              ret1m,
+		"ret_5m":              ret5m,
+		"log_ret_1s":          logRet,
+		"log_ret_1m":          logRet1m,
+		"log_ret_5m":          logRet5m,
+		"mean_ret_60":         meanRet60,
+		"std_ret_60":          stdRet60,
+		"z_ret_60":            z60,
+		"mean_ret_300":        meanRet300,
+		"std_ret_300":         stdRet300,
+		"z_ret_300":           z300,
+		"ewma_var_60":         st.EWMA60.Var,
+		"ewma_var_300":        st.EWMA300.Var,
+		"ewma_vol_60":         math.Sqrt(math.Max(st.EWMA60.Var, 1e-12)),
+		"ewma_vol_300":        math.Sqrt(math.Max(st.EWMA300.Var, 1e-12)),
+		"realized_var_300":    st.Log300.SumSq(),
+		"realized_vol_300":    math.Sqrt(math.Max(st.Log300.SumSq(), 0)),
+		"mean_vol_60":         meanVol60,
+		"std_vol_60":          stdVol60,
+		"volume_ratio_60":     vol / math.Max(meanVol60, 1e-9),
+		"volume_surprise_60":  volSurprise,
+		"anomaly_density_300": st.RecentAnomaly.Mean(),
+		"tick_gap_s":          tickGap,
+		"staleness_score":     staleness,
+		"missingness_ratio":   missRatio,
+		"out_of_order_ratio":  ooRatio,
+		"duplicate_ratio":     dupRatio,
+		"late_ratio":          lateRatio,
+		"dq_penalty":          dq,
+	}
+	return payload, dq
+}
+
+func ratio(a, b float64) float64 {goCover_3043ebaafa84__3[0] = 3 ; goCover_3043ebaafa84__3[1] = goCover_3043ebaafa84_P ; goCover_3043ebaafa84__3[2] = 3 ; goCover_3043ebaafa84__3[3] = 1;
+	if b <= 0 {goCover_3043ebaafa84__3[5] = 1;
+		return 0
+	}
+	goCover_3043ebaafa84__3[4] = 1;return a / b
+}
+
+func horizonReturn(hist *marketmath.Ring, current float64, lag int) float64 {goCover_3043ebaafa84__4[0] = 5 ; goCover_3043ebaafa84__4[1] = goCover_3043ebaafa84_P ; goCover_3043ebaafa84__4[2] = 4 ; goCover_3043ebaafa84__4[3] = 1;
+	if hist == nil || lag < 1 {goCover_3043ebaafa84__4[6] = 1;
+		return 0
+	}
+	goCover_3043ebaafa84__4[4] = 1;base, ok := hist.AtLag(lag - 1)
+	if !ok || base <= 0 {goCover_3043ebaafa84__4[7] = 1;
+		return 0
+	}
+	goCover_3043ebaafa84__4[5] = 1;return (current / base) - 1
+}
+
+func horizonLogReturn(hist *marketmath.Ring, current float64, lag int) float64 {goCover_3043ebaafa84__5[0] = 5 ; goCover_3043ebaafa84__5[1] = goCover_3043ebaafa84_P ; goCover_3043ebaafa84__5[2] = 5 ; goCover_3043ebaafa84__5[3] = 1;
+	if hist == nil || lag < 1 {goCover_3043ebaafa84__5[6] = 1;
+		return 0
+	}
+	goCover_3043ebaafa84__5[4] = 1;base, ok := hist.AtLag(lag - 1)
+	if !ok || base <= 0 {goCover_3043ebaafa84__5[7] = 1;
+		return 0
+	}
+	goCover_3043ebaafa84__5[5] = 1;return math.Log(math.Max(current, eps) / math.Max(base, eps))
+}

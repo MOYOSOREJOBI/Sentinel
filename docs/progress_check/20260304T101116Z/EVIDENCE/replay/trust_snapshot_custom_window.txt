@@ -1,0 +1,7 @@
+HTTP/1.1 200 OK
+Content-Type: application/json
+X-Request-Id: 76fde41431c577bc
+Date: Wed, 04 Mar 2026 19:22:23 GMT
+Content-Length: 894
+
+{"cacheHealth":"warming","calibration":{"anomaly_stability":0.837725,"auc":0.675797,"brier":0.011114,"history":[{"anomaly_stability":0.837725,"auc":0.675797,"brier":0.011114,"pr_auc":0.017884,"trained_at":"2026-03-01T03:01:18Z"}],"pr_auc":0.017884},"circuitBreakerCount":0,"dqBreakdown":{"duplicates":{"threshold":0.01,"value":0},"lateEvents":{"threshold":0.005,"value":0},"missingness":{"threshold":0.02,"value":0}},"dqTotals":{"warnings":0},"modelDegradedCount":0,"modelState":{"active_artifact_hash":"inline","active_deployed_at":"2026-03-04T10:12:37.671738-07:00","active_model_version":"baseline-v2","calibration_version":"platt_v1","fallback_mode":false,"last_trained_at":"2026-03-01T03:01:18Z","latest_produced_at":null,"latest_scoring_run_id":"","model_artifact_hash":"inline","model_version":"baseline-v2"},"suppressedAlertCount":0,"trustSummary":{"fallbackRatio":0,"state":"stable"}}

@@ -1,0 +1,2 @@
+$ curl -i -sS --max-time 5 http://localhost:8082/healthz
+curl: (7) Failed to connect to localhost port 8082 after 0 ms: Could not connect to server

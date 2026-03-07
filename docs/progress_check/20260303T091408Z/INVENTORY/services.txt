@@ -1,0 +1,71 @@
+# Services, entrypoints, and ports
+
+$ rg -n '^  [a-z0-9-]+:|ports: \[|build: |image: |command: |entrypoint:' deploy/docker/docker-compose.yml
+2:  redpanda:
+3:    image: redpandadata/redpanda:v24.1.10
+4:    command: ["redpanda","start","--overprovisioned","--smp","1","--memory","1G","--reserve-memory","0M","--node-id","0","--check=false","--kafka-addr","PLAINTEXT://0.0.0.0:9092","--advertise-kafka-addr","PLAINTEXT://redpanda:9092"]
+5:    ports: ["9092:9092"]
+12:  postgres:
+13:    image: timescale/timescaledb:2.15.1-pg16
+15:    ports: ["5432:5432"]
+22:  redis:
+23:    image: redis:7
+24:    ports: ["6379:6379"]
+31:  memcached:
+32:    image: memcached:1.6
+34:    ports: ["11211:11211"]
+36:  migrate:
+37:    image: timescale/timescaledb:2.15.1-pg16
+42:    entrypoint:
+68:  topics-init:
+69:    image: redpandadata/redpanda:v24.1.10
+73:    entrypoint:
+84:  gateway-api:
+85:    build: {context: ../.., dockerfile: deploy/docker/Dockerfile-go, args: {SERVICE: gateway-api}}
+87:    ports: ["8080:8080"]
+101:  simulator:
+102:    build: {context: ../.., dockerfile: deploy/docker/Dockerfile-go, args: {SERVICE: simulator}}
+114:  aggregator:
+115:    build: {context: ../.., dockerfile: deploy/docker/Dockerfile-go, args: {SERVICE: aggregator}}
+117:    ports: ["8081:8081"]
+131:  features:
+132:    build: {context: ../.., dockerfile: deploy/docker/Dockerfile-go, args: {SERVICE: features}}
+134:    ports: ["8082:8082"]
+148:  inference:
+149:    build: {context: ../.., dockerfile: deploy/docker/Dockerfile.inference}
+151:    ports: ["8090:8090"]
+160:  alerts:
+161:    build: {context: ../.., dockerfile: deploy/docker/Dockerfile-go, args: {SERVICE: alerts}}
+163:    ports: ["8083:8083"]
+177:  governance:
+178:    build: {context: ../.., dockerfile: deploy/docker/Dockerfile-go, args: {SERVICE: governance}}
+180:    ports: ["8084:8084"]
+191:  query:
+192:    build: {context: ../.., dockerfile: deploy/docker/Dockerfile-go, args: {SERVICE: query}}
+194:    ports: ["8085:8085"]
+205:  web:
+206:    image: node:20-alpine
+223:    command: sh -c "npm install --prefer-offline && npm run dev"
+224:    ports: ["3000:3000"]
+235:  playwright:
+236:    image: mcr.microsoft.com/playwright:v1.53.0-noble
+249:    entrypoint: ["bash","-lc"]
+250:    command: ["npm ci && npx playwright test"]
+252:  prometheus:
+253:    image: prom/prometheus:v2.54.1
+257:    ports: ["9090:9090"]
+259:  grafana:
+260:    image: grafana/grafana:11.1.4
+270:    ports: ["3001:3000"]
+
+$ find cmd -maxdepth 2 -name main.go | sort
+cmd/aggregator/main.go
+cmd/alerts/main.go
+cmd/features/main.go
+cmd/gateway-api/main.go
+cmd/governance/main.go
+cmd/query/main.go
+cmd/simulator/main.go
+
+$ find services -maxdepth 2 -type f \( -name app.py -o -name main.py -o -name '*.sh' \) | sort
+services/inference/app.py

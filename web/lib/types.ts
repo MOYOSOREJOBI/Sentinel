@@ -4,9 +4,11 @@ export interface IncidentRow {
   id: string;
   symbols: string[];
   venue: string;
+  countryIso2: string;
   countryCode: string;
   countryName: string;
   region: string;
+  sector: string;
   industry: string;
   severityBand: string;
   safetyLevel: SafetyLevel;
@@ -23,6 +25,7 @@ export interface IncidentRow {
 }
 
 export type CountryAgg = {
+  countryIso2: string;
   countryCode: string;
   countryName: string;
   incidentCount: number;

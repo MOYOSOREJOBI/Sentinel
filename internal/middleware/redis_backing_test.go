@@ -33,12 +33,22 @@ func TestCSRF_RedisBackedExpiry(t *testing.T) {
 	csrfRedis = rediskv.NewFromEnv()
 	csrfStore = sync.Map{}
 
-	BindCSRF("alice", "token-1", 100*time.Millisecond)
-	if !ValidCSRF("alice", "token-1") {
+	if err := BindCSRF("alice", "token-1", 100*time.Millisecond); err != nil {
+		t.Fatalf("bind csrf: %v", err)
+	}
+	valid, err := ValidCSRF("alice", "token-1")
+	if err != nil {
+		t.Fatalf("validate csrf: %v", err)
+	}
+	if !valid {
 		t.Fatalf("expected csrf token to validate before expiry")
 	}
 	time.Sleep(160 * time.Millisecond)
-	if ValidCSRF("alice", "token-1") {
+	valid, err = ValidCSRF("alice", "token-1")
+	if err != nil {
+		t.Fatalf("validate expired csrf: %v", err)
+	}
+	if valid {
 		t.Fatalf("expected csrf token to expire in redis")
 	}
 }
@@ -79,5 +89,34 @@ func TestRateLimit_RedisBackedBlocking(t *testing.T) {
 	h.ServeHTTP(rr, httptest.NewRequest(http.MethodGet, "/", nil))
 	if rr.Code != http.StatusTooManyRequests {
 		t.Fatalf("expected redis-backed limiter to return 429, got %d", rr.Code)
+	}
+}
+
+func TestRateLimit_FailsClosedWithoutRedisWhenUnsafeDisabled(t *testing.T) {
+	oldAddr := os.Getenv("REDIS_ADDR")
+	oldEnabled := os.Getenv("REDIS_ENABLED")
+	oldUnsafe := os.Getenv("DEV_UNSAFE")
+	t.Cleanup(func() {
+		_ = os.Setenv("REDIS_ADDR", oldAddr)
+		_ = os.Setenv("REDIS_ENABLED", oldEnabled)
+		_ = os.Setenv("DEV_UNSAFE", oldUnsafe)
+		rlRedis = rediskv.NewFromEnv()
+		rl = sync.Map{}
+	})
+
+	_ = os.Setenv("REDIS_ADDR", "127.0.0.1:1")
+	_ = os.Setenv("REDIS_ENABLED", "true")
+	_ = os.Setenv("DEV_UNSAFE", "false")
+	rlRedis = rediskv.NewFromEnv()
+	rl = sync.Map{}
+
+	h := RateLimit(func(r *http.Request) string { return "blocked" }, 2, time.Minute)(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.WriteHeader(http.StatusOK)
+	}))
+
+	rr := httptest.NewRecorder()
+	h.ServeHTTP(rr, httptest.NewRequest(http.MethodPost, "/", nil))
+	if rr.Code != http.StatusServiceUnavailable {
+		t.Fatalf("expected missing redis to fail closed with 503, got %d", rr.Code)
 	}
 }

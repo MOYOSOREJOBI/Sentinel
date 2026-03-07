@@ -1,0 +1,52 @@
+
+> sentinel-web@0.1.0 test
+> rm -rf .tmp-tests && tsc -p tests/tsconfig.json && node --test .tmp-tests/tests/*.test.js .tmp-tests/tests/**/*.test.js
+
+✔ command center renders analytics containers (5.739305ms)
+✔ queue renders recommended actions and priority (0.88036ms)
+✔ incident page renders model and explanation sections and case promotion (0.980201ms)
+✔ case workspace and detail show role-gated workflow (1.133285ms)
+✔ trust page renders trend containers (2.904662ms)
+✔ replay page labels metadata-first mode and deterministic timeline (1.441204ms)
+✔ governance executive about and glossary pages are productized (1.811077ms)
+✔ filter bar allowlist excludes about and glossary (1.146432ms)
+✔ TrustStrip renders fallback honesty (30.063421ms)
+✔ WorldRiskMap renders legend and empty state scaffolding (17.741899ms)
+✔ pickOverlaySymbol prefers the symbol shared by candles and scores (71.918469ms)
+✔ filterSeriesBySymbol keeps only the focused instrument when one is selected (26.930502ms)
+✔ pickOverlaySymbol falls back when the preferred symbol has no series data (0.538092ms)
+✔ pickOverlaySymbol falls back when the preferred symbol has no candle coverage (0.488459ms)
+✔ sortSeriesByTs orders chart points from oldest to newest (6.793376ms)
+✔ role-gated tabs are enforced by role mapping (30.153387ms)
+✔ score summary counts high and critical severities (14.35474ms)
+✔ degraded state component exists (6.606679ms)
+✔ governance page has no JSON dump pre block (6.797007ms)
+✔ layout renders html shell and child content (81.375781ms)
+✔ filterAlerts applies severity status and symbol filters (11.90268ms)
+✔ groupAlerts groups by status and symbol (4.620582ms)
+✔ normalizeAlertCreatedAt prefers created_at and falls back to ts (50.365151ms)
+✔ route locale helpers translate zh alias and strip prefixes (30.602505ms)
+✔ withLocalePath prefixes logical routes (0.666793ms)
+✔ locale labels stay deterministic across server and client environments (0.501814ms)
+✔ i18n dictionary provides translated navigation labels (29.91364ms)
+✔ every locale contains every English key (16.301245ms)
+✔ percentile returns bounded value (42.517216ms)
+✔ deriveQuantMetrics computes meaningful positive values (2.960277ms)
+✔ role-gated tabs are enforced by role mapping (27.665457ms)
+✔ capabilities are strictly separated by role (0.925898ms)
+✔ normalizeRiskValue supports normalized and percentage-like inputs (33.500535ms)
+✔ bucketIndex uses 0..1 risk buckets (0.917144ms)
+✔ summarizeQuantVisuals prefers backend rollups and filters placeholder countries (19.835228ms)
+✔ upsert replaces matching row only (13.374299ms)
+✔ governance page retains admin-gated controls (9.470481ms)
+✔ world atlas ships committed country geometry (8.784599ms)
+✔ world map normalizes real iso2 rows and drops placeholder XX (6.694966ms)
+✔ country filters persist when navigating to queue and feed routes (1.251992ms)
+ℹ tests 40
+ℹ suites 0
+ℹ pass 40
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 2272.108972

@@ -35,7 +35,7 @@ for line in os.environ.get("COOKIE_BLOB", "").splitlines():
 PY
 )"
   [ -n "$token" ] && [ -n "$csrf" ] || {
-    POSTGRES_URL=postgres://sentinel:sentinel@localhost:5432/sentinel?sslmode=disable go run "$ROOT/scripts/seed-users.go" >/dev/null
+    POSTGRES_URL=postgres://sentinel:sentinel@localhost:5432/sentinel?sslmode=disable go run -tags seedusers "$ROOT/scripts/seed-users.go" >/dev/null
     login_cookie
     return
   }

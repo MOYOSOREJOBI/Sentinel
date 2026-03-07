@@ -167,3 +167,28 @@ func TestSeedStatusHandlerReturnsCountsFields(t *testing.T) {
 		}
 	}
 }
+
+func TestSSEStreamFlushesInitialHeartbeat(t *testing.T) {
+	req := httptest.NewRequest(http.MethodGet, "/stream/command-center", nil)
+	ctx, cancel := context.WithCancel(req.Context())
+	defer cancel()
+	req = req.WithContext(ctx)
+	rr := httptest.NewRecorder()
+
+	done := make(chan struct{})
+	go func() {
+		sseStream(func(context.Context) any { return map[string]any{"ok": true} }, "command_center_patch").ServeHTTP(rr, req)
+		close(done)
+	}()
+
+	time.Sleep(20 * time.Millisecond)
+	cancel()
+	<-done
+
+	if !strings.Contains(rr.Body.String(), ": connected") {
+		t.Fatalf("expected initial heartbeat, got %q", rr.Body.String())
+	}
+	if !rr.Flushed {
+		t.Fatalf("expected response recorder to flush initial heartbeat")
+	}
+}

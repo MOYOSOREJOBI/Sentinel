@@ -1,0 +1,7 @@
+HTTP/1.1 200 OK
+Content-Type: application/json
+X-Request-Id: 4d2cc6d9437f09dc
+Date: Wed, 04 Mar 2026 17:12:19 GMT
+Content-Length: 1048
+
+{"allowedLatenessMs":5000,"commonMismatchCauses":["missing recomputed:3325","missing as scored:945"],"determinismExplain":"Replay fingerprint matched prior replay 21002bc2-0e83-4e26-8147-e78a74c166a9 for the same window and inputs.","determinismStatus":"MATCH","featureSetVersion":"v2","matchedCount":0,"maxScoreDelta":0,"mismatchedCount":0,"modelVersion":"baseline-v1","parityExplanation":"Replay diverged: 0 mismatched, 945 missing from stored scoring, 3325 missing from replay.","parityStatus":"MISMATCH","pinnedEvidence":[{"path":"/replay/4647e7ec-2a60-4448-93dd-879047a22cba","type":"replay_detail"},{"path":"/replay/4647e7ec-2a60-4448-93dd-879047a22cba/summary","type":"replay_summary"}],"replayId":"4647e7ec-2a60-4448-93dd-879047a22cba","timestamps":{"completedAt":"2026-03-04T10:12:09.960724-07:00","exportedAt":"2026-03-04T17:12:19Z","requestedAt":"2026-03-04T10:11:47.875971-07:00","startedAt":"2026-03-04T10:11:47.886248-07:00"},"watermarkPolicy":"wm_v1","window":{"end":"2026-03-03T08:45:48-07:00","start":"2026-03-03T08:45:47-07:00"}}

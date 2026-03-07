@@ -1,0 +1,5 @@
+./scripts/doctor.sh
+WARN docker daemon not reachable
+WARN jwt private key missing; run make dev-keys
+WARN jwt public key missing; run make dev-keys
+doctor completed with warnings

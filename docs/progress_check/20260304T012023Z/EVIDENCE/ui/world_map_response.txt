@@ -1,0 +1,10 @@
+HTTP/1.1 200 OK
+vary: RSC, Next-Router-State-Tree, Next-Router-Prefetch
+content-length: 940
+content-type: application/json
+date: Wed, 04 Mar 2026 01:29:06 GMT
+x-request-id: 71c71f576701ec93
+Connection: keep-alive
+Keep-Alive: timeout=5
+
+{"countries":[{"countryCode":"SG","countryName":"Singapore","incidentCount":1,"avgCompositeRisk":0.4871166142394985,"maxSafetyLevel":"elevated","trustState":"stable","topIndustry":"Telecom Services"},{"countryCode":"AU","countryName":"Australia","incidentCount":1,"avgCompositeRisk":0.5049035217589962,"maxSafetyLevel":"elevated","trustState":"stable","topIndustry":"REITs"},{"countryCode":"DE","countryName":"Germany","incidentCount":1,"avgCompositeRisk":0.47771720488247743,"maxSafetyLevel":"elevated","trustState":"stable","topIndustry":"Capital Goods"},{"countryCode":"JP","countryName":"Japan","incidentCount":1,"avgCompositeRisk":0.5080163901210949,"maxSafetyLevel":"elevated","trustState":"stable","topIndustry":"Retail"},{"countryCode":"GB","countryName":"United Kingdom","incidentCount":1,"avgCompositeRisk":0.4945025046304407,"maxSafetyLevel":"elevated","trustState":"stable","topIndustry":"Power Utilities"}],"timeWindow":"24h"}

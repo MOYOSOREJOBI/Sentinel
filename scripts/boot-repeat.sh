@@ -39,7 +39,7 @@ for i in $(seq 1 "$RUNS"); do
   $COMPOSE up -d --build >/dev/null
   wait_for http://localhost:8080/healthz
   wait_for http://localhost:8085/readyz
-  POSTGRES_URL=postgres://sentinel:sentinel@localhost:5432/sentinel?sslmode=disable go run "$ROOT/scripts/seed-users.go" >/dev/null
+  POSTGRES_URL=postgres://sentinel:sentinel@localhost:5432/sentinel?sslmode=disable go run -tags seedusers "$ROOT/scripts/seed-users.go" >/dev/null
   login="$(curl --max-time 5 -i -sS -X POST http://localhost:8080/auth/login -H 'Content-Type: application/json' --data '{"Email":"admin@sentinel.local","Password":"Sentinel#123"}')"
   cookie="$(cookie_line "$login")"
   deadline=$((SECONDS+90))

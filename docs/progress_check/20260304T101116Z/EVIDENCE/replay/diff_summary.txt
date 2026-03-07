@@ -1,0 +1,7 @@
+HTTP/1.1 200 OK
+Content-Type: application/json
+X-Request-Id: 9485984df1f1076a
+Date: Wed, 04 Mar 2026 17:05:48 GMT
+Content-Length: 944
+
+{"id":"82f12a8b-73d7-474c-8170-442ec3fca68e","status":"completed","summary":{"as_scored":{"avg_score":0,"count":0,"high_or_higher":0},"as_scored_fingerprint":"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855","avg_score_delta":0,"common_mismatch_causes":[],"determinism_explanation":"No prior replay with the same window and model inputs was found; this fingerprint is the baseline for future comparisons.","determinism_status":"FIRST_RUN","high_count_delta":0,"matched_count":0,"max_score_delta":0,"mismatch_samples":[],"mismatched_count":0,"missing_as_scored_count":0,"missing_recomputed_count":0,"parity_explanation":"No score points were present in the selected window.","parity_status":"MATCH","recomputed":{"avg_score":0,"count":0,"high_or_higher":0},"recomputed_fingerprint":"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855","result":{"candle_count":0,"feature_count":0,"score_count":0,"tick_count":0}}}

@@ -1,0 +1,45 @@
+?   	sentinel/cmd/aggregator	[no test files]
+# sentinel/cmd/alerts.test
+ld: warning: '/private/var/folders/vk/y7jdn8793b33fkr3q9_b33xc0000gn/T/go-link-2421983627/000013.o' has malformed LC_DYSYMTAB, expected 98 undefined symbols to start at index 884, found 95 undefined symbols starting at index 884
+ok  	sentinel/cmd/alerts	(cached)
+# sentinel/cmd/features.test
+ld: warning: '/private/var/folders/vk/y7jdn8793b33fkr3q9_b33xc0000gn/T/go-link-3242016586/000013.o' has malformed LC_DYSYMTAB, expected 98 undefined symbols to start at index 884, found 95 undefined symbols starting at index 884
+ok  	sentinel/cmd/features	(cached)
+# sentinel/cmd/gateway-api.test
+ld: warning: '/private/var/folders/vk/y7jdn8793b33fkr3q9_b33xc0000gn/T/go-link-323138129/000013.o' has malformed LC_DYSYMTAB, expected 98 undefined symbols to start at index 884, found 95 undefined symbols starting at index 884
+ok  	sentinel/cmd/gateway-api	(cached)
+# sentinel/cmd/governance.test
+ld: warning: '/private/var/folders/vk/y7jdn8793b33fkr3q9_b33xc0000gn/T/go-link-1704563306/000013.o' has malformed LC_DYSYMTAB, expected 98 undefined symbols to start at index 884, found 95 undefined symbols starting at index 884
+ok  	sentinel/cmd/governance	(cached)
+# sentinel/cmd/query.test
+ld: warning: '/private/var/folders/vk/y7jdn8793b33fkr3q9_b33xc0000gn/T/go-link-2889980489/000013.o' has malformed LC_DYSYMTAB, expected 98 undefined symbols to start at index 884, found 95 undefined symbols starting at index 884
+ok  	sentinel/cmd/query	(cached)
+# sentinel/cmd/simulator.test
+ld: warning: '/private/var/folders/vk/y7jdn8793b33fkr3q9_b33xc0000gn/T/go-link-3029595914/000013.o' has malformed LC_DYSYMTAB, expected 98 undefined symbols to start at index 884, found 95 undefined symbols starting at index 884
+ok  	sentinel/cmd/simulator	(cached)
+ok  	sentinel/internal/audit	(cached)
+ok  	sentinel/internal/auth	(cached)
+ok  	sentinel/internal/authz	(cached)
+ok  	sentinel/internal/cache	(cached)
+ok  	sentinel/internal/config	(cached)
+?   	sentinel/internal/contracts	[no test files]
+?   	sentinel/internal/db	[no test files]
+ok  	sentinel/internal/healthcheck	(cached)
+?   	sentinel/internal/httpx	[no test files]
+ok  	sentinel/internal/incidents	(cached)
+ok  	sentinel/internal/kafka	(cached)
+?   	sentinel/internal/logging	[no test files]
+ok  	sentinel/internal/logic	(cached)
+ok  	sentinel/internal/marketmath	(cached)
+# sentinel/internal/metrics.test
+ld: warning: '/private/var/folders/vk/y7jdn8793b33fkr3q9_b33xc0000gn/T/go-link-3934690016/000013.o' has malformed LC_DYSYMTAB, expected 98 undefined symbols to start at index 884, found 95 undefined symbols starting at index 884
+# sentinel/internal/replay.test
+ld: warning: '/private/var/folders/vk/y7jdn8793b33fkr3q9_b33xc0000gn/T/go-link-522192424/000013.o' has malformed LC_DYSYMTAB, expected 98 undefined symbols to start at index 884, found 95 undefined symbols starting at index 884
+ok  	sentinel/internal/metrics	(cached)
+ok  	sentinel/internal/middleware	(cached)
+ok  	sentinel/internal/pipeline/scoring	(cached)
+ok  	sentinel/internal/query	(cached)
+ok  	sentinel/internal/rbac	(cached)
+?   	sentinel/internal/rediskv	[no test files]
+ok  	sentinel/internal/replay	(cached)
+?   	sentinel/internal/testredis	[no test files]

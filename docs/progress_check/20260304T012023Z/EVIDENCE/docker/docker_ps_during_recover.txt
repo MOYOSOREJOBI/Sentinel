@@ -1,0 +1,19 @@
+NAMES                   STATUS                    PORTS
+docker-web-1            Up 6 minutes (healthy)    0.0.0.0:33000->3000/tcp, [::]:33000->3000/tcp
+docker-gateway-api-1    Up 6 minutes (healthy)    0.0.0.0:58080->8080/tcp, [::]:58080->8080/tcp
+docker-query-1          Up 6 minutes (healthy)    0.0.0.0:58085->8085/tcp, [::]:58085->8085/tcp
+docker-redis-1          Up 7 minutes (healthy)    0.0.0.0:56379->6379/tcp, [::]:56379->6379/tcp
+docker-postgres-1       Up 7 minutes (healthy)    0.0.0.0:55432->5432/tcp, [::]:55432->5432/tcp
+docker-redpanda-1       Up 12 minutes (healthy)   0.0.0.0:9092->9092/tcp, [::]:9092->9092/tcp, 0.0.0.0:59092->9092/tcp, [::]:59092->9092/tcp
+docker-features-1       Up 3 hours (healthy)      0.0.0.0:58082->8082/tcp, [::]:58082->8082/tcp
+docker-aggregator-1     Up 3 hours (healthy)      0.0.0.0:58081->8081/tcp, [::]:58081->8081/tcp
+docker-simulator-1      Up 3 hours (healthy)      
+docker-alerts-1         Up 3 hours (healthy)      0.0.0.0:58083->8083/tcp, [::]:58083->8083/tcp
+docker-governance-1     Up 3 hours (healthy)      0.0.0.0:58084->8084/tcp, [::]:58084->8084/tcp
+docker-inference-1      Up 3 hours (healthy)      0.0.0.0:58090->8090/tcp, [::]:58090->8090/tcp
+docker-grafana-1        Up 4 hours                0.0.0.0:33001->3000/tcp, [::]:33001->3000/tcp
+docker-prometheus-1     Up 4 hours                0.0.0.0:59090->9090/tcp, [::]:59090->9090/tcp
+ballislife-adminer-1    Up 17 hours               0.0.0.0:8080->8080/tcp, [::]:8080->8080/tcp
+ballislife-postgres-1   Up 17 hours (healthy)     0.0.0.0:5432->5432/tcp, [::]:5432->5432/tcp
+ballislife-redis-1      Up 17 hours               0.0.0.0:6379->6379/tcp, [::]:6379->6379/tcp
+blissful_jang           Up 17 hours               

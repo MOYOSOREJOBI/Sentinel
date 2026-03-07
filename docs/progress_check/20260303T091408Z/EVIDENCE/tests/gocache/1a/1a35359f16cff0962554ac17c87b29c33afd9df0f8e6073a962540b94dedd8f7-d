@@ -1,0 +1,45 @@
+//line /Users/mac/Desktop/Sentinel/scripts/backfill.go:1:1
+package main; import _ "runtime/coverage"
+
+import (
+	"context"
+	"fmt"
+	"log"
+	"os"
+	"strconv"
+	"time"
+
+	"sentinel/internal/db"
+	qrm "sentinel/internal/query"
+)
+
+func main() {goCover_c9831b5bed63__0[0] = 11 ; goCover_c9831b5bed63__0[1] = goCover_c9831b5bed63_P ; goCover_c9831b5bed63__0[2] = 0 ; goCover_c9831b5bed63__0[3] = 1;
+	years := 20
+	if raw := os.Getenv("YEARS"); raw != "" {goCover_c9831b5bed63__0[8] = 1;
+		parsed, err := strconv.Atoi(raw)
+		if err != nil || parsed <= 0 {goCover_c9831b5bed63__0[10] = 1;
+			log.Fatalf("invalid YEARS=%q", raw)
+		}
+		goCover_c9831b5bed63__0[9] = 1;years = parsed
+	}
+
+	goCover_c9831b5bed63__0[4] = 1;pgURL := os.Getenv("POSTGRES_URL")
+	if pgURL == "" {goCover_c9831b5bed63__0[11] = 1;
+		pgURL = "postgres://sentinel:sentinel@localhost:5432/sentinel?sslmode=disable"
+	}
+
+	goCover_c9831b5bed63__0[5] = 1;ctx, cancel := context.WithTimeout(context.Background(), 5*time.Minute)
+	defer cancel()
+
+	pool, err := db.Connect(ctx, pgURL)
+	if err != nil {goCover_c9831b5bed63__0[12] = 1;
+		log.Fatalf("connect postgres: %v", err)
+	}
+	goCover_c9831b5bed63__0[6] = 1;defer pool.Close()
+
+	if err := qrm.BackfillHistory(ctx, pool, years); err != nil {goCover_c9831b5bed63__0[13] = 1;
+		log.Fatalf("backfill history: %v", err)
+	}
+
+	goCover_c9831b5bed63__0[7] = 1;fmt.Printf("backfill complete: %d years\n", years)
+}

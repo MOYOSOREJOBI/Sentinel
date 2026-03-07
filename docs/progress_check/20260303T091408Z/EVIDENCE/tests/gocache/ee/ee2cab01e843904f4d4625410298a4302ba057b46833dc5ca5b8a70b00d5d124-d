@@ -1,0 +1,176 @@
+//line /Users/mac/Desktop/Sentinel/internal/metrics/metrics.go:1:1
+package metrics
+
+import (
+	"net/http"
+	"strconv"
+	"strings"
+	"time"
+
+	"github.com/go-chi/chi/v5"
+	"github.com/prometheus/client_golang/prometheus"
+	"github.com/prometheus/client_golang/prometheus/promhttp"
+)
+
+var (
+	registry = prometheus.NewRegistry()
+
+	httpRequests = prometheus.NewCounterVec(
+		prometheus.CounterOpts{
+			Name: "http_requests_total",
+			Help: "Total HTTP requests handled by Sentinel Go services.",
+		},
+		[]string{"service", "method", "path", "status"},
+	)
+	httpLatency = prometheus.NewHistogramVec(
+		prometheus.HistogramOpts{
+			Name:    "http_request_duration_seconds",
+			Help:    "HTTP request latency in seconds.",
+			Buckets: []float64{0.005, 0.01, 0.025, 0.05, 0.1, 0.25, 0.5, 1, 2.5, 5},
+		},
+		[]string{"service", "path"},
+	)
+	dbLatency = prometheus.NewHistogramVec(
+		prometheus.HistogramOpts{
+			Name:    "db_query_duration_seconds",
+			Help:    "Database query latency in seconds.",
+			Buckets: []float64{0.0005, 0.001, 0.005, 0.01, 0.025, 0.05, 0.1, 0.25, 0.5, 1},
+		},
+		[]string{"service", "query"},
+	)
+	queryRowsReturned = prometheus.NewHistogramVec(
+		prometheus.HistogramOpts{
+			Name:    "query_rows_returned",
+			Help:    "Rows returned by bounded query endpoints.",
+			Buckets: []float64{0, 1, 5, 10, 25, 50, 100, 200, 250, 500},
+		},
+		[]string{"service", "endpoint"},
+	)
+	caseMutations = prometheus.NewCounterVec(
+		prometheus.CounterOpts{
+			Name: "case_mutations_total",
+			Help: "Case workflow mutations handled by Sentinel services.",
+		},
+		[]string{"service", "action"},
+	)
+	replayJobEvents = prometheus.NewCounterVec(
+		prometheus.CounterOpts{
+			Name: "replay_job_events_total",
+			Help: "Replay job lifecycle events emitted by Sentinel services.",
+		},
+		[]string{"service", "status"},
+	)
+	kafkaProduced = prometheus.NewCounterVec(
+		prometheus.CounterOpts{
+			Name: "kafka_messages_produced_total",
+			Help: "Kafka messages produced by Go services.",
+		},
+		[]string{"service", "topic"},
+	)
+	kafkaConsumed = prometheus.NewCounterVec(
+		prometheus.CounterOpts{
+			Name: "kafka_messages_consumed_total",
+			Help: "Kafka messages consumed by Go services.",
+		},
+		[]string{"service", "topic"},
+	)
+	serviceUp = prometheus.NewGaugeVec(
+		prometheus.GaugeOpts{
+			Name: "sentinel_up",
+			Help: "Whether the service process is up.",
+		},
+		[]string{"service"},
+	)
+
+	metricsHandler = promhttp.InstrumentMetricHandler(
+		registry,
+		promhttp.HandlerFor(registry, promhttp.HandlerOpts{}),
+	)
+)
+
+func init() {goCover_b90854132f2b__0[0] = 1 ; goCover_b90854132f2b__0[1] = goCover_b90854132f2b_P ; goCover_b90854132f2b__0[2] = 0 ; goCover_b90854132f2b__0[3] = 1;
+	registry.MustRegister(httpRequests, httpLatency, dbLatency, queryRowsReturned, caseMutations, replayJobEvents, kafkaProduced, kafkaConsumed, serviceUp)
+}
+
+type statusRecorder struct {
+	http.ResponseWriter
+	status int
+}
+
+func (s *statusRecorder) WriteHeader(code int) {goCover_b90854132f2b__1[0] = 1 ; goCover_b90854132f2b__1[1] = goCover_b90854132f2b_P ; goCover_b90854132f2b__1[2] = 1 ; goCover_b90854132f2b__1[3] = 1;
+	s.status = code
+	s.ResponseWriter.WriteHeader(code)
+}
+
+func Handler(w http.ResponseWriter, r *http.Request) {goCover_b90854132f2b__2[0] = 1 ; goCover_b90854132f2b__2[1] = goCover_b90854132f2b_P ; goCover_b90854132f2b__2[2] = 2 ; goCover_b90854132f2b__2[3] = 1;
+	metricsHandler.ServeHTTP(w, r)
+}
+
+func HTTPMiddleware(service string) func(http.Handler) http.Handler {goCover_b90854132f2b__3[0] = 3 ; goCover_b90854132f2b__3[1] = goCover_b90854132f2b_P ; goCover_b90854132f2b__3[2] = 3 ; goCover_b90854132f2b__3[3] = 1;
+	serviceUp.WithLabelValues(service).Set(1)
+	return func(next http.Handler) http.Handler {goCover_b90854132f2b__3[4] = 1;
+		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {goCover_b90854132f2b__3[5] = 1;
+			start := time.Now()
+			rec := &statusRecorder{ResponseWriter: w, status: http.StatusOK}
+			next.ServeHTTP(rec, r)
+			path := routePattern(r)
+			httpRequests.WithLabelValues(service, r.Method, path, strconv.Itoa(rec.status)).Inc()
+			httpLatency.WithLabelValues(service, path).Observe(time.Since(start).Seconds())
+		})
+	}
+}
+
+func Wrap(service string, next http.Handler) http.Handler {goCover_b90854132f2b__4[0] = 1 ; goCover_b90854132f2b__4[1] = goCover_b90854132f2b_P ; goCover_b90854132f2b__4[2] = 4 ; goCover_b90854132f2b__4[3] = 1;
+	return HTTPMiddleware(service)(next)
+}
+
+func IncKafkaProduced(service, topic string) {goCover_b90854132f2b__5[0] = 1 ; goCover_b90854132f2b__5[1] = goCover_b90854132f2b_P ; goCover_b90854132f2b__5[2] = 5 ; goCover_b90854132f2b__5[3] = 1;
+	kafkaProduced.WithLabelValues(service, topic).Inc()
+}
+
+func IncKafkaConsumed(service, topic string) {goCover_b90854132f2b__6[0] = 1 ; goCover_b90854132f2b__6[1] = goCover_b90854132f2b_P ; goCover_b90854132f2b__6[2] = 6 ; goCover_b90854132f2b__6[3] = 1;
+	kafkaConsumed.WithLabelValues(service, topic).Inc()
+}
+
+func ObserveDBQuery(service, query string, d time.Duration) {goCover_b90854132f2b__7[0] = 1 ; goCover_b90854132f2b__7[1] = goCover_b90854132f2b_P ; goCover_b90854132f2b__7[2] = 7 ; goCover_b90854132f2b__7[3] = 1;
+	dbLatency.WithLabelValues(service, sanitizeQuery(query)).Observe(d.Seconds())
+}
+
+func ObserveRowsReturned(service, endpoint string, rows int) {goCover_b90854132f2b__8[0] = 3 ; goCover_b90854132f2b__8[1] = goCover_b90854132f2b_P ; goCover_b90854132f2b__8[2] = 8 ; goCover_b90854132f2b__8[3] = 1;
+	if rows < 0 {goCover_b90854132f2b__8[5] = 1;
+		rows = 0
+	}
+	goCover_b90854132f2b__8[4] = 1;queryRowsReturned.WithLabelValues(service, sanitizeQuery(endpoint)).Observe(float64(rows))
+}
+
+func IncCaseMutation(service, action string) {goCover_b90854132f2b__9[0] = 1 ; goCover_b90854132f2b__9[1] = goCover_b90854132f2b_P ; goCover_b90854132f2b__9[2] = 9 ; goCover_b90854132f2b__9[3] = 1;
+	caseMutations.WithLabelValues(service, sanitizeQuery(action)).Inc()
+}
+
+func IncReplayJobEvent(service, status string) {goCover_b90854132f2b__10[0] = 1 ; goCover_b90854132f2b__10[1] = goCover_b90854132f2b_P ; goCover_b90854132f2b__10[2] = 10 ; goCover_b90854132f2b__10[3] = 1;
+	replayJobEvents.WithLabelValues(service, sanitizeQuery(status)).Inc()
+}
+
+func routePattern(r *http.Request) string {goCover_b90854132f2b__11[0] = 6 ; goCover_b90854132f2b__11[1] = goCover_b90854132f2b_P ; goCover_b90854132f2b__11[2] = 11 ; goCover_b90854132f2b__11[3] = 1;
+	if rc := chi.RouteContext(r.Context()); rc != nil {goCover_b90854132f2b__11[6] = 1;
+		if p := strings.TrimSpace(rc.RoutePattern()); p != "" {goCover_b90854132f2b__11[7] = 1;
+			return p
+		}
+	}
+	goCover_b90854132f2b__11[4] = 1;if p := strings.TrimSpace(r.URL.Path); p != "" {goCover_b90854132f2b__11[8] = 1;
+		return p
+	}
+	goCover_b90854132f2b__11[5] = 1;return "/"
+}
+
+func sanitizeQuery(in string) string {goCover_b90854132f2b__12[0] = 5 ; goCover_b90854132f2b__12[1] = goCover_b90854132f2b_P ; goCover_b90854132f2b__12[2] = 12 ; goCover_b90854132f2b__12[3] = 1;
+	in = strings.TrimSpace(strings.ToLower(in))
+	if in == "" {goCover_b90854132f2b__12[6] = 1;
+		return "unknown"
+	}
+	goCover_b90854132f2b__12[4] = 1;in = strings.Join(strings.Fields(in), "_")
+	if len(in) > 80 {goCover_b90854132f2b__12[7] = 1;
+		in = in[:80]
+	}
+	goCover_b90854132f2b__12[5] = 1;return in
+}

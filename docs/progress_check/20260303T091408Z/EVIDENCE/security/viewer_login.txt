@@ -1,0 +1,2 @@
+$ curl -i -sS --max-time 5 -c docs/progress_check/20260303T091408Z/EVIDENCE/security/viewer.cookies.txt -H Content-Type: application/json -d {"Email":"viewer@sentinel.local","Password":"Sentinel#123"} http://localhost:8080/auth/login
+curl: (7) Failed to connect to localhost port 8080 after 0 ms: Could not connect to server

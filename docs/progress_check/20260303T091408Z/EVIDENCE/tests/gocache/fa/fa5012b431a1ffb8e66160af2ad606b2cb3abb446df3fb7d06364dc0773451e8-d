@@ -1,0 +1,37 @@
+//line /Users/mac/Desktop/Sentinel/internal/middleware/requestid.go:1:1
+package middleware
+
+import (
+	"context"
+	"crypto/rand"
+	"encoding/hex"
+	"net/http"
+)
+
+type requestIDContextKey struct{}
+
+func RequestID(next http.Handler) http.Handler {goCover_9096a20e3d2e__10[0] = 4 ; goCover_9096a20e3d2e__10[1] = goCover_9096a20e3d2e_P ; goCover_9096a20e3d2e__10[2] = 10 ; goCover_9096a20e3d2e__10[3] = 1;
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {goCover_9096a20e3d2e__10[4] = 1;
+		rid := r.Header.Get("X-Request-ID")
+		if rid == "" {goCover_9096a20e3d2e__10[6] = 1;
+			b := make([]byte, 8)
+			_, _ = rand.Read(b)
+			rid = hex.EncodeToString(b)
+		}
+		goCover_9096a20e3d2e__10[5] = 1;r.Header.Set("X-Request-ID", rid)
+		w.Header().Set("X-Request-ID", rid)
+		next.ServeHTTP(w, r.WithContext(context.WithValue(r.Context(), requestIDContextKey{}, rid)))
+	})
+}
+
+func RequestIDValue(r *http.Request) string {goCover_9096a20e3d2e__11[0] = 6 ; goCover_9096a20e3d2e__11[1] = goCover_9096a20e3d2e_P ; goCover_9096a20e3d2e__11[2] = 11 ; goCover_9096a20e3d2e__11[3] = 1;
+	if r == nil {goCover_9096a20e3d2e__11[6] = 1;
+		return ""
+	}
+	goCover_9096a20e3d2e__11[4] = 1;if v := r.Context().Value(requestIDContextKey{}); v != nil {goCover_9096a20e3d2e__11[7] = 1;
+		if rid, ok := v.(string); ok {goCover_9096a20e3d2e__11[8] = 1;
+			return rid
+		}
+	}
+	goCover_9096a20e3d2e__11[5] = 1;return r.Header.Get("X-Request-ID")
+}

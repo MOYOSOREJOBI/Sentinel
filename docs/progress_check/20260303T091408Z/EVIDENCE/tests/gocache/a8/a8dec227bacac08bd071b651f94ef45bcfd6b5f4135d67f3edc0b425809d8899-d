@@ -1,0 +1,37 @@
+//line /Users/mac/Desktop/Sentinel/internal/query/world_map.go:1:1
+package query
+
+import (
+	"context"
+
+	"github.com/jackc/pgx/v5/pgxpool"
+)
+
+type CountryAgg struct {
+	CountryCode      string  `json:"countryCode"`
+	CountryName      string  `json:"countryName"`
+	IncidentCount    int     `json:"incidentCount"`
+	AvgCompositeRisk float64 `json:"avgCompositeRisk"`
+	MaxSafetyLevel   string  `json:"maxSafetyLevel"`
+	TrustState       string  `json:"trustState"`
+	TopIndustry      string  `json:"topIndustry,omitempty"`
+}
+
+func LoadWorldMap(ctx context.Context, db *pgxpool.Pool, f QueueFilters) ([]CountryAgg, error) {goCover_fbd601c42ea1__27[0] = 6 ; goCover_fbd601c42ea1__27[1] = goCover_fbd601c42ea1_P ; goCover_fbd601c42ea1__27[2] = 27 ; goCover_fbd601c42ea1__27[3] = 1;
+	where, args := whereClause(f)
+
+	q := `SELECT coalesce(m.country_code,'XX'),coalesce(m.country_name,'Unknown'),count(i.id),coalesce(avg(i.composite_risk),0),coalesce(max(i.severity_band),'Stable'),coalesce(max(i.trust_state),'healthy'),coalesce(max(m.industry),'') FROM incidents i LEFT JOIN instrument_metadata m ON m.instrument_id=i.primary_symbol WHERE ` + where + ` GROUP BY 1,2 ORDER BY 3 DESC LIMIT 250`
+	rows, err := db.Query(ctx, q, args...)
+	if err != nil {goCover_fbd601c42ea1__27[6] = 1;
+		return nil, err
+	}
+	goCover_fbd601c42ea1__27[4] = 1;defer rows.Close()
+	out := []CountryAgg{}
+	for rows.Next() {goCover_fbd601c42ea1__27[7] = 1;
+		var c CountryAgg
+		if rows.Scan(&c.CountryCode, &c.CountryName, &c.IncidentCount, &c.AvgCompositeRisk, &c.MaxSafetyLevel, &c.TrustState, &c.TopIndustry) == nil {goCover_fbd601c42ea1__27[8] = 1;
+			out = append(out, c)
+		}
+	}
+	goCover_fbd601c42ea1__27[5] = 1;return out, nil
+}

@@ -1,0 +1,126 @@
+$ rg -n "localhost:\d+|localhost" deploy web internal cmd scripts
+web/e2e/sentinel.spec.ts:3:const E2E_BASE_URL = process.env.E2E_BASE_URL || 'http://localhost:3000'
+scripts/demo-smoke.sh:58:  curl -fsS "http://localhost:${p}/readyz" >/dev/null
+scripts/demo-smoke.sh:61:curl -fsS http://localhost:8090/readyz >/dev/null || curl -fsS http://localhost:8090/healthz >/dev/null
+scripts/demo-smoke.sh:64:root_check gateway-api http://localhost:8080/
+scripts/demo-smoke.sh:65:root_check query http://localhost:8085/
+scripts/demo-smoke.sh:66:root_check alerts http://localhost:8083/
+scripts/demo-smoke.sh:67:root_check governance http://localhost:8084/
+scripts/demo-smoke.sh:68:root_check inference http://localhost:8090/
+scripts/demo-smoke.sh:72:  body="$(curl -fsS http://localhost:8085/debug/seed-status || true)"
+scripts/demo-smoke.sh:87:headers="$(curl -fsSI http://localhost:3000/api/sse/alerts)"
+scripts/demo-smoke.sh:91:curl -fsS -D- http://localhost:3000/ | head -n 30
+scripts/demo-smoke.sh:94:python3 scripts/prom_up_check.py http://localhost:9090 gateway query alerts governance aggregator features inference
+scripts/demo-smoke.sh:97:curl -fsS -u admin:sentinel http://localhost:3001/api/datasources | python3 - <<'PY'
+scripts/demo-smoke.sh:104:curl -fsS -u admin:sentinel http://localhost:3001/api/search?query=sentinel | python3 - <<'PY'
+scripts/run-demo.sh:36:wait_for gateway http://localhost:8080/healthz
+scripts/run-demo.sh:37:wait_for query http://localhost:8085/readyz
+scripts/run-demo.sh:38:wait_for alerts http://localhost:8083/readyz
+scripts/run-demo.sh:39:wait_for governance http://localhost:8084/readyz
+scripts/run-demo.sh:40:wait_for command-center http://localhost:3000/command-center 80
+scripts/run-demo.sh:44:curl -fsS -c "$COOKIE_JAR" -X POST http://localhost:8080/auth/login -H 'Content-Type: application/json' -d "$LOGIN_JSON" >/dev/null
+scripts/run-demo.sh:48:  curl -fsS -b "$COOKIE_JAR" "http://localhost:8085/$ep" >/dev/null
+scripts/local-bootstrap.sh:103:health_check http://localhost:3000
+scripts/local-bootstrap.sh:104:health_check http://localhost:8080/healthz
+scripts/local-bootstrap.sh:105:health_check http://localhost:8085/readyz
+scripts/local-bootstrap.sh:106:health_check http://localhost:8083/readyz
+scripts/local-bootstrap.sh:107:health_check http://localhost:8084/readyz
+scripts/local-bootstrap.sh:108:health_check http://localhost:9090
+scripts/local-bootstrap.sh:111:open_url http://localhost:3000/command-center
+scripts/local-bootstrap.sh:112:open_url http://localhost:3000/queue
+scripts/local-bootstrap.sh:113:open_url http://localhost:3000/trust
+scripts/local-bootstrap.sh:114:open_url http://localhost:3000/governance
+scripts/local-bootstrap.sh:115:open_url http://localhost:3000/executive
+scripts/security-proof.sh:4:gateway_url="${GATEWAY_URL:-http://localhost:8080}"
+scripts/security-proof.sh:5:alerts_url="${ALERTS_URL:-http://localhost:8083}"
+scripts/security-proof.sh:6:governance_url="${GOVERNANCE_URL:-http://localhost:8084}"
+scripts/perf-smoke.sh:21:  response="$(curl --max-time 5 -i -sS -X POST http://localhost:8080/auth/login -H 'Content-Type: application/json' --data '{"Email":"admin@sentinel.local","Password":"Sentinel#123"}')"
+scripts/perf-smoke.sh:38:    POSTGRES_URL=postgres://sentinel:sentinel@localhost:5432/sentinel?sslmode=disable go run "$ROOT/scripts/seed-users.go" >/dev/null
+scripts/perf-smoke.sh:100:wait_for http://localhost:8080/healthz
+scripts/perf-smoke.sh:101:wait_for http://localhost:8085/readyz
+scripts/perf-smoke.sh:102:wait_for http://localhost:3000/login
+scripts/perf-smoke.sh:108:run_load queue "http://localhost:8085/queue?window=24h"
+scripts/perf-smoke.sh:109:run_load command_center "http://localhost:8085/command-center?window=24h"
+scripts/perf-smoke.sh:110:run_load feed "http://localhost:8085/feed?window=24h"
+scripts/prod-readiness.sh:22:  response="$(curl --max-time 5 -i -sS -X POST http://localhost:8080/auth/login -H 'Content-Type: application/json' --data "{\"Email\":\"${email}\",\"Password\":\"Sentinel#123\"}")"
+scripts/prod-readiness.sh:56:wait_for http://localhost:8080/healthz
+scripts/prod-readiness.sh:57:wait_for http://localhost:8083/readyz
+scripts/prod-readiness.sh:58:wait_for http://localhost:8084/readyz
+scripts/prod-readiness.sh:59:wait_for http://localhost:8085/readyz
+scripts/prod-readiness.sh:62:  POSTGRES_URL=postgres://sentinel:sentinel@localhost:5432/sentinel?sslmode=disable go run "$ROOT/scripts/seed-users.go" >/dev/null
+scripts/prod-readiness.sh:72:UNAUTH_ACK="$(curl --max-time 5 -s -o /dev/null -w '%{http_code}' -X POST http://localhost:8083/alerts/1/ack)"
+scripts/prod-readiness.sh:75:VIEWER_ACK="$(curl --max-time 5 -s -o /dev/null -w '%{http_code}' -H "Cookie: $VIEWER_COOKIE" -H "X-CSRF-Token: $VIEWER_CSRF" -X POST http://localhost:8083/alerts/1/ack)"
+scripts/prod-readiness.sh:78:SEED_JSON="$(curl --max-time 5 -fsS -H "Cookie: $ADMIN_COOKIE" http://localhost:8085/debug/seed-status)"
+scripts/prod-readiness.sh:86:curl --max-time 5 -fsS -H "Cookie: $ADMIN_COOKIE" -H "X-CSRF-Token: $ADMIN_CSRF" -X POST http://localhost:8084/forecast/refresh >/tmp/sentinel-forecast-refresh.json
+scripts/prod-readiness.sh:87:curl --max-time 5 -fsS -H "Cookie: $ADMIN_COOKIE" http://localhost:8085/forecast >/tmp/sentinel-forecast.json
+scripts/prod-readiness.sh:89:METRICS="$(curl --max-time 5 -fsS http://localhost:8083/metrics)"
+cmd/gateway-api/main.go:246:	if strings.HasPrefix(host, "localhost") || strings.HasPrefix(host, "127.0.0.1") {
+scripts/prom_up_check.py:24:    p.add_argument("prom", nargs="?", default="http://localhost:9090", help="Prometheus base URL")
+scripts/browser-validate.mjs:6:const BASE = process.env.BASE_URL || 'http://localhost:3000'
+scripts/seed-users.go:29:		dsn = "postgres://sentinel:sentinel@localhost:5432/sentinel?sslmode=disable"
+scripts/smoke.sh:4:base_api=${BASE_API:-http://localhost}
+scripts/smoke.sh:5:prom=${PROM_URL:-http://localhost:9090}
+scripts/final-validation.sh:14:  http://localhost:8080/readyz \
+scripts/final-validation.sh:15:  http://localhost:8085/readyz \
+scripts/final-validation.sh:16:  http://localhost:8081/readyz \
+scripts/final-validation.sh:17:  http://localhost:8082/readyz \
+scripts/final-validation.sh:18:  http://localhost:8083/readyz \
+scripts/final-validation.sh:19:  http://localhost:8084/readyz \
+scripts/final-validation.sh:20:  http://localhost:8090/readyz
+scripts/final-validation.sh:38:curl -fsS http://localhost:8080/healthz && echo
+scripts/final-validation.sh:39:curl -fsS http://localhost:8080/readyz && echo
+scripts/final-validation.sh:40:curl -fsS http://localhost:8085/alerts | head -c 500 && echo
+scripts/final-validation.sh:41:curl -fsS http://localhost:8085/scores | head -c 500 && echo
+scripts/final-validation.sh:42:curl -fsS http://localhost:9090/-/healthy && echo
+scripts/final-validation.sh:48:curl -fsS http://localhost:8085/readyz && echo
+scripts/final-validation.sh:52:curl -fsS http://localhost:8081/readyz && echo
+scripts/final-validation.sh:53:curl -fsS http://localhost:8082/readyz && echo
+scripts/final-validation.sh:54:curl -fsS http://localhost:8083/readyz && echo
+scripts/final-validation.sh:55:curl -fsS http://localhost:8090/readyz && echo
+scripts/backfill.go:27:		pgURL = "postgres://sentinel:sentinel@localhost:5432/sentinel?sslmode=disable"
+scripts/capture-screenshots.mjs:7:const BASE = process.env.BASE_URL || 'http://localhost:3000'
+scripts/runtime-proof.sh:70:curl -fsS http://localhost:8080/ >/dev/null
+scripts/runtime-proof.sh:71:curl -fsS http://localhost:8085/ >/dev/null
+scripts/runtime-proof.sh:72:curl -fsS http://localhost:8083/ >/dev/null
+scripts/runtime-proof.sh:73:curl -fsS http://localhost:8084/ >/dev/null
+scripts/runtime-proof.sh:76:curl -fsS http://localhost:8080/readyz >/dev/null
+scripts/runtime-proof.sh:77:curl -fsS http://localhost:8085/readyz >/dev/null
+scripts/runtime-proof.sh:78:curl -fsS http://localhost:8083/readyz >/dev/null
+scripts/runtime-proof.sh:79:curl -fsS http://localhost:8084/readyz >/dev/null
+scripts/runtime-proof.sh:80:curl -fsS http://localhost:8080/metrics >/dev/null
+scripts/runtime-proof.sh:81:curl -fsS http://localhost:8085/metrics >/dev/null
+scripts/runtime-proof.sh:82:curl -fsS http://localhost:8083/metrics >/dev/null
+scripts/runtime-proof.sh:83:curl -fsS http://localhost:8084/metrics >/dev/null
+scripts/runtime-proof.sh:91:  -X POST http://localhost:8080/auth/login \
+scripts/runtime-proof.sh:96:curl -fsS http://localhost:3000/ >/dev/null
+scripts/runtime-proof.sh:101:  if curl -fsS -b "${COOKIE_JAR}" http://localhost:8085/debug/seed-status -o "${LOG_DIR}/seed-status.json" && python3 - "${LOG_DIR}/seed-status.json" <<'PY'
+scripts/runtime-proof.sh:121:  -X POST http://localhost:3000/api/proxy/gateway-api/auth/login \
+scripts/runtime-proof.sh:125:curl -fsS -b "${COOKIE_JAR}" http://localhost:3000/api/proxy/gateway-api/me | tee "${LOG_DIR}/web-me.json" >/dev/null
+scripts/runtime-proof.sh:134:curl -fsS -b "${COOKIE_JAR}" http://localhost:3000/api/proxy/query/command-center | tee "${LOG_DIR}/web-command-center.json" >/dev/null
+scripts/runtime-proof.sh:144:curl -fsS -b "${COOKIE_JAR}" 'http://localhost:3000/api/proxy/query/queue?window=24h' | tee "${LOG_DIR}/web-queue.json" >/dev/null
+scripts/runtime-proof.sh:152:curl -fsS -b "${COOKIE_JAR}" 'http://localhost:3000/api/proxy/query/search-suggest?q=ap' | tee "${LOG_DIR}/web-search-suggest.json" >/dev/null
+scripts/runtime-proof.sh:164:curl -fsS -b "${COOKIE_JAR}" 'http://localhost:3000/api/proxy/query/scores?window=24h&maxPoints=50' | tee "${LOG_DIR}/web-scores.json" >/dev/null
+scripts/runtime-proof.sh:175:curl -fsS -b "${COOKIE_JAR}" 'http://localhost:3000/api/proxy/query/candles?window=24h&maxPoints=50' | tee "${LOG_DIR}/web-candles.json" >/dev/null
+scripts/runtime-proof.sh:186:curl -fsS http://localhost:8090/metrics | tee "${LOG_DIR}/inference-metrics.txt" >/dev/null
+scripts/runtime-proof.sh:196:python3 scripts/prom_up_check.py http://localhost:9090 --from-config prometheus/prometheus.yml \
+scripts/runtime-proof.sh:203:curl -fsS "http://${GF_USER}:${GF_PASS}@localhost:3001/api/health" | tee "${LOG_DIR}/grafana_health.json" >/dev/null
+scripts/runtime-proof.sh:204:curl -fsS "http://${GF_USER}:${GF_PASS}@localhost:3001/api/search?type=dash-db" | tee "${LOG_DIR}/grafana_search.json" >/dev/null
+scripts/boot-repeat.sh:40:  wait_for http://localhost:8080/healthz
+scripts/boot-repeat.sh:41:  wait_for http://localhost:8085/readyz
+scripts/boot-repeat.sh:42:  POSTGRES_URL=postgres://sentinel:sentinel@localhost:5432/sentinel?sslmode=disable go run "$ROOT/scripts/seed-users.go" >/dev/null
+scripts/boot-repeat.sh:43:  login="$(curl --max-time 5 -i -sS -X POST http://localhost:8080/auth/login -H 'Content-Type: application/json' --data '{"Email":"admin@sentinel.local","Password":"Sentinel#123"}')"
+scripts/boot-repeat.sh:47:    if seed_json="$(curl --max-time 5 -fsS -H "Cookie: $cookie" http://localhost:8085/debug/seed-status 2>/dev/null)"; then
+web/playwright.config.js:6:    baseURL: process.env.E2E_BASE_URL || "http://localhost:3000",
+deploy/docker/docker-compose.yml:155:      test: ["CMD-SHELL", "python -c \"import urllib.request; urllib.request.urlopen('http://localhost:8090/healthz')\""]
+internal/config/validate_test.go:6:	valid := Config{ServiceName: "gateway", HTTPAddr: ":8080", PostgresURL: "postgres://a:b@localhost:5432/db", KafkaBrokers: []string{"localhost:9092"}}
+deploy/docker/docker-compose.yml.bak_fix:94:      test: ["CMD-SHELL", "python -c \"import urllib.request; urllib.request.urlopen('http://localhost:8090/healthz')\""]
+internal/middleware/cors.go:33:// If not set and APP_ENV=local, defaults to http://localhost:3000,http://127.0.0.1:3000 .
+internal/middleware/cors.go:38:		v = "http://localhost:3000,http://127.0.0.1:3000"
+web/app/api/sse/trust/route.ts:3:const API_QUERY = process.env.UPSTREAM_QUERY || process.env.API_QUERY || 'http://localhost:8085'
+web/app/api/proxy/[service]/[...path]/route.ts:19:  if (service === "gateway" || service === "gateway-api") return "http://localhost:8080";
+web/app/api/proxy/[service]/[...path]/route.ts:20:  if (service === "query") return "http://localhost:8085";
+web/app/api/proxy/[service]/[...path]/route.ts:21:  if (service === "alerts") return "http://localhost:8083";
+web/app/api/proxy/[service]/[...path]/route.ts:22:  if (service === "governance") return "http://localhost:8084";
+web/app/api/sse/alerts/route.ts:3:const API_ALERTS = process.env.UPSTREAM_ALERTS || process.env.API_ALERTS || 'http://localhost:8083'
+web/app/api/sse/command-center/route.ts:3:const API_QUERY = process.env.UPSTREAM_QUERY || process.env.API_QUERY || 'http://localhost:8085'
+web/app/api/sse/queue/route.ts:3:const API_QUERY = process.env.UPSTREAM_QUERY || process.env.API_QUERY || 'http://localhost:8085'

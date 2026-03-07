@@ -2,56 +2,157 @@ package query
 
 import (
 	"context"
+	"sort"
+	"strings"
 
 	"github.com/jackc/pgx/v5/pgxpool"
 )
 
+func buildCommandCenterSummary(window string, rows []QueueRow) map[string]any {
+	open := len(rows)
+	high := 0
+
+	topIncidents := make([]map[string]any, 0, 5)
+	severity := map[string]int{"critical": 0, "high": 0, "elevated": 0, "stable": 0}
+	histogram := []int{0, 0, 0, 0, 0}
+
+	type bucketCount struct {
+		Key   string
+		Label string
+		Count int
+	}
+	countryCounts := map[string]bucketCount{}
+	industryCounts := map[string]int{}
+
+	for idx, row := range rows {
+		sev := strings.ToLower(strings.TrimSpace(row.SeverityBand))
+		switch {
+		case strings.Contains(sev, "critical"):
+			severity["critical"]++
+			high++
+		case strings.Contains(sev, "high"):
+			severity["high"]++
+			high++
+		case strings.Contains(sev, "elevated"):
+			severity["elevated"]++
+		default:
+			severity["stable"]++
+		}
+
+		switch {
+		case row.CompositeRisk < 0.2:
+			histogram[0]++
+		case row.CompositeRisk < 0.4:
+			histogram[1]++
+		case row.CompositeRisk < 0.6:
+			histogram[2]++
+		case row.CompositeRisk < 0.8:
+			histogram[3]++
+		default:
+			histogram[4]++
+		}
+
+		code := strings.ToUpper(strings.TrimSpace(row.CountryISO2))
+		if code != "" && code != "XX" {
+			item := countryCounts[code]
+			item.Key = code
+			item.Label = strings.TrimSpace(row.CountryName)
+			item.Count++
+			countryCounts[code] = item
+		}
+
+		industry := strings.TrimSpace(row.Industry)
+		if industry == "" {
+			industry = "Unknown"
+		}
+		industryCounts[industry]++
+
+		if idx < 5 {
+			topIncidents = append(topIncidents, map[string]any{
+				"id":            row.ID,
+				"symbol":        row.Symbol,
+				"priorityScore": row.PriorityScore,
+				"compositeRisk": row.CompositeRisk,
+				"severityBand":  row.SeverityBand,
+			})
+		}
+	}
+
+	rankedCountries := make([]bucketCount, 0, len(countryCounts))
+	for _, item := range countryCounts {
+		rankedCountries = append(rankedCountries, item)
+	}
+	sort.Slice(rankedCountries, func(i, j int) bool {
+		if rankedCountries[i].Count == rankedCountries[j].Count {
+			return rankedCountries[i].Key < rankedCountries[j].Key
+		}
+		return rankedCountries[i].Count > rankedCountries[j].Count
+	})
+
+	topCountries := make([]map[string]any, 0, minInt(8, len(rankedCountries)))
+	for _, item := range rankedCountries {
+		label := item.Label
+		if strings.TrimSpace(label) == "" {
+			label = item.Key
+		}
+		topCountries = append(topCountries, map[string]any{
+			"countryIso2":   item.Key,
+			"countryCode":   item.Key,
+			"countryName":   label,
+			"incidentCount": item.Count,
+		})
+		if len(topCountries) == 8 {
+			break
+		}
+	}
+
+	rankedIndustries := make([]bucketCount, 0, len(industryCounts))
+	for key, count := range industryCounts {
+		rankedIndustries = append(rankedIndustries, bucketCount{Key: key, Count: count})
+	}
+	sort.Slice(rankedIndustries, func(i, j int) bool {
+		if rankedIndustries[i].Count == rankedIndustries[j].Count {
+			return rankedIndustries[i].Key < rankedIndustries[j].Key
+		}
+		return rankedIndustries[i].Count > rankedIndustries[j].Count
+	})
+
+	topIndustries := make([]map[string]any, 0, minInt(8, len(rankedIndustries)))
+	for _, item := range rankedIndustries {
+		topIndustries = append(topIndustries, map[string]any{
+			"industry":      item.Key,
+			"incidentCount": item.Count,
+		})
+		if len(topIndustries) == 8 {
+			break
+		}
+	}
+
+	return map[string]any{
+		"timeWindow":         window,
+		"openIncidents":      open,
+		"highRiskCount":      high,
+		"backlogDelta":       high - open,
+		"topIncidents":       topIncidents,
+		"topCountries":       topCountries,
+		"topIndustries":      topIndustries,
+		"severityBreakdown":  severity,
+		"compositeHistogram": histogram,
+		"trust":              map[string]any{"state": "stable"},
+	}
+}
+
 func LoadCommandCenter(ctx context.Context, db *pgxpool.Pool, f QueueFilters) (map[string]any, error) {
-	where, args := whereClause(f)
-
-	var open, high int
-	_ = db.QueryRow(ctx, `SELECT count(i.id) FROM incidents i LEFT JOIN instrument_metadata m ON m.instrument_id=i.primary_symbol WHERE i.status in ('open','ack') AND `+where, args...).Scan(&open)
-	_ = db.QueryRow(ctx, `SELECT count(i.id) FROM incidents i LEFT JOIN instrument_metadata m ON m.instrument_id=i.primary_symbol WHERE i.status in ('open','ack') AND i.severity_band in ('high','critical') AND `+where, args...).Scan(&high)
-
-	topIncidents := []map[string]any{}
-	rows, err := db.Query(ctx, `SELECT i.id,i.primary_symbol,coalesce(i.priority_score,0),coalesce(i.composite_risk,0),i.severity_band FROM incidents i LEFT JOIN instrument_metadata m ON m.instrument_id=i.primary_symbol WHERE i.status in ('open','ack') AND `+where+` ORDER BY i.priority_score DESC LIMIT 5`, args...)
-	if err == nil {
-		defer rows.Close()
-		for rows.Next() {
-			var id int64
-			var sym, sev string
-			var p, c float64
-			if rows.Scan(&id, &sym, &p, &c, &sev) == nil {
-				topIncidents = append(topIncidents, map[string]any{"id": id, "symbol": sym, "priorityScore": p, "compositeRisk": c, "severityBand": sev})
-			}
-		}
+	rows, err := LoadQueue(ctx, db, f)
+	if err != nil {
+		return nil, err
 	}
+	return buildCommandCenterSummary(f.Window, rows), nil
+}
 
-	countries := []map[string]any{}
-	cr, err := db.Query(ctx, `SELECT coalesce(m.country_code,'XX'),count(i.id) FROM incidents i LEFT JOIN instrument_metadata m ON m.instrument_id=i.primary_symbol WHERE `+where+` GROUP BY 1 ORDER BY 2 DESC LIMIT 5`, args...)
-	if err == nil {
-		defer cr.Close()
-		for cr.Next() {
-			var code string
-			var c int
-			if cr.Scan(&code, &c) == nil {
-				countries = append(countries, map[string]any{"countryCode": code, "incidentCount": c})
-			}
-		}
+func minInt(a, b int) int {
+	if a < b {
+		return a
 	}
-
-	industries := []map[string]any{}
-	ir, err := db.Query(ctx, `SELECT coalesce(m.industry,'Unknown'),count(i.id) FROM incidents i LEFT JOIN instrument_metadata m ON m.instrument_id=i.primary_symbol WHERE `+where+` GROUP BY 1 ORDER BY 2 DESC LIMIT 5`, args...)
-	if err == nil {
-		defer ir.Close()
-		for ir.Next() {
-			var ind string
-			var c int
-			if ir.Scan(&ind, &c) == nil {
-				industries = append(industries, map[string]any{"industry": ind, "incidentCount": c})
-			}
-		}
-	}
-
-	return map[string]any{"timeWindow": f.Window, "openIncidents": open, "highRiskCount": high, "backlogDelta": high - open, "topIncidents": topIncidents, "topCountries": countries, "topIndustries": industries, "trust": map[string]any{"state": "stable"}}, nil
+	return b
 }

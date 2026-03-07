@@ -15,6 +15,7 @@ web/test-results/
 # Environment and local secrets
 .env
 keys/
+backups/
 
 # OS/editor files
 .DS_Store

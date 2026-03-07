@@ -7,7 +7,7 @@ async function loginAs(page: any, email: string, password = 'Sentinel#123') {
   await page.getByTestId('login-email').fill(email)
   await page.getByTestId('login-password').fill(password)
   await page.getByTestId('login-submit').click()
-  await expect(page).toHaveURL(/command-center/)
+  await expect(page).toHaveURL(/\/([a-z-]+\/)?command-center/)
 }
 
 async function login(page: any) {
@@ -50,9 +50,40 @@ test('command center loads map and globe containers', async ({ page }) => {
   await expect(page.getByTestId('command-center')).toBeVisible()
   await expect(page.getByTestId('kpi-open-incidents')).toBeVisible()
   await expect(page.getByTestId('kpi-high-risk')).toBeVisible()
+  await expect(page.getByRole('alert')).toHaveCount(0)
+  await expect(page.getByTestId('candle-risk-panel')).toBeVisible()
   await expect(page.getByTestId('risk-globe')).toBeVisible()
   await expect(page.getByTestId('world-map')).toBeVisible()
   await expect(page.locator('svg[aria-label="world risk map"]')).toBeVisible()
+  await expect(page.getByText('Country bar chart')).toBeVisible()
+  await expect(page.getByText('Composite risk histogram')).toBeVisible()
+  await expect(page.getByText('Severity pie chart')).toBeVisible()
+})
+
+test('clicking a country on the map carries the filter into queue', async ({ page }) => {
+  await login(page)
+  const firstChip = page.locator('[data-testid^="world-map-chip-"]').first()
+  await expect(firstChip).toBeVisible({ timeout: 15000 })
+  const testId = await firstChip.getAttribute('data-testid')
+  const code = String(testId || '').replace('world-map-chip-', '')
+  expect(code).not.toBe('')
+  await firstChip.click()
+  await expect(page.getByTestId('filter-country')).toHaveValue(code)
+
+  await page.getByRole('link', { name: 'Queue' }).click()
+  await expect(page).toHaveURL(new RegExp(`/([a-z-]+/)?queue\\?`))
+  await expect(page.getByTestId('filter-country')).toHaveValue(code)
+  await expect(page.locator('[data-testid="queue"] tbody tr').first()).toBeVisible({ timeout: 15000 })
+
+  const filtered = await fetchJson(page, `/api/proxy/query/queue?window=24h&countryCode=${encodeURIComponent(code)}`)
+  expect(filtered.status).toBe(200)
+  expect(Array.isArray(filtered.body)).toBe(true)
+  expect(filtered.body.length).toBeGreaterThan(0)
+  for (const row of filtered.body) {
+    expect(String(row.countryIso2 || row.countryCode)).toBe(code)
+  }
+
+  await page.screenshot({ path: 'test-results/world-map-filtered-queue.png', fullPage: true })
 })
 
 test('queue renders ranked rows after login', async ({ page }) => {
@@ -67,6 +98,7 @@ test('switch locale to Arabic sets rtl html direction and updates visible UI cop
   await expect(page.getByRole('heading', { name: 'Command Center' })).toBeVisible()
   await expect(page.getByRole('link', { name: 'Queue' })).toBeVisible()
   await page.getByTestId('locale-switcher').selectOption('ar')
+  await expect(page).toHaveURL(/\/ar\/command-center/)
   await expect(page.locator('html')).toHaveAttribute('dir', 'rtl')
   await expect(page.getByRole('heading', { name: 'مركز القيادة' })).toBeVisible()
   await expect(page.getByRole('link', { name: 'الطابور' })).toBeVisible()
@@ -149,7 +181,12 @@ test('feed country filter changes returned rows', async ({ page }) => {
   const body = initial.body
   expect(Array.isArray(body.items)).toBe(true)
   expect(body.items.length).toBeGreaterThan(0)
-  const country = 'XX'
+  const firstCountry = body.items.find((item: any) => {
+    const code = String(item.country_code || item.countryCode || '')
+    return code && code !== 'XX'
+  })
+  const country = String(firstCountry?.country_code || firstCountry?.countryCode || '')
+  expect(country).not.toBe('')
 
   await page.goto(`/feed?window=24h&countryCode=${encodeURIComponent(country)}`)
   await expect(page.getByTestId('filter-country')).toHaveValue(country)

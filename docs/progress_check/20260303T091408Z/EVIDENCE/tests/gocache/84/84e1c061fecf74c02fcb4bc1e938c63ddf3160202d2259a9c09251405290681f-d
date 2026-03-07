@@ -1,0 +1,31 @@
+//line /Users/mac/Desktop/Sentinel/internal/rbac/rbac.go:1:1
+package rbac
+
+import (
+	"net/http"
+	"strings"
+)
+
+var permissions = map[string]map[string]bool{
+	"admin":   {"*": true, "governance:read": true},
+	"analyst": {"alerts:write": true, "replay:write": true, "read": true},
+	"viewer":  {"read": true},
+}
+
+func Allowed(role, perm string) bool {goCover_bd84685c5568__0[0] = 3 ; goCover_bd84685c5568__0[1] = goCover_bd84685c5568_P ; goCover_bd84685c5568__0[2] = 0 ; goCover_bd84685c5568__0[3] = 1;
+	p, ok := permissions[strings.ToLower(role)]
+	if !ok {goCover_bd84685c5568__0[5] = 1;
+		return false
+	}
+	goCover_bd84685c5568__0[4] = 1;return p["*"] || p[perm]
+}
+
+func Require(role, perm string, next http.Handler) http.Handler {goCover_bd84685c5568__1[0] = 4 ; goCover_bd84685c5568__1[1] = goCover_bd84685c5568_P ; goCover_bd84685c5568__1[2] = 1 ; goCover_bd84685c5568__1[3] = 1;
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {goCover_bd84685c5568__1[4] = 1;
+		if !Allowed(role, perm) {goCover_bd84685c5568__1[6] = 1;
+			http.Error(w, "forbidden", http.StatusForbidden)
+			return
+		}
+		goCover_bd84685c5568__1[5] = 1;next.ServeHTTP(w, r)
+	})
+}

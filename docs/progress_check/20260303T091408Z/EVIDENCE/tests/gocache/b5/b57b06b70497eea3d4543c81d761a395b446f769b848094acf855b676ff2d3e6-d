@@ -1,0 +1,9 @@
+//line /Users/mac/Desktop/Sentinel/internal/db/db.go:1:1
+package db
+
+import (
+	"context"
+	"github.com/jackc/pgx/v5/pgxpool"
+)
+
+func Connect(ctx context.Context, dsn string) (*pgxpool.Pool, error) {goCover_c89db485804b__0[0] = 1 ; goCover_c89db485804b__0[1] = goCover_c89db485804b_P ; goCover_c89db485804b__0[2] = 0 ; goCover_c89db485804b__0[3] = 1; return pgxpool.New(ctx, dsn) }

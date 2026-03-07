@@ -1,0 +1,78 @@
+//line /Users/mac/Desktop/Sentinel/internal/marketmath/rolling.go:1:1
+package marketmath
+
+import "math"
+
+type Ring struct {
+	buf   []float64
+	size  int
+	idx   int
+	count int
+	sum   float64
+	sumSq float64
+}
+
+func NewRing(size int) *Ring {goCover_3d3a9210d624__6[0] = 1 ; goCover_3d3a9210d624__6[1] = goCover_3d3a9210d624_P ; goCover_3d3a9210d624__6[2] = 6 ; goCover_3d3a9210d624__6[3] = 1;
+	return &Ring{buf: make([]float64, size), size: size}
+}
+
+func (r *Ring) Push(x float64) {goCover_3d3a9210d624__7[0] = 3 ; goCover_3d3a9210d624__7[1] = goCover_3d3a9210d624_P ; goCover_3d3a9210d624__7[2] = 7 ; goCover_3d3a9210d624__7[3] = 1;
+	if r.count < r.size {goCover_3d3a9210d624__7[5] = 1;
+		r.buf[r.idx] = x
+		r.idx = (r.idx + 1) % r.size
+		r.count++
+		r.sum += x
+		r.sumSq += x * x
+		return
+	}
+	goCover_3d3a9210d624__7[4] = 1;old := r.buf[r.idx]
+	r.buf[r.idx] = x
+	r.idx = (r.idx + 1) % r.size
+	r.sum += x - old
+	r.sumSq += x*x - old*old
+}
+
+func (r *Ring) Mean() float64 {goCover_3d3a9210d624__8[0] = 3 ; goCover_3d3a9210d624__8[1] = goCover_3d3a9210d624_P ; goCover_3d3a9210d624__8[2] = 8 ; goCover_3d3a9210d624__8[3] = 1;
+	if r.count == 0 {goCover_3d3a9210d624__8[5] = 1;
+		return 0
+	}
+	goCover_3d3a9210d624__8[4] = 1;return r.sum / float64(r.count)
+}
+
+func (r *Ring) Variance() float64 {goCover_3d3a9210d624__9[0] = 5 ; goCover_3d3a9210d624__9[1] = goCover_3d3a9210d624_P ; goCover_3d3a9210d624__9[2] = 9 ; goCover_3d3a9210d624__9[3] = 1;
+	if r.count < 2 {goCover_3d3a9210d624__9[6] = 1;
+		return 0
+	}
+	goCover_3d3a9210d624__9[4] = 1;n := float64(r.count)
+	mean := r.Mean()
+	v := (r.sumSq / n) - (mean * mean)
+	if v < 0 {goCover_3d3a9210d624__9[7] = 1;
+		return 0
+	}
+	goCover_3d3a9210d624__9[5] = 1;return v
+}
+
+func (r *Ring) Count() int {goCover_3d3a9210d624__10[0] = 1 ; goCover_3d3a9210d624__10[1] = goCover_3d3a9210d624_P ; goCover_3d3a9210d624__10[2] = 10 ; goCover_3d3a9210d624__10[3] = 1;
+	return r.count
+}
+
+func (r *Ring) SumSq() float64 {goCover_3d3a9210d624__11[0] = 1 ; goCover_3d3a9210d624__11[1] = goCover_3d3a9210d624_P ; goCover_3d3a9210d624__11[2] = 11 ; goCover_3d3a9210d624__11[3] = 1;
+	return r.sumSq
+}
+
+func (r *Ring) Std() float64 {goCover_3d3a9210d624__12[0] = 3 ; goCover_3d3a9210d624__12[1] = goCover_3d3a9210d624_P ; goCover_3d3a9210d624__12[2] = 12 ; goCover_3d3a9210d624__12[3] = 1;
+	v := r.Variance()
+	if v <= 0 {goCover_3d3a9210d624__12[5] = 1;
+		return 0
+	}
+	goCover_3d3a9210d624__12[4] = 1;return math.Sqrt(v)
+}
+
+func (r *Ring) AtLag(lag int) (float64, bool) {goCover_3d3a9210d624__13[0] = 3 ; goCover_3d3a9210d624__13[1] = goCover_3d3a9210d624_P ; goCover_3d3a9210d624__13[2] = 13 ; goCover_3d3a9210d624__13[3] = 1;
+	if r.count == 0 || lag < 0 || lag >= r.count {goCover_3d3a9210d624__13[5] = 1;
+		return 0, false
+	}
+	goCover_3d3a9210d624__13[4] = 1;last := (r.idx - 1 + r.size) % r.size
+	pos := (last - lag + r.size) % r.size
+	return r.buf[pos], true
+}

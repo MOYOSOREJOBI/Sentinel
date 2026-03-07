@@ -1,0 +1,22 @@
+//line /Users/mac/Desktop/Sentinel/internal/pipeline/scoring/scoring.go:1:1
+package scoring
+
+import "math"
+
+func ScoreAndSeverity(prevPrice, price float64) (float64, string) {goCover_5593081226fd__0[0] = 7 ; goCover_5593081226fd__0[1] = goCover_5593081226fd_P ; goCover_5593081226fd__0[2] = 0 ; goCover_5593081226fd__0[3] = 1;
+	if prevPrice <= 0 || price <= 0 {goCover_5593081226fd__0[5] = 1;
+		return 0, "stable"
+	}
+	goCover_5593081226fd__0[4] = 1;ret := math.Abs((price / prevPrice) - 1)
+	score := math.Max(0, math.Min(1, ret*25.0))
+	switch {
+	case score >= 0.85:goCover_5593081226fd__0[6] = 1;
+		return score, "critical"
+	case score >= 0.65:goCover_5593081226fd__0[7] = 1;
+		return score, "high"
+	case score >= 0.40:goCover_5593081226fd__0[8] = 1;
+		return score, "elevated"
+	default:goCover_5593081226fd__0[9] = 1;
+		return score, "stable"
+	}
+}

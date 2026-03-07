@@ -1,0 +1,2 @@
+web/test-results/.last-run.json
+web/test-results/world-map-filtered-queue.png

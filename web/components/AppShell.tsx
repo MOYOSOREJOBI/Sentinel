@@ -7,7 +7,7 @@ import { api, GlobalFilters, Role } from '../lib/api'
 import FilterCombobox from './FilterCombobox'
 import { fromDateTimeLocalValue, mergeFilterState, parseFilterState, toDateTimeLocalValue } from '../lib/filterState'
 import { requireAuth } from '../lib/requireAuth'
-import { allLocales, applyLocale, localeLabel, useI18n } from '../lib/i18n'
+import { allLocales, applyLocale, localeLabel, stripLocalePrefix, useI18n, withLocalePath } from '../lib/i18n'
 
 const PRIMARY_NAV_ITEMS = [
   { href: '/command-center', label: 'Command Center', key: 'commandCenter' },
@@ -35,7 +35,16 @@ const FILTER_BAR_ROUTES = new Set([
 ])
 
 export function shouldShowFilterBar(pathname?: string | null) {
-  return FILTER_BAR_ROUTES.has(String(pathname || ''))
+  return FILTER_BAR_ROUTES.has(stripLocalePrefix(pathname))
+}
+
+export function buildFilterAwareHref(pathname: string, locale: string, search?: string | null, preserveFilters = false) {
+  const base = withLocalePath(pathname, locale)
+  const nextSearch = String(search || '').replace(/^\?/, '')
+  if (!preserveFilters || !nextSearch || !shouldShowFilterBar(pathname)) {
+    return base
+  }
+  return `${base}?${nextSearch}`
 }
 
 export function useGlobalFilters() {
@@ -83,28 +92,43 @@ export default function AppShell({
 }) {
   const pathname = usePathname()
   const router = useRouter()
+  const searchParams = useSearchParams()
   const [me, setMe] = useState<{ email: string; role: Role }>({ email: '', role: 'viewer' })
   const { locale, setLocale, tr } = useI18n()
+  const logicalPathname = useMemo(() => stripLocalePrefix(pathname), [pathname])
 
   useEffect(() => {
     applyLocale(locale)
+    const nextPath = withLocalePath(pathname, locale)
+    const query = searchParams?.toString()
+    const target = query ? `${nextPath}?${query}` : nextPath
+    if (pathname && pathname !== nextPath) {
+      router.replace(target, { scroll: false })
+    }
+  }, [locale, pathname, router, searchParams])
+
+  useEffect(() => {
     requireAuth(router)
       .then((m) => {
         if (!m) return
         setMe({ email: m.email || m.user || '', role: m.role || 'viewer' })
+        if (m.preferredLocale && m.preferredLocale !== locale) {
+          setLocale(m.preferredLocale as any)
+        }
       })
-      .catch(() => router.replace('/login'))
-  }, [router, locale])
+      .catch(() => router.replace(withLocalePath('/login', locale)))
+  }, [locale, router])
 
   const logout = async () => {
     await api.logout()
-    router.replace('/login')
+    router.replace(withLocalePath('/login', locale))
   }
 
   const roleLabel = useMemo(() => me.role.charAt(0).toUpperCase() + me.role.slice(1), [me.role])
   const primaryItems = useMemo(() => PRIMARY_NAV_ITEMS.filter((i) => roleAllowed(me.role, i.minRole)), [me.role])
   const bottomItems = useMemo(() => BOTTOM_NAV_ITEMS, [])
   const showFilterBar = Boolean(setFilters && shouldShowFilterBar(pathname))
+  const search = searchParams?.toString() || ''
 
   const applySuggestion = (field: string, value: string, suggestion?: { kind: string; value: string }) => {
     if (!setFilters) {
@@ -150,14 +174,14 @@ export default function AppShell({
         <div className="nav-section-label">{tr('navPrimary', 'Primary')}</div>
         <nav className="left-nav-list">
           {primaryItems.map((item) => (
-            <Link key={item.href} href={item.href} className={`left-nav-link ${pathname === item.href ? 'active' : ''}`}>{tr(item.key, item.label)}</Link>
+            <Link key={item.href} href={buildFilterAwareHref(item.href, locale, search, true)} className={`left-nav-link ${logicalPathname === item.href ? 'active' : ''}`}>{tr(item.key, item.label)}</Link>
           ))}
         </nav>
         <div className="left-nav-bottom">
           <div className="nav-section-label">{tr('navReference', 'Reference')}</div>
           <nav className="left-nav-list compact">
             {bottomItems.map((item) => (
-              <Link key={item.href} href={item.href} className={`left-nav-link ${pathname === item.href ? 'active' : ''}`}>{tr(item.key, item.label)}</Link>
+              <Link key={item.href} href={buildFilterAwareHref(item.href, locale, search, false)} className={`left-nav-link ${logicalPathname === item.href ? 'active' : ''}`}>{tr(item.key, item.label)}</Link>
             ))}
           </nav>
           <div className="locale-panel">
@@ -166,7 +190,11 @@ export default function AppShell({
               aria-label={tr('localeLabel', 'Locale')}
               data-testid="locale-switcher"
               value={locale}
-              onChange={(e)=>{ setLocale(e.target.value as any) }}
+              onChange={(e)=>{
+                const next = e.target.value as any
+                setLocale(next)
+                void api.updateLocalePreference(next).catch(() => null)
+              }}
             >
               {allLocales().map((l)=><option key={l} value={l}>{localeLabel(l)}</option>)}
             </select>

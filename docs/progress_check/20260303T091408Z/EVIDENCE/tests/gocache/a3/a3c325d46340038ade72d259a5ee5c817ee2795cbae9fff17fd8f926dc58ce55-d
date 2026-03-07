@@ -1,0 +1,5 @@
+./contracts.go
+./jobs.go
+./runner.go
+./runner_scoring_test.go
+./runner_test.go

@@ -1,0 +1,2 @@
+$ docker compose -f deploy/docker/docker-compose.yml exec -T postgres psql -U sentinel -d sentinel -c SELECT\ \'raw_ticks\'\ AS\ table\,\ count\(\*\)\ FROM\ raw_ticks\ UNION\ ALL\ SELECT\ \'candles\'\,\ count\(\*\)\ FROM\ candles\ UNION\ ALL\ SELECT\ \'features\'\,\ count\(\*\)\ FROM\ features\ UNION\ ALL\ SELECT\ \'scores\'\,\ count\(\*\)\ FROM\ scores\ UNION\ ALL\ SELECT\ \'alerts\'\,\ count\(\*\)\ FROM\ alerts\ UNION\ ALL\ SELECT\ \'incidents\'\,\ count\(\*\)\ FROM\ incidents\ UNION\ ALL\ SELECT\ \'cases\'\,\ count\(\*\)\ FROM\ cases\;
+service "postgres" is not running

@@ -1,0 +1,28 @@
+//line /Users/mac/Desktop/Sentinel/internal/marketmath/ewma.go:1:1
+package marketmath
+
+import "math"
+
+type EWMA struct {
+	Lambda float64
+	Var    float64
+	Init   bool
+}
+
+func NewEWMA(lambda float64) *EWMA {goCover_3d3a9210d624__2[0] = 1 ; goCover_3d3a9210d624__2[1] = goCover_3d3a9210d624_P ; goCover_3d3a9210d624__2[2] = 2 ; goCover_3d3a9210d624__2[3] = 1;
+	return &EWMA{Lambda: lambda}
+}
+
+func (e *EWMA) Update(ret float64) {goCover_3d3a9210d624__3[0] = 3 ; goCover_3d3a9210d624__3[1] = goCover_3d3a9210d624_P ; goCover_3d3a9210d624__3[2] = 3 ; goCover_3d3a9210d624__3[3] = 1;
+	x2 := ret * ret
+	if !e.Init {goCover_3d3a9210d624__3[5] = 1;
+		e.Var = x2
+		e.Init = true
+		return
+	}
+	goCover_3d3a9210d624__3[4] = 1;e.Var = e.Lambda*e.Var + (1.0-e.Lambda)*x2
+}
+
+func (e *EWMA) Vol() float64 {goCover_3d3a9210d624__4[0] = 1 ; goCover_3d3a9210d624__4[1] = goCover_3d3a9210d624_P ; goCover_3d3a9210d624__4[2] = 4 ; goCover_3d3a9210d624__4[3] = 1;
+	return math.Sqrt(math.Max(e.Var, 1e-12))
+}

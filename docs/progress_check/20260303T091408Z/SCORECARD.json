@@ -1,0 +1,154 @@
+{
+  "backend_apis": {
+    "score": 35,
+    "weight": 0.18,
+    "evidence": [
+      "cmd/gateway-api/main.go:48-135",
+      "cmd/query/main.go:104-628",
+      "cmd/alerts/main.go:77-390",
+      "cmd/governance/main.go:59-342",
+      "docs/progress_check/20260303T091408Z/EVIDENCE/curl/gateway-api_healthz.txt",
+      "docs/progress_check/20260303T091408Z/EVIDENCE/curl/query_readyz.txt"
+    ],
+    "top_blockers": [
+      "Fresh compose boot never produced running API containers because the Go images require a missing repo-root `keys/` directory.",
+      "The browser-facing path could not be exercised because `web` never came up.",
+      "The query service exposes `POST /dev/backfill` without a CSRF middleware in the router setup."
+    ]
+  },
+  "data_pipeline": {
+    "score": 20,
+    "weight": 0.14,
+    "evidence": [
+      "cmd/aggregator/main.go:56-80",
+      "cmd/features/main.go:88-110",
+      "services/inference/app.py:183-320",
+      "cmd/alerts/main.go:408-505",
+      "docs/progress_check/20260303T091408Z/EVIDENCE/docker/compose_up.txt"
+    ],
+    "top_blockers": [
+      "No live pipeline proof exists in this run because the stack failed before any containers started.",
+      "The only current proof for the pipeline is static code, not runtime output.",
+      "Fresh-boot score persistence could not be validated from PostgreSQL or HTTP."
+    ]
+  },
+  "database": {
+    "score": 15,
+    "weight": 0.12,
+    "evidence": [
+      "sql/migrations/001_init.sql:14-130",
+      "sql/migrations/003_incidents_cases_lineage.sql:18-105",
+      "sql/migrations/008_scores_lineage.sql:2-56",
+      "docs/progress_check/20260303T091408Z/EVIDENCE/sql/tables.txt",
+      "docs/progress_check/20260303T091408Z/EVIDENCE/sql/counts.txt"
+    ],
+    "top_blockers": [
+      "Runtime database truth is blocked because `postgres` never started.",
+      "Row counts, joins, constraints, and live lineage could not be validated in this run.",
+      "The audit can only prove schema intent, not populated state."
+    ]
+  },
+  "ml_quant": {
+    "score": 30,
+    "weight": 0.10,
+    "evidence": [
+      "services/inference/app.py:37-52",
+      "services/inference/app.py:147-162",
+      "services/inference/app.py:183-243",
+      "services/inference/app.py:256-276",
+      "cmd/alerts/main.go:421-483"
+    ],
+    "top_blockers": [
+      "The inference service could not be started, so this run has no live proof of `/readyz` or `/metrics` output.",
+      "Lineage fields are statically wired, but not runtime-validated in the current boot.",
+      "No live `scores` rows were queryable because the database container never existed."
+    ]
+  },
+  "ui_ux": {
+    "score": 15,
+    "weight": 0.12,
+    "evidence": [
+      "web/app/api/proxy/[service]/[...path]/route.ts:11-48",
+      "web/app/api/sse/proxy.ts:7-37",
+      "docs/progress_check/20260303T091408Z/EVIDENCE/ui/login_raw.txt",
+      "docs/progress_check/20260303T091408Z/EVIDENCE/ui/command_center.txt"
+    ],
+    "top_blockers": [
+      "The browser path is entirely unavailable because `web` never came up on port 3000.",
+      "All authenticated UI data probes failed at connection time, so no real-user screen state could be proven.",
+      "The Next proxy layer forwards mutating methods without local auth or CSRF checks and depends entirely on upstream enforcement."
+    ]
+  },
+  "security": {
+    "score": 45,
+    "weight": 0.12,
+    "evidence": [
+      "internal/authz/middleware.go:56-85",
+      "internal/middleware/csrf.go:61-85",
+      "internal/middleware/ratelimit.go:44-56",
+      "cmd/alerts/main.go:116-119",
+      "cmd/governance/main.go:79-81",
+      "docs/progress_check/20260303T091408Z/EVIDENCE/security/alerts_ack_unauth.txt"
+    ],
+    "top_blockers": [
+      "Runtime security probes are mostly inconclusive because the stack never became reachable.",
+      "`query` has an authenticated admin write route without a CSRF middleware.",
+      "`gateway-api` logout can execute without explicit auth if no valid auth context is present."
+    ]
+  },
+  "observability": {
+    "score": 25,
+    "weight": 0.08,
+    "evidence": [
+      "cmd/aggregator/main.go:56-80",
+      "cmd/features/main.go:88-110",
+      "cmd/simulator/main.go:54-70",
+      "services/inference/app.py:274-276",
+      "docs/progress_check/20260303T091408Z/EVIDENCE/metrics/prom_targets.json",
+      "docs/progress_check/20260303T091408Z/EVIDENCE/metrics/metrics_summary.txt"
+    ],
+    "top_blockers": [
+      "Runtime observability is blocked because no stack was reachable on localhost after the fresh boot.",
+      "Prometheus and Grafana endpoints were not live in the current run.",
+      "Metric surfaces exist in code, but not in current runtime evidence."
+    ]
+  },
+  "testing": {
+    "score": 20,
+    "weight": 0.08,
+    "evidence": [
+      "Makefile:56-62",
+      "docs/progress_check/20260303T091408Z/EVIDENCE/tests/make_test.txt",
+      "docs/progress_check/20260303T091408Z/EVIDENCE/tests/go_test_count1_gocache.txt",
+      "docs/progress_check/20260303T091408Z/EVIDENCE/tests/go_test_race_gocache.txt",
+      "docs/progress_check/20260303T091408Z/EVIDENCE/tests/go_vet_gocache.txt"
+    ],
+    "top_blockers": [
+      "The `sentinel/scripts` package is not testable as a package because it contains two `main` functions in one directory.",
+      "Several tests require binding ephemeral loopback ports and fail in this environment, which reduces usable signal here.",
+      "Coverage generation was only partial because the package failures stop a clean full-report pass."
+    ]
+  },
+  "production_ops": {
+    "score": 10,
+    "weight": 0.06,
+    "evidence": [
+      "README.md:66-76",
+      "scripts/run-demo.sh:23-35",
+      "scripts/playwright-docker.sh:3-9",
+      "docs/progress_check/20260303T091408Z/EVIDENCE/docker/compose_up.txt",
+      "docs/progress_check/20260303T091408Z/EVIDENCE/playwright/results.txt"
+    ],
+    "top_blockers": [
+      "The documented raw compose path is currently broken on a clean repo checkout without generated dev keys.",
+      "The Playwright Docker path hit a separate host-port collision on `5432`.",
+      "Current operational scripts are not converged on one reliable fresh-boot path."
+    ]
+  },
+  "demo_completion_percent": 0,
+  "production_readiness_percent": 25,
+  "scoring_notes": {
+    "demo_completion_basis": "No `docs/audit/_latest/proofs` markers exist in this repo snapshot, and the fresh boot failed before any current-run demo proof could complete.",
+    "weighted_total_formula": "sum(score * weight), rounded to nearest whole number"
+  }
+}

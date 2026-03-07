@@ -30,14 +30,11 @@ func Run(ctx context.Context, db *pgxpool.Pool, jobID string) error {
 		return err
 	}
 	sortTicks(ticks)
-	result := Result{}
-	if job.ReplayMode != "as_scored" {
-		result, err = recomputePipeline(ctx, db, job, ticks)
-		if err != nil {
-			_ = markReplayJobFailed(ctx, db, jobID, err.Error())
-			metrics.IncReplayJobEvent("governance", "failed")
-			return err
-		}
+	result, err := recomputePipeline(ctx, db, job, ticks)
+	if err != nil {
+		_ = markReplayJobFailed(ctx, db, jobID, err.Error())
+		metrics.IncReplayJobEvent("governance", "failed")
+		return err
 	}
 	if err := persistReplayResult(ctx, db, job, result); err != nil {
 		_ = markReplayJobFailed(ctx, db, jobID, err.Error())
@@ -91,25 +88,7 @@ func persistReplayResult(ctx context.Context, db *pgxpool.Pool, job Job, result 
 		return err
 	}
 	b, _ := json.Marshal(diff)
-	_, err = db.Exec(ctx, `INSERT INTO replay_runs(id,incident_id,status,diff_summary,completed_at) VALUES($1,$2,'completed',$3,now()) ON CONFLICT (id) DO UPDATE SET status='completed',diff_summary=$3,completed_at=now()`, job.ID, job.ReplayMode, b)
-	_, err = db.Exec(ctx, `INSERT INTO replay_runs(id,incident_id,status,diff_summary,completed_at) VALUES($1,'recompute','completed',$2,now()) ON CONFLICT (id) DO UPDATE SET status='completed',diff_summary=$2,completed_at=now()`, job.ID, b)
+	_, err = db.Exec(ctx, `INSERT INTO replay_runs(id,incident_id,status,diff_summary,started_at,completed_at) VALUES($1,$2,'completed',$3,now(),now())
+ON CONFLICT (id) DO UPDATE SET status='completed',diff_summary=$3,completed_at=now()`, job.ID, job.ID, b)
 	return err
-}
-
-func buildReplayDiffSummary(ctx context.Context, db *pgxpool.Pool, job Job, result Result) (DiffSummary, error) {
-	as := ScoreStats{}
-	rec := ScoreStats{}
-	if err := db.QueryRow(ctx, `SELECT count(*),coalesce(avg(score),0),count(*) FILTER (WHERE severity in ('high','critical')) FROM scores WHERE ts BETWEEN $1 AND $2 AND coalesce(replay_run_id,'')=''`, job.TimeWindowStart, job.TimeWindowEnd).Scan(&as.Count, &as.AvgScore, &as.HighOrHigher); err != nil {
-		return DiffSummary{}, err
-	}
-	if err := db.QueryRow(ctx, `SELECT count(*),coalesce(avg(score),0),count(*) FILTER (WHERE severity in ('high','critical')) FROM scores WHERE replay_run_id=$1`, job.ID).Scan(&rec.Count, &rec.AvgScore, &rec.HighOrHigher); err != nil {
-		return DiffSummary{}, err
-	}
-	return DiffSummary{
-		Result:         result,
-		AsScored:       as,
-		Recomputed:     rec,
-		AvgScoreDelta:  rec.AvgScore - as.AvgScore,
-		HighCountDelta: rec.HighOrHigher - as.HighOrHigher,
-	}, nil
 }

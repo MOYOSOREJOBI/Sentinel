@@ -27,7 +27,9 @@ type feedRow struct {
 	TopDriver1            string
 	TopDriver2            string
 	LastActivityAt        time.Time
+	CountryISO2           string
 	CountryCode           string
+	CountryName           string
 	Region                string
 	Industry              string
 	Sector                string
@@ -254,7 +256,7 @@ func LoadRiskFeed(ctx context.Context, db *pgxpool.Pool, f QueueFilters, limit i
 	where, args := whereClause(f)
 	q := `SELECT i.id,i.primary_symbol,i.status,i.severity_band,coalesce(i.priority_score,0),coalesce(i.composite_risk,0),
 coalesce(i.escalation_probability,0),coalesce(i.confidence,0),coalesce(i.trust_state,'stable'),coalesce(i.model_version,''),
-coalesce(i.top_driver_1,''),coalesce(i.top_driver_2,''),i.last_activity_at,coalesce(m.country_code,'XX'),coalesce(m.region,''),
+coalesce(i.top_driver_1,''),coalesce(i.top_driver_2,''),i.last_activity_at,coalesce(nullif(upper(m.country_code),''),'XX'),coalesce(m.country_name,''),coalesce(m.region,''),
 coalesce(m.industry,''),coalesce(m.sector,''),coalesce(m.venue,'')
 FROM incidents i
 LEFT JOIN instrument_metadata m ON m.instrument_id=i.primary_symbol
@@ -275,13 +277,14 @@ LIMIT 500`
 		if err := rows.Scan(
 			&r.ID, &r.Symbol, &r.Status, &r.SeverityBand, &r.PriorityScore, &r.CompositeRisk,
 			&r.EscalationProbability, &r.Confidence, &r.TrustState, &r.ModelVersion,
-			&r.TopDriver1, &r.TopDriver2, &r.LastActivityAt, &r.CountryCode, &r.Region,
-			&r.Industry, &r.Sector, &r.Venue,
-		); err != nil {
-			continue
-		}
+				&r.TopDriver1, &r.TopDriver2, &r.LastActivityAt, &r.CountryISO2, &r.CountryName, &r.Region,
+				&r.Industry, &r.Sector, &r.Venue,
+			); err != nil {
+				continue
+			}
+			r.CountryCode = r.CountryISO2
 
-		score, marketImplied, components, reason := rankFeedRow(r, f, now, mode)
+			score, marketImplied, components, reason := rankFeedRow(r, f, now, mode)
 		ranked = append(ranked, feedRanked{
 			row:               r,
 			rankScore:         score,
@@ -337,10 +340,13 @@ LIMIT 500`
 			"escalation_prob":       item.row.EscalationProbability,
 			"confidence":            item.row.Confidence,
 			"trustState":            item.row.TrustState,
-			"modelVersion":          item.row.ModelVersion,
-			"countryCode":           item.row.CountryCode,
-			"country_code":          item.row.CountryCode,
-			"region":                item.row.Region,
+				"modelVersion":          item.row.ModelVersion,
+				"countryIso2":           item.row.CountryISO2,
+				"countryCode":           item.row.CountryCode,
+				"country_code":          item.row.CountryCode,
+				"countryName":           item.row.CountryName,
+				"country_name":          item.row.CountryName,
+				"region":                item.row.Region,
 			"industry":              item.row.Industry,
 			"sector":                item.row.Sector,
 			"venue":                 item.row.Venue,

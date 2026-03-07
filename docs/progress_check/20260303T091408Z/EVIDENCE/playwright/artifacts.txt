@@ -1,0 +1,6 @@
+$ find docs/progress_check/20260303T091408Z/EVIDENCE/playwright -type f | sort
+docs/progress_check/20260303T091408Z/EVIDENCE/playwright/artifacts.txt
+docs/progress_check/20260303T091408Z/EVIDENCE/playwright/logs/playwright.log
+docs/progress_check/20260303T091408Z/EVIDENCE/playwright/results.txt
+
+$ find web -maxdepth 3 \( -path "*/playwright-report/*" -o -path "*/test-results/*" -o -path "*/blob-report/*" \) -type f | sort

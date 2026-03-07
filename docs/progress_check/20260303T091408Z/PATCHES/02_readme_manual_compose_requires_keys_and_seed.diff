@@ -1,0 +1,12 @@
+diff --git a/README.md b/README.md
+--- a/README.md
++++ b/README.md
+@@
+ Or run compose manually:
+ 
+ ```bash
+-docker compose -f deploy/docker/docker-compose.yml up -d --build
++make dev-keys
++docker compose -f deploy/docker/docker-compose.yml up -d --build
++make seed
+ ```

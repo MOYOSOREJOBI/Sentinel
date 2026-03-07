@@ -1,0 +1,12 @@
+# ./...
+pattern ./...: open /Users/mac/Library/Caches/go-build/32/32464cc8898ab53c2a51830bd8551e6b767e2e17833c2c430f511abe18b6b233-a: operation not permitted
+FAIL	./... [setup failed]
+--- FAIL: TestCSRF_RedisBackedExpiry (0.00s)
+    redis_backing_test.go:18: start redis stub: listen tcp 127.0.0.1:0: bind: operation not permitted
+--- FAIL: TestRateLimit_RedisBackedBlocking (0.00s)
+    redis_backing_test.go:49: start redis stub: listen tcp 127.0.0.1:0: bind: operation not permitted
+FAIL
+FAIL	sentinel/internal/middleware	4.965s
+?   	sentinel/internal/rediskv	[no test files]
+?   	sentinel/internal/testredis	[no test files]
+FAIL

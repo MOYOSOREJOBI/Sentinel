@@ -1,0 +1,678 @@
+./scripts/dev-keys.sh
+keys already exist, skipping generation
+[compose] using deploy/docker/docker-compose.override.local.yml
+[ports] web=33000 gateway=58080 query=58085 postgres=55432 redis=56379 redpanda=59092
+ Container docker-postgres-1 Recreate 
+ Container docker-redpanda-1 Recreate 
+ Container docker-redis-1 Recreate 
+ Container docker-redis-1 Recreated 
+ Container docker-redpanda-1 Recreated 
+ Container docker-postgres-1 Recreated 
+ Container docker-redis-1 Starting 
+ Container docker-redpanda-1 Starting 
+ Container docker-postgres-1 Starting 
+ Container docker-redpanda-1 Started 
+ Container docker-redis-1 Started 
+ Container docker-postgres-1 Started 
+NOTICE:  relation "schema_migrations" already exists, skipping
+PostgreSQL is ready, running migrations...
+Skipping 001_init.sql (already applied)...
+Skipping 002_indexes.sql (already applied)...
+Skipping 003_incidents_cases_lineage.sql (already applied)...
+Skipping 004_replay_jobs.sql (already applied)...
+Skipping 005_model_deployments.sql (already applied)...
+Skipping 006_watchlists_and_preferences.sql (already applied)...
+Skipping 007_escalation_oncall.sql (already applied)...
+Skipping 008_scores_lineage.sql (already applied)...
+Skipping 009_incident_ops.sql (already applied)...
+Skipping 010_timescale_rollups.sql (already applied)...
+Skipping 011_preferred_locale.sql (already applied)...
+Migrations complete.
+Redpanda is ready, creating topics...
+TOPIC      STATUS
+raw.ticks  TOPIC_ALREADY_EXISTS: The topic has already been created
+TOPIC            STATUS
+derived.candles  TOPIC_ALREADY_EXISTS: The topic has already been created
+TOPIC             STATUS
+derived.features  TOPIC_ALREADY_EXISTS: The topic has already been created
+TOPIC           STATUS
+derived.scores  TOPIC_ALREADY_EXISTS: The topic has already been created
+TOPIC           STATUS
+alerts.created  TOPIC_ALREADY_EXISTS: The topic has already been created
+TOPIC       STATUS
+dq.metrics  TOPIC_ALREADY_EXISTS: The topic has already been created
+TOPIC           STATUS
+dlq.aggregator  TOPIC_ALREADY_EXISTS: The topic has already been created
+TOPIC         STATUS
+dlq.features  TOPIC_ALREADY_EXISTS: The topic has already been created
+TOPIC          STATUS
+dlq.inference  TOPIC_ALREADY_EXISTS: The topic has already been created
+TOPIC       STATUS
+dlq.alerts  TOPIC_ALREADY_EXISTS: The topic has already been created
+Topics created and metadata available.
+ Image docker-features Building 
+ Image docker-simulator Building 
+ Image docker-gateway-api Building 
+ Image docker-alerts Building 
+ Image docker-governance Building 
+ Image docker-aggregator Building 
+ Image docker-query Building 
+ Image docker-inference Building 
+#1 [internal] load local bake definitions
+#1 reading from stdin 4.03kB done
+#1 DONE 0.0s
+
+#2 [governance internal] load build definition from Dockerfile-go
+#2 transferring dockerfile:
+#2 transferring dockerfile: 428B 0.0s done
+#2 DONE 3.6s
+
+#3 [inference internal] load build definition from Dockerfile.inference
+#3 transferring dockerfile: 240B 0.0s done
+#3 DONE 3.6s
+
+#4 [simulator internal] load metadata for gcr.io/distroless/static-debian12:latest
+#4 DONE 0.5s
+
+#5 [auth] library/golang:pull token for registry-1.docker.io
+#5 DONE 0.0s
+
+#6 [auth] library/python:pull token for registry-1.docker.io
+#6 DONE 0.0s
+
+#7 [governance internal] load metadata for docker.io/library/golang:1.23
+#7 DONE 1.0s
+
+#8 [query internal] load .dockerignore
+#8 ...
+
+#9 [inference internal] load metadata for docker.io/library/python:3.11-slim
+#9 DONE 1.6s
+
+#8 [inference internal] load .dockerignore
+#8 transferring context:
+#8 transferring context: 2B done
+#8 DONE 5.3s
+
+#10 [query internal] load build context
+#10 ...
+
+#11 [inference internal] load build context
+#11 transferring context: 1.84kB 0.0s done
+#11 DONE 0.1s
+
+#12 [inference 1/5] FROM docker.io/library/python:3.11-slim@sha256:4057d02a202f69bfbfe10f65300519f612eb00fc595b8499f77d3cfe5b1b9fd4
+#12 resolve docker.io/library/python:3.11-slim@sha256:4057d02a202f69bfbfe10f65300519f612eb00fc595b8499f77d3cfe5b1b9fd4 0.1s done
+#12 DONE 0.1s
+
+#13 [features stage-1 1/5] FROM gcr.io/distroless/static-debian12:latest@sha256:20bc6c0bc4d625a22a8fde3e55f6515709b32055ef8fb9cfbddaa06d1760f838
+#13 resolve gcr.io/distroless/static-debian12:latest@sha256:20bc6c0bc4d625a22a8fde3e55f6515709b32055ef8fb9cfbddaa06d1760f838 0.1s done
+#13 DONE 0.1s
+
+#14 [alerts build 1/6] FROM docker.io/library/golang:1.23@sha256:60deed95d3888cc5e4d9ff8a10c54e5edc008c6ae3fba6187be6fb592e19e8c0
+#14 resolve docker.io/library/golang:1.23@sha256:60deed95d3888cc5e4d9ff8a10c54e5edc008c6ae3fba6187be6fb592e19e8c0 0.1s done
+#14 DONE 0.2s
+
+#10 [query internal] load build context
+#10 transferring context: 51.00MB 5.1s
+#10 transferring context: 51.30MB 5.7s done
+#10 transferring context: 51.30MB 5.7s done
+#10 ...
+
+#12 [inference 1/5] FROM docker.io/library/python:3.11-slim@sha256:4057d02a202f69bfbfe10f65300519f612eb00fc595b8499f77d3cfe5b1b9fd4
+#12 DONE 0.3s
+
+#10 [query internal] load build context
+#10 ...
+
+#12 [inference 1/5] FROM docker.io/library/python:3.11-slim@sha256:4057d02a202f69bfbfe10f65300519f612eb00fc595b8499f77d3cfe5b1b9fd4
+#12 sha256:2067094444255bb5bf0f8b525f10409691c57f48c48e6bebac8c3a85df4f9dd2 0B / 1.29MB 0.2s
+#12 sha256:bbf418262cbe98089272fafddcc570e7fa85e6fa28fe7163dc445136042bd183 0B / 14.37MB 0.2s
+#12 sha256:43272e9c9d4bd6009934139dd3c958777b55bdbe0ccadb5e7a13f847436fabd2 250B / 250B 0.2s done
+#12 sha256:bbf418262cbe98089272fafddcc570e7fa85e6fa28fe7163dc445136042bd183 4.19MB / 14.37MB 0.5s
+#12 sha256:2067094444255bb5bf0f8b525f10409691c57f48c48e6bebac8c3a85df4f9dd2 1.29MB / 1.29MB 0.5s done
+#12 sha256:bbf418262cbe98089272fafddcc570e7fa85e6fa28fe7163dc445136042bd183 10.49MB / 14.37MB 0.6s
+#12 extracting sha256:2067094444255bb5bf0f8b525f10409691c57f48c48e6bebac8c3a85df4f9dd2
+#12 sha256:bbf418262cbe98089272fafddcc570e7fa85e6fa28fe7163dc445136042bd183 14.37MB / 14.37MB 0.7s done
+#12 extracting sha256:2067094444255bb5bf0f8b525f10409691c57f48c48e6bebac8c3a85df4f9dd2 0.3s done
+#12 extracting sha256:bbf418262cbe98089272fafddcc570e7fa85e6fa28fe7163dc445136042bd183
+#12 extracting sha256:bbf418262cbe98089272fafddcc570e7fa85e6fa28fe7163dc445136042bd183 1.7s done
+#12 DONE 2.9s
+
+#10 [query internal] load build context
+#10 ...
+
+#12 [inference 1/5] FROM docker.io/library/python:3.11-slim@sha256:4057d02a202f69bfbfe10f65300519f612eb00fc595b8499f77d3cfe5b1b9fd4
+#12 extracting sha256:43272e9c9d4bd6009934139dd3c958777b55bdbe0ccadb5e7a13f847436fabd2 0.0s done
+#12 DONE 2.9s
+
+#15 [inference 2/5] WORKDIR /app
+#15 ...
+
+#10 [query internal] load build context
+#10 DONE 11.1s
+
+#15 [inference 2/5] WORKDIR /app
+#15 DONE 7.0s
+
+#16 [gateway-api build 2/6] WORKDIR /app
+#16 CACHED
+
+#17 [gateway-api build 3/6] COPY go.mod go.sum ./
+#17 CACHED
+
+#18 [gateway-api build 4/6] RUN go mod download
+#18 CACHED
+
+#19 [gateway-api build 5/6] COPY . .
+#19 ...
+
+#20 [inference 3/5] COPY services/inference/requirements.txt .
+#20 DONE 0.2s
+
+#21 [inference 4/5] RUN pip install --no-cache-dir -r requirements.txt
+#21 6.951 Collecting flask==3.0.3 (from -r requirements.txt (line 1))
+#21 7.018   Downloading flask-3.0.3-py3-none-any.whl.metadata (3.2 kB)
+#21 7.073 Collecting kafka-python==2.0.2 (from -r requirements.txt (line 2))
+#21 7.088   Downloading kafka_python-2.0.2-py2.py3-none-any.whl.metadata (7.8 kB)
+#21 7.139 Collecting prometheus-client==0.20.0 (from -r requirements.txt (line 3))
+#21 7.153   Downloading prometheus_client-0.20.0-py3-none-any.whl.metadata (1.8 kB)
+#21 7.204 Collecting python-snappy==0.7.1 (from -r requirements.txt (line 4))
+#21 7.215   Downloading python_snappy-0.7.1-py3-none-any.whl.metadata (1.3 kB)
+#21 7.296 Collecting Werkzeug>=3.0.0 (from flask==3.0.3->-r requirements.txt (line 1))
+#21 7.306   Downloading werkzeug-3.1.6-py3-none-any.whl.metadata (4.0 kB)
+#21 7.351 Collecting Jinja2>=3.1.2 (from flask==3.0.3->-r requirements.txt (line 1))
+#21 7.361   Downloading jinja2-3.1.6-py3-none-any.whl.metadata (2.9 kB)
+#21 7.396 Collecting itsdangerous>=2.1.2 (from flask==3.0.3->-r requirements.txt (line 1))
+#21 7.406   Downloading itsdangerous-2.2.0-py3-none-any.whl.metadata (1.9 kB)
+#21 7.459 Collecting click>=8.1.3 (from flask==3.0.3->-r requirements.txt (line 1))
+#21 7.470   Downloading click-8.3.1-py3-none-any.whl.metadata (2.6 kB)
+#21 7.517 Collecting blinker>=1.6.2 (from flask==3.0.3->-r requirements.txt (line 1))
+#21 7.528   Downloading blinker-1.9.0-py3-none-any.whl.metadata (1.6 kB)
+#21 7.886 Collecting cramjam (from python-snappy==0.7.1->-r requirements.txt (line 4))
+#21 7.906   Downloading cramjam-2.11.0-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (5.6 kB)
+#21 8.042 Collecting MarkupSafe>=2.0 (from Jinja2>=3.1.2->flask==3.0.3->-r requirements.txt (line 1))
+#21 8.050   Downloading markupsafe-3.0.3-cp311-cp311-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl.metadata (2.7 kB)
+#21 8.096 Downloading flask-3.0.3-py3-none-any.whl (101 kB)
+#21 8.104    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 101.7/101.7 kB 50.9 MB/s eta 0:00:00
+#21 8.118 Downloading kafka_python-2.0.2-py2.py3-none-any.whl (246 kB)
+#21 8.128    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 246.5/246.5 kB 57.9 MB/s eta 0:00:00
+#21 8.142 Downloading prometheus_client-0.20.0-py3-none-any.whl (54 kB)
+#21 8.148    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 54.5/54.5 kB 131.1 MB/s eta 0:00:00
+#21 8.160 Downloading python_snappy-0.7.1-py3-none-any.whl (8.6 kB)
+#21 8.169 Downloading blinker-1.9.0-py3-none-any.whl (8.5 kB)
+#21 8.185 Downloading click-8.3.1-py3-none-any.whl (108 kB)
+#21 8.193    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 108.3/108.3 kB 62.1 MB/s eta 0:00:00
+#21 8.204 Downloading itsdangerous-2.2.0-py3-none-any.whl (16 kB)
+#21 8.215 Downloading jinja2-3.1.6-py3-none-any.whl (134 kB)
+#21 8.221    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 134.9/134.9 kB 97.0 MB/s eta 0:00:00
+#21 8.232 Downloading werkzeug-3.1.6-py3-none-any.whl (225 kB)
+#21 8.240    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 225.2/225.2 kB 125.8 MB/s eta 0:00:00
+#21 8.252 Downloading cramjam-2.11.0-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (2.0 MB)
+#21 8.280    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 2.0/2.0 MB 83.9 MB/s eta 0:00:00
+#21 8.292 Downloading markupsafe-3.0.3-cp311-cp311-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl (22 kB)
+#21 8.511 Installing collected packages: kafka-python, prometheus-client, MarkupSafe, itsdangerous, cramjam, click, blinker, Werkzeug, python-snappy, Jinja2, flask
+#21 10.10 Successfully installed Jinja2-3.1.6 MarkupSafe-3.0.3 Werkzeug-3.1.6 blinker-1.9.0 click-8.3.1 cramjam-2.11.0 flask-3.0.3 itsdangerous-2.2.0 kafka-python-2.0.2 prometheus-client-0.20.0 python-snappy-0.7.1
+#21 10.10 WARNING: Running pip as the 'root' user can result in broken permissions and conflicting behaviour with the system package manager. It is recommended to use a virtual environment instead: https://pip.pypa.io/warnings/venv
+#21 10.26 
+#21 10.26 [notice] A new release of pip is available: 24.0 -> 26.0.1
+#21 10.26 [notice] To update, run: pip install --upgrade pip
+#21 DONE 11.3s
+
+#19 [gateway-api build 5/6] COPY . .
+#19 ...
+
+#22 [inference 5/5] COPY services/inference .
+#22 DONE 0.2s
+
+#19 [gateway-api build 5/6] COPY . .
+#19 ...
+
+#23 [inference] exporting to image
+#23 exporting layers
+#23 exporting layers 2.0s done
+#23 exporting manifest sha256:71c5d5cdd33d17dd7abd31c69a874285a8f57fe0523740431baff2ef47145044 0.0s done
+#23 exporting config sha256:4ac0d34fe4046f713a79635180496d62ec1b5b8db68d059a53bb12f683fe81db 0.0s done
+#23 exporting attestation manifest sha256:ee64f047fef6dc2a840cfc01ed19d95df997dbea1feab6d1221d03133387839c 0.0s done
+#23 exporting manifest list sha256:a9edaf2205852782e7711c9ba4ddc4e6bf7407ca9cefa6fd003fa943f53b2276 0.0s done
+#23 naming to docker.io/library/docker-inference:latest
+#23 naming to docker.io/library/docker-inference:latest done
+#23 unpacking to docker.io/library/docker-inference:latest
+#23 unpacking to docker.io/library/docker-inference:latest 0.7s done
+#23 DONE 2.9s
+
+#19 [gateway-api build 5/6] COPY . .
+#19 ...
+
+#24 [inference] resolving provenance for metadata file
+#24 DONE 0.0s
+
+#19 [gateway-api build 5/6] COPY . .
+#19 DONE 23.8s
+
+#25 [aggregator build 6/6] RUN CGO_ENABLED=0 GOOS=linux go build -o /bin/service ./cmd/aggregator
+#25 ...
+
+#26 [features build 6/6] RUN CGO_ENABLED=0 GOOS=linux go build -o /bin/service ./cmd/features
+#26 ...
+
+#27 [gateway-api build 6/6] RUN CGO_ENABLED=0 GOOS=linux go build -o /bin/service ./cmd/gateway-api
+#27 ...
+
+#28 [query build 6/6] RUN CGO_ENABLED=0 GOOS=linux go build -o /bin/service ./cmd/query
+#28 ...
+
+#29 [governance build 6/6] RUN CGO_ENABLED=0 GOOS=linux go build -o /bin/service ./cmd/governance
+#29 ...
+
+#30 [simulator build 6/6] RUN CGO_ENABLED=0 GOOS=linux go build -o /bin/service ./cmd/simulator
+#30 ...
+
+#31 [alerts build 6/6] RUN CGO_ENABLED=0 GOOS=linux go build -o /bin/service ./cmd/alerts
+#31 ...
+
+#28 [query build 6/6] RUN CGO_ENABLED=0 GOOS=linux go build -o /bin/service ./cmd/query
+#28 DONE 91.5s
+
+#27 [gateway-api build 6/6] RUN CGO_ENABLED=0 GOOS=linux go build -o /bin/service ./cmd/gateway-api
+#27 DONE 91.5s
+
+#31 [alerts build 6/6] RUN CGO_ENABLED=0 GOOS=linux go build -o /bin/service ./cmd/alerts
+#31 ...
+
+#32 [gateway-api stage-1 4/5] WORKDIR /app
+#32 CACHED
+
+#33 [gateway-api stage-1 2/5] COPY --from=build /bin/service /app/service
+#33 CACHED
+
+#34 [gateway-api stage-1 3/5] COPY --from=build /app/services/inference/models /app/inference-models
+#34 CACHED
+
+#35 [gateway-api stage-1 5/5] COPY keys ./keys
+#35 CACHED
+
+#36 [query stage-1 4/5] WORKDIR /app
+#36 CACHED
+
+#37 [query stage-1 2/5] COPY --from=build /bin/service /app/service
+#37 CACHED
+
+#38 [query stage-1 3/5] COPY --from=build /app/services/inference/models /app/inference-models
+#38 CACHED
+
+#39 [query stage-1 5/5] COPY keys ./keys
+#39 CACHED
+
+#40 [gateway-api] exporting to image
+#40 exporting layers
+#40 exporting layers 0.1s done
+#40 exporting manifest sha256:f1c14f0b3d638d8f06eea6673d9b6b09e9a855c070a34f4d2ade1fb4ff36eead 0.0s done
+#40 exporting config sha256:9a09f8cf53aea3dc3cbac854e5b988053e90ce656906b02152c2fb5985ee32a1 done
+#40 exporting attestation manifest sha256:7fc148cdc9330d79eb49728fad0f578615ae784b471d2628f9d7dd5b82e77a96
+#40 exporting attestation manifest sha256:7fc148cdc9330d79eb49728fad0f578615ae784b471d2628f9d7dd5b82e77a96 0.1s done
+#40 exporting manifest list sha256:84c430f1f8346dca95284491e4e50cd079d6a42dc574ab782d32a0ab3d2503a2
+#40 exporting manifest list sha256:84c430f1f8346dca95284491e4e50cd079d6a42dc574ab782d32a0ab3d2503a2 0.1s done
+#40 naming to docker.io/library/docker-gateway-api:latest 0.0s done
+#40 unpacking to docker.io/library/docker-gateway-api:latest 0.1s done
+#40 DONE 0.7s
+
+#41 [query] exporting to image
+#41 exporting layers 0.1s done
+#41 exporting manifest sha256:a01eec2d4f423d65b878abec9e3b7b69930c2a6b3c42c5d7d0d5f064eb295799 done
+#41 exporting config sha256:18fdb420df84393e3e2c329ec72a065ffb3625e7aa8500d8d06252943f8e456a done
+#41 exporting attestation manifest sha256:7e2f0729c8bb6f1fd3f3693ce59d0e1fef866d45f165fc4fc53f9925128196fd 0.1s done
+#41 exporting manifest list sha256:7e1b49ff0df962f8a259d7b083315da6ae9e59e092007fb0109c953b835e7c9a 0.1s done
+#41 naming to docker.io/library/docker-query:latest 0.0s done
+#41 unpacking to docker.io/library/docker-query:latest 0.1s done
+#41 DONE 0.7s
+
+#26 [features build 6/6] RUN CGO_ENABLED=0 GOOS=linux go build -o /bin/service ./cmd/features
+#26 ...
+
+#42 [query] resolving provenance for metadata file
+#42 DONE 0.2s
+
+#43 [gateway-api] resolving provenance for metadata file
+#43 DONE 0.1s
+
+#25 [aggregator build 6/6] RUN CGO_ENABLED=0 GOOS=linux go build -o /bin/service ./cmd/aggregator
+#25 ...
+
+#29 [governance build 6/6] RUN CGO_ENABLED=0 GOOS=linux go build -o /bin/service ./cmd/governance
+#29 DONE 95.3s
+
+#25 [aggregator build 6/6] RUN CGO_ENABLED=0 GOOS=linux go build -o /bin/service ./cmd/aggregator
+#25 ...
+
+#44 [governance stage-1 2/5] COPY --from=build /bin/service /app/service
+#44 CACHED
+
+#45 [governance stage-1 3/5] COPY --from=build /app/services/inference/models /app/inference-models
+#45 CACHED
+
+#46 [governance stage-1 4/5] WORKDIR /app
+#46 CACHED
+
+#47 [governance stage-1 5/5] COPY keys ./keys
+#47 CACHED
+
+#48 [governance] exporting to image
+#48 exporting layers 0.0s done
+#48 exporting manifest sha256:a32bdca47114fed97796813bbcc3ee2275cdae94aac8c6daefc497b69baa7955 done
+#48 exporting config sha256:76779fa240a41ca273e64926608fa7bfca3ce8009c701086ea385b634d484aab done
+#48 exporting attestation manifest sha256:7b35b6372140722b26a6ce2e76bbd88613b3d17420237295ae26dcbbc66c2624 0.1s done
+#48 exporting manifest list sha256:e520a1160480de521b54c229852df8ffa898e3c9376db22a4ac7703446160da9
+#48 exporting manifest list sha256:e520a1160480de521b54c229852df8ffa898e3c9376db22a4ac7703446160da9 0.0s done
+#48 naming to docker.io/library/docker-governance:latest done
+#48 unpacking to docker.io/library/docker-governance:latest 0.1s done
+#48 DONE 0.5s
+
+#31 [alerts build 6/6] RUN CGO_ENABLED=0 GOOS=linux go build -o /bin/service ./cmd/alerts
+#31 ...
+
+#49 [governance] resolving provenance for metadata file
+#49 DONE 0.0s
+
+#25 [aggregator build 6/6] RUN CGO_ENABLED=0 GOOS=linux go build -o /bin/service ./cmd/aggregator
+#25 ...
+
+#26 [features build 6/6] RUN CGO_ENABLED=0 GOOS=linux go build -o /bin/service ./cmd/features
+#26 DONE 98.6s
+
+#25 [aggregator build 6/6] RUN CGO_ENABLED=0 GOOS=linux go build -o /bin/service ./cmd/aggregator
+#25 ...
+
+#50 [features stage-1 3/5] COPY --from=build /app/services/inference/models /app/inference-models
+#50 CACHED
+
+#51 [features stage-1 4/5] WORKDIR /app
+#51 CACHED
+
+#52 [features stage-1 2/5] COPY --from=build /bin/service /app/service
+#52 CACHED
+
+#53 [features stage-1 5/5] COPY keys ./keys
+#53 CACHED
+
+#54 [features] exporting to image
+#54 exporting layers 0.0s done
+#54 exporting manifest sha256:b8cc4779eb873a94dcc31cf6b80a98b9e63eb0f8d0b4f21ae0e2b7a1a2bed4ea done
+#54 exporting config sha256:ef79473a71ef68c3b2fc74002f11fa1500f9cf6a14a8d0bf5137b3f81566409c done
+#54 exporting attestation manifest sha256:ccc7671688089c99e49e758636fd085f451f5c78f68312afd10d54b5cde9fbc4
+#54 exporting attestation manifest sha256:ccc7671688089c99e49e758636fd085f451f5c78f68312afd10d54b5cde9fbc4 0.1s done
+#54 exporting manifest list sha256:a42c8da6b51e853e0787bf9fa5bcd1a9024f2bbe141a66570d5dcfa7d883d067 0.0s done
+#54 naming to docker.io/library/docker-features:latest done
+#54 unpacking to docker.io/library/docker-features:latest 0.1s done
+#54 DONE 0.5s
+
+#25 [aggregator build 6/6] RUN CGO_ENABLED=0 GOOS=linux go build -o /bin/service ./cmd/aggregator
+#25 ...
+
+#30 [simulator build 6/6] RUN CGO_ENABLED=0 GOOS=linux go build -o /bin/service ./cmd/simulator
+#30 DONE 99.5s
+
+#25 [aggregator build 6/6] RUN CGO_ENABLED=0 GOOS=linux go build -o /bin/service ./cmd/aggregator
+#25 ...
+
+#55 [simulator stage-1 4/5] WORKDIR /app
+#55 CACHED
+
+#56 [simulator stage-1 2/5] COPY --from=build /bin/service /app/service
+#56 CACHED
+
+#57 [simulator stage-1 3/5] COPY --from=build /app/services/inference/models /app/inference-models
+#57 CACHED
+
+#58 [simulator stage-1 5/5] COPY keys ./keys
+#58 CACHED
+
+#59 [simulator] exporting to image
+#59 exporting layers 0.1s done
+#59 exporting manifest sha256:08400685b010e3de57cc17cbc066150f26a6711b014a9d05b409022197fff5b2 done
+#59 exporting config sha256:76139c567925e75a3935199ff06a2274ab019920006508efa9696b70c968493c done
+#59 exporting attestation manifest sha256:06d199c6391b665f0b087a11a64ccb2dd4f0e7272e69991f88d77ed0eb63c70b 0.1s done
+#59 exporting manifest list sha256:7aa3e25230c3745e24fb39a278efa41ace815b92c6064f77a0e70a040de75f7e
+#59 exporting manifest list sha256:7aa3e25230c3745e24fb39a278efa41ace815b92c6064f77a0e70a040de75f7e 0.0s done
+#59 naming to docker.io/library/docker-simulator:latest done
+#59 unpacking to docker.io/library/docker-simulator:latest 0.1s done
+#59 ...
+
+#60 [features] resolving provenance for metadata file
+#60 DONE 0.1s
+
+#59 [simulator] exporting to image
+#59 DONE 0.6s
+
+#31 [alerts build 6/6] RUN CGO_ENABLED=0 GOOS=linux go build -o /bin/service ./cmd/alerts
+#31 ...
+
+#25 [aggregator build 6/6] RUN CGO_ENABLED=0 GOOS=linux go build -o /bin/service ./cmd/aggregator
+#25 DONE 100.6s
+
+#31 [alerts build 6/6] RUN CGO_ENABLED=0 GOOS=linux go build -o /bin/service ./cmd/alerts
+#31 DONE 100.7s
+
+#61 [simulator] resolving provenance for metadata file
+#61 DONE 0.0s
+
+#62 [alerts stage-1 4/5] WORKDIR /app
+#62 CACHED
+
+#63 [alerts stage-1 2/5] COPY --from=build /bin/service /app/service
+#63 CACHED
+
+#64 [alerts stage-1 3/5] COPY --from=build /app/services/inference/models /app/inference-models
+#64 CACHED
+
+#65 [aggregator stage-1 2/5] COPY --from=build /bin/service /app/service
+#65 CACHED
+
+#66 [aggregator stage-1 3/5] COPY --from=build /app/services/inference/models /app/inference-models
+#66 CACHED
+
+#67 [aggregator stage-1 4/5] WORKDIR /app
+#67 CACHED
+
+#68 [aggregator stage-1 5/5] COPY keys ./keys
+#68 CACHED
+
+#69 [alerts stage-1 5/5] COPY keys ./keys
+#69 CACHED
+
+#70 [alerts] exporting to image
+#70 exporting layers 0.1s done
+#70 exporting manifest sha256:6abcd7309c27831361299b45dad08275950900197a9cde50d7933db0a7bf7a9d done
+#70 exporting config sha256:23f338fb59bf3ef3f0899174a1bbe161f26dc1a55cce2618e3ba99c04424ba3d done
+#70 exporting attestation manifest sha256:b567eee0e638521d104430c2512abd4157a0e1550374859c01b33a1ae59b77a2 0.1s done
+#70 exporting manifest list sha256:20dd84bd3ea2a20fe4c860ff43e881cb04c1c10f77a383419e66f50d3260f305
+#70 exporting manifest list sha256:20dd84bd3ea2a20fe4c860ff43e881cb04c1c10f77a383419e66f50d3260f305 0.0s done
+#70 naming to docker.io/library/docker-alerts:latest done
+#70 unpacking to docker.io/library/docker-alerts:latest 0.1s done
+#70 DONE 0.5s
+
+#71 [aggregator] exporting to image
+#71 exporting layers 0.1s done
+#71 exporting manifest sha256:4f0dacb43da0c74570c4fc6087a0b00a7ddc1cea841e18daca0d971c05d0316e done
+#71 exporting config sha256:7a5de4a2d54371d84ed430623f6225ef33a66613c79a2014130d356fdf5d66ea done
+#71 exporting attestation manifest sha256:dde1a9b377be163f5d1a04d488aedec4122da908c12a91bfc3d65677e9939bbb 0.1s done
+#71 exporting manifest list sha256:48a802c78d20931ddfb398d8ea1f29b396508ab8eaa39398514cbe677c7d4e87 0.1s done
+#71 naming to docker.io/library/docker-aggregator:latest 0.0s done
+#71 unpacking to docker.io/library/docker-aggregator:latest 0.1s done
+#71 DONE 0.5s
+
+#72 [alerts] resolving provenance for metadata file
+#72 DONE 0.1s
+
+#73 [aggregator] resolving provenance for metadata file
+#73 DONE 0.0s
+ Image docker-inference Built 
+ Image docker-alerts Built 
+ Image docker-governance Built 
+ Image docker-simulator Built 
+ Image docker-gateway-api Built 
+ Image docker-query Built 
+ Image docker-features Built 
+ Image docker-aggregator Built 
+ Container docker-redis-1 Running 
+ Container docker-redpanda-1 Running 
+ Container docker-prometheus-1 Running 
+ Container docker-postgres-1 Running 
+ Container docker-grafana-1 Running 
+ Container docker-simulator-1 Recreate 
+ Container docker-inference-1 Recreate 
+ Container docker-aggregator-1 Recreate 
+ Container docker-query-1 Recreate 
+ Container docker-alerts-1 Recreate 
+ Container docker-governance-1 Recreate 
+ Container docker-gateway-api-1 Recreate 
+ Container docker-features-1 Recreate 
+ Container docker-governance-1 Recreated 
+ Container docker-gateway-api-1 Recreated 
+ Container docker-query-1 Recreated 
+ Container docker-web-1 Recreate 
+ Container docker-aggregator-1 Recreated 
+ Container docker-features-1 Recreated 
+ Container docker-alerts-1 Recreated 
+ Container docker-simulator-1 Recreated 
+ Container docker-inference-1 Recreated 
+ Container docker-web-1 Recreated 
+ Container docker-redpanda-1 Waiting 
+ Container docker-postgres-1 Waiting 
+ Container docker-postgres-1 Healthy 
+ Container docker-migrate-1 Starting 
+ Container docker-redpanda-1 Healthy 
+ Container docker-topics-init-1 Starting 
+ Container docker-migrate-1 Started 
+ Container docker-postgres-1 Waiting 
+ Container docker-migrate-1 Waiting 
+ Container docker-migrate-1 Waiting 
+ Container docker-postgres-1 Waiting 
+ Container docker-topics-init-1 Started 
+ Container docker-migrate-1 Waiting 
+ Container docker-topics-init-1 Waiting 
+ Container docker-topics-init-1 Waiting 
+ Container docker-postgres-1 Waiting 
+ Container docker-redpanda-1 Waiting 
+ Container docker-redis-1 Waiting 
+ Container docker-migrate-1 Waiting 
+ Container docker-postgres-1 Waiting 
+ Container docker-redpanda-1 Waiting 
+ Container docker-migrate-1 Waiting 
+ Container docker-topics-init-1 Waiting 
+ Container docker-postgres-1 Waiting 
+ Container docker-redpanda-1 Waiting 
+ Container docker-redpanda-1 Waiting 
+ Container docker-redis-1 Waiting 
+ Container docker-migrate-1 Waiting 
+ Container docker-topics-init-1 Waiting 
+ Container docker-topics-init-1 Waiting 
+ Container docker-redis-1 Waiting 
+ Container docker-redis-1 Waiting 
+ Container docker-redpanda-1 Waiting 
+ Container docker-topics-init-1 Waiting 
+ Container docker-postgres-1 Waiting 
+ Container docker-postgres-1 Healthy 
+ Container docker-postgres-1 Healthy 
+ Container docker-redis-1 Healthy 
+ Container docker-postgres-1 Healthy 
+ Container docker-redpanda-1 Healthy 
+ Container docker-redpanda-1 Healthy 
+ Container docker-redis-1 Healthy 
+ Container docker-redpanda-1 Healthy 
+ Container docker-postgres-1 Healthy 
+ Container docker-redis-1 Healthy 
+ Container docker-redis-1 Healthy 
+ Container docker-redpanda-1 Healthy 
+ Container docker-postgres-1 Healthy 
+ Container docker-postgres-1 Healthy 
+ Container docker-redpanda-1 Healthy 
+ Container docker-topics-init-1 Exited 
+ Container docker-topics-init-1 Exited 
+ Container docker-topics-init-1 Exited 
+ Container docker-inference-1 Starting 
+ Container docker-topics-init-1 Exited 
+ Container docker-topics-init-1 Exited 
+ Container docker-topics-init-1 Exited 
+ Container docker-simulator-1 Starting 
+ Container docker-inference-1 Started 
+ Container docker-simulator-1 Started 
+ Container docker-migrate-1 Exited 
+ Container docker-migrate-1 Exited 
+ Container docker-query-1 Starting 
+ Container docker-governance-1 Starting 
+ Container docker-migrate-1 Exited 
+ Container docker-aggregator-1 Starting 
+ Container docker-migrate-1 Exited 
+ Container docker-gateway-api-1 Starting 
+ Container docker-migrate-1 Exited 
+ Container docker-alerts-1 Starting 
+ Container docker-migrate-1 Exited 
+ Container docker-features-1 Starting 
+ Container docker-features-1 Started 
+ Container docker-query-1 Started 
+ Container docker-alerts-1 Started 
+ Container docker-gateway-api-1 Started 
+ Container docker-query-1 Waiting 
+ Container docker-gateway-api-1 Waiting 
+ Container docker-aggregator-1 Started 
+ Container docker-governance-1 Started 
+ Container docker-query-1 Healthy 
+ Container docker-gateway-api-1 Healthy 
+ Container docker-web-1 Starting 
+ Container docker-web-1 Started 
+POSTGRES_URL=postgres://sentinel:sentinel@localhost:55432/sentinel?sslmode=disable go run -tags seedusers ./scripts/seed-users.go
+users, instruments, watchlists, and preferences seeded
+[wait] gateway -> http://localhost:58080/healthz
+[ok] gateway
+[wait] query -> http://localhost:58085/readyz
+[ok] query
+[wait] alerts -> http://localhost:58083/readyz
+[ok] alerts
+[wait] governance -> http://localhost:58084/readyz
+[ok] governance
+[wait] command-center -> http://localhost:33000/command-center
+[ok] command-center
+[ok] query/command-center
+[ok] query/queue
+[ok] query/trust
+[ok] query/world-map
+[ok] query/governance/summary
+[ok] query/executive-summary
+[ok] query/cases
+[pass] Sentinel stack ready (default)
+Unable to find image 'mcr.microsoft.com/playwright:v1.55.0-jammy' locally
+v1.55.0-jammy: Pulling from playwright
+a2e211bf8ef2: Pulling fs layer
+fe45efe6d7bf: Pulling fs layer
+7cdd07fdf967: Pulling fs layer
+660ffc76f83b: Pulling fs layer
+fe45efe6d7bf: Download complete
+660ffc76f83b: Download complete
+660ffc76f83b: Pull complete
+7cdd07fdf967: Download complete
+7cdd07fdf967: Pull complete
+fe45efe6d7bf: Pull complete
+a2e211bf8ef2: Download complete
+a2e211bf8ef2: Pull complete
+Digest: sha256:55db7b712a981e9cc1ec757a4511cd01c5ed4e20bd7c84b2dee4e1d320102b9d
+Status: Downloaded newer image for mcr.microsoft.com/playwright:v1.55.0-jammy
+node:internal/modules/package_json_reader:255
+  throw new ERR_MODULE_NOT_FOUND(packageName, fileURLToPath(base), null);
+        ^
+
+Error [ERR_MODULE_NOT_FOUND]: Cannot find package 'playwright' imported from /work/scripts/browser-validate.mjs
+    at Object.getPackageJSONURL (node:internal/modules/package_json_reader:255:9)
+    at packageResolve (node:internal/modules/esm/resolve:767:81)
+    at moduleResolve (node:internal/modules/esm/resolve:853:18)
+    at defaultResolve (node:internal/modules/esm/resolve:983:11)
+    at ModuleLoader.defaultResolve (node:internal/modules/esm/loader:783:12)
+    at #cachedDefaultResolve (node:internal/modules/esm/loader:707:25)
+    at ModuleLoader.resolve (node:internal/modules/esm/loader:690:38)
+    at ModuleLoader.getModuleJobForImport (node:internal/modules/esm/loader:307:38)
+    at ModuleJob._link (node:internal/modules/esm/module_job:183:49) {
+  code: 'ERR_MODULE_NOT_FOUND'
+}
+
+Node.js v22.18.0
+[fail] browser validation

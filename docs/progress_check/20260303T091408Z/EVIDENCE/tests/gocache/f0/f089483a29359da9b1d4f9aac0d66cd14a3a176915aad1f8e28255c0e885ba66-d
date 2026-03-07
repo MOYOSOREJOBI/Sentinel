@@ -1,0 +1,21 @@
+//line /Users/mac/Desktop/Sentinel/internal/marketmath/hash.go:1:1
+package marketmath
+
+import (
+	"crypto/sha256"
+	"encoding/hex"
+	"encoding/json"
+)
+
+func StableFeatureHash(featureMap map[string]float64, orderedKeys []string) (string, error) {goCover_3d3a9210d624__5[0] = 5 ; goCover_3d3a9210d624__5[1] = goCover_3d3a9210d624_P ; goCover_3d3a9210d624__5[2] = 5 ; goCover_3d3a9210d624__5[3] = 1;
+	out := make([][2]interface{}, 0, len(orderedKeys))
+	for _, k := range orderedKeys {goCover_3d3a9210d624__5[6] = 1;
+		out = append(out, [2]interface{}{k, featureMap[k]})
+	}
+	goCover_3d3a9210d624__5[4] = 1;b, err := json.Marshal(out)
+	if err != nil {goCover_3d3a9210d624__5[7] = 1;
+		return "", err
+	}
+	goCover_3d3a9210d624__5[5] = 1;sum := sha256.Sum256(b)
+	return hex.EncodeToString(sum[:]), nil
+}

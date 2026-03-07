@@ -465,7 +465,7 @@ func loadModelDeploymentRows(ctx context.Context, pool *pgxpool.Pool) []map[stri
 	defer rows.Close()
 	out := []map[string]any{}
 	for rows.Next() {
-		var id int
+		var id string
 		var modelName, modelVersion, artifactHash, artifactPath, featureSetVersion, calibrationVersion, status, createdBy, approvedBy, changeReason string
 		var approvedAt, deployedAt, createdAt any
 		if rows.Scan(&id, &modelName, &modelVersion, &artifactHash, &artifactPath, &featureSetVersion, &calibrationVersion, &status, &createdBy, &approvedBy, &approvedAt, &deployedAt, &changeReason, &createdAt) == nil {
@@ -491,7 +491,11 @@ func loadModelDeploymentRows(ctx context.Context, pool *pgxpool.Pool) []map[stri
 }
 
 func loadReplayJobRows(ctx context.Context, pool *pgxpool.Pool) []map[string]any {
-	rows, err := pool.Query(ctx, `SELECT id::text,status,requested_by,requested_at,started_at,completed_at,replay_mode,model_version,feature_set_version,watermark_policy_id,allowed_lateness_ms,error_message FROM replay_jobs ORDER BY requested_at DESC LIMIT 100`)
+	rows, err := pool.Query(ctx, `SELECT rj.id::text,rj.status,rj.requested_by,rj.requested_at,rj.started_at,rj.completed_at,rj.replay_mode,rj.model_version,rj.feature_set_version,rj.watermark_policy_id,rj.allowed_lateness_ms,coalesce(rj.error_message,''),rr.diff_summary
+FROM replay_jobs rj
+LEFT JOIN replay_runs rr ON rr.id = rj.id::text
+ORDER BY rj.requested_at DESC
+LIMIT 100`)
 	if err != nil {
 		return []map[string]any{}
 	}
@@ -501,7 +505,12 @@ func loadReplayJobRows(ctx context.Context, pool *pgxpool.Pool) []map[string]any
 		var id, status, requestedBy, replayMode, modelVersion, featureSetVersion, watermarkPolicy, errorMessage string
 		var requestedAt, startedAt, completedAt any
 		var allowedLatenessMS int
-		if rows.Scan(&id, &status, &requestedBy, &requestedAt, &startedAt, &completedAt, &replayMode, &modelVersion, &featureSetVersion, &watermarkPolicy, &allowedLatenessMS, &errorMessage) == nil {
+		var raw []byte
+		if rows.Scan(&id, &status, &requestedBy, &requestedAt, &startedAt, &completedAt, &replayMode, &modelVersion, &featureSetVersion, &watermarkPolicy, &allowedLatenessMS, &errorMessage, &raw) == nil {
+			summary := map[string]any{}
+			if len(raw) > 0 {
+				_ = json.Unmarshal(raw, &summary)
+			}
 			out = append(out, map[string]any{
 				"id":                id,
 				"status":            status,
@@ -515,10 +524,38 @@ func loadReplayJobRows(ctx context.Context, pool *pgxpool.Pool) []map[string]any
 				"watermarkPolicy":   watermarkPolicy,
 				"allowedLatenessMs": allowedLatenessMS,
 				"errorMessage":      errorMessage,
+				"parityStatus":      mapString(summary, "parity_status", "UNKNOWN"),
+				"matchedCount":      mapNumber(summary, "matched_count"),
+				"mismatchedCount":   mapNumber(summary, "mismatched_count"),
+				"maxScoreDelta":     mapNumber(summary, "max_score_delta"),
+				"determinismStatus": mapString(summary, "determinism_status", "UNKNOWN"),
 			})
 		}
 	}
 	return out
+}
+
+func mapString(m map[string]any, key, fallback string) string {
+	if v, ok := m[key].(string); ok && strings.TrimSpace(v) != "" {
+		return v
+	}
+	return fallback
+}
+
+func mapNumber(m map[string]any, key string) float64 {
+	switch v := m[key].(type) {
+	case float64:
+		return v
+	case int:
+		return float64(v)
+	case int64:
+		return float64(v)
+	case json.Number:
+		n, _ := v.Float64()
+		return n
+	default:
+		return 0
+	}
 }
 
 func loadEscalationPolicyRows(ctx context.Context, pool *pgxpool.Pool) []map[string]any {

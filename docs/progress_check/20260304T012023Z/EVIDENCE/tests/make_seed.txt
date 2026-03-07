@@ -1,0 +1,2 @@
+POSTGRES_URL=postgres://sentinel:sentinel@localhost:55432/sentinel?sslmode=disable go run -tags seedusers ./scripts/seed-users.go
+users, instruments, watchlists, and preferences seeded

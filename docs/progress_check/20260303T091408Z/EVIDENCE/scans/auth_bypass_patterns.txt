@@ -1,0 +1,8 @@
+$ rg -n "AllowUnauth|bypass|skip csrf|dev only" .
+./docs/PRODUCTION_READINESS_REVIEW.md:83:   - Indicates intended controls are currently bypassed at runtime.
+./docs/ml/20260301T061423Z/PRODUCTION_READINESS_REVIEW_excerpt.txt:83:   - Indicates intended controls are currently bypassed at runtime.
+./docs/review/20260301T054050Z/PRODUCTION_READINESS_REVIEW_excerpt.txt:83:    83	   - Indicates intended controls are currently bypassed at runtime.
+./docs/progress_check/20260301T165141Z/GAPS_AND_FIXES.md:35:  - If yes, stop bypassing CSRF for authenticated requests that lack a token.
+./docs/progress_check/20260301T165141Z/REPORT.md:29:| CSRF enforced | README and docs imply CSRF is in place | Partial. Middleware exists, but unauthenticated mutating requests bypass it and authenticated logout succeeded without `X-CSRF-Token` | `internal/middleware/csrf.go:61-84`; `docs/progress_check/20260301T165141Z/EVIDENCE/curl/security/gateway_logout_no_csrf.txt`; `cmd/gateway-api/main.go:71-77`, `cmd/gateway-api/main.go:115-123` |
+./docs/ml/20260301T061330Z/PRODUCTION_READINESS_REVIEW_excerpt.txt:83:   - Indicates intended controls are currently bypassed at runtime.
+./docs/progress_check/20260301T165141Z/EVIDENCE/PRODUCTION_READINESS_REVIEW_excerpt.txt:83:   - Indicates intended controls are currently bypassed at runtime.

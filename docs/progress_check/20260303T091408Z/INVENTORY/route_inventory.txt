@@ -1,0 +1,93 @@
+# Route Inventory
+
+## Alerts
+82:	r.Get("/healthz", func(w http.ResponseWriter, r *http.Request) { w.Write([]byte("ok")) })
+83:	r.Get("/", func(w http.ResponseWriter, r *http.Request) {
+95:	r.Get("/readyz", func(w http.ResponseWriter, r *http.Request) {
+113:	r.Get("/metrics", metrics.Handler)
+122:	mutation.Post("/alerts/{id}/ack", func(w http.ResponseWriter, r *http.Request) {
+136:	mutation.Post("/incidents/{id}/transition", func(w http.ResponseWriter, r *http.Request) {
+174:	mutation.Post("/cases", func(w http.ResponseWriter, r *http.Request) {
+187:	mutation.Post("/incidents/{id}/promote-case", func(w http.ResponseWriter, r *http.Request) {
+203:	mutation.Post("/incidents/{id}/notify-oncall", func(w http.ResponseWriter, r *http.Request) {
+219:	read.Get("/cases", func(w http.ResponseWriter, r *http.Request) {
+237:	read.Get("/notifications", func(w http.ResponseWriter, r *http.Request) {
+257:	read.Get("/cases/{id}", func(w http.ResponseWriter, r *http.Request) {
+281:	mutation.Patch("/cases/{id}", func(w http.ResponseWriter, r *http.Request) {
+322:	mutation.Post("/cases/{id}/notes", func(w http.ResponseWriter, r *http.Request) {
+344:	mutation.Post("/cases/{id}/evidence", func(w http.ResponseWriter, r *http.Request) {
+368:	mutation.Post("/cases/{id}/disposition", func(w http.ResponseWriter, r *http.Request) {
+
+## Governance
+64:	r.Get("/healthz", func(w http.ResponseWriter, r *http.Request) { w.Write([]byte("ok")) })
+65:	r.Get("/", func(w http.ResponseWriter, r *http.Request) {
+77:	r.Get("/readyz", readinessHandler(pool))
+83:	read.Get("/governance/summary", func(w http.ResponseWriter, r *http.Request) {
+93:	read.Get("/active-models", func(w http.ResponseWriter, r *http.Request) {
+123:	r.Get("/metrics", metrics.Handler)
+124:	read.Get("/audit/verify", func(w http.ResponseWriter, r *http.Request) {
+137:	admin.Post("/models/deploy", func(w http.ResponseWriter, r *http.Request) {
+165:	workflow.Post("/replay/start", func(w http.ResponseWriter, r *http.Request) {
+207:	read.Get("/models", func(w http.ResponseWriter, r *http.Request) {
+211:	read.Get("/models/deployments", func(w http.ResponseWriter, r *http.Request) {
+215:	read.Get("/replay/jobs", func(w http.ResponseWriter, r *http.Request) {
+219:	read.Get("/escalation-policies", func(w http.ResponseWriter, r *http.Request) {
+223:	policyAdmin.Post("/escalation-policies", func(w http.ResponseWriter, r *http.Request) {
+284:	policyAdmin.Delete("/escalation-policies/{id}", func(w http.ResponseWriter, r *http.Request) {
+304:	read.Get("/on-call", func(w http.ResponseWriter, r *http.Request) {
+321:	read.Get("/current-oncall", func(w http.ResponseWriter, r *http.Request) {
+331:	workflow.Post("/forecast/refresh", func(w http.ResponseWriter, r *http.Request) {
+
+## Query
+108:	r.Get("/healthz", func(w http.ResponseWriter, r *http.Request) { _, _ = w.Write([]byte("ok")) })
+109:	r.Get("/", func(w http.ResponseWriter, r *http.Request) {
+121:	r.Get("/readyz", func(w http.ResponseWriter, r *http.Request) {
+128:	r.Get("/metrics", metrics.Handler)
+152:		pr.Get("/queue", func(w http.ResponseWriter, r *http.Request) {
+170:		pr.Get("/command-center", func(w http.ResponseWriter, r *http.Request) {
+187:		pr.Get("/feed", func(w http.ResponseWriter, r *http.Request) {
+231:		pr.Get("/search-suggest", func(w http.ResponseWriter, r *http.Request) {
+331:		pr.Get("/trust", func(w http.ResponseWriter, r *http.Request) {
+347:		pr.Get("/world-map", func(w http.ResponseWriter, r *http.Request) {
+364:		pr.Get("/executive-summary", func(w http.ResponseWriter, r *http.Request) {
+426:		pr.Get("/governance/summary", func(w http.ResponseWriter, r *http.Request) {
+454:		pr.Get("/replay/{job}", func(w http.ResponseWriter, r *http.Request) {
+477:		pr.Get("/incident/{id}", func(w http.ResponseWriter, r *http.Request) {
+491:		pr.Get("/incident/{id}/brief", func(w http.ResponseWriter, r *http.Request) {
+519:		pr.Get("/cases", func(w http.ResponseWriter, r *http.Request) {
+537:		pr.Get("/case/{id}", func(w http.ResponseWriter, r *http.Request) {
+549:		pr.Get("/scores", func(w http.ResponseWriter, r *http.Request) {
+571:		pr.Get("/candles", func(w http.ResponseWriter, r *http.Request) {
+595:		pr.Get("/forecast", func(w http.ResponseWriter, r *http.Request) {
+612:		pr.Get("/stream/queue", sseStream(func(ctx context.Context) any {
+620:		pr.Get("/stream/command-center", sseStream(func(ctx context.Context) any {
+624:		pr.Get("/stream/trust", sseStream(func(ctx context.Context) any {
+
+## Gateway
+59:	r.Get("/healthz", func(w http.ResponseWriter, r *http.Request) { _, _ = w.Write([]byte("ok")) })
+60:	r.Get("/", func(w http.ResponseWriter, r *http.Request) {
+72:	r.Get("/readyz", func(w http.ResponseWriter, r *http.Request) {
+79:	r.Get("/metrics", metrics.Handler)
+81:	r.Post("/auth/login", func(w http.ResponseWriter, r *http.Request) {
+117:	r.Post("/auth/logout", func(w http.ResponseWriter, r *http.Request) {
+128:	r.Get("/me", func(w http.ResponseWriter, r *http.Request) {
+
+## Web Route Handlers
+
+$ find web -type f \( -name route.ts -o -name route.js \) | sort
+web/app/api/proxy/[service]/[...path]/route.ts
+web/app/api/sse/alerts/route.ts
+web/app/api/sse/command-center/route.ts
+web/app/api/sse/queue/route.ts
+web/app/api/sse/trust/route.ts
+
+$ rg -n 'export async function (GET|POST|PUT|PATCH|DELETE)' web/app/api
+web/app/api/proxy/[service]/[...path]/route.ts:44:export async function GET(req: NextRequest, ctx: any) { return proxy(req, ctx.params.service, ctx.params.path); }
+web/app/api/proxy/[service]/[...path]/route.ts:45:export async function POST(req: NextRequest, ctx: any) { return proxy(req, ctx.params.service, ctx.params.path); }
+web/app/api/proxy/[service]/[...path]/route.ts:46:export async function PUT(req: NextRequest, ctx: any) { return proxy(req, ctx.params.service, ctx.params.path); }
+web/app/api/proxy/[service]/[...path]/route.ts:47:export async function PATCH(req: NextRequest, ctx: any) { return proxy(req, ctx.params.service, ctx.params.path); }
+web/app/api/proxy/[service]/[...path]/route.ts:48:export async function DELETE(req: NextRequest, ctx: any) { return proxy(req, ctx.params.service, ctx.params.path); }
+web/app/api/sse/trust/route.ts:7:export async function GET(request: Request) {
+web/app/api/sse/alerts/route.ts:7:export async function GET(request: Request) {
+web/app/api/sse/command-center/route.ts:7:export async function GET(request: Request) {
+web/app/api/sse/queue/route.ts:7:export async function GET(request: Request) {

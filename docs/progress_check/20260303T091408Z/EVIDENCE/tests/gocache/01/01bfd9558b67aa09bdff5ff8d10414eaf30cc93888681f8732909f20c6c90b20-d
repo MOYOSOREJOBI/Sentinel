@@ -1,0 +1,28 @@
+//line /Users/mac/Desktop/Sentinel/internal/cache/invalidation.go:1:1
+package cache
+
+import (
+	"context"
+	"strings"
+)
+
+func InvalidateByPrefixes(ctx context.Context, prefixes ...string) {goCover_6b3c91dd9e60__0[0] = 10 ; goCover_6b3c91dd9e60__0[1] = goCover_6b3c91dd9e60_P ; goCover_6b3c91dd9e60__0[2] = 0 ; goCover_6b3c91dd9e60__0[3] = 1;
+	mem.Range(func(key, _ any) bool {goCover_6b3c91dd9e60__0[5] = 1;
+		ks, ok := key.(string)
+		if !ok {goCover_6b3c91dd9e60__0[8] = 1;
+			return true
+		}
+		goCover_6b3c91dd9e60__0[6] = 1;for _, p := range prefixes {goCover_6b3c91dd9e60__0[9] = 1;
+			if strings.HasPrefix(ks, p) {goCover_6b3c91dd9e60__0[10] = 1;
+				mem.Delete(ks)
+				break
+			}
+		}
+		goCover_6b3c91dd9e60__0[7] = 1;return true
+	})
+	goCover_6b3c91dd9e60__0[4] = 1;if redisClient != nil && redisClient.Enabled() {goCover_6b3c91dd9e60__0[11] = 1;
+		for _, p := range prefixes {goCover_6b3c91dd9e60__0[12] = 1;
+			_ = redisClient.Del(ctx, p+"*")
+		}
+	}
+}

@@ -1,0 +1,116 @@
+//line /Users/mac/Desktop/Sentinel/internal/replay/runner.go:1:1
+package replay
+
+import (
+	"context"
+	"encoding/json"
+	"fmt"
+	"sort"
+	"time"
+
+	"github.com/jackc/pgx/v5/pgxpool"
+	"sentinel/internal/metrics"
+	"sentinel/internal/pipeline/scoring"
+)
+
+func Run(ctx context.Context, db *pgxpool.Pool, jobID string) error {goCover_97633feabd7a__5[0] = 14 ; goCover_97633feabd7a__5[1] = goCover_97633feabd7a_P ; goCover_97633feabd7a__5[2] = 5 ; goCover_97633feabd7a__5[3] = 1;
+	if err := markReplayJobRunning(ctx, db, jobID); err != nil {goCover_97633feabd7a__5[10] = 1;
+		return err
+	}
+	goCover_97633feabd7a__5[4] = 1;metrics.IncReplayJobEvent("governance", "running")
+	job, err := loadReplayJob(ctx, db, jobID)
+	if err != nil {goCover_97633feabd7a__5[11] = 1;
+		_ = markReplayJobFailed(ctx, db, jobID, err.Error())
+		metrics.IncReplayJobEvent("governance", "failed")
+		return err
+	}
+	goCover_97633feabd7a__5[5] = 1;ticks, err := loadRawTicks(ctx, db, job.TimeWindowStart, job.TimeWindowEnd)
+	if err != nil {goCover_97633feabd7a__5[12] = 1;
+		_ = markReplayJobFailed(ctx, db, jobID, err.Error())
+		metrics.IncReplayJobEvent("governance", "failed")
+		return err
+	}
+	goCover_97633feabd7a__5[6] = 1;sortTicks(ticks)
+	result := Result{}
+	if job.ReplayMode != "as_scored" {goCover_97633feabd7a__5[13] = 1;
+		result, err = recomputePipeline(ctx, db, job, ticks)
+		if err != nil {goCover_97633feabd7a__5[14] = 1;
+			_ = markReplayJobFailed(ctx, db, jobID, err.Error())
+			metrics.IncReplayJobEvent("governance", "failed")
+			return err
+		}
+	}
+	goCover_97633feabd7a__5[7] = 1;if err := persistReplayResult(ctx, db, job, result); err != nil {goCover_97633feabd7a__5[15] = 1;
+		_ = markReplayJobFailed(ctx, db, jobID, err.Error())
+		metrics.IncReplayJobEvent("governance", "failed")
+		return err
+	}
+	goCover_97633feabd7a__5[8] = 1;if err := markReplayJobCompleted(ctx, db, jobID); err != nil {goCover_97633feabd7a__5[16] = 1;
+		metrics.IncReplayJobEvent("governance", "failed")
+		return err
+	}
+	goCover_97633feabd7a__5[9] = 1;metrics.IncReplayJobEvent("governance", "completed")
+	return nil
+}
+
+func sortTicks(ticks []Tick) {goCover_97633feabd7a__6[0] = 4 ; goCover_97633feabd7a__6[1] = goCover_97633feabd7a_P ; goCover_97633feabd7a__6[2] = 6 ; goCover_97633feabd7a__6[3] = 1;
+	sort.Slice(ticks, func(i, j int) bool {goCover_97633feabd7a__6[4] = 1;
+		if ticks[i].EventTime.Equal(ticks[j].EventTime) {goCover_97633feabd7a__6[6] = 1;
+			return ticks[i].SequenceID < ticks[j].SequenceID
+		}
+		goCover_97633feabd7a__6[5] = 1;return ticks[i].EventTime.Before(ticks[j].EventTime)
+	})
+}
+
+func recomputePipeline(ctx context.Context, db *pgxpool.Pool, job Job, ticks []Tick) (Result, error) {goCover_97633feabd7a__7[0] = 5 ; goCover_97633feabd7a__7[1] = goCover_97633feabd7a_P ; goCover_97633feabd7a__7[2] = 7 ; goCover_97633feabd7a__7[3] = 1;
+	if len(ticks) == 0 {goCover_97633feabd7a__7[6] = 1;
+		return Result{}, nil
+	}
+	goCover_97633feabd7a__7[4] = 1;feat, score, candle := 0, 0, 0
+	lastPrice := map[string]float64{}
+	for _, t := range ticks {goCover_97633feabd7a__7[7] = 1;
+		payload := map[string]any{"symbol": t.Symbol, "price": t.Price, "volume": t.Volume, "event_time": t.EventTime, "replay_job_id": job.ID}
+		b, _ := json.Marshal(payload)
+		bucket := t.EventTime.Truncate(time.Second)
+		_, _ = db.Exec(ctx, `INSERT INTO candles(idempotency_key,symbol,bucket,interval,open,high,low,close,volume,replay_run_id) VALUES($1,$2,$3,'1s',$4,$4,$4,$4,$5,$6) ON CONFLICT DO NOTHING`, fmt.Sprintf("replay:candle:%s:%s", job.ID, t.EventID), t.Symbol, bucket, t.Price, t.Volume, job.ID)
+		candle++
+		_, _ = db.Exec(ctx, `INSERT INTO features(idempotency_key,symbol,ts,feature_hash,payload,replay_run_id) VALUES($1,$2,$3,$4,$5,$6) ON CONFLICT DO NOTHING`, fmt.Sprintf("replay:feature:%s:%s", job.ID, t.EventID), t.Symbol, t.EventTime, job.ID, b, job.ID)
+		feat++
+
+		s, sev := scoring.ScoreAndSeverity(lastPrice[t.Symbol], t.Price)
+		explanation := fmt.Sprintf("recomputed_return=%.6f", s)
+		_, _ = db.Exec(ctx, `INSERT INTO scores(idempotency_key,symbol,ts,score,severity,explanation,replay_run_id,model_version,feature_set_version) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9) ON CONFLICT DO NOTHING`, fmt.Sprintf("replay:score:%s:%s", job.ID, t.EventID), t.Symbol, t.EventTime, s, sev, explanation, job.ID, job.ModelVersion, job.FeatureSetVersion)
+		lastPrice[t.Symbol] = t.Price
+		score++
+	}
+	goCover_97633feabd7a__7[5] = 1;return Result{TickCount: len(ticks), CandleCount: candle, FeatureCount: feat, ScoreCount: score}, nil
+}
+
+func persistReplayResult(ctx context.Context, db *pgxpool.Pool, job Job, result Result) error {goCover_97633feabd7a__8[0] = 3 ; goCover_97633feabd7a__8[1] = goCover_97633feabd7a_P ; goCover_97633feabd7a__8[2] = 8 ; goCover_97633feabd7a__8[3] = 1;
+	diff, err := buildReplayDiffSummary(ctx, db, job, result)
+	if err != nil {goCover_97633feabd7a__8[5] = 1;
+		return err
+	}
+	goCover_97633feabd7a__8[4] = 1;b, _ := json.Marshal(diff)
+	_, err = db.Exec(ctx, `INSERT INTO replay_runs(id,incident_id,status,diff_summary,completed_at) VALUES($1,$2,'completed',$3,now()) ON CONFLICT (id) DO UPDATE SET status='completed',diff_summary=$3,completed_at=now()`, job.ID, job.ReplayMode, b)
+	_, err = db.Exec(ctx, `INSERT INTO replay_runs(id,incident_id,status,diff_summary,completed_at) VALUES($1,'recompute','completed',$2,now()) ON CONFLICT (id) DO UPDATE SET status='completed',diff_summary=$2,completed_at=now()`, job.ID, b)
+	return err
+}
+
+func buildReplayDiffSummary(ctx context.Context, db *pgxpool.Pool, job Job, result Result) (DiffSummary, error) {goCover_97633feabd7a__9[0] = 5 ; goCover_97633feabd7a__9[1] = goCover_97633feabd7a_P ; goCover_97633feabd7a__9[2] = 9 ; goCover_97633feabd7a__9[3] = 1;
+	as := ScoreStats{}
+	rec := ScoreStats{}
+	if err := db.QueryRow(ctx, `SELECT count(*),coalesce(avg(score),0),count(*) FILTER (WHERE severity in ('high','critical')) FROM scores WHERE ts BETWEEN $1 AND $2 AND coalesce(replay_run_id,'')=''`, job.TimeWindowStart, job.TimeWindowEnd).Scan(&as.Count, &as.AvgScore, &as.HighOrHigher); err != nil {goCover_97633feabd7a__9[6] = 1;
+		return DiffSummary{}, err
+	}
+	goCover_97633feabd7a__9[4] = 1;if err := db.QueryRow(ctx, `SELECT count(*),coalesce(avg(score),0),count(*) FILTER (WHERE severity in ('high','critical')) FROM scores WHERE replay_run_id=$1`, job.ID).Scan(&rec.Count, &rec.AvgScore, &rec.HighOrHigher); err != nil {goCover_97633feabd7a__9[7] = 1;
+		return DiffSummary{}, err
+	}
+	goCover_97633feabd7a__9[5] = 1;return DiffSummary{
+		Result:         result,
+		AsScored:       as,
+		Recomputed:     rec,
+		AvgScoreDelta:  rec.AvgScore - as.AvgScore,
+		HighCountDelta: rec.HighOrHigher - as.HighOrHigher,
+	}, nil
+}

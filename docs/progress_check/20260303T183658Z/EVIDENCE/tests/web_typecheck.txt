@@ -1,0 +1,38 @@
+
+> sentinel-web@0.1.0 typecheck
+> next build --no-lint && tsc --noEmit
+
+ ⚠ Linting is disabled.
+  ▲ Next.js 14.2.5
+
+   Creating an optimized production build ...
+ ✓ Compiled successfully
+   Checking validity of types ...
+   Collecting page data ...
+PageNotFoundError: Cannot find module for page: /api/proxy/[service]/[...path]
+    at getPagePath (/Users/mac/Desktop/Sentinel/web/node_modules/next/dist/server/require.js:94:15)
+    at requirePage (/Users/mac/Desktop/Sentinel/web/node_modules/next/dist/server/require.js:99:22)
+    at /Users/mac/Desktop/Sentinel/web/node_modules/next/dist/server/load-components.js:98:84
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async loadComponentsImpl (/Users/mac/Desktop/Sentinel/web/node_modules/next/dist/server/load-components.js:98:26)
+    at async /Users/mac/Desktop/Sentinel/web/node_modules/next/dist/build/utils.js:1116:32
+    at async Span.traceAsyncFn (/Users/mac/Desktop/Sentinel/web/node_modules/next/dist/trace/trace.js:154:20) {
+  code: 'ENOENT'
+}
+PageNotFoundError: Cannot find module for page: /api/sse/alerts
+    at getPagePath (/Users/mac/Desktop/Sentinel/web/node_modules/next/dist/server/require.js:94:15)
+    at requirePage (/Users/mac/Desktop/Sentinel/web/node_modules/next/dist/server/require.js:99:22)
+    at /Users/mac/Desktop/Sentinel/web/node_modules/next/dist/server/load-components.js:98:84
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async loadComponentsImpl (/Users/mac/Desktop/Sentinel/web/node_modules/next/dist/server/load-components.js:98:26)
+    at async /Users/mac/Desktop/Sentinel/web/node_modules/next/dist/build/utils.js:1116:32
+    at async Span.traceAsyncFn (/Users/mac/Desktop/Sentinel/web/node_modules/next/dist/trace/trace.js:154:20) {
+  code: 'ENOENT'
+}
+
+> Build error occurred
+Error: Failed to collect page data for /api/proxy/[service]/[...path]
+    at /Users/mac/Desktop/Sentinel/web/node_modules/next/dist/build/utils.js:1268:15
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5) {
+  type: 'Error'
+}

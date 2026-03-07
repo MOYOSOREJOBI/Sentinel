@@ -1,0 +1,13 @@
+NAME                   IMAGE                               COMMAND                  SERVICE       CREATED       STATUS                 PORTS
+docker-aggregator-1    docker-aggregator                   "/app/service"           aggregator    2 hours ago   Up 2 hours (healthy)   0.0.0.0:58081->8081/tcp, [::]:58081->8081/tcp
+docker-alerts-1        docker-alerts                       "/app/service"           alerts        2 hours ago   Up 2 hours (healthy)   0.0.0.0:58083->8083/tcp, [::]:58083->8083/tcp
+docker-features-1      docker-features                     "/app/service"           features      2 hours ago   Up 2 hours (healthy)   0.0.0.0:58082->8082/tcp, [::]:58082->8082/tcp
+docker-gateway-api-1   docker-gateway-api                  "/app/service"           gateway-api   2 hours ago   Up 2 hours (healthy)   0.0.0.0:58080->8080/tcp, [::]:58080->8080/tcp
+docker-governance-1    docker-governance                   "/app/service"           governance    2 hours ago   Up 2 hours (healthy)   0.0.0.0:58084->8084/tcp, [::]:58084->8084/tcp
+docker-inference-1     docker-inference                    "python app.py"          inference     2 hours ago   Up 2 hours (healthy)   0.0.0.0:58090->8090/tcp, [::]:58090->8090/tcp
+docker-postgres-1      timescale/timescaledb:2.15.1-pg16   "docker-entrypoint.s…"   postgres      2 hours ago   Up 2 hours (healthy)   0.0.0.0:55432->5432/tcp, [::]:55432->5432/tcp
+docker-query-1         docker-query                        "/app/service"           query         2 hours ago   Up 2 hours (healthy)   0.0.0.0:58085->8085/tcp, [::]:58085->8085/tcp
+docker-redis-1         redis:7                             "docker-entrypoint.s…"   redis         2 hours ago   Up 2 hours (healthy)   0.0.0.0:56379->6379/tcp, [::]:56379->6379/tcp
+docker-redpanda-1      redpandadata/redpanda:v24.1.10      "/entrypoint.sh redp…"   redpanda      2 hours ago   Up 2 hours (healthy)   0.0.0.0:59092->9092/tcp, [::]:59092->9092/tcp
+docker-simulator-1     docker-simulator                    "/app/service"           simulator     2 hours ago   Up 2 hours (healthy)   
+docker-web-1           node:20-alpine                      "docker-entrypoint.s…"   web           2 hours ago   Up 2 hours (healthy)   0.0.0.0:3000->3000/tcp, [::]:3000->3000/tcp

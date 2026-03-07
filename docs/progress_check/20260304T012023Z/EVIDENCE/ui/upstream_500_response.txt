@@ -1,0 +1,1305 @@
+1164- ○ Compiling /api/sse/command-center ...
+1165- ✓ Compiled /api/sse/command-center in 621ms (311 modules)
+1166- GET /api/proxy/query/queue?window=24h 200 in 1093ms
+1167- GET /api/proxy/query/feed?window=24h&limit=5 200 in 1097ms
+1168: GET /api/proxy/query/candles?symbol=CONS-041&window=24h&maxPoints=320&res=5m 200 in 3234ms
+1169: GET /api/proxy/query/candles?symbol=CONS-041&window=24h&maxPoints=320&res=5m 200 in 2705ms
+1170: GET /api/proxy/query/scores?symbol=CONS-041&window=24h&maxPoints=320 200 in 2275ms
+1171: GET /api/proxy/query/scores?symbol=CONS-041&window=24h&maxPoints=320 200 in 3248ms
+1172- ○ Compiling /queue ...
+1173- ✓ Compiled /queue in 1501ms (596 modules)
+1174- GET / 200 in 988ms
+1175: GET /api/sse/command-center 200 in 5974ms
+1176- GET /api/proxy/query/queue?window=24h 200 in 155ms
+1177- GET /api/proxy/query/queue?window=24h 200 in 222ms
+1178- GET /api/proxy/query/feed?window=24h&limit=100 200 in 225ms
+1179- GET /api/proxy/query/feed?window=24h&limit=100 200 in 222ms
+--
+1235-        at Socket.<anonymous> (node:internal/deps/undici/undici:6408:28)
+1236-        at Socket.emit (node:events:536:35)
+1237-        at endReadableNT (node:internal/streams/readable:1698:12)
+1238-        at process.processTicksAndRejections (node:internal/process/task_queues:82:21) {
+1239:      code: 'UND_ERR_SOCKET',
+1240-      socket: [Object],
+1241-      [Symbol(undici.error.UND_ERR)]: true,
+1242:      [Symbol(undici.error.UND_ERR_SOCKET)]: true
+1243-    }
+1244-  }
+1245-}
+1246- GET /api/sse/trust 500 in 22175ms
+--
+1283-        at Socket.<anonymous> (node:internal/deps/undici/undici:6408:28)
+1284-        at Socket.emit (node:events:536:35)
+1285-        at endReadableNT (node:internal/streams/readable:1698:12)
+1286-        at process.processTicksAndRejections (node:internal/process/task_queues:82:21) {
+1287:      code: 'UND_ERR_SOCKET',
+1288-      socket: [Object],
+1289-      [Symbol(undici.error.UND_ERR)]: true,
+1290:      [Symbol(undici.error.UND_ERR_SOCKET)]: true
+1291-    }
+1292-  }
+1293-}
+1294- GET /api/sse/trust 500 in 21610ms
+--
+1331-        at Socket.<anonymous> (node:internal/deps/undici/undici:6408:28)
+1332-        at Socket.emit (node:events:536:35)
+1333-        at endReadableNT (node:internal/streams/readable:1698:12)
+1334-        at process.processTicksAndRejections (node:internal/process/task_queues:82:21) {
+1335:      code: 'UND_ERR_SOCKET',
+1336-      socket: [Object],
+1337-      [Symbol(undici.error.UND_ERR)]: true,
+1338:      [Symbol(undici.error.UND_ERR_SOCKET)]: true
+1339-    }
+1340-  }
+1341-}
+1342- GET /api/sse/trust 500 in 25635ms
+--
+1381-        at Socket.<anonymous> (node:internal/deps/undici/undici:6408:28)
+1382-        at Socket.emit (node:events:536:35)
+1383-        at endReadableNT (node:internal/streams/readable:1698:12)
+1384-        at process.processTicksAndRejections (node:internal/process/task_queues:82:21) {
+1385:      code: 'UND_ERR_SOCKET',
+1386-      socket: [Object],
+1387-      [Symbol(undici.error.UND_ERR)]: true,
+1388:      [Symbol(undici.error.UND_ERR_SOCKET)]: true
+1389-    }
+1390-  }
+1391-}
+1392- GET /api/sse/trust 500 in 31225ms
+--
+1433-        at Socket.<anonymous> (node:internal/deps/undici/undici:6408:28)
+1434-        at Socket.emit (node:events:536:35)
+1435-        at endReadableNT (node:internal/streams/readable:1698:12)
+1436-        at process.processTicksAndRejections (node:internal/process/task_queues:82:21) {
+1437:      code: 'UND_ERR_SOCKET',
+1438-      socket: [Object],
+1439-      [Symbol(undici.error.UND_ERR)]: true,
+1440:      [Symbol(undici.error.UND_ERR_SOCKET)]: true
+1441-    }
+1442-  }
+1443-}
+1444- GET /api/sse/trust 500 in 30654ms
+--
+1448- GET /api/proxy/query/world-map?window=24h 200 in 402ms
+1449- GET /api/proxy/query/queue?window=24h 200 in 324ms
+1450- GET / 200 in 224ms
+1451- GET / 200 in 327ms
+1452: GET /api/proxy/query/scores?symbol=CONS-041&window=24h&maxPoints=320 200 in 471ms
+1453: GET /api/proxy/query/scores?symbol=CONS-041&window=30d&maxPoints=320 500 in 436ms
+1454: GET /api/proxy/query/candles?symbol=CONS-041&window=30d&maxPoints=320&res=5m 500 in 450ms
+1455: GET /api/proxy/query/candles?symbol=CONS-041&window=24h&maxPoints=320&res=5m 200 in 599ms
+1456- GET / 200 in 381ms
+1457- ⨯ Error: failed to pipe response
+1458-    at pipeToNodeResponse (/app/web/node_modules/next/dist/server/pipe-readable.js:126:15)
+1459-    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+--
+1488-        at Socket.<anonymous> (node:internal/deps/undici/undici:6408:28)
+1489-        at Socket.emit (node:events:536:35)
+1490-        at endReadableNT (node:internal/streams/readable:1698:12)
+1491-        at process.processTicksAndRejections (node:internal/process/task_queues:82:21) {
+1492:      code: 'UND_ERR_SOCKET',
+1493-      socket: [Object],
+1494-      [Symbol(undici.error.UND_ERR)]: true,
+1495:      [Symbol(undici.error.UND_ERR_SOCKET)]: true
+1496-    }
+1497-  }
+1498-}
+1499- GET /api/sse/trust 500 in 28035ms
+--
+1535-        at Socket.<anonymous> (node:internal/deps/undici/undici:6408:28)
+1536-        at Socket.emit (node:events:536:35)
+1537-        at endReadableNT (node:internal/streams/readable:1698:12)
+1538-        at process.processTicksAndRejections (node:internal/process/task_queues:82:21) {
+1539:      code: 'UND_ERR_SOCKET',
+1540-      socket: [Object],
+1541-      [Symbol(undici.error.UND_ERR)]: true,
+1542:      [Symbol(undici.error.UND_ERR_SOCKET)]: true
+1543-    }
+1544-  }
+1545-}
+1546- GET /api/sse/trust 500 in 21002ms
+--
+1583-        at Socket.<anonymous> (node:internal/deps/undici/undici:6408:28)
+1584-        at Socket.emit (node:events:536:35)
+1585-        at endReadableNT (node:internal/streams/readable:1698:12)
+1586-        at process.processTicksAndRejections (node:internal/process/task_queues:82:21) {
+1587:      code: 'UND_ERR_SOCKET',
+1588-      socket: [Object],
+1589-      [Symbol(undici.error.UND_ERR)]: true,
+1590:      [Symbol(undici.error.UND_ERR_SOCKET)]: true
+1591-    }
+1592-  }
+1593-}
+1594- GET /api/sse/trust 500 in 20680ms
+--
+1630-        at Socket.<anonymous> (node:internal/deps/undici/undici:6408:28)
+1631-        at Socket.emit (node:events:536:35)
+1632-        at endReadableNT (node:internal/streams/readable:1698:12)
+1633-        at process.processTicksAndRejections (node:internal/process/task_queues:82:21) {
+1634:      code: 'UND_ERR_SOCKET',
+1635-      socket: [Object],
+1636-      [Symbol(undici.error.UND_ERR)]: true,
+1637:      [Symbol(undici.error.UND_ERR_SOCKET)]: true
+1638-    }
+1639-  }
+1640-}
+1641- GET /api/sse/trust 500 in 20555ms
+--
+1677-        at Socket.<anonymous> (node:internal/deps/undici/undici:6408:28)
+1678-        at Socket.emit (node:events:536:35)
+1679-        at endReadableNT (node:internal/streams/readable:1698:12)
+1680-        at process.processTicksAndRejections (node:internal/process/task_queues:82:21) {
+1681:      code: 'UND_ERR_SOCKET',
+1682-      socket: [Object],
+1683-      [Symbol(undici.error.UND_ERR)]: true,
+1684:      [Symbol(undici.error.UND_ERR_SOCKET)]: true
+1685-    }
+1686-  }
+1687-}
+1688- GET /api/sse/trust 500 in 20647ms
+--
+1724-        at Socket.<anonymous> (node:internal/deps/undici/undici:6408:28)
+1725-        at Socket.emit (node:events:536:35)
+1726-        at endReadableNT (node:internal/streams/readable:1698:12)
+1727-        at process.processTicksAndRejections (node:internal/process/task_queues:82:21) {
+1728:      code: 'UND_ERR_SOCKET',
+1729-      socket: [Object],
+1730-      [Symbol(undici.error.UND_ERR)]: true,
+1731:      [Symbol(undici.error.UND_ERR_SOCKET)]: true
+1732-    }
+1733-  }
+1734-}
+1735- GET /api/sse/trust 500 in 20696ms
+--
+1772-        at Socket.<anonymous> (node:internal/deps/undici/undici:6408:28)
+1773-        at Socket.emit (node:events:536:35)
+1774-        at endReadableNT (node:internal/streams/readable:1698:12)
+1775-        at process.processTicksAndRejections (node:internal/process/task_queues:82:21) {
+1776:      code: 'UND_ERR_SOCKET',
+1777-      socket: [Object],
+1778-      [Symbol(undici.error.UND_ERR)]: true,
+1779:      [Symbol(undici.error.UND_ERR_SOCKET)]: true
+1780-    }
+1781-  }
+1782-}
+1783- GET /api/sse/trust 500 in 20045ms
+--
+1819-        at Socket.<anonymous> (node:internal/deps/undici/undici:6408:28)
+1820-        at Socket.emit (node:events:536:35)
+1821-        at endReadableNT (node:internal/streams/readable:1698:12)
+1822-        at process.processTicksAndRejections (node:internal/process/task_queues:82:21) {
+1823:      code: 'UND_ERR_SOCKET',
+1824-      socket: [Object],
+1825-      [Symbol(undici.error.UND_ERR)]: true,
+1826:      [Symbol(undici.error.UND_ERR_SOCKET)]: true
+1827-    }
+1828-  }
+1829-}
+1830- GET /api/sse/trust 500 in 20147ms
+--
+1866-        at Socket.<anonymous> (node:internal/deps/undici/undici:6408:28)
+1867-        at Socket.emit (node:events:536:35)
+1868-        at endReadableNT (node:internal/streams/readable:1698:12)
+1869-        at process.processTicksAndRejections (node:internal/process/task_queues:82:21) {
+1870:      code: 'UND_ERR_SOCKET',
+1871-      socket: [Object],
+1872-      [Symbol(undici.error.UND_ERR)]: true,
+1873:      [Symbol(undici.error.UND_ERR_SOCKET)]: true
+1874-    }
+1875-  }
+1876-}
+1877- GET /api/sse/trust 500 in 20109ms
+--
+1913-        at Socket.<anonymous> (node:internal/deps/undici/undici:6408:28)
+1914-        at Socket.emit (node:events:536:35)
+1915-        at endReadableNT (node:internal/streams/readable:1698:12)
+1916-        at process.processTicksAndRejections (node:internal/process/task_queues:82:21) {
+1917:      code: 'UND_ERR_SOCKET',
+1918-      socket: [Object],
+1919-      [Symbol(undici.error.UND_ERR)]: true,
+1920:      [Symbol(undici.error.UND_ERR_SOCKET)]: true
+1921-    }
+1922-  }
+1923-}
+1924- GET /api/sse/trust 500 in 20248ms
+--
+1960-        at Socket.<anonymous> (node:internal/deps/undici/undici:6408:28)
+1961-        at Socket.emit (node:events:536:35)
+1962-        at endReadableNT (node:internal/streams/readable:1698:12)
+1963-        at process.processTicksAndRejections (node:internal/process/task_queues:82:21) {
+1964:      code: 'UND_ERR_SOCKET',
+1965-      socket: [Object],
+1966-      [Symbol(undici.error.UND_ERR)]: true,
+1967:      [Symbol(undici.error.UND_ERR_SOCKET)]: true
+1968-    }
+1969-  }
+1970-}
+1971- GET /api/sse/trust 500 in 20900ms
+--
+2008-        at Socket.<anonymous> (node:internal/deps/undici/undici:6408:28)
+2009-        at Socket.emit (node:events:536:35)
+2010-        at endReadableNT (node:internal/streams/readable:1698:12)
+2011-        at process.processTicksAndRejections (node:internal/process/task_queues:82:21) {
+2012:      code: 'UND_ERR_SOCKET',
+2013-      socket: [Object],
+2014-      [Symbol(undici.error.UND_ERR)]: true,
+2015:      [Symbol(undici.error.UND_ERR_SOCKET)]: true
+2016-    }
+2017-  }
+2018-}
+2019- GET /api/sse/trust 500 in 20932ms
+--
+2055-        at Socket.<anonymous> (node:internal/deps/undici/undici:6408:28)
+2056-        at Socket.emit (node:events:536:35)
+2057-        at endReadableNT (node:internal/streams/readable:1698:12)
+2058-        at process.processTicksAndRejections (node:internal/process/task_queues:82:21) {
+2059:      code: 'UND_ERR_SOCKET',
+2060-      socket: [Object],
+2061-      [Symbol(undici.error.UND_ERR)]: true,
+2062:      [Symbol(undici.error.UND_ERR_SOCKET)]: true
+2063-    }
+2064-  }
+2065-}
+2066- GET /api/sse/trust 500 in 21003ms
+--
+2102-        at Socket.<anonymous> (node:internal/deps/undici/undici:6408:28)
+2103-        at Socket.emit (node:events:536:35)
+2104-        at endReadableNT (node:internal/streams/readable:1698:12)
+2105-        at process.processTicksAndRejections (node:internal/process/task_queues:82:21) {
+2106:      code: 'UND_ERR_SOCKET',
+2107-      socket: [Object],
+2108-      [Symbol(undici.error.UND_ERR)]: true,
+2109:      [Symbol(undici.error.UND_ERR_SOCKET)]: true
+2110-    }
+2111-  }
+2112-}
+2113- GET /api/sse/trust 500 in 20500ms
+--
+2150-        at Socket.<anonymous> (node:internal/deps/undici/undici:6408:28)
+2151-        at Socket.emit (node:events:536:35)
+2152-        at endReadableNT (node:internal/streams/readable:1698:12)
+2153-        at process.processTicksAndRejections (node:internal/process/task_queues:82:21) {
+2154:      code: 'UND_ERR_SOCKET',
+2155-      socket: [Object],
+2156-      [Symbol(undici.error.UND_ERR)]: true,
+2157:      [Symbol(undici.error.UND_ERR_SOCKET)]: true
+2158-    }
+2159-  }
+2160-}
+2161- GET /api/sse/trust 500 in 20563ms
+--
+2197-        at Socket.<anonymous> (node:internal/deps/undici/undici:6408:28)
+2198-        at Socket.emit (node:events:536:35)
+2199-        at endReadableNT (node:internal/streams/readable:1698:12)
+2200-        at process.processTicksAndRejections (node:internal/process/task_queues:82:21) {
+2201:      code: 'UND_ERR_SOCKET',
+2202-      socket: [Object],
+2203-      [Symbol(undici.error.UND_ERR)]: true,
+2204:      [Symbol(undici.error.UND_ERR_SOCKET)]: true
+2205-    }
+2206-  }
+2207-}
+2208- GET /api/sse/trust 500 in 20251ms
+--
+2244-        at Socket.<anonymous> (node:internal/deps/undici/undici:6408:28)
+2245-        at Socket.emit (node:events:536:35)
+2246-        at endReadableNT (node:internal/streams/readable:1698:12)
+2247-        at process.processTicksAndRejections (node:internal/process/task_queues:82:21) {
+2248:      code: 'UND_ERR_SOCKET',
+2249-      socket: [Object],
+2250-      [Symbol(undici.error.UND_ERR)]: true,
+2251:      [Symbol(undici.error.UND_ERR_SOCKET)]: true
+2252-    }
+2253-  }
+2254-}
+2255- GET /api/sse/trust 500 in 19966ms
+--
+2291-        at Socket.<anonymous> (node:internal/deps/undici/undici:6408:28)
+2292-        at Socket.emit (node:events:536:35)
+2293-        at endReadableNT (node:internal/streams/readable:1698:12)
+2294-        at process.processTicksAndRejections (node:internal/process/task_queues:82:21) {
+2295:      code: 'UND_ERR_SOCKET',
+2296-      socket: [Object],
+2297-      [Symbol(undici.error.UND_ERR)]: true,
+2298:      [Symbol(undici.error.UND_ERR_SOCKET)]: true
+2299-    }
+2300-  }
+2301-}
+2302- GET /api/sse/trust 500 in 20188ms
+--
+2339-        at Socket.<anonymous> (node:internal/deps/undici/undici:6408:28)
+2340-        at Socket.emit (node:events:536:35)
+2341-        at endReadableNT (node:internal/streams/readable:1698:12)
+2342-        at process.processTicksAndRejections (node:internal/process/task_queues:82:21) {
+2343:      code: 'UND_ERR_SOCKET',
+2344-      socket: [Object],
+2345-      [Symbol(undici.error.UND_ERR)]: true,
+2346:      [Symbol(undici.error.UND_ERR_SOCKET)]: true
+2347-    }
+2348-  }
+2349-}
+2350- GET /api/sse/trust 500 in 20464ms
+--
+2386-        at Socket.<anonymous> (node:internal/deps/undici/undici:6408:28)
+2387-        at Socket.emit (node:events:536:35)
+2388-        at endReadableNT (node:internal/streams/readable:1698:12)
+2389-        at process.processTicksAndRejections (node:internal/process/task_queues:82:21) {
+2390:      code: 'UND_ERR_SOCKET',
+2391-      socket: [Object],
+2392-      [Symbol(undici.error.UND_ERR)]: true,
+2393:      [Symbol(undici.error.UND_ERR_SOCKET)]: true
+2394-    }
+2395-  }
+2396-}
+2397- GET /api/sse/trust 500 in 20256ms
+--
+2433-        at Socket.<anonymous> (node:internal/deps/undici/undici:6408:28)
+2434-        at Socket.emit (node:events:536:35)
+2435-        at endReadableNT (node:internal/streams/readable:1698:12)
+2436-        at process.processTicksAndRejections (node:internal/process/task_queues:82:21) {
+2437:      code: 'UND_ERR_SOCKET',
+2438-      socket: [Object],
+2439-      [Symbol(undici.error.UND_ERR)]: true,
+2440:      [Symbol(undici.error.UND_ERR_SOCKET)]: true
+2441-    }
+2442-  }
+2443-}
+2444- GET /api/sse/trust 500 in 22576ms
+--
+2472- GET /api/proxy/query/command-center?window=24h 200 in 262ms
+2473- GET /api/proxy/query/world-map?window=24h 200 in 190ms
+2474- GET /api/proxy/query/queue?window=24h 200 in 194ms
+2475- GET /api/proxy/query/feed?window=24h&limit=5 200 in 201ms
+2476: GET /api/proxy/query/scores?symbol=CONS-041&window=24h&maxPoints=320 200 in 391ms
+2477: GET /api/proxy/query/scores?symbol=CONS-041&window=24h&maxPoints=320 200 in 529ms
+2478- GET / 200 in 91ms
+2479: GET /api/proxy/query/candles?symbol=CONS-041&window=24h&maxPoints=320&res=5m 200 in 1721ms
+2480: GET /api/proxy/query/candles?symbol=CONS-041&window=24h&maxPoints=320&res=5m 200 in 2010ms
+2481: GET /api/proxy/query/candles?symbol=CONS-041&window=24h&maxPoints=320&res=1m 200 in 125ms
+2482: GET /api/proxy/query/scores?symbol=CONS-041&window=24h&maxPoints=320 200 in 182ms
+2483- GET / 200 in 84ms
+2484: GET /api/proxy/query/candles?symbol=CONS-041&window=24h&maxPoints=320&res=1h 200 in 129ms
+2485: GET /api/proxy/query/scores?symbol=CONS-041&window=24h&maxPoints=320 200 in 163ms
+2486- GET / 200 in 59ms
+2487- ⨯ Error: failed to pipe response
+2488-    at pipeToNodeResponse (/app/web/node_modules/next/dist/server/pipe-readable.js:126:15)
+2489-    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+--
+2518-        at Socket.<anonymous> (node:internal/deps/undici/undici:6408:28)
+2519-        at Socket.emit (node:events:536:35)
+2520-        at endReadableNT (node:internal/streams/readable:1698:12)
+2521-        at process.processTicksAndRejections (node:internal/process/task_queues:82:21) {
+2522:      code: 'UND_ERR_SOCKET',
+2523-      socket: [Object],
+2524-      [Symbol(undici.error.UND_ERR)]: true,
+2525:      [Symbol(undici.error.UND_ERR_SOCKET)]: true
+2526-    }
+2527-  }
+2528-}
+2529- GET /api/sse/command-center 500 in 15175ms
+2530: GET /api/proxy/query/candles?symbol=CONS-041&window=24h&maxPoints=320&res=1h 200 in 118ms
+2531: GET /api/proxy/query/scores?symbol=CONS-041&window=24h&maxPoints=320 200 in 150ms
+2532- GET / 200 in 76ms
+2533- GET / 200 in 57ms
+2534: GET /api/proxy/query/candles?symbol=CONS-041&window=24h&maxPoints=320&res=1h 200 in 141ms
+2535: GET /api/proxy/query/scores?symbol=CONS-041&window=24h&maxPoints=320 200 in 178ms
+2536- GET / 200 in 68ms
+2537- ⨯ Error: failed to pipe response
+2538-    at pipeToNodeResponse (/app/web/node_modules/next/dist/server/pipe-readable.js:126:15)
+2539-    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+--
+2568-        at Socket.<anonymous> (node:internal/deps/undici/undici:6408:28)
+2569-        at Socket.emit (node:events:536:35)
+2570-        at endReadableNT (node:internal/streams/readable:1698:12)
+2571-        at process.processTicksAndRejections (node:internal/process/task_queues:82:21) {
+2572:      code: 'UND_ERR_SOCKET',
+2573-      socket: [Object],
+2574-      [Symbol(undici.error.UND_ERR)]: true,
+2575:      [Symbol(undici.error.UND_ERR_SOCKET)]: true
+2576-    }
+2577-  }
+2578-}
+2579- GET /api/sse/command-center 500 in 15076ms
+2580- GET / 200 in 68ms
+2581: GET /api/proxy/query/candles?symbol=CONS-041&window=24h&maxPoints=320&res=1h 200 in 119ms
+2582: GET /api/proxy/query/scores?symbol=CONS-041&window=24h&maxPoints=320 200 in 142ms
+2583- GET / 200 in 68ms
+2584- GET / 200 in 72ms
+2585- ⨯ Error: failed to pipe response
+2586-    at pipeToNodeResponse (/app/web/node_modules/next/dist/server/pipe-readable.js:126:15)
+--
+2616-        at Socket.<anonymous> (node:internal/deps/undici/undici:6408:28)
+2617-        at Socket.emit (node:events:536:35)
+2618-        at endReadableNT (node:internal/streams/readable:1698:12)
+2619-        at process.processTicksAndRejections (node:internal/process/task_queues:82:21) {
+2620:      code: 'UND_ERR_SOCKET',
+2621-      socket: [Object],
+2622-      [Symbol(undici.error.UND_ERR)]: true,
+2623:      [Symbol(undici.error.UND_ERR_SOCKET)]: true
+2624-    }
+2625-  }
+2626-}
+2627- GET /api/sse/command-center 500 in 15061ms
+2628: GET /api/proxy/query/candles?symbol=CONS-041&window=24h&maxPoints=320&res=1h 200 in 190ms
+2629: GET /api/proxy/query/scores?symbol=CONS-041&window=24h&maxPoints=320 200 in 208ms
+2630- GET / 200 in 86ms
+2631- GET / 200 in 70ms
+2632: GET /api/proxy/query/scores?symbol=CONS-041&window=24h&maxPoints=320 200 in 115ms
+2633: GET /api/proxy/query/candles?symbol=CONS-041&window=24h&maxPoints=320&res=1h 200 in 145ms
+2634- GET / 200 in 70ms
+2635- ⨯ Error: failed to pipe response
+2636-    at pipeToNodeResponse (/app/web/node_modules/next/dist/server/pipe-readable.js:126:15)
+2637-    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+--
+2666-        at Socket.<anonymous> (node:internal/deps/undici/undici:6408:28)
+2667-        at Socket.emit (node:events:536:35)
+2668-        at endReadableNT (node:internal/streams/readable:1698:12)
+2669-        at process.processTicksAndRejections (node:internal/process/task_queues:82:21) {
+2670:      code: 'UND_ERR_SOCKET',
+2671-      socket: [Object],
+2672-      [Symbol(undici.error.UND_ERR)]: true,
+2673:      [Symbol(undici.error.UND_ERR_SOCKET)]: true
+2674-    }
+2675-  }
+2676-}
+2677- GET /api/sse/command-center 500 in 15071ms
+2678: GET /api/proxy/query/candles?symbol=CONS-041&window=24h&maxPoints=320&res=1h 200 in 122ms
+2679: GET /api/proxy/query/scores?symbol=CONS-041&window=24h&maxPoints=320 200 in 171ms
+2680- GET / 200 in 126ms
+2681- GET / 200 in 72ms
+2682: GET /api/proxy/query/scores?symbol=CONS-041&window=24h&maxPoints=320 200 in 118ms
+2683: GET /api/proxy/query/candles?symbol=CONS-041&window=24h&maxPoints=320&res=1h 200 in 132ms
+2684- ⨯ Error: failed to pipe response
+2685-    at pipeToNodeResponse (/app/web/node_modules/next/dist/server/pipe-readable.js:126:15)
+2686-    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+2687-    at async sendResponse (/app/web/node_modules/next/dist/server/send-response.js:40:13)
+--
+2715-        at Socket.<anonymous> (node:internal/deps/undici/undici:6408:28)
+2716-        at Socket.emit (node:events:536:35)
+2717-        at endReadableNT (node:internal/streams/readable:1698:12)
+2718-        at process.processTicksAndRejections (node:internal/process/task_queues:82:21) {
+2719:      code: 'UND_ERR_SOCKET',
+2720-      socket: [Object],
+2721-      [Symbol(undici.error.UND_ERR)]: true,
+2722:      [Symbol(undici.error.UND_ERR_SOCKET)]: true
+2723-    }
+2724-  }
+2725-}
+2726- GET /api/sse/command-center 500 in 15061ms
+2727- GET / 200 in 74ms
+2728- GET / 200 in 64ms
+2729: GET /api/proxy/query/scores?symbol=CONS-041&window=24h&maxPoints=320 200 in 189ms
+2730: GET /api/proxy/query/candles?symbol=CONS-041&window=24h&maxPoints=320&res=1h 200 in 201ms
+2731- GET / 200 in 63ms
+2732- ⨯ Error: failed to pipe response
+2733-    at pipeToNodeResponse (/app/web/node_modules/next/dist/server/pipe-readable.js:126:15)
+2734-    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+--
+2763-        at Socket.<anonymous> (node:internal/deps/undici/undici:6408:28)
+2764-        at Socket.emit (node:events:536:35)
+2765-        at endReadableNT (node:internal/streams/readable:1698:12)
+2766-        at process.processTicksAndRejections (node:internal/process/task_queues:82:21) {
+2767:      code: 'UND_ERR_SOCKET',
+2768-      socket: [Object],
+2769-      [Symbol(undici.error.UND_ERR)]: true,
+2770:      [Symbol(undici.error.UND_ERR_SOCKET)]: true
+2771-    }
+2772-  }
+2773-}
+2774- GET /api/sse/command-center 500 in 15096ms
+2775- GET / 200 in 81ms
+2776: GET /api/proxy/query/scores?symbol=CONS-041&window=24h&maxPoints=320 200 in 136ms
+2777: GET /api/proxy/query/candles?symbol=CONS-041&window=24h&maxPoints=320&res=1h 200 in 142ms
+2778- GET / 200 in 67ms
+2779- GET / 200 in 85ms
+2780: GET /api/proxy/query/candles?symbol=CONS-041&window=24h&maxPoints=320&res=1h 200 in 132ms
+2781: GET /api/proxy/query/scores?symbol=CONS-041&window=24h&maxPoints=320 200 in 160ms
+2782- ⨯ Error: failed to pipe response
+2783-    at pipeToNodeResponse (/app/web/node_modules/next/dist/server/pipe-readable.js:126:15)
+2784-    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+2785-    at async sendResponse (/app/web/node_modules/next/dist/server/send-response.js:40:13)
+--
+2813-        at Socket.<anonymous> (node:internal/deps/undici/undici:6408:28)
+2814-        at Socket.emit (node:events:536:35)
+2815-        at endReadableNT (node:internal/streams/readable:1698:12)
+2816-        at process.processTicksAndRejections (node:internal/process/task_queues:82:21) {
+2817:      code: 'UND_ERR_SOCKET',
+2818-      socket: [Object],
+2819-      [Symbol(undici.error.UND_ERR)]: true,
+2820:      [Symbol(undici.error.UND_ERR_SOCKET)]: true
+2821-    }
+2822-  }
+2823-}
+2824- GET /api/sse/command-center 500 in 15066ms
+2825- GET / 200 in 78ms
+2826: GET /api/proxy/query/candles?symbol=CONS-041&window=24h&maxPoints=320&res=1h 200 in 161ms
+2827: GET /api/proxy/query/scores?symbol=CONS-041&window=24h&maxPoints=320 200 in 205ms
+2828- GET / 200 in 130ms
+2829- GET / 200 in 75ms
+2830- ⨯ Error: failed to pipe response
+2831-    at pipeToNodeResponse (/app/web/node_modules/next/dist/server/pipe-readable.js:126:15)
+--
+2861-        at Socket.<anonymous> (node:internal/deps/undici/undici:6408:28)
+2862-        at Socket.emit (node:events:536:35)
+2863-        at endReadableNT (node:internal/streams/readable:1698:12)
+2864-        at process.processTicksAndRejections (node:internal/process/task_queues:82:21) {
+2865:      code: 'UND_ERR_SOCKET',
+2866-      socket: [Object],
+2867-      [Symbol(undici.error.UND_ERR)]: true,
+2868:      [Symbol(undici.error.UND_ERR_SOCKET)]: true
+2869-    }
+2870-  }
+2871-}
+2872- GET /api/sse/command-center 500 in 15082ms
+2873: GET /api/proxy/query/candles?symbol=CONS-041&window=24h&maxPoints=320&res=1h 200 in 133ms
+2874: GET /api/proxy/query/scores?symbol=CONS-041&window=24h&maxPoints=320 200 in 162ms
+2875- GET / 200 in 69ms
+2876- GET / 200 in 61ms
+2877: GET /api/proxy/query/candles?symbol=CONS-041&window=24h&maxPoints=320&res=1h 200 in 121ms
+2878: GET /api/proxy/query/scores?symbol=CONS-041&window=24h&maxPoints=320 200 in 156ms
+2879- GET / 200 in 72ms
+2880- ⨯ Error: failed to pipe response
+2881-    at pipeToNodeResponse (/app/web/node_modules/next/dist/server/pipe-readable.js:126:15)
+2882-    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+--
+2911-        at Socket.<anonymous> (node:internal/deps/undici/undici:6408:28)
+2912-        at Socket.emit (node:events:536:35)
+2913-        at endReadableNT (node:internal/streams/readable:1698:12)
+2914-        at process.processTicksAndRejections (node:internal/process/task_queues:82:21) {
+2915:      code: 'UND_ERR_SOCKET',
+2916-      socket: [Object],
+2917-      [Symbol(undici.error.UND_ERR)]: true,
+2918:      [Symbol(undici.error.UND_ERR_SOCKET)]: true
+2919-    }
+2920-  }
+2921-}
+2922- GET /api/sse/command-center 500 in 15082ms
+2923- GET / 200 in 71ms
+2924: GET /api/proxy/query/scores?symbol=CONS-041&window=24h&maxPoints=320 200 in 169ms
+2925: GET /api/proxy/query/candles?symbol=CONS-041&window=24h&maxPoints=320&res=1h 200 in 192ms
+2926: GET /api/sse/command-center 200 in 2999ms
+2927- GET / 200 in 67ms
+2928- ⨯ Error: failed to pipe response
+2929-    at pipeToNodeResponse (/app/web/node_modules/next/dist/server/pipe-readable.js:126:15)
+2930-    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+--
+2959-        at Socket.<anonymous> (node:internal/deps/undici/undici:6408:28)
+2960-        at Socket.emit (node:events:536:35)
+2961-        at endReadableNT (node:internal/streams/readable:1698:12)
+2962-        at process.processTicksAndRejections (node:internal/process/task_queues:82:21) {
+2963:      code: 'UND_ERR_SOCKET',
+2964-      socket: [Object],
+2965-      [Symbol(undici.error.UND_ERR)]: true,
+2966:      [Symbol(undici.error.UND_ERR_SOCKET)]: true
+2967-    }
+2968-  }
+2969-}
+2970- GET /api/sse/command-center 500 in 15068ms
+2971- GET / 200 in 73ms
+2972: GET /api/proxy/query/candles?symbol=CONS-041&window=24h&maxPoints=320&res=1h 200 in 147ms
+2973: GET /api/proxy/query/scores?symbol=CONS-041&window=24h&maxPoints=320 200 in 177ms
+2974- GET / 200 in 81ms
+2975: GET /api/proxy/query/candles?symbol=CONS-041&window=24h&maxPoints=320&res=1h 200 in 128ms
+2976: GET /api/proxy/query/scores?symbol=CONS-041&window=24h&maxPoints=320 200 in 183ms
+2977- GET / 200 in 107ms
+2978- ⨯ Error: failed to pipe response
+2979-    at pipeToNodeResponse (/app/web/node_modules/next/dist/server/pipe-readable.js:126:15)
+2980-    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+--
+3009-        at Socket.<anonymous> (node:internal/deps/undici/undici:6408:28)
+3010-        at Socket.emit (node:events:536:35)
+3011-        at endReadableNT (node:internal/streams/readable:1698:12)
+3012-        at process.processTicksAndRejections (node:internal/process/task_queues:82:21) {
+3013:      code: 'UND_ERR_SOCKET',
+3014-      socket: [Object],
+3015-      [Symbol(undici.error.UND_ERR)]: true,
+3016:      [Symbol(undici.error.UND_ERR_SOCKET)]: true
+3017-    }
+3018-  }
+3019-}
+3020- GET /api/sse/command-center 500 in 15078ms
+3021- GET / 200 in 84ms
+3022: GET /api/proxy/query/candles?symbol=CONS-041&window=24h&maxPoints=320&res=1h 200 in 127ms
+3023: GET /api/proxy/query/scores?symbol=CONS-041&window=24h&maxPoints=320 200 in 159ms
+3024- GET / 200 in 80ms
+3025- GET / 200 in 69ms
+3026- ⨯ Error: failed to pipe response
+3027-    at pipeToNodeResponse (/app/web/node_modules/next/dist/server/pipe-readable.js:126:15)
+--
+3057-        at Socket.<anonymous> (node:internal/deps/undici/undici:6408:28)
+3058-        at Socket.emit (node:events:536:35)
+3059-        at endReadableNT (node:internal/streams/readable:1698:12)
+3060-        at process.processTicksAndRejections (node:internal/process/task_queues:82:21) {
+3061:      code: 'UND_ERR_SOCKET',
+3062-      socket: [Object],
+3063-      [Symbol(undici.error.UND_ERR)]: true,
+3064:      [Symbol(undici.error.UND_ERR_SOCKET)]: true
+3065-    }
+3066-  }
+3067-}
+3068- GET /api/sse/command-center 500 in 15075ms
+3069: GET /api/proxy/query/candles?symbol=CONS-041&window=24h&maxPoints=320&res=1h 200 in 127ms
+3070: GET /api/proxy/query/scores?symbol=CONS-041&window=24h&maxPoints=320 200 in 148ms
+3071- GET / 200 in 80ms
+3072- GET / 200 in 71ms
+3073: GET /api/proxy/query/candles?symbol=CONS-041&window=24h&maxPoints=320&res=1h 200 in 166ms
+3074: GET /api/proxy/query/scores?symbol=CONS-041&window=24h&maxPoints=320 200 in 201ms
+3075- GET / 200 in 81ms
+3076- ⨯ Error: failed to pipe response
+3077-    at pipeToNodeResponse (/app/web/node_modules/next/dist/server/pipe-readable.js:126:15)
+3078-    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+--
+3107-        at Socket.<anonymous> (node:internal/deps/undici/undici:6408:28)
+3108-        at Socket.emit (node:events:536:35)
+3109-        at endReadableNT (node:internal/streams/readable:1698:12)
+3110-        at process.processTicksAndRejections (node:internal/process/task_queues:82:21) {
+3111:      code: 'UND_ERR_SOCKET',
+3112-      socket: [Object],
+3113-      [Symbol(undici.error.UND_ERR)]: true,
+3114:      [Symbol(undici.error.UND_ERR_SOCKET)]: true
+3115-    }
+3116-  }
+3117-}
+3118- GET /api/sse/command-center 500 in 15076ms
+3119- GET / 200 in 87ms
+3120: GET /api/proxy/query/scores?symbol=CONS-041&window=24h&maxPoints=320 200 in 226ms
+3121: GET /api/proxy/query/candles?symbol=CONS-041&window=24h&maxPoints=320&res=1h 200 in 269ms
+3122- GET / 200 in 168ms
+3123: GET /api/proxy/query/candles?symbol=CONS-041&window=24h&maxPoints=320&res=1h 200 in 170ms
+3124: GET /api/proxy/query/scores?symbol=CONS-041&window=24h&maxPoints=320 200 in 220ms
+3125- ⨯ Error: failed to pipe response
+3126-    at pipeToNodeResponse (/app/web/node_modules/next/dist/server/pipe-readable.js:126:15)
+3127-    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+3128-    at async sendResponse (/app/web/node_modules/next/dist/server/send-response.js:40:13)
+--
+3156-        at Socket.<anonymous> (node:internal/deps/undici/undici:6408:28)
+3157-        at Socket.emit (node:events:536:35)
+3158-        at endReadableNT (node:internal/streams/readable:1698:12)
+3159-        at process.processTicksAndRejections (node:internal/process/task_queues:82:21) {
+3160:      code: 'UND_ERR_SOCKET',
+3161-      socket: [Object],
+3162-      [Symbol(undici.error.UND_ERR)]: true,
+3163:      [Symbol(undici.error.UND_ERR_SOCKET)]: true
+3164-    }
+3165-  }
+3166-}
+3167- GET /api/sse/command-center 500 in 15086ms
+3168- GET / 200 in 99ms
+3169- GET / 200 in 92ms
+3170: GET /api/proxy/query/candles?symbol=CONS-041&window=24h&maxPoints=320&res=1h 200 in 134ms
+3171: GET /api/proxy/query/scores?symbol=CONS-041&window=24h&maxPoints=320 200 in 177ms
+3172- GET / 200 in 157ms
+3173- ⨯ Error: failed to pipe response
+3174-    at pipeToNodeResponse (/app/web/node_modules/next/dist/server/pipe-readable.js:126:15)
+3175-    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+--
+3204-        at Socket.<anonymous> (node:internal/deps/undici/undici:6408:28)
+3205-        at Socket.emit (node:events:536:35)
+3206-        at endReadableNT (node:internal/streams/readable:1698:12)
+3207-        at process.processTicksAndRejections (node:internal/process/task_queues:82:21) {
+3208:      code: 'UND_ERR_SOCKET',
+3209-      socket: [Object],
+3210-      [Symbol(undici.error.UND_ERR)]: true,
+3211:      [Symbol(undici.error.UND_ERR_SOCKET)]: true
+3212-    }
+3213-  }
+3214-}
+3215- GET /api/sse/command-center 500 in 15120ms
+3216- GET / 200 in 91ms
+3217: GET /api/proxy/query/scores?symbol=CONS-041&window=24h&maxPoints=320 200 in 146ms
+3218: GET /api/proxy/query/candles?symbol=CONS-041&window=24h&maxPoints=320&res=1h 200 in 161ms
+3219- GET / 200 in 75ms
+3220- GET / 200 in 73ms
+3221: GET /api/proxy/query/candles?symbol=CONS-041&window=24h&maxPoints=320&res=1h 200 in 129ms
+3222: GET /api/proxy/query/scores?symbol=CONS-041&window=24h&maxPoints=320 200 in 174ms
+3223- ⨯ Error: failed to pipe response
+3224-    at pipeToNodeResponse (/app/web/node_modules/next/dist/server/pipe-readable.js:126:15)
+3225-    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+3226-    at async sendResponse (/app/web/node_modules/next/dist/server/send-response.js:40:13)
+--
+3254-        at Socket.<anonymous> (node:internal/deps/undici/undici:6408:28)
+3255-        at Socket.emit (node:events:536:35)
+3256-        at endReadableNT (node:internal/streams/readable:1698:12)
+3257-        at process.processTicksAndRejections (node:internal/process/task_queues:82:21) {
+3258:      code: 'UND_ERR_SOCKET',
+3259-      socket: [Object],
+3260-      [Symbol(undici.error.UND_ERR)]: true,
+3261:      [Symbol(undici.error.UND_ERR_SOCKET)]: true
+3262-    }
+3263-  }
+3264-}
+3265- GET /api/sse/command-center 500 in 15078ms
+3266- GET / 200 in 75ms
+3267: GET /api/proxy/query/candles?symbol=CONS-041&window=24h&maxPoints=320&res=1h 200 in 135ms
+3268: GET /api/proxy/query/scores?symbol=CONS-041&window=24h&maxPoints=320 200 in 160ms
+3269- GET / 200 in 100ms
+3270- GET / 200 in 86ms
+3271- ⨯ Error: failed to pipe response
+3272-    at pipeToNodeResponse (/app/web/node_modules/next/dist/server/pipe-readable.js:126:15)
+--
+3302-        at Socket.<anonymous> (node:internal/deps/undici/undici:6408:28)
+3303-        at Socket.emit (node:events:536:35)
+3304-        at endReadableNT (node:internal/streams/readable:1698:12)
+3305-        at process.processTicksAndRejections (node:internal/process/task_queues:82:21) {
+3306:      code: 'UND_ERR_SOCKET',
+3307-      socket: [Object],
+3308-      [Symbol(undici.error.UND_ERR)]: true,
+3309:      [Symbol(undici.error.UND_ERR_SOCKET)]: true
+3310-    }
+3311-  }
+3312-}
+3313- GET /api/sse/command-center 500 in 15106ms
+3314: GET /api/proxy/query/candles?symbol=CONS-041&window=24h&maxPoints=320&res=1h 200 in 181ms
+3315: GET /api/proxy/query/scores?symbol=CONS-041&window=24h&maxPoints=320 200 in 229ms
+3316- GET / 200 in 99ms
+3317- GET / 200 in 93ms
+3318: GET /api/proxy/query/candles?symbol=CONS-041&window=24h&maxPoints=320&res=1h 200 in 129ms
+3319: GET /api/proxy/query/scores?symbol=CONS-041&window=24h&maxPoints=320 200 in 172ms
+3320- ⨯ Error: failed to pipe response
+3321-    at pipeToNodeResponse (/app/web/node_modules/next/dist/server/pipe-readable.js:126:15)
+3322-    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+3323-    at async sendResponse (/app/web/node_modules/next/dist/server/send-response.js:40:13)
+--
+3351-        at Socket.<anonymous> (node:internal/deps/undici/undici:6408:28)
+3352-        at Socket.emit (node:events:536:35)
+3353-        at endReadableNT (node:internal/streams/readable:1698:12)
+3354-        at process.processTicksAndRejections (node:internal/process/task_queues:82:21) {
+3355:      code: 'UND_ERR_SOCKET',
+3356-      socket: [Object],
+3357-      [Symbol(undici.error.UND_ERR)]: true,
+3358:      [Symbol(undici.error.UND_ERR_SOCKET)]: true
+3359-    }
+3360-  }
+3361-}
+3362- GET /api/sse/command-center 500 in 15086ms
+3363- GET / 200 in 101ms
+3364- GET / 200 in 87ms
+3365: GET /api/proxy/query/candles?symbol=CONS-041&window=24h&maxPoints=320&res=1h 200 in 250ms
+3366: GET /api/proxy/query/scores?symbol=CONS-041&window=24h&maxPoints=320 200 in 311ms
+3367- GET / 200 in 138ms
+3368- ⨯ Error: failed to pipe response
+3369-    at pipeToNodeResponse (/app/web/node_modules/next/dist/server/pipe-readable.js:126:15)
+3370-    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+--
+3399-        at Socket.<anonymous> (node:internal/deps/undici/undici:6408:28)
+3400-        at Socket.emit (node:events:536:35)
+3401-        at endReadableNT (node:internal/streams/readable:1698:12)
+3402-        at process.processTicksAndRejections (node:internal/process/task_queues:82:21) {
+3403:      code: 'UND_ERR_SOCKET',
+3404-      socket: [Object],
+3405-      [Symbol(undici.error.UND_ERR)]: true,
+3406:      [Symbol(undici.error.UND_ERR_SOCKET)]: true
+3407-    }
+3408-  }
+3409-}
+3410- GET /api/sse/command-center 500 in 15090ms
+3411: GET /api/proxy/query/candles?symbol=CONS-041&window=24h&maxPoints=320&res=1h 200 in 194ms
+3412: GET /api/proxy/query/scores?symbol=CONS-041&window=24h&maxPoints=320 200 in 265ms
+3413- GET / 200 in 266ms
+3414- GET / 200 in 440ms
+3415: GET /api/proxy/query/candles?symbol=CONS-041&window=24h&maxPoints=320&res=1h 200 in 448ms
+3416: GET /api/proxy/query/scores?symbol=CONS-041&window=24h&maxPoints=320 200 in 493ms
+3417- ⨯ Error: failed to pipe response
+3418-    at pipeToNodeResponse (/app/web/node_modules/next/dist/server/pipe-readable.js:126:15)
+3419-    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+3420-    at async sendResponse (/app/web/node_modules/next/dist/server/send-response.js:40:13)
+--
+3448-        at Socket.<anonymous> (node:internal/deps/undici/undici:6408:28)
+3449-        at Socket.emit (node:events:536:35)
+3450-        at endReadableNT (node:internal/streams/readable:1698:12)
+3451-        at process.processTicksAndRejections (node:internal/process/task_queues:82:21) {
+3452:      code: 'UND_ERR_SOCKET',
+3453-      socket: [Object],
+3454-      [Symbol(undici.error.UND_ERR)]: true,
+3455:      [Symbol(undici.error.UND_ERR_SOCKET)]: true
+3456-    }
+3457-  }
+3458-}
+3459- GET /api/sse/command-center 500 in 15125ms
+3460- GET / 200 in 278ms
+3461: GET /api/proxy/query/candles?symbol=CONS-041&window=24h&maxPoints=320&res=1h 200 in 377ms
+3462: GET /api/proxy/query/scores?symbol=CONS-041&window=24h&maxPoints=320 200 in 586ms
+3463- GET / 200 in 259ms
+3464- GET / 200 in 303ms
+3465- ⨯ Error: failed to pipe response
+3466-    at pipeToNodeResponse (/app/web/node_modules/next/dist/server/pipe-readable.js:126:15)
+--
+3496-        at Socket.<anonymous> (node:internal/deps/undici/undici:6408:28)
+3497-        at Socket.emit (node:events:536:35)
+3498-        at endReadableNT (node:internal/streams/readable:1698:12)
+3499-        at process.processTicksAndRejections (node:internal/process/task_queues:82:21) {
+3500:      code: 'UND_ERR_SOCKET',
+3501-      socket: [Object],
+3502-      [Symbol(undici.error.UND_ERR)]: true,
+3503:      [Symbol(undici.error.UND_ERR_SOCKET)]: true
+3504-    }
+3505-  }
+3506-}
+3507- GET /api/sse/command-center 500 in 15378ms
+3508: GET /api/proxy/query/candles?symbol=CONS-041&window=24h&maxPoints=320&res=1h 200 in 698ms
+3509: GET /api/proxy/query/scores?symbol=CONS-041&window=24h&maxPoints=320 200 in 840ms
+3510- GET / 200 in 240ms
+3511: GET /api/proxy/query/scores?symbol=CONS-041&window=24h&maxPoints=320 200 in 555ms
+3512: GET /api/proxy/query/candles?symbol=CONS-041&window=24h&maxPoints=320&res=1h 200 in 619ms
+3513- GET / 200 in 266ms
+3514- ⨯ Error: failed to pipe response
+3515-    at pipeToNodeResponse (/app/web/node_modules/next/dist/server/pipe-readable.js:126:15)
+3516-    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+--
+3545-        at Socket.<anonymous> (node:internal/deps/undici/undici:6408:28)
+3546-        at Socket.emit (node:events:536:35)
+3547-        at endReadableNT (node:internal/streams/readable:1698:12)
+3548-        at process.processTicksAndRejections (node:internal/process/task_queues:82:21) {
+3549:      code: 'UND_ERR_SOCKET',
+3550-      socket: [Object],
+3551-      [Symbol(undici.error.UND_ERR)]: true,
+3552:      [Symbol(undici.error.UND_ERR_SOCKET)]: true
+3553-    }
+3554-  }
+3555-}
+3556- GET /api/sse/command-center 500 in 15443ms
+3557: GET /api/proxy/query/candles?symbol=CONS-041&window=24h&maxPoints=320&res=1h 200 in 225ms
+3558: GET /api/proxy/query/scores?symbol=CONS-041&window=24h&maxPoints=320 200 in 443ms
+3559- GET / 200 in 191ms
+3560- GET / 200 in 133ms
+3561: GET /api/proxy/query/candles?symbol=CONS-041&window=24h&maxPoints=320&res=1h 200 in 249ms
+3562: GET /api/proxy/query/scores?symbol=CONS-041&window=24h&maxPoints=320 200 in 322ms
+3563- ⨯ Error: failed to pipe response
+3564-    at pipeToNodeResponse (/app/web/node_modules/next/dist/server/pipe-readable.js:126:15)
+3565-    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+3566-    at async sendResponse (/app/web/node_modules/next/dist/server/send-response.js:40:13)
+--
+3594-        at Socket.<anonymous> (node:internal/deps/undici/undici:6408:28)
+3595-        at Socket.emit (node:events:536:35)
+3596-        at endReadableNT (node:internal/streams/readable:1698:12)
+3597-        at process.processTicksAndRejections (node:internal/process/task_queues:82:21) {
+3598:      code: 'UND_ERR_SOCKET',
+3599-      socket: [Object],
+3600-      [Symbol(undici.error.UND_ERR)]: true,
+3601:      [Symbol(undici.error.UND_ERR_SOCKET)]: true
+3602-    }
+3603-  }
+3604-}
+3605- GET /api/sse/command-center 500 in 15163ms
+3606- GET / 200 in 179ms
+3607: GET /api/proxy/query/candles?symbol=CONS-041&window=24h&maxPoints=320&res=1h 200 in 283ms
+3608: GET /api/proxy/query/scores?symbol=CONS-041&window=24h&maxPoints=320 200 in 333ms
+3609- GET / 200 in 159ms
+3610- GET / 200 in 121ms
+3611- ⨯ Error: failed to pipe response
+3612-    at pipeToNodeResponse (/app/web/node_modules/next/dist/server/pipe-readable.js:126:15)
+--
+3642-        at Socket.<anonymous> (node:internal/deps/undici/undici:6408:28)
+3643-        at Socket.emit (node:events:536:35)
+3644-        at endReadableNT (node:internal/streams/readable:1698:12)
+3645-        at process.processTicksAndRejections (node:internal/process/task_queues:82:21) {
+3646:      code: 'UND_ERR_SOCKET',
+3647-      socket: [Object],
+3648-      [Symbol(undici.error.UND_ERR)]: true,
+3649:      [Symbol(undici.error.UND_ERR_SOCKET)]: true
+3650-    }
+3651-  }
+3652-}
+3653- GET /api/sse/command-center 500 in 15146ms
+3654: GET /api/proxy/query/candles?symbol=CONS-041&window=24h&maxPoints=320&res=1h 200 in 286ms
+3655: GET /api/proxy/query/scores?symbol=CONS-041&window=24h&maxPoints=320 200 in 366ms
+3656- GET / 200 in 142ms
+3657- GET / 200 in 122ms
+3658: GET /api/proxy/query/candles?symbol=CONS-041&window=24h&maxPoints=320&res=1h 200 in 295ms
+3659: GET /api/proxy/query/scores?symbol=CONS-041&window=24h&maxPoints=320 200 in 350ms
+3660- ⨯ Error: failed to pipe response
+3661-    at pipeToNodeResponse (/app/web/node_modules/next/dist/server/pipe-readable.js:126:15)
+3662-    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+3663-    at async sendResponse (/app/web/node_modules/next/dist/server/send-response.js:40:13)
+--
+3691-        at Socket.<anonymous> (node:internal/deps/undici/undici:6408:28)
+3692-        at Socket.emit (node:events:536:35)
+3693-        at endReadableNT (node:internal/streams/readable:1698:12)
+3694-        at process.processTicksAndRejections (node:internal/process/task_queues:82:21) {
+3695:      code: 'UND_ERR_SOCKET',
+3696-      socket: [Object],
+3697-      [Symbol(undici.error.UND_ERR)]: true,
+3698:      [Symbol(undici.error.UND_ERR_SOCKET)]: true
+3699-    }
+3700-  }
+3701-}
+3702- GET /api/sse/command-center 500 in 15142ms
+3703- GET / 200 in 130ms
+3704: GET /api/proxy/query/candles?symbol=CONS-041&window=24h&maxPoints=320&res=1h 200 in 181ms
+3705: GET /api/proxy/query/scores?symbol=CONS-041&window=24h&maxPoints=320 200 in 216ms
+3706- GET / 200 in 156ms
+3707- GET / 200 in 126ms
+3708- ⨯ Error: failed to pipe response
+3709-    at pipeToNodeResponse (/app/web/node_modules/next/dist/server/pipe-readable.js:126:15)
+--
+3739-        at Socket.<anonymous> (node:internal/deps/undici/undici:6408:28)
+3740-        at Socket.emit (node:events:536:35)
+3741-        at endReadableNT (node:internal/streams/readable:1698:12)
+3742-        at process.processTicksAndRejections (node:internal/process/task_queues:82:21) {
+3743:      code: 'UND_ERR_SOCKET',
+3744-      socket: [Object],
+3745-      [Symbol(undici.error.UND_ERR)]: true,
+3746:      [Symbol(undici.error.UND_ERR_SOCKET)]: true
+3747-    }
+3748-  }
+3749-}
+3750- GET /api/sse/command-center 500 in 15138ms
+3751: GET /api/proxy/query/candles?symbol=CONS-041&window=24h&maxPoints=320&res=1h 200 in 181ms
+3752: GET /api/proxy/query/scores?symbol=CONS-041&window=24h&maxPoints=320 200 in 218ms
+3753- GET / 200 in 100ms
+3754- GET / 200 in 130ms
+3755: GET /api/proxy/query/candles?symbol=CONS-041&window=24h&maxPoints=320&res=1h 200 in 180ms
+3756: GET /api/proxy/query/scores?symbol=CONS-041&window=24h&maxPoints=320 200 in 212ms
+3757- GET / 200 in 124ms
+3758- ⨯ Error: failed to pipe response
+3759-    at pipeToNodeResponse (/app/web/node_modules/next/dist/server/pipe-readable.js:126:15)
+3760-    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+--
+3789-        at Socket.<anonymous> (node:internal/deps/undici/undici:6408:28)
+3790-        at Socket.emit (node:events:536:35)
+3791-        at endReadableNT (node:internal/streams/readable:1698:12)
+3792-        at process.processTicksAndRejections (node:internal/process/task_queues:82:21) {
+3793:      code: 'UND_ERR_SOCKET',
+3794-      socket: [Object],
+3795-      [Symbol(undici.error.UND_ERR)]: true,
+3796:      [Symbol(undici.error.UND_ERR_SOCKET)]: true
+3797-    }
+3798-  }
+3799-}
+3800- GET /api/sse/command-center 500 in 15114ms
+3801- ✓ Compiled in 691ms (325 modules)
+3802: GET /api/proxy/query/candles?symbol=CONS-041&window=24h&maxPoints=320&res=1h 200 in 263ms
+3803: GET /api/proxy/query/scores?symbol=CONS-041&window=24h&maxPoints=320 200 in 568ms
+3804- GET / 200 in 527ms
+3805- GET / 200 in 117ms
+3806- ⨯ Error: failed to pipe response
+3807-    at pipeToNodeResponse (/app/web/node_modules/next/dist/server/pipe-readable.js:126:15)
+--
+3837-        at Socket.<anonymous> (node:internal/deps/undici/undici:6408:28)
+3838-        at Socket.emit (node:events:536:35)
+3839-        at endReadableNT (node:internal/streams/readable:1698:12)
+3840-        at process.processTicksAndRejections (node:internal/process/task_queues:82:21) {
+3841:      code: 'UND_ERR_SOCKET',
+3842-      socket: [Object],
+3843-      [Symbol(undici.error.UND_ERR)]: true,
+3844:      [Symbol(undici.error.UND_ERR_SOCKET)]: true
+3845-    }
+3846-  }
+3847-}
+3848- GET /api/sse/command-center 500 in 15128ms
+3849: GET /api/proxy/query/scores?symbol=CONS-041&window=24h&maxPoints=320 200 in 286ms
+3850: GET /api/proxy/query/candles?symbol=CONS-041&window=24h&maxPoints=320&res=1h 200 in 296ms
+3851- GET / 200 in 116ms
+3852- GET / 200 in 118ms
+3853: GET /api/proxy/query/candles?symbol=CONS-041&window=24h&maxPoints=320&res=1h 200 in 278ms
+3854: GET /api/proxy/query/scores?symbol=CONS-041&window=24h&maxPoints=320 200 in 326ms
+3855- GET / 200 in 148ms
+3856: GET /api/sse/command-center 200 in 15153ms
+3857: GET /api/proxy/query/candles?symbol=CONS-041&window=24h&maxPoints=320&res=1h 200 in 231ms
+3858: GET /api/proxy/query/scores?symbol=CONS-041&window=24h&maxPoints=320 200 in 275ms
+3859- GET / 200 in 159ms
+3860- GET / 200 in 138ms
+3861: GET /api/proxy/query/candles?symbol=CONS-041&window=24h&maxPoints=320&res=1h 200 in 223ms
+3862: GET /api/proxy/query/scores?symbol=CONS-041&window=24h&maxPoints=320 200 in 278ms
+3863: GET /api/sse/command-center 200 in 15110ms
+3864- GET / 200 in 124ms
+3865- GET / 200 in 121ms
+3866: GET /api/proxy/query/candles?symbol=CONS-041&window=24h&maxPoints=320&res=1h 200 in 198ms
+3867: GET /api/proxy/query/scores?symbol=CONS-041&window=24h&maxPoints=320 200 in 255ms
+3868- GET / 200 in 122ms
+3869: GET /api/sse/command-center 200 in 15145ms
+3870: GET /api/proxy/query/candles?symbol=CONS-041&window=24h&maxPoints=320&res=1h 200 in 270ms
+3871: GET /api/proxy/query/scores?symbol=CONS-041&window=24h&maxPoints=320 200 in 326ms
+3872- GET / 200 in 239ms
+3873- GET / 200 in 117ms
+3874: GET /api/proxy/query/candles?symbol=CONS-041&window=24h&maxPoints=320&res=1h 200 in 254ms
+3875: GET /api/proxy/query/scores?symbol=CONS-041&window=24h&maxPoints=320 200 in 309ms
+3876- GET / 200 in 164ms
+3877: GET /api/sse/command-center 200 in 15153ms
+3878- GET / 200 in 136ms
+3879: GET /api/proxy/query/candles?symbol=CONS-041&window=24h&maxPoints=320&res=1h 200 in 350ms
+3880: GET /api/proxy/query/scores?symbol=CONS-041&window=24h&maxPoints=320 200 in 426ms
+3881- GET / 200 in 180ms
+3882: GET /api/sse/command-center 200 in 15120ms
+3883: GET /api/proxy/query/candles?symbol=CONS-041&window=24h&maxPoints=320&res=1h 200 in 255ms
+3884: GET /api/proxy/query/scores?symbol=CONS-041&window=24h&maxPoints=320 200 in 353ms
+3885- GET / 200 in 148ms
+3886- GET / 200 in 131ms
+3887: GET /api/proxy/query/candles?symbol=CONS-041&window=24h&maxPoints=320&res=1h 200 in 258ms
+3888: GET /api/proxy/query/scores?symbol=CONS-041&window=24h&maxPoints=320 200 in 333ms
+3889- GET / 200 in 152ms
+3890: GET /api/sse/command-center 200 in 15142ms
+3891- GET / 200 in 189ms
+3892: GET /api/proxy/query/candles?symbol=CONS-041&window=24h&maxPoints=320&res=1h 200 in 289ms
+3893: GET /api/proxy/query/scores?symbol=CONS-041&window=24h&maxPoints=320 200 in 345ms
+3894- GET / 200 in 145ms
+3895: GET /api/sse/command-center 200 in 15138ms
+3896: GET /api/proxy/query/candles?symbol=CONS-041&window=24h&maxPoints=320&res=1h 200 in 315ms
+3897: GET /api/proxy/query/scores?symbol=CONS-041&window=24h&maxPoints=320 200 in 335ms
+3898- GET / 200 in 196ms
+3899- GET / 200 in 205ms
+3900: GET /api/proxy/query/candles?symbol=CONS-041&window=24h&maxPoints=320&res=1h 200 in 359ms
+3901: GET /api/proxy/query/scores?symbol=CONS-041&window=24h&maxPoints=320 200 in 435ms
+3902- GET / 200 in 136ms
+3903: GET /api/sse/command-center 200 in 15301ms
+3904: GET /api/proxy/query/candles?symbol=CONS-041&window=24h&maxPoints=320&res=1h 200 in 637ms
+3905: GET /api/proxy/query/scores?symbol=CONS-041&window=24h&maxPoints=320 200 in 715ms
+3906- GET / 200 in 237ms
+3907- ✓ Compiled in 3.2s (610 modules)
+3908- GET /api/proxy/query/feed?window=24h&limit=5 200 in 1609ms
+3909- GET /api/proxy/query/queue?window=24h 200 in 1629ms
+3910- GET /api/proxy/query/world-map?window=24h 200 in 1665ms
+3911- GET /api/proxy/query/command-center?window=24h 200 in 1928ms
+3912- GET / 200 in 3019ms
+3913: GET /api/sse/command-center 200 in 15329ms
+3914: GET /api/proxy/query/candles?symbol=CONS-041&window=24h&maxPoints=320&res=1h 200 in 282ms
+3915: GET /api/proxy/query/scores?symbol=CONS-041&window=24h&maxPoints=320 200 in 349ms
+3916- ✓ Compiled in 3.2s (610 modules)
+3917- GET /api/proxy/query/world-map?window=24h 200 in 1745ms
+3918- GET /api/proxy/query/command-center?window=24h 200 in 1756ms
+3919- GET /api/proxy/query/queue?window=24h 200 in 1741ms
+3920- GET /api/proxy/query/feed?window=24h&limit=5 200 in 1754ms
+3921- GET / 200 in 3184ms
+3922: GET /api/proxy/query/candles?symbol=CONS-041&window=24h&maxPoints=320&res=1h 200 in 248ms
+3923: GET /api/proxy/query/scores?symbol=CONS-041&window=24h&maxPoints=320 200 in 318ms
+3924- ✓ Compiled in 906ms (610 modules)
+3925- GET / 200 in 583ms
+3926: GET /api/sse/command-center 200 in 15176ms
+3927: GET /api/proxy/query/candles?symbol=CONS-041&window=24h&maxPoints=320&res=1h 200 in 267ms
+3928: GET /api/proxy/query/scores?symbol=CONS-041&window=24h&maxPoints=320 200 in 387ms
+3929- GET / 200 in 203ms
+3930- ✓ Compiled in 1701ms (610 modules)
+3931: GET /api/proxy/query/candles?symbol=CONS-041&window=24h&maxPoints=320&res=5m 200 in 654ms
+3932- GET /api/proxy/query/queue?window=24h 200 in 607ms
+3933- GET /api/proxy/query/world-map?window=24h 200 in 623ms
+3934- GET /api/proxy/query/command-center?window=24h 200 in 653ms
+3935: GET /api/proxy/query/scores?symbol=CONS-041&window=24h&maxPoints=320 200 in 745ms
+3936- GET /api/proxy/query/feed?window=24h&limit=5 200 in 2220ms
+3937: GET /api/proxy/query/candles?symbol=CONS-041&window=24h&maxPoints=320&res=5m 200 in 999ms
+3938: GET /api/proxy/query/scores?symbol=CONS-041&window=24h&maxPoints=320 200 in 1031ms
+3939- GET / 200 in 530ms
+3940: GET /api/sse/command-center 200 in 15261ms
+3941- ✓ Compiled in 3s (610 modules)
+3942: GET /api/proxy/query/candles?symbol=CONS-041&window=24h&maxPoints=320&res=5m 200 in 445ms
+3943: GET /api/proxy/query/scores?symbol=CONS-041&window=24h&maxPoints=320 200 in 785ms
+3944- GET / 200 in 770ms
+3945- ✓ Compiled in 6.2s (709 modules)
+3946: GET /api/proxy/query/candles?symbol=CONS-041&window=24h&maxPoints=320&res=5m 200 in 3406ms
+3947: GET /api/proxy/query/scores?symbol=CONS-041&window=24h&maxPoints=320 200 in 3438ms
+3948: GET /api/sse/command-center 200 in 17631ms
+3949- ○ Compiling /icon.svg ...
+3950- ✓ Compiled /icon.svg in 8.4s (378 modules)
+3951- GET /icon.svg?61a4368537996c78 200 in 11155ms
+3952- GET / 200 in 3175ms
+3953: GET /api/proxy/query/scores?symbol=CONS-041&window=24h&maxPoints=320 200 in 10203ms
+3954: GET /api/proxy/query/candles?symbol=CONS-041&window=24h&maxPoints=320&res=5m 200 in 10404ms
+3955: GET /api/proxy/query/candles?symbol=CONS-041&window=24h&maxPoints=320&res=5m 200 in 260ms
+3956: GET /api/proxy/query/scores?symbol=CONS-041&window=24h&maxPoints=320 200 in 425ms
+3957: GET /api/sse/command-center 200 in 16567ms
+3958- GET / 200 in 384ms
+3959: GET /api/proxy/query/candles?symbol=CONS-041&window=24h&maxPoints=320&res=5m 200 in 379ms
+3960: GET /api/proxy/query/scores?symbol=CONS-041&window=24h&maxPoints=320 200 in 671ms
+3961- GET / 200 in 494ms
+3962: GET /api/sse/command-center 200 in 15299ms
+3963: GET /api/proxy/query/candles?symbol=CONS-041&window=24h&maxPoints=320&res=5m 200 in 655ms
+3964: GET /api/proxy/query/scores?symbol=CONS-041&window=24h&maxPoints=320 200 in 744ms
+3965- GET / 200 in 506ms
+3966: GET /api/proxy/query/candles?symbol=CONS-041&window=24h&maxPoints=320&res=5m 200 in 669ms
+3967: GET /api/proxy/query/scores?symbol=CONS-041&window=24h&maxPoints=320 200 in 1059ms
+3968- GET / 200 in 489ms
+3969: GET /api/sse/command-center 200 in 15383ms
+3970: GET /api/proxy/query/scores?symbol=CONS-041&window=24h&maxPoints=320 200 in 1406ms
+3971: GET /api/proxy/query/candles?symbol=CONS-041&window=24h&maxPoints=320&res=5m 200 in 1561ms
+3972- GET / 200 in 909ms
+3973: GET /api/proxy/query/candles?symbol=CONS-041&window=24h&maxPoints=320&res=5m 200 in 445ms
+3974: GET /api/proxy/query/scores?symbol=CONS-041&window=24h&maxPoints=320 200 in 801ms
+3975: GET /api/sse/command-center 200 in 15442ms
+3976- GET / 200 in 652ms
+3977: GET /api/proxy/query/candles?symbol=CONS-041&window=24h&maxPoints=320&res=5m 200 in 1556ms
+3978: GET /api/proxy/query/scores?symbol=CONS-041&window=24h&maxPoints=320 200 in 1611ms
+3979- GET / 200 in 1964ms
+3980: GET /api/sse/command-center 200 in 15457ms
+3981- GET / 200 in 517ms
+3982: GET /api/proxy/query/candles?symbol=CONS-041&window=24h&maxPoints=320&res=5m 200 in 615ms
+3983: GET /api/proxy/query/scores?symbol=CONS-041&window=24h&maxPoints=320 200 in 865ms
+3984- GET / 200 in 478ms
+3985: GET /api/proxy/query/candles?symbol=CONS-041&window=24h&maxPoints=320&res=5m 200 in 461ms
+3986: GET /api/proxy/query/scores?symbol=CONS-041&window=24h&maxPoints=320 200 in 754ms
+3987: GET /api/sse/command-center 200 in 15471ms
+3988- GET / 200 in 540ms
+3989: GET /api/proxy/query/candles?symbol=CONS-041&window=24h&maxPoints=320&res=5m 200 in 500ms
+3990: GET /api/proxy/query/scores?symbol=CONS-041&window=24h&maxPoints=320 200 in 693ms
+3991- GET / 200 in 763ms
+3992: GET /api/sse/command-center 200 in 15361ms
+3993: GET /api/proxy/query/scores?symbol=CONS-041&window=24h&maxPoints=320 200 in 1306ms
+3994: GET /api/proxy/query/candles?symbol=CONS-041&window=24h&maxPoints=320&res=5m 200 in 1346ms
+3995- GET / 200 in 754ms
+3996: GET /api/proxy/query/candles?symbol=CONS-041&window=24h&maxPoints=320&res=5m 200 in 868ms
+3997: GET /api/proxy/query/scores?symbol=CONS-041&window=24h&maxPoints=320 200 in 995ms
+3998- GET / 200 in 490ms
+3999: GET /api/sse/command-center 200 in 15295ms
+4000: GET /api/proxy/query/candles?symbol=CONS-041&window=24h&maxPoints=320&res=5m 200 in 993ms
+4001: GET /api/proxy/query/scores?symbol=CONS-041&window=24h&maxPoints=320 200 in 1320ms
+4002- GET / 200 in 1554ms
+4003: GET /api/sse/command-center 200 in 15664ms
+4004: GET /api/proxy/query/candles?symbol=CONS-041&window=24h&maxPoints=320&res=5m 200 in 1432ms
+4005: GET /api/proxy/query/scores?symbol=CONS-041&window=24h&maxPoints=320 200 in 1833ms
+4006- GET / 200 in 670ms
+4007: GET /api/proxy/query/candles?symbol=CONS-041&window=24h&maxPoints=320&res=5m 200 in 612ms
+4008: GET /api/proxy/query/scores?symbol=CONS-041&window=24h&maxPoints=320 200 in 905ms
+4009- GET / 200 in 575ms
+4010: GET /api/sse/command-center 200 in 15790ms
+4011: GET /api/proxy/query/scores?symbol=CONS-041&window=24h&maxPoints=320 200 in 1534ms
+4012: GET /api/proxy/query/candles?symbol=CONS-041&window=24h&maxPoints=320&res=5m 200 in 1503ms
+4013- GET / 200 in 535ms
+4014: GET /api/proxy/query/candles?symbol=CONS-041&window=24h&maxPoints=320&res=5m 200 in 818ms
+4015: GET /api/proxy/query/scores?symbol=CONS-041&window=24h&maxPoints=320 200 in 1003ms
+4016- GET / 200 in 885ms
+4017: GET /api/sse/command-center 200 in 15780ms
+4018: GET /api/proxy/query/candles?symbol=CONS-041&window=24h&maxPoints=320&res=5m 200 in 1057ms
+4019: GET /api/proxy/query/scores?symbol=CONS-041&window=24h&maxPoints=320 200 in 1382ms
+4020- GET / 200 in 1292ms
+4021: GET /api/sse/command-center 200 in 15606ms
+4022: GET /api/proxy/query/candles?symbol=CONS-041&window=24h&maxPoints=320&res=5m 200 in 883ms
+4023: GET /api/proxy/query/scores?symbol=CONS-041&window=24h&maxPoints=320 200 in 1180ms
+4024- GET / 200 in 825ms
+4025: GET /api/proxy/query/scores?symbol=CONS-041&window=24h&maxPoints=320 200 in 1066ms
+4026: GET /api/proxy/query/candles?symbol=CONS-041&window=24h&maxPoints=320&res=5m 200 in 1481ms
+4027- GET / 200 in 701ms
+4028: GET /api/sse/command-center 200 in 15992ms
+4029: GET /api/proxy/query/candles?symbol=CONS-041&window=24h&maxPoints=320&res=5m 200 in 1095ms
+4030: GET /api/proxy/query/scores?symbol=CONS-041&window=24h&maxPoints=320 200 in 1729ms
+4031- GET / 200 in 1558ms
+4032: GET /api/proxy/query/candles?symbol=CONS-041&window=24h&maxPoints=320&res=5m 200 in 1114ms
+4033: GET /api/proxy/query/scores?symbol=CONS-041&window=24h&maxPoints=320 200 in 1252ms
+4034- GET / 200 in 1080ms
+4035: GET /api/sse/command-center 200 in 15537ms
+4036: GET /api/proxy/query/scores?symbol=CONS-041&window=24h&maxPoints=320 200 in 1358ms
+4037: GET /api/proxy/query/candles?symbol=CONS-041&window=24h&maxPoints=320&res=5m 200 in 1877ms
+4038- GET / 200 in 1483ms
+4039: GET /api/sse/command-center 200 in 15973ms
+4040: GET /api/proxy/query/candles?symbol=CONS-041&window=24h&maxPoints=320&res=5m 200 in 1866ms
+4041- GET / 200 in 1574ms
+4042: GET /api/proxy/query/scores?symbol=CONS-041&window=24h&maxPoints=320 200 in 2653ms
+4043: GET /api/proxy/query/candles?symbol=CONS-041&window=24h&maxPoints=320&res=5m 200 in 1437ms
+4044: GET /api/proxy/query/scores?symbol=CONS-041&window=24h&maxPoints=320 200 in 1591ms
+4045- GET / 200 in 1231ms
+4046: GET /api/sse/command-center 200 in 16665ms
+4047: GET /api/proxy/query/candles?symbol=CONS-041&window=24h&maxPoints=320&res=5m 200 in 1525ms
+4048: GET /api/proxy/query/scores?symbol=CONS-041&window=24h&maxPoints=320 200 in 1673ms
+4049- GET / 200 in 1143ms
+4050: GET /api/proxy/query/scores?symbol=CONS-041&window=24h&maxPoints=320 200 in 1318ms
+4051: GET /api/proxy/query/candles?symbol=CONS-041&window=24h&maxPoints=320&res=5m 200 in 1580ms
+4052- GET / 200 in 1276ms
+4053: GET /api/sse/command-center 200 in 16048ms
+4054: GET /api/proxy/query/candles?symbol=CONS-041&window=24h&maxPoints=320&res=5m 200 in 1468ms
+4055: GET /api/proxy/query/scores?symbol=CONS-041&window=24h&maxPoints=320 200 in 1655ms
+4056- GET / 200 in 1306ms
+4057: GET /api/sse/command-center 200 in 15681ms
+4058: GET /api/proxy/query/scores?symbol=CONS-041&window=24h&maxPoints=320 200 in 1803ms
+4059: GET /api/proxy/query/candles?symbol=CONS-041&window=24h&maxPoints=320&res=5m 200 in 2113ms
+4060- GET / 200 in 1205ms
+4061: GET /api/proxy/query/candles?symbol=CONS-041&window=24h&maxPoints=320&res=5m 200 in 2011ms
+4062: GET /api/proxy/query/scores?symbol=CONS-041&window=24h&maxPoints=320 200 in 2465ms
+4063: GET /api/sse/command-center 200 in 16783ms
+4064: GET /api/proxy/query/candles?symbol=CONS-041&window=24h&maxPoints=320&res=5m 200 in 2098ms
+4065: GET /api/proxy/query/scores?symbol=CONS-041&window=24h&maxPoints=320 200 in 2155ms
+4066- GET / 200 in 434ms
+4067: GET /api/proxy/query/candles?symbol=CONS-041&window=24h&maxPoints=320&res=5m 200 in 1262ms
+4068: GET /api/proxy/query/scores?symbol=CONS-041&window=24h&maxPoints=320 200 in 1648ms
+4069: GET /api/sse/command-center 200 in 16302ms
+4070- GET / 200 in 1149ms
+4071: GET /api/proxy/query/candles?symbol=CONS-041&window=24h&maxPoints=320&res=5m 200 in 849ms
+4072: GET /api/proxy/query/scores?symbol=CONS-041&window=24h&maxPoints=320 200 in 962ms
+4073- GET / 200 in 719ms
+4074: GET /api/sse/command-center 200 in 15500ms
+4075: GET /api/proxy/query/scores?symbol=CONS-041&window=24h&maxPoints=320 200 in 3334ms
+4076: GET /api/proxy/query/candles?symbol=CONS-041&window=24h&maxPoints=320&res=5m 200 in 3504ms
+4077- GET / 200 in 1592ms
+4078: GET /api/proxy/query/candles?symbol=CONS-041&window=24h&maxPoints=320&res=5m 200 in 1774ms
+4079: GET /api/proxy/query/scores?symbol=CONS-041&window=24h&maxPoints=320 200 in 1961ms
+4080: GET /api/sse/command-center 200 in 17943ms
+4081: GET /api/proxy/query/candles?symbol=CONS-041&window=24h&maxPoints=320&res=5m 200 in 2195ms
+4082: GET /api/proxy/query/scores?symbol=CONS-041&window=24h&maxPoints=320 200 in 2464ms
+4083- GET / 200 in 750ms
+4084: GET /api/proxy/query/candles?symbol=CONS-041&window=24h&maxPoints=320&res=5m 200 in 1226ms
+4085: GET /api/proxy/query/scores?symbol=CONS-041&window=24h&maxPoints=320 200 in 1849ms
+4086- GET / 200 in 1782ms
+4087: GET /api/sse/command-center 200 in 16395ms
+4088: GET /api/proxy/query/scores?symbol=CONS-041&window=24h&maxPoints=320 200 in 1331ms
+4089: GET /api/proxy/query/candles?symbol=CONS-041&window=24h&maxPoints=320&res=5m 200 in 1669ms
+4090- GET / 200 in 747ms
+4091: GET /api/sse/command-center 200 in 16260ms
+4092: GET /api/proxy/query/candles?symbol=CONS-041&window=24h&maxPoints=320&res=5m 200 in 2240ms
+4093: GET /api/proxy/query/scores?symbol=CONS-041&window=24h&maxPoints=320 200 in 3586ms
+4094: GET /api/proxy/query/candles?symbol=CONS-041&window=24h&maxPoints=320&res=5m 200 in 2719ms
+4095: GET /api/proxy/query/scores?symbol=CONS-041&window=24h&maxPoints=320 200 in 2863ms
+4096: GET /api/sse/command-center 200 in 17100ms
+4097: GET /api/proxy/query/candles?symbol=CONS-041&window=24h&maxPoints=320&res=5m 200 in 3746ms
+4098: GET /api/proxy/query/scores?symbol=CONS-041&window=24h&maxPoints=320 200 in 4204ms
+4099: GET /api/proxy/query/candles?symbol=CONS-041&window=24h&maxPoints=320&res=5m 200 in 5444ms
+4100: GET /api/proxy/query/scores?symbol=CONS-041&window=24h&maxPoints=320 200 in 6189ms
+4101: GET /api/sse/command-center 200 in 19131ms
+4102: GET /api/proxy/query/scores?symbol=CONS-041&window=24h&maxPoints=320 200 in 3441ms
+4103: GET /api/proxy/query/candles?symbol=CONS-041&window=24h&maxPoints=320&res=5m 200 in 5187ms
+4104: GET /api/proxy/query/candles?symbol=CONS-041&window=24h&maxPoints=320&res=5m 200 in 2195ms
+4105: GET /api/proxy/query/scores?symbol=CONS-041&window=24h&maxPoints=320 200 in 2052ms
+4106: GET /api/sse/command-center 200 in 18685ms
+4107- GET /api/proxy/gateway-api/me 200 in 1953ms
+4108- GET /api/proxy/query/queue?window=24h 200 in 1882ms
+4109- GET /api/proxy/query/queue?window=24h 200 in 2231ms
+4110- GET /api/proxy/query/feed?window=24h&limit=100 200 in 1972ms
+--
+4167- GET /api/proxy/query/world-map?window=24h 200 in 5719ms
+4168- GET /api/proxy/query/feed?window=24h&limit=5 200 in 5246ms
+4169- GET /api/proxy/query/queue?window=24h 200 in 5837ms
+4170- ○ Compiling /about ...
+4171: GET /api/sse/command-center 200 in 19890ms
+4172: ⨯ TypeError: fetch failed
+4173-    at node:internal/deps/undici/undici:14902:13
+4174-    at async proxy (webpack-internal:///(rsc)/./app/api/proxy/[service]/[...path]/route.ts:41:17)
+4175-    at async /app/web/node_modules/next/dist/compiled/next-server/app-route.runtime.dev.js:6:55038
+4176-    at async ek.execute (/app/web/node_modules/next/dist/compiled/next-server/app-route.runtime.dev.js:6:45808)
+--
+4194-      at Socket.<anonymous> (node:internal/deps/undici/undici:6408:28)
+4195-      at Socket.emit (node:events:536:35)
+4196-      at endReadableNT (node:internal/streams/readable:1698:12)
+4197-      at process.processTicksAndRejections (node:internal/process/task_queues:82:21) {
+4198:    code: 'UND_ERR_SOCKET',
+4199-    socket: {
+4200-      localAddress: '172.19.0.15',
+4201-      localPort: 55566,
+4202-      remoteAddress: '172.19.0.7',
+--
+4206-      bytesWritten: 1286,
+4207-      bytesRead: 0
+4208-    },
+4209-    [Symbol(undici.error.UND_ERR)]: true,
+4210:    [Symbol(undici.error.UND_ERR_SOCKET)]: true
+4211-  }
+4212-}
+4213: GET /api/proxy/query/candles?symbol=FIN-006&window=24h&maxPoints=320&res=5m 500 in 26770ms
+4214: ⨯ TypeError: fetch failed
+4215-    at node:internal/deps/undici/undici:14902:13
+4216-    at async proxy (webpack-internal:///(rsc)/./app/api/proxy/[service]/[...path]/route.ts:41:17)
+4217-    at async /app/web/node_modules/next/dist/compiled/next-server/app-route.runtime.dev.js:6:55038
+4218-    at async ek.execute (/app/web/node_modules/next/dist/compiled/next-server/app-route.runtime.dev.js:6:45808)
+--
+4236-      at Socket.<anonymous> (node:internal/deps/undici/undici:6408:28)
+4237-      at Socket.emit (node:events:536:35)
+4238-      at endReadableNT (node:internal/streams/readable:1698:12)
+4239-      at process.processTicksAndRejections (node:internal/process/task_queues:82:21) {
+4240:    code: 'UND_ERR_SOCKET',
+4241-    socket: {
+4242-      localAddress: '172.19.0.15',
+4243-      localPort: 55540,
+4244-      remoteAddress: '172.19.0.7',
+--
+4248-      bytesWritten: 2530,
+4249-      bytesRead: 1626
+4250-    },
+4251-    [Symbol(undici.error.UND_ERR)]: true,
+4252:    [Symbol(undici.error.UND_ERR_SOCKET)]: true
+4253-  }
+4254-}
+4255: GET /api/proxy/query/scores?symbol=FIN-006&window=24h&maxPoints=320 500 in 41138ms

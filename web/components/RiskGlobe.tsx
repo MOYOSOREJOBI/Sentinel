@@ -75,22 +75,25 @@ function riskColor(risk: number) {
   return '#7087a5'
 }
 
-function setTexture(loader: any, material: any, uri: string) {
+function setTexture(loader: any, material: any, uri: string, isDisposed?: () => boolean) {
   loader.load(uri, (texture: any) => {
-    texture.colorSpace = undefined
+    if (isDisposed?.()) {
+      texture.dispose?.()
+      return
+    }
     texture.wrapS = texture.wrapT = 1000
     material.map = texture
     material.needsUpdate = true
   })
 }
 
-export function RiskGlobe({ data, onSelect }: { data: CountryAgg[]; onSelect: (iso2: string) => void }) {
+export function RiskGlobe({ data, geoIncomplete = false, onSelect }: { data: CountryAgg[]; geoIncomplete?: boolean; onSelect: (iso2: string) => void }) {
   const { tr } = useI18n()
   const containerRef = useRef<HTMLDivElement>(null)
   const onSelectRef = useRef(onSelect)
   const [hovered, setHovered] = useState<{ iso2: string; name: string; risk: number; incidents: number } | null>(null)
   const [tipXY, setTipXY] = useState({ x: 0, y: 0 })
-  const hasUnknownGeo = data.some((row) => String(row.iso2 || '').toUpperCase() === 'XX')
+  const hasUnknownGeo = geoIncomplete
 
   onSelectRef.current = onSelect
 
@@ -221,7 +224,7 @@ export function RiskGlobe({ data, onSelect }: { data: CountryAgg[]; onSelect: (i
       const loader = new THREE.TextureLoader()
 
       const fillMarkup = new XMLSerializer().serializeToString(svgMapEl)
-      setTexture(loader, baseMaterial, `data:image/svg+xml;charset=utf-8,${encodeURIComponent(fillMarkup)}`)
+      setTexture(loader, baseMaterial, `data:image/svg+xml;charset=utf-8,${encodeURIComponent(fillMarkup)}`, () => disposed)
 
       for (const path of Array.from(svgMapEl.querySelectorAll('path'))) {
         path.setAttribute('fill', 'none')
@@ -229,7 +232,7 @@ export function RiskGlobe({ data, onSelect }: { data: CountryAgg[]; onSelect: (i
         path.setAttribute('stroke-width', '8')
       }
       const strokeMarkup = new XMLSerializer().serializeToString(svgMapEl)
-      setTexture(loader, strokeMaterial, `data:image/svg+xml;charset=utf-8,${encodeURIComponent(strokeMarkup)}`)
+      setTexture(loader, strokeMaterial, `data:image/svg+xml;charset=utf-8,${encodeURIComponent(strokeMarkup)}`, () => disposed)
 
       let hoveredIdx = -1
       const raycaster = new THREE.Raycaster()
@@ -246,7 +249,7 @@ export function RiskGlobe({ data, onSelect }: { data: CountryAgg[]; onSelect: (i
         if (nextIdx === hoveredIdx && clientX === undefined && clientY === undefined) return
         hoveredIdx = nextIdx
         globeSelectionMesh.visible = true
-        setTexture(loader, selectionMaterial, overlayUris[nextIdx])
+        setTexture(loader, selectionMaterial, overlayUris[nextIdx], () => disposed)
         const meta = fallbackCountries[nextIdx]
         const row = riskMap.get(meta.iso2)
         setHovered({

@@ -1,0 +1,810 @@
+//line /Users/mac/Desktop/Sentinel/cmd/query/main.go:1:1
+package main; import _ "runtime/coverage"
+
+import (
+	"context"
+	"encoding/json"
+	"fmt"
+	"log"
+	"net/http"
+	"os"
+	"os/signal"
+	"strconv"
+	"strings"
+	"syscall"
+	"time"
+
+	"github.com/go-chi/chi/v5"
+	"sentinel/internal/auth"
+	"sentinel/internal/authz"
+	"sentinel/internal/cache"
+	"sentinel/internal/config"
+	"sentinel/internal/db"
+	"sentinel/internal/healthcheck"
+	"sentinel/internal/httpx"
+	"sentinel/internal/logging"
+	"sentinel/internal/metrics"
+	"sentinel/internal/middleware"
+	qrm "sentinel/internal/query"
+)
+
+const (
+	ttlQueue     = 3 * time.Second
+	ttlSummary   = 5 * time.Second
+	ttlWorldMap  = 10 * time.Second
+	ttlExecutive = 10 * time.Second
+)
+
+type seedStatusCheck struct {
+	Name  string
+	Query string
+}
+
+var seedStatusChecks = []seedStatusCheck{
+	{Name: "raw_ticks", Query: "SELECT count(*) FROM raw_ticks"},
+	{Name: "candles", Query: "SELECT count(*) FROM candles"},
+	{Name: "features", Query: "SELECT count(*) FROM features"},
+	{Name: "scores", Query: "SELECT count(*) FROM scores"},
+	{Name: "alerts", Query: "SELECT count(*) FROM alerts"},
+	{Name: "incidents", Query: "SELECT count(*) FROM incidents"},
+	{Name: "cases", Query: "SELECT count(*) FROM cases"},
+}
+
+func seedStatusHandler(counter func(context.Context, string) (int64, error)) http.HandlerFunc {goCover_dfe3ca4f3b1d__0[0] = 6 ; goCover_dfe3ca4f3b1d__0[1] = goCover_dfe3ca4f3b1d_P ; goCover_dfe3ca4f3b1d__0[2] = 0 ; goCover_dfe3ca4f3b1d__0[3] = 1;
+	return func(w http.ResponseWriter, r *http.Request) {goCover_dfe3ca4f3b1d__0[4] = 1;
+		out := map[string]int64{}
+		for _, c := range seedStatusChecks {goCover_dfe3ca4f3b1d__0[6] = 1;
+			n, err := counter(r.Context(), c.Query)
+			if err != nil {goCover_dfe3ca4f3b1d__0[8] = 1;
+				http.Error(w, "internal", http.StatusInternalServerError)
+				return
+			}
+			goCover_dfe3ca4f3b1d__0[7] = 1;out[c.Name] = n
+		}
+		goCover_dfe3ca4f3b1d__0[5] = 1;httpx.JSON(w, http.StatusOK, out)
+	}
+}
+
+type filters struct {
+	Window      string
+	From        time.Time
+	To          time.Time
+	Q           string
+	CountryCode string
+	Region      string
+	Sector      string
+	Industry    string
+	Venue       string
+	Symbol      string
+	Locale      string
+}
+
+func main() {goCover_dfe3ca4f3b1d__1[0] = 206 ; goCover_dfe3ca4f3b1d__1[1] = goCover_dfe3ca4f3b1d_P ; goCover_dfe3ca4f3b1d__1[2] = 1 ; goCover_dfe3ca4f3b1d__1[3] = 1;
+	if len(os.Args) > 1 && os.Args[1] == "healthcheck" {goCover_dfe3ca4f3b1d__1[15] = 1;
+		port := healthcheck.MustPort("PORT", 8085)
+		os.Exit(healthcheck.Run(port, "/readyz"))
+	}
+
+	goCover_dfe3ca4f3b1d__1[4] = 1;ctx, cancel := context.WithCancel(context.Background())
+	defer cancel()
+	logger := logging.New("query")
+	cfg := config.Load("query")
+	if err := config.Validate(cfg); err != nil {goCover_dfe3ca4f3b1d__1[16] = 1;
+		log.Fatalf("query: invalid config: %v", err)
+	}
+	goCover_dfe3ca4f3b1d__1[5] = 1;pool, err := db.Connect(ctx, cfg.PostgresURL)
+	if err != nil {goCover_dfe3ca4f3b1d__1[17] = 1;
+		log.Fatalf("query: failed db: %v", err)
+	}
+	goCover_dfe3ca4f3b1d__1[6] = 1;defer pool.Close()
+	pub, err := auth.ReadPublic(cfg.JWTPublicKey)
+	if err != nil {goCover_dfe3ca4f3b1d__1[18] = 1;
+		log.Fatalf("query: failed read key: %v", err)
+	}
+
+	goCover_dfe3ca4f3b1d__1[7] = 1;r := chi.NewRouter()
+	r.Use(middleware.RequestID)
+	r.Use(middleware.CORS)
+	r.Use(metrics.HTTPMiddleware("query"))
+	r.Get("/healthz", func(w http.ResponseWriter, r *http.Request) {goCover_dfe3ca4f3b1d__1[19] = 1; _, _ = w.Write([]byte("ok")) })
+	goCover_dfe3ca4f3b1d__1[8] = 1;r.Get("/", func(w http.ResponseWriter, r *http.Request) {goCover_dfe3ca4f3b1d__1[20] = 1;
+		httpx.JSON(w, http.StatusOK, map[string]any{
+			"service": "query",
+			"version": "dev",
+			"links": map[string]string{
+				"healthz": "/healthz",
+				"readyz":  "/readyz",
+				"metrics": "/metrics",
+				"docs":    "/docs",
+			},
+		})
+	})
+	goCover_dfe3ca4f3b1d__1[9] = 1;r.Get("/readyz", func(w http.ResponseWriter, r *http.Request) {goCover_dfe3ca4f3b1d__1[21] = 1;
+		if err := pool.Ping(r.Context()); err != nil {goCover_dfe3ca4f3b1d__1[23] = 1;
+			http.Error(w, "not ready", 503)
+			return
+		}
+		goCover_dfe3ca4f3b1d__1[22] = 1;_, _ = w.Write([]byte("ok"))
+	})
+	goCover_dfe3ca4f3b1d__1[10] = 1;r.Get("/metrics", metrics.Handler)
+	debugHandler := seedStatusHandler(func(ctx context.Context, query string) (int64, error) {goCover_dfe3ca4f3b1d__1[24] = 1;
+		var n int64
+		if err := pool.QueryRow(ctx, query).Scan(&n); err != nil {goCover_dfe3ca4f3b1d__1[26] = 1;
+			return 0, err
+		}
+		goCover_dfe3ca4f3b1d__1[25] = 1;return n, nil
+	})
+	goCover_dfe3ca4f3b1d__1[11] = 1;r.With(authz.RequirePerm(pub, "read")).Get("/debug/seed-status", debugHandler)
+	r.With(authz.RequirePerm(pub, "admin")).Post("/dev/backfill", func(w http.ResponseWriter, r *http.Request) {goCover_dfe3ca4f3b1d__1[27] = 1;
+		if !cfg.DemoMode {goCover_dfe3ca4f3b1d__1[30] = 1;
+			http.NotFound(w, r)
+			return
+		}
+		goCover_dfe3ca4f3b1d__1[28] = 1;years := parseFeedLimit(r.URL.Query().Get("years"), 20, 20)
+		if err := qrm.BackfillHistory(r.Context(), pool, years); err != nil {goCover_dfe3ca4f3b1d__1[31] = 1;
+			http.Error(w, "backfill failed", http.StatusInternalServerError)
+			return
+		}
+		goCover_dfe3ca4f3b1d__1[29] = 1;httpx.JSON(w, http.StatusOK, map[string]any{"status": "ok", "years": years})
+	})
+
+	goCover_dfe3ca4f3b1d__1[12] = 1;r.Group(func(pr chi.Router) {goCover_dfe3ca4f3b1d__1[32] = 1;
+		pr.Use(authz.RequirePerm(pub, "read"))
+		pr.Get("/queue", func(w http.ResponseWriter, r *http.Request) {goCover_dfe3ca4f3b1d__1[51] = 1;
+			f, err := parseFilters(r)
+			if err != nil {goCover_dfe3ca4f3b1d__1[55] = 1;
+				http.Error(w, err.Error(), http.StatusBadRequest)
+				return
+			}
+			goCover_dfe3ca4f3b1d__1[52] = 1;claims, _ := authz.Claims(r)
+			key := cache.QueueKey(claims.Role, f.Region, f.CountryCode, f.Sector, f.Industry, f.Venue, f.Symbol, f.Locale, f.Window+":"+f.Q)
+			out, err := cache.GetOrLoadJSON(r.Context(), key, ttlQueue, func() ([]qrm.QueueRow, error) {goCover_dfe3ca4f3b1d__1[56] = 1;
+				return qrm.LoadQueue(r.Context(), pool, qrm.QueueFilters{Window: f.Window, From: f.From, To: f.To, Q: f.Q, CountryCode: f.CountryCode, Region: f.Region, Sector: f.Sector, Industry: f.Industry, Venue: f.Venue, Symbol: f.Symbol, Locale: f.Locale})
+			})
+			goCover_dfe3ca4f3b1d__1[53] = 1;if err != nil {goCover_dfe3ca4f3b1d__1[57] = 1;
+				http.Error(w, "internal", 500)
+				return
+			}
+			goCover_dfe3ca4f3b1d__1[54] = 1;metrics.ObserveRowsReturned("query", "queue", len(out))
+			httpx.JSON(w, 200, out)
+		})
+		goCover_dfe3ca4f3b1d__1[33] = 1;pr.Get("/command-center", func(w http.ResponseWriter, r *http.Request) {goCover_dfe3ca4f3b1d__1[58] = 1;
+			f, err := parseFilters(r)
+			if err != nil {goCover_dfe3ca4f3b1d__1[62] = 1;
+				http.Error(w, err.Error(), http.StatusBadRequest)
+				return
+			}
+			goCover_dfe3ca4f3b1d__1[59] = 1;claims, _ := authz.Claims(r)
+			key := cache.CommandCenterKey(claims.Role, f.Region, f.CountryCode, f.Sector, f.Industry, f.Venue, f.Symbol, f.Locale, f.Window+":"+f.Q)
+			out, err := cache.GetOrLoadJSON(r.Context(), key, ttlSummary, func() (map[string]any, error) {goCover_dfe3ca4f3b1d__1[63] = 1;
+				return qrm.LoadCommandCenter(r.Context(), pool, qrm.QueueFilters{Window: f.Window, From: f.From, To: f.To, Q: f.Q, CountryCode: f.CountryCode, Region: f.Region, Sector: f.Sector, Industry: f.Industry, Venue: f.Venue, Symbol: f.Symbol, Locale: f.Locale})
+			})
+			goCover_dfe3ca4f3b1d__1[60] = 1;if err != nil {goCover_dfe3ca4f3b1d__1[64] = 1;
+				http.Error(w, "internal", 500)
+				return
+			}
+			goCover_dfe3ca4f3b1d__1[61] = 1;httpx.JSON(w, 200, out)
+		})
+		goCover_dfe3ca4f3b1d__1[34] = 1;pr.Get("/feed", func(w http.ResponseWriter, r *http.Request) {goCover_dfe3ca4f3b1d__1[65] = 1;
+			f, err := parseFilters(r)
+			if err != nil {goCover_dfe3ca4f3b1d__1[69] = 1;
+				http.Error(w, err.Error(), http.StatusBadRequest)
+				return
+			}
+			goCover_dfe3ca4f3b1d__1[66] = 1;limit := parseFeedLimit(r.URL.Query().Get("limit"), 50, 200)
+			cursor := strings.TrimSpace(r.URL.Query().Get("cursor"))
+			mode := r.URL.Query().Get("mode")
+			switch mode {
+			case "trending", "for_you":goCover_dfe3ca4f3b1d__1[70] = 1;
+			default:goCover_dfe3ca4f3b1d__1[71] = 1;
+				mode = ""
+			}
+			goCover_dfe3ca4f3b1d__1[67] = 1;page, err := qrm.LoadRiskFeed(r.Context(), pool, qrm.QueueFilters{
+				Window:      f.Window,
+				From:        f.From,
+				To:          f.To,
+				Q:           f.Q,
+				CountryCode: f.CountryCode,
+				Region:      f.Region,
+				Sector:      f.Sector,
+				Industry:    f.Industry,
+				Venue:       f.Venue,
+				Symbol:      f.Symbol,
+				Locale:      f.Locale,
+			}, limit, cursor, mode)
+			if err != nil {goCover_dfe3ca4f3b1d__1[72] = 1;
+				http.Error(w, "internal", 500)
+				return
+			}
+			goCover_dfe3ca4f3b1d__1[68] = 1;metrics.ObserveRowsReturned("query", "feed", len(page.Items))
+			httpx.JSON(w, 200, map[string]any{
+				"items":             page.Items,
+				"next_cursor":       page.NextCursor,
+				"server_time":       page.ServerTime,
+				"history":           page.History,
+				"history_limited":   page.HistoryLimited,
+				"window":            f.Window,
+				"limit":             limit,
+				"mode":              mode,
+				"dev_backfill_path": "/api/proxy/query/dev/backfill?years=20",
+			})
+		})
+		goCover_dfe3ca4f3b1d__1[35] = 1;pr.Get("/search-suggest", func(w http.ResponseWriter, r *http.Request) {goCover_dfe3ca4f3b1d__1[73] = 1;
+			q := strings.TrimSpace(r.URL.Query().Get("q"))
+			kindFilter := strings.ToLower(strings.TrimSpace(r.URL.Query().Get("k")))
+			limit := parseFeedLimit(r.URL.Query().Get("limit"), 12, 40)
+			if q == "" {goCover_dfe3ca4f3b1d__1[80] = 1;
+				httpx.JSON(w, 200, map[string]any{"items": []any{}})
+				return
+			}
+			goCover_dfe3ca4f3b1d__1[74] = 1;like := "%" + strings.ToLower(q) + "%"
+			items := []map[string]string{}
+			add := func(kind, value string) {goCover_dfe3ca4f3b1d__1[81] = 1;
+				v := strings.TrimSpace(value)
+				if v == "" {goCover_dfe3ca4f3b1d__1[85] = 1;
+					return
+				}
+				goCover_dfe3ca4f3b1d__1[82] = 1;kk := kind
+				if len(kk) > 1 {goCover_dfe3ca4f3b1d__1[86] = 1;
+					kk = strings.ToUpper(kk[:1]) + kk[1:]
+				} else{ goCover_dfe3ca4f3b1d__1[87] = 1;{
+					kk = strings.ToUpper(kk)
+				}}
+				goCover_dfe3ca4f3b1d__1[83] = 1;label := fmt.Sprintf("%s | %s", kk, v)
+				for _, it := range items {goCover_dfe3ca4f3b1d__1[88] = 1;
+					if it["label"] == label {goCover_dfe3ca4f3b1d__1[89] = 1;
+						return
+					}
+				}
+				goCover_dfe3ca4f3b1d__1[84] = 1;items = append(items, map[string]string{"kind": kind, "value": v, "label": label})
+			}
+
+			goCover_dfe3ca4f3b1d__1[75] = 1;loadStrings := func(query, kind string) {goCover_dfe3ca4f3b1d__1[90] = 1;
+				rows, err := pool.Query(r.Context(), query, like, limit)
+				if err != nil {goCover_dfe3ca4f3b1d__1[92] = 1;
+					return
+				}
+				goCover_dfe3ca4f3b1d__1[91] = 1;defer rows.Close()
+				for rows.Next() {goCover_dfe3ca4f3b1d__1[93] = 1;
+					var v string
+					if rows.Scan(&v) == nil {goCover_dfe3ca4f3b1d__1[94] = 1;
+						add(kind, v)
+						if len(items) >= limit {goCover_dfe3ca4f3b1d__1[95] = 1;
+							return
+						}
+					}
+				}
+			}
+
+			goCover_dfe3ca4f3b1d__1[76] = 1;loadKind := func(kind string) {goCover_dfe3ca4f3b1d__1[96] = 1;
+				if kindFilter != "" && kindFilter != kind {goCover_dfe3ca4f3b1d__1[98] = 1;
+					return
+				}
+				goCover_dfe3ca4f3b1d__1[97] = 1;switch kind {
+				case "symbol":goCover_dfe3ca4f3b1d__1[99] = 1;
+					loadStrings(`SELECT DISTINCT primary_symbol FROM incidents WHERE lower(primary_symbol) LIKE $1 ORDER BY 1 LIMIT $2`, "symbol")
+				case "country":goCover_dfe3ca4f3b1d__1[100] = 1;
+					loadStrings(`SELECT DISTINCT country_code FROM instrument_metadata WHERE lower(country_code) LIKE $1 ORDER BY 1 LIMIT $2`, "country")
+				case "region":goCover_dfe3ca4f3b1d__1[101] = 1;
+					loadStrings(`SELECT DISTINCT region FROM instrument_metadata WHERE lower(region) LIKE $1 ORDER BY 1 LIMIT $2`, "region")
+				case "sector":goCover_dfe3ca4f3b1d__1[102] = 1;
+					loadStrings(`SELECT DISTINCT sector FROM instrument_metadata WHERE lower(sector) LIKE $1 ORDER BY 1 LIMIT $2`, "sector")
+				case "industry":goCover_dfe3ca4f3b1d__1[103] = 1;
+					loadStrings(`SELECT DISTINCT industry FROM instrument_metadata WHERE lower(industry) LIKE $1 ORDER BY 1 LIMIT $2`, "industry")
+				case "venue":goCover_dfe3ca4f3b1d__1[104] = 1;
+					loadStrings(`SELECT DISTINCT venue FROM instrument_metadata WHERE lower(venue) LIKE $1 ORDER BY 1 LIMIT $2`, "venue")
+				}
+			}
+
+			goCover_dfe3ca4f3b1d__1[77] = 1;for _, kind := range []string{"symbol", "country", "region", "sector", "industry", "venue"} {goCover_dfe3ca4f3b1d__1[105] = 1;
+				if len(items) >= limit {goCover_dfe3ca4f3b1d__1[107] = 1;
+					break
+				}
+				goCover_dfe3ca4f3b1d__1[106] = 1;loadKind(kind)
+			}
+
+			// Fallback suggestions for empty/demo datasets.
+			goCover_dfe3ca4f3b1d__1[78] = 1;if len(items) == 0 {goCover_dfe3ca4f3b1d__1[108] = 1;
+				demo := []map[string]string{
+					{"kind": "symbol", "value": "BTC/USD"},
+					{"kind": "symbol", "value": "AAPL"},
+					{"kind": "symbol", "value": "TSLA"},
+					{"kind": "sector", "value": "Technology"},
+					{"kind": "sector", "value": "Energy"},
+					{"kind": "country", "value": "US"},
+					{"kind": "country", "value": "GB"},
+				}
+				for _, d := range demo {goCover_dfe3ca4f3b1d__1[109] = 1;
+					if kindFilter != "" && kindFilter != d["kind"] {goCover_dfe3ca4f3b1d__1[112] = 1;
+						continue
+					}
+					goCover_dfe3ca4f3b1d__1[110] = 1;if strings.Contains(strings.ToLower(d["value"]), strings.ToLower(q)) {goCover_dfe3ca4f3b1d__1[113] = 1;
+						add(d["kind"], d["value"])
+					}
+					goCover_dfe3ca4f3b1d__1[111] = 1;if len(items) >= limit {goCover_dfe3ca4f3b1d__1[114] = 1;
+						break
+					}
+				}
+			}
+
+			goCover_dfe3ca4f3b1d__1[79] = 1;httpx.JSON(w, 200, map[string]any{"items": items})
+		})
+		goCover_dfe3ca4f3b1d__1[36] = 1;pr.Get("/trust", func(w http.ResponseWriter, r *http.Request) {goCover_dfe3ca4f3b1d__1[115] = 1;
+			f, err := parseFilters(r)
+			if err != nil {goCover_dfe3ca4f3b1d__1[119] = 1;
+				http.Error(w, err.Error(), http.StatusBadRequest)
+				return
+			}
+			goCover_dfe3ca4f3b1d__1[116] = 1;key := cache.TrustKey(f.Region, f.CountryCode, f.Sector, f.Industry, f.Venue, f.Symbol, f.Locale, f.Window+":"+f.Q)
+			out, err := cache.GetOrLoadJSON(r.Context(), key, ttlSummary, func() (map[string]any, error) {goCover_dfe3ca4f3b1d__1[120] = 1;
+				return qrm.LoadTrust(r.Context(), pool, qrm.QueueFilters{Window: f.Window, From: f.From, To: f.To, Q: f.Q, CountryCode: f.CountryCode, Region: f.Region, Sector: f.Sector, Industry: f.Industry, Venue: f.Venue, Symbol: f.Symbol, Locale: f.Locale})
+			})
+			goCover_dfe3ca4f3b1d__1[117] = 1;if err != nil {goCover_dfe3ca4f3b1d__1[121] = 1;
+				http.Error(w, "internal", 500)
+				return
+			}
+			goCover_dfe3ca4f3b1d__1[118] = 1;httpx.JSON(w, 200, out)
+		})
+		goCover_dfe3ca4f3b1d__1[37] = 1;pr.Get("/world-map", func(w http.ResponseWriter, r *http.Request) {goCover_dfe3ca4f3b1d__1[122] = 1;
+			f, err := parseFilters(r)
+			if err != nil {goCover_dfe3ca4f3b1d__1[126] = 1;
+				http.Error(w, err.Error(), http.StatusBadRequest)
+				return
+			}
+			goCover_dfe3ca4f3b1d__1[123] = 1;key := cache.WorldMapKey(f.Region, f.CountryCode, f.Sector, f.Industry, f.Venue, f.Symbol, f.Locale, f.Window+":"+f.Q)
+			countries, err := cache.GetOrLoadJSON(r.Context(), key, ttlWorldMap, func() ([]qrm.CountryAgg, error) {goCover_dfe3ca4f3b1d__1[127] = 1;
+				return qrm.LoadWorldMap(r.Context(), pool, qrm.QueueFilters{Window: f.Window, From: f.From, To: f.To, Q: f.Q, CountryCode: f.CountryCode, Region: f.Region, Sector: f.Sector, Industry: f.Industry, Venue: f.Venue, Symbol: f.Symbol, Locale: f.Locale})
+			})
+			goCover_dfe3ca4f3b1d__1[124] = 1;if err != nil {goCover_dfe3ca4f3b1d__1[128] = 1;
+				http.Error(w, "internal", 500)
+				return
+			}
+			goCover_dfe3ca4f3b1d__1[125] = 1;metrics.ObserveRowsReturned("query", "world_map", len(countries))
+			httpx.JSON(w, 200, map[string]any{"countries": countries, "timeWindow": f.Window})
+		})
+		goCover_dfe3ca4f3b1d__1[38] = 1;pr.Get("/executive-summary", func(w http.ResponseWriter, r *http.Request) {goCover_dfe3ca4f3b1d__1[129] = 1;
+			f, err := parseFilters(r)
+			if err != nil {goCover_dfe3ca4f3b1d__1[133] = 1;
+				http.Error(w, err.Error(), http.StatusBadRequest)
+				return
+			}
+			goCover_dfe3ca4f3b1d__1[130] = 1;key := cache.ExecutiveKey(f.Region, f.CountryCode, f.Sector, f.Industry, f.Venue, f.Symbol, f.Locale, f.Window+":"+f.Q)
+			out, err := cache.GetOrLoadJSON(r.Context(), key, ttlExecutive, func() (map[string]any, error) {goCover_dfe3ca4f3b1d__1[134] = 1;
+				topRisks, err := qrm.LoadQueue(r.Context(), pool, qrm.QueueFilters{Window: f.Window, From: f.From, To: f.To, Q: f.Q, CountryCode: f.CountryCode, Region: f.Region, Sector: f.Sector, Industry: f.Industry, Venue: f.Venue, Symbol: f.Symbol, Locale: f.Locale})
+				if err != nil {goCover_dfe3ca4f3b1d__1[141] = 1;
+					return nil, err
+				}
+				goCover_dfe3ca4f3b1d__1[135] = 1;countryConcentration, err := qrm.LoadWorldMap(r.Context(), pool, qrm.QueueFilters{Window: f.Window, From: f.From, To: f.To, Q: f.Q, CountryCode: f.CountryCode, Region: f.Region, Sector: f.Sector, Industry: f.Industry, Venue: f.Venue, Symbol: f.Symbol, Locale: f.Locale})
+				if err != nil {goCover_dfe3ca4f3b1d__1[142] = 1;
+					return nil, err
+				}
+				goCover_dfe3ca4f3b1d__1[136] = 1;trust, _ := qrm.LoadTrust(r.Context(), pool, qrm.QueueFilters{Window: f.Window, From: f.From, To: f.To, Q: f.Q, CountryCode: f.CountryCode, Region: f.Region, Sector: f.Sector, Industry: f.Industry, Venue: f.Venue, Symbol: f.Symbol, Locale: f.Locale})
+				top := make([]map[string]any, 0, 5)
+				for i, row := range topRisks {goCover_dfe3ca4f3b1d__1[143] = 1;
+					if i >= 5 {goCover_dfe3ca4f3b1d__1[145] = 1;
+						break
+					}
+					goCover_dfe3ca4f3b1d__1[144] = 1;top = append(top, map[string]any{"id": row.ID, "symbol": row.Symbol, "priorityScore": row.PriorityScore, "compositeRisk": row.CompositeRisk, "severityBand": row.SeverityBand})
+				}
+				goCover_dfe3ca4f3b1d__1[137] = 1;industryConcentration := []map[string]any{}
+				industryWhere, industryArgs := buildExecutiveIndustryWhere(f)
+				addIndustry := func(col, val string) {goCover_dfe3ca4f3b1d__1[146] = 1;
+					if val == "" {goCover_dfe3ca4f3b1d__1[148] = 1;
+						return
+					}
+					goCover_dfe3ca4f3b1d__1[147] = 1;industryArgs = append(industryArgs, val)
+					industryWhere += fmt.Sprintf(" AND %s=$%d", col, len(industryArgs))
+				}
+				goCover_dfe3ca4f3b1d__1[138] = 1;addIndustry("m.region", f.Region)
+				addIndustry("m.country_code", f.CountryCode)
+				addIndustry("m.industry", f.Industry)
+				addIndustry("m.sector", f.Sector)
+				addIndustry("m.venue", f.Venue)
+				addIndustry("i.primary_symbol", f.Symbol)
+				ir, err := pool.Query(r.Context(), `SELECT coalesce(m.industry,'Unknown'),count(i.id) FROM incidents i LEFT JOIN instrument_metadata m ON m.instrument_id=i.primary_symbol WHERE `+industryWhere+` GROUP BY 1 ORDER BY 2 DESC LIMIT 8`, industryArgs...)
+				if err == nil {goCover_dfe3ca4f3b1d__1[149] = 1;
+					defer ir.Close()
+					for ir.Next() {goCover_dfe3ca4f3b1d__1[150] = 1;
+						var industry string
+						var count int
+						if ir.Scan(&industry, &count) == nil {goCover_dfe3ca4f3b1d__1[151] = 1;
+							industryConcentration = append(industryConcentration, map[string]any{"industry": industry, "incidentCount": count})
+						}
+					}
+				}
+				goCover_dfe3ca4f3b1d__1[139] = 1;riskMemo := "No material change."
+				if len(top) > 0 {goCover_dfe3ca4f3b1d__1[152] = 1;
+					riskMemo = "Top risk concentration is increasing in the leading instruments for the selected time window."
+				}
+				goCover_dfe3ca4f3b1d__1[140] = 1;return map[string]any{"topRisks": top, "countryConcentration": countryConcentration, "industryConcentration": industryConcentration, "trustSummary": trust["trustSummary"], "riskMemo": riskMemo}, nil
+			})
+			goCover_dfe3ca4f3b1d__1[131] = 1;if err != nil {goCover_dfe3ca4f3b1d__1[153] = 1;
+				http.Error(w, "internal", 500)
+				return
+			}
+			goCover_dfe3ca4f3b1d__1[132] = 1;httpx.JSON(w, 200, out)
+		})
+		goCover_dfe3ca4f3b1d__1[39] = 1;pr.Get("/governance/summary", func(w http.ResponseWriter, r *http.Request) {goCover_dfe3ca4f3b1d__1[154] = 1;
+			lineage := []map[string]any{}
+			rows, err := pool.Query(r.Context(), `SELECT model_name,version,state,created_at FROM model_registry ORDER BY created_at DESC LIMIT 20`)
+			if err == nil {goCover_dfe3ca4f3b1d__1[157] = 1;
+				defer rows.Close()
+				for rows.Next() {goCover_dfe3ca4f3b1d__1[158] = 1;
+					var n, v, s string
+					var t any
+					if rows.Scan(&n, &v, &s, &t) == nil {goCover_dfe3ca4f3b1d__1[159] = 1;
+						lineage = append(lineage, map[string]any{"model": n, "version": v, "state": s, "createdAt": t})
+					}
+				}
+			}
+			goCover_dfe3ca4f3b1d__1[155] = 1;replays := []map[string]any{}
+			rp, err := pool.Query(r.Context(), `SELECT id::text,status,requested_at,started_at,completed_at,replay_mode,model_version,feature_set_version,watermark_policy_id,allowed_lateness_ms FROM replay_jobs ORDER BY requested_at DESC LIMIT 25`)
+			if err == nil {goCover_dfe3ca4f3b1d__1[160] = 1;
+				defer rp.Close()
+				for rp.Next() {goCover_dfe3ca4f3b1d__1[161] = 1;
+					var id, st, rm, mv, fv, wp string
+					var req, stt, ct any
+					var late int
+					if rp.Scan(&id, &st, &req, &stt, &ct, &rm, &mv, &fv, &wp, &late) == nil {goCover_dfe3ca4f3b1d__1[162] = 1;
+						replays = append(replays, map[string]any{"id": id, "status": st, "requestedAt": req, "startedAt": stt, "completedAt": ct, "replayMode": rm, "modelVersion": mv, "featureSetVersion": fv, "watermarkPolicy": wp, "allowedLatenessMs": late})
+					}
+				}
+			}
+			goCover_dfe3ca4f3b1d__1[156] = 1;httpx.JSON(w, 200, map[string]any{"modelLineage": lineage, "replayJobs": replays, "thresholdChanges": []any{}})
+		})
+		goCover_dfe3ca4f3b1d__1[40] = 1;pr.Get("/replay/{job}", func(w http.ResponseWriter, r *http.Request) {goCover_dfe3ca4f3b1d__1[163] = 1;
+			id := chi.URLParam(r, "job")
+			var status, replayMode, mv, fv, wp string
+			var late int
+			var s, e, started, completed any
+			if err := pool.QueryRow(r.Context(), `SELECT status,replay_mode,time_window_start,time_window_end,started_at,completed_at,model_version,feature_set_version,watermark_policy_id,allowed_lateness_ms FROM replay_jobs WHERE id=$1`, id).Scan(&status, &replayMode, &s, &e, &started, &completed, &mv, &fv, &wp, &late); err != nil {goCover_dfe3ca4f3b1d__1[166] = 1;
+				http.Error(w, "not found", 404)
+				return
+			}
+			goCover_dfe3ca4f3b1d__1[164] = 1;var result any = map[string]any{}
+			_ = pool.QueryRow(r.Context(), `SELECT diff_summary FROM replay_runs WHERE id=$1`, id).Scan(&result)
+			selectedMode := normalizeReplayViewMode(r.URL.Query().Get("mode"))
+			partial := status != "completed"
+			resp := map[string]any{"id": id, "status": status, "replayMode": replayMode, "selectedMode": selectedMode, "timeWindowStart": s, "timeWindowEnd": e, "startedAt": started, "completedAt": completed, "modelVersion": mv, "featureSetVersion": fv, "watermarkPolicy": wp, "allowedLatenessMs": late, "result": result, "partial": partial, "limitations": []string{"deterministic replay scoring uses return-based approximation"}}
+			if m, ok := result.(map[string]any); ok {goCover_dfe3ca4f3b1d__1[167] = 1;
+				if selectedMode == "as_scored" {goCover_dfe3ca4f3b1d__1[168] = 1;
+					resp["selectedStats"] = m["as_scored"]
+				} else{ goCover_dfe3ca4f3b1d__1[169] = 1;{
+					resp["selectedStats"] = m["recomputed"]
+				}}
+			}
+			goCover_dfe3ca4f3b1d__1[165] = 1;httpx.JSON(w, 200, resp)
+		})
+		goCover_dfe3ca4f3b1d__1[41] = 1;pr.Get("/incident/{id}", func(w http.ResponseWriter, r *http.Request) {goCover_dfe3ca4f3b1d__1[170] = 1;
+			id := chi.URLParam(r, "id")
+			var out = map[string]any{"id": id}
+			var status, sym, sev, mv string
+			var p, c float64
+			if err := pool.QueryRow(r.Context(), `SELECT status,primary_symbol,severity_band,coalesce(priority_score,0),coalesce(composite_risk,0),coalesce(model_version,'') FROM incidents WHERE id=$1`, id).Scan(&status, &sym, &sev, &p, &c, &mv); err == nil {goCover_dfe3ca4f3b1d__1[172] = 1;
+				out["status"] = status
+				out["symbol"] = sym
+				out["severity"] = sev
+				out["score_header"] = map[string]any{"priority": p, "composite": c}
+				out["model_version"] = mv
+			}
+			goCover_dfe3ca4f3b1d__1[171] = 1;httpx.JSON(w, 200, out)
+		})
+		goCover_dfe3ca4f3b1d__1[42] = 1;pr.Get("/incident/{id}/brief", func(w http.ResponseWriter, r *http.Request) {goCover_dfe3ca4f3b1d__1[173] = 1;
+			id := chi.URLParam(r, "id")
+			var status, sym, sev, modelVersion, driver1, driver2, rec string
+			var priority, composite, escalation float64
+			err := pool.QueryRow(r.Context(), `SELECT status,primary_symbol,severity_band,coalesce(model_version,''),coalesce(top_driver_1,''),coalesce(top_driver_2,''),coalesce(priority_score,0),coalesce(composite_risk,0),coalesce(escalation_probability,0),coalesce(top_driver_1,'watch') FROM incidents WHERE id=$1`, id).Scan(&status, &sym, &sev, &modelVersion, &driver1, &driver2, &priority, &composite, &escalation, &rec)
+			if err != nil {goCover_dfe3ca4f3b1d__1[176] = 1;
+				http.Error(w, "not found", http.StatusNotFound)
+				return
+			}
+			goCover_dfe3ca4f3b1d__1[174] = 1;payload := map[string]any{
+				"incidentId":        id,
+				"whatHappened":      fmt.Sprintf("%s moved into %s risk with %.2f priority", sym, sev, priority),
+				"impactedSymbols":   []string{sym},
+				"topDrivers":        []string{driver1, driver2},
+				"recommendedAction": rec,
+				"status":            status,
+				"severityBand":      sev,
+				"modelVersion":      modelVersion,
+				"compositeRisk":     composite,
+				"escalationProb":    escalation,
+			}
+			if strings.EqualFold(r.URL.Query().Get("format"), "md") {goCover_dfe3ca4f3b1d__1[177] = 1;
+				w.Header().Set("Content-Type", "text/markdown; charset=utf-8")
+				_, _ = fmt.Fprintf(w, "# Incident %s brief\n\n- Symbol: %s\n- Status: %s\n- Severity: %s\n- Priority: %.2f\n- Composite risk: %.2f\n- Escalation probability: %.2f\n- Top drivers: %s, %s\n- Recommended action: %s\n", id, sym, status, sev, priority, composite, escalation, driver1, driver2, rec)
+				return
+			}
+			goCover_dfe3ca4f3b1d__1[175] = 1;httpx.JSON(w, 200, payload)
+		})
+		goCover_dfe3ca4f3b1d__1[43] = 1;pr.Get("/cases", func(w http.ResponseWriter, r *http.Request) {goCover_dfe3ca4f3b1d__1[178] = 1;
+			rows, err := pool.Query(r.Context(), `SELECT id,incident_id,status,reason,coalesce(owner_name,''),created_at,updated_at FROM cases ORDER BY updated_at DESC LIMIT 200`)
+			if err != nil {goCover_dfe3ca4f3b1d__1[181] = 1;
+				httpx.JSON(w, 200, []any{})
+				return
+			}
+			goCover_dfe3ca4f3b1d__1[179] = 1;defer rows.Close()
+			out := []map[string]any{}
+			for rows.Next() {goCover_dfe3ca4f3b1d__1[182] = 1;
+				var id, incidentID int64
+				var status, reason, owner string
+				var createdAt, updatedAt any
+				if rows.Scan(&id, &incidentID, &status, &reason, &owner, &createdAt, &updatedAt) == nil {goCover_dfe3ca4f3b1d__1[183] = 1;
+					out = append(out, map[string]any{"id": id, "incident_id": incidentID, "status": status, "reason": reason, "owner": owner, "created_at": createdAt, "updated_at": updatedAt})
+				}
+			}
+			goCover_dfe3ca4f3b1d__1[180] = 1;httpx.JSON(w, 200, out)
+		})
+		goCover_dfe3ca4f3b1d__1[44] = 1;pr.Get("/case/{id}", func(w http.ResponseWriter, r *http.Request) {goCover_dfe3ca4f3b1d__1[184] = 1;
+			id := chi.URLParam(r, "id")
+			var incidentID int64
+			var cid int64
+			var status, reason, owner string
+			var createdAt, updatedAt any
+			if err := pool.QueryRow(r.Context(), `SELECT id,incident_id,status,reason,coalesce(owner_name,''),created_at,updated_at FROM cases WHERE id=$1`, id).Scan(&cid, &incidentID, &status, &reason, &owner, &createdAt, &updatedAt); err != nil {goCover_dfe3ca4f3b1d__1[186] = 1;
+				http.Error(w, "not found", http.StatusNotFound)
+				return
+			}
+			goCover_dfe3ca4f3b1d__1[185] = 1;httpx.JSON(w, 200, map[string]any{"id": cid, "status": status, "reason": reason, "owner": owner, "created_at": createdAt, "updated_at": updatedAt, "incident_id": incidentID})
+		})
+		goCover_dfe3ca4f3b1d__1[45] = 1;pr.Get("/scores", func(w http.ResponseWriter, r *http.Request) {goCover_dfe3ca4f3b1d__1[187] = 1;
+			f, err := parseFilters(r)
+			if err != nil {goCover_dfe3ca4f3b1d__1[190] = 1;
+				http.Error(w, err.Error(), http.StatusBadRequest)
+				return
+			}
+			goCover_dfe3ca4f3b1d__1[188] = 1;symbol := firstNonEmpty(strings.TrimSpace(r.URL.Query().Get("symbol")), f.Symbol)
+			window := f.Window
+			maxPoints := parseFeedLimit(r.URL.Query().Get("maxPoints"), 300, 1000)
+			series, err := qrm.LoadScoreSeries(r.Context(), pool, symbol, window, maxPoints, f.From, f.To)
+			if err != nil {goCover_dfe3ca4f3b1d__1[191] = 1;
+				http.Error(w, "internal", 500)
+				return
+			}
+			goCover_dfe3ca4f3b1d__1[189] = 1;metrics.ObserveRowsReturned("query", "scores", len(series))
+			httpx.JSON(w, 200, map[string]any{
+				"series":    series,
+				"symbol":    symbol,
+				"window":    window,
+				"maxPoints": maxPoints,
+			})
+		})
+		goCover_dfe3ca4f3b1d__1[46] = 1;pr.Get("/candles", func(w http.ResponseWriter, r *http.Request) {goCover_dfe3ca4f3b1d__1[192] = 1;
+			symbol := strings.TrimSpace(r.URL.Query().Get("symbol"))
+			window := normalizeWindow(r.URL.Query().Get("window"))
+			res := strings.TrimSpace(r.URL.Query().Get("res"))
+			if window == "" {goCover_dfe3ca4f3b1d__1[196] = 1;
+				window = "24h"
+			}
+			goCover_dfe3ca4f3b1d__1[193] = 1;if res == "" {goCover_dfe3ca4f3b1d__1[197] = 1;
+				res = "1m"
+			}
+			goCover_dfe3ca4f3b1d__1[194] = 1;maxPoints := parseFeedLimit(r.URL.Query().Get("maxPoints"), 300, 1000)
+			series, err := qrm.LoadCandleSeries(r.Context(), pool, symbol, window, res, maxPoints)
+			if err != nil {goCover_dfe3ca4f3b1d__1[198] = 1;
+				http.Error(w, "internal", 500)
+				return
+			}
+			goCover_dfe3ca4f3b1d__1[195] = 1;httpx.JSON(w, 200, map[string]any{
+				"series":    series,
+				"symbol":    symbol,
+				"window":    window,
+				"res":       res,
+				"maxPoints": maxPoints,
+			})
+		})
+		goCover_dfe3ca4f3b1d__1[47] = 1;pr.Get("/forecast", func(w http.ResponseWriter, r *http.Request) {goCover_dfe3ca4f3b1d__1[199] = 1;
+			var generatedAt any
+			var incidentLow, incidentBase, incidentHigh int
+			var watchlist []string
+			var explain []string
+			err := pool.QueryRow(r.Context(), `SELECT generated_at,incident_band_low,incident_band_base,incident_band_high,watchlist_risks,why_moved FROM forecast_snapshots ORDER BY generated_at DESC LIMIT 1`).Scan(&generatedAt, &incidentLow, &incidentBase, &incidentHigh, &watchlist, &explain)
+			if err != nil {goCover_dfe3ca4f3b1d__1[201] = 1;
+				http.Error(w, "not found", http.StatusNotFound)
+				return
+			}
+			goCover_dfe3ca4f3b1d__1[200] = 1;httpx.JSON(w, 200, map[string]any{
+				"generatedAt":        generatedAt,
+				"incidentVolumeBand": map[string]int{"low": incidentLow, "base": incidentBase, "high": incidentHigh},
+				"watchlistRisks":     watchlist,
+				"whyMoved":           explain,
+			})
+		})
+		goCover_dfe3ca4f3b1d__1[48] = 1;pr.Get("/stream/queue", sseStream(func(ctx context.Context) any {goCover_dfe3ca4f3b1d__1[202] = 1;
+			rows, _ := qrm.LoadQueue(ctx, pool, qrm.QueueFilters{Window: "24h"})
+			inc := map[string]any{"id": 0}
+			if len(rows) > 0 {goCover_dfe3ca4f3b1d__1[204] = 1;
+				inc = map[string]any{"id": rows[0].ID, "symbol": rows[0].Symbol, "priorityScore": rows[0].PriorityScore, "severityBand": rows[0].SeverityBand, "recommendedAction": rows[0].RecommendedAction}
+			}
+			goCover_dfe3ca4f3b1d__1[203] = 1;return map[string]any{"type": "upsert", "incident": inc}
+		}, "queue_patch"))
+		goCover_dfe3ca4f3b1d__1[49] = 1;pr.Get("/stream/command-center", sseStream(func(ctx context.Context) any {goCover_dfe3ca4f3b1d__1[205] = 1;
+			cc, _ := qrm.LoadCommandCenter(ctx, pool, qrm.QueueFilters{Window: "24h"})
+			return cc
+		}, "command_center_patch"))
+		goCover_dfe3ca4f3b1d__1[50] = 1;pr.Get("/stream/trust", sseStream(func(ctx context.Context) any {goCover_dfe3ca4f3b1d__1[206] = 1;
+			t, _ := qrm.LoadTrust(ctx, pool, qrm.QueueFilters{Window: "24h"})
+			return t
+		}, "trust_patch"))
+	})
+
+	goCover_dfe3ca4f3b1d__1[13] = 1;srv := &http.Server{Addr: cfg.HTTPAddr, Handler: r, ReadTimeout: 15 * time.Second, WriteTimeout: 15 * time.Second, IdleTimeout: 60 * time.Second}
+	go func() {goCover_dfe3ca4f3b1d__1[207] = 1;
+		if err := srv.ListenAndServe(); err != nil && err != http.ErrServerClosed {goCover_dfe3ca4f3b1d__1[208] = 1;
+			log.Fatalf("query server: %v", err)
+		}
+	}()
+	goCover_dfe3ca4f3b1d__1[14] = 1;quit := make(chan os.Signal, 1)
+	signal.Notify(quit, syscall.SIGINT, syscall.SIGTERM)
+	<-quit
+	cancel()
+	_ = srv.Shutdown(context.Background())
+	logger.Info("query shutdown", nil)
+}
+
+func sseStream(payload func(context.Context) any, event string) http.HandlerFunc {goCover_dfe3ca4f3b1d__2[0] = 7 ; goCover_dfe3ca4f3b1d__2[1] = goCover_dfe3ca4f3b1d_P ; goCover_dfe3ca4f3b1d__2[2] = 2 ; goCover_dfe3ca4f3b1d__2[3] = 1;
+	return func(w http.ResponseWriter, r *http.Request) {goCover_dfe3ca4f3b1d__2[4] = 1;
+		w.Header().Set("Content-Type", "text/event-stream")
+		w.Header().Set("Cache-Control", "no-cache")
+		w.Header().Set("Connection", "keep-alive")
+		flusher, ok := w.(http.Flusher)
+		if !ok {goCover_dfe3ca4f3b1d__2[6] = 1;
+			http.Error(w, "unsupported", 500)
+			return
+		}
+		goCover_dfe3ca4f3b1d__2[5] = 1;tk := time.NewTicker(15 * time.Second)
+		defer tk.Stop()
+		for {goCover_dfe3ca4f3b1d__2[7] = 1;
+			select {
+			case <-r.Context().Done():goCover_dfe3ca4f3b1d__2[8] = 1;
+				return
+			case <-tk.C:goCover_dfe3ca4f3b1d__2[9] = 1;
+				b, _ := json.Marshal(payload(r.Context()))
+				_, _ = w.Write([]byte(": heartbeat\n"))
+				_, _ = w.Write([]byte("event: " + event + "\n"))
+				_, _ = w.Write([]byte("data: " + string(b) + "\n\n"))
+				flusher.Flush()
+			}
+		}
+	}
+}
+
+func firstNonEmpty(values ...string) string {goCover_dfe3ca4f3b1d__3[0] = 4 ; goCover_dfe3ca4f3b1d__3[1] = goCover_dfe3ca4f3b1d_P ; goCover_dfe3ca4f3b1d__3[2] = 3 ; goCover_dfe3ca4f3b1d__3[3] = 1;
+	for _, value := range values {goCover_dfe3ca4f3b1d__3[5] = 1;
+		value = strings.TrimSpace(value)
+		if value != "" {goCover_dfe3ca4f3b1d__3[6] = 1;
+			return value
+		}
+	}
+	goCover_dfe3ca4f3b1d__3[4] = 1;return ""
+}
+
+func parseFilters(r *http.Request) (filters, error) {goCover_dfe3ca4f3b1d__4[0] = 19 ; goCover_dfe3ca4f3b1d__4[1] = goCover_dfe3ca4f3b1d_P ; goCover_dfe3ca4f3b1d__4[2] = 4 ; goCover_dfe3ca4f3b1d__4[3] = 1;
+	q := r.URL.Query()
+	tw := normalizeWindow(q.Get("window"))
+	if tw == "" {goCover_dfe3ca4f3b1d__4[10] = 1;
+		tw = normalizeWindow(q.Get("time_window"))
+	}
+	goCover_dfe3ca4f3b1d__4[4] = 1;startRaw := firstNonEmpty(q.Get("start"), q.Get("from"))
+	endRaw := firstNonEmpty(q.Get("end"), q.Get("to"))
+	if tw != "" && (startRaw != "" || endRaw != "") {goCover_dfe3ca4f3b1d__4[11] = 1;
+		return filters{}, fmt.Errorf("window cannot be combined with start/end")
+	}
+	goCover_dfe3ca4f3b1d__4[5] = 1;if startRaw != "" && endRaw == "" {goCover_dfe3ca4f3b1d__4[12] = 1;
+		return filters{}, fmt.Errorf("start requires end")
+	}
+	goCover_dfe3ca4f3b1d__4[6] = 1;if endRaw != "" && startRaw == "" {goCover_dfe3ca4f3b1d__4[13] = 1;
+		return filters{}, fmt.Errorf("end requires start")
+	}
+
+	goCover_dfe3ca4f3b1d__4[7] = 1;if tw == "" {goCover_dfe3ca4f3b1d__4[14] = 1;
+		tw = "24h"
+	}
+	goCover_dfe3ca4f3b1d__4[8] = 1;var from time.Time
+	var to time.Time
+	if startRaw != "" && endRaw != "" {goCover_dfe3ca4f3b1d__4[15] = 1;
+		var err error
+		from, err = time.Parse(time.RFC3339, startRaw)
+		if err != nil {goCover_dfe3ca4f3b1d__4[19] = 1;
+			return filters{}, fmt.Errorf("invalid start")
+		}
+		goCover_dfe3ca4f3b1d__4[16] = 1;to, err = time.Parse(time.RFC3339, endRaw)
+		if err != nil {goCover_dfe3ca4f3b1d__4[20] = 1;
+			return filters{}, fmt.Errorf("invalid end")
+		}
+		goCover_dfe3ca4f3b1d__4[17] = 1;if to.Before(from) {goCover_dfe3ca4f3b1d__4[21] = 1;
+			from, to = to, from
+		}
+		goCover_dfe3ca4f3b1d__4[18] = 1;tw = "custom"
+	}
+	goCover_dfe3ca4f3b1d__4[9] = 1;country := firstNonEmpty(q.Get("countryCode"), q.Get("country"))
+	return filters{
+		Window:      tw,
+		From:        from,
+		To:          to,
+		Q:           strings.TrimSpace(q.Get("q")),
+		CountryCode: country,
+		Region:      q.Get("region"),
+		Sector:      q.Get("sector"),
+		Industry:    q.Get("industry"),
+		Venue:       q.Get("venue"),
+		Symbol:      q.Get("symbol"),
+		Locale:      q.Get("locale"),
+	}, nil
+}
+
+func normalizeReplayViewMode(in string) string {goCover_dfe3ca4f3b1d__5[0] = 3 ; goCover_dfe3ca4f3b1d__5[1] = goCover_dfe3ca4f3b1d_P ; goCover_dfe3ca4f3b1d__5[2] = 5 ; goCover_dfe3ca4f3b1d__5[3] = 1;
+	switch in {
+	case "as_scored", "recomputed":goCover_dfe3ca4f3b1d__5[4] = 1;
+		return in
+	default:goCover_dfe3ca4f3b1d__5[5] = 1;
+		return "recomputed"
+	}
+}
+
+func normalizeWindow(in string) string {goCover_dfe3ca4f3b1d__6[0] = 3 ; goCover_dfe3ca4f3b1d__6[1] = goCover_dfe3ca4f3b1d_P ; goCover_dfe3ca4f3b1d__6[2] = 6 ; goCover_dfe3ca4f3b1d__6[3] = 1;
+	switch in {
+	case "1h", "24h", "7d", "30d", "90d", "1y", "5y", "20y", "custom":goCover_dfe3ca4f3b1d__6[4] = 1;
+		return in
+	default:goCover_dfe3ca4f3b1d__6[5] = 1;
+		return ""
+	}
+}
+
+func parseFeedLimit(in string, fallback, max int) int {goCover_dfe3ca4f3b1d__7[0] = 7 ; goCover_dfe3ca4f3b1d__7[1] = goCover_dfe3ca4f3b1d_P ; goCover_dfe3ca4f3b1d__7[2] = 7 ; goCover_dfe3ca4f3b1d__7[3] = 1;
+	if in == "" {goCover_dfe3ca4f3b1d__7[7] = 1;
+		return fallback
+	}
+	goCover_dfe3ca4f3b1d__7[4] = 1;n, err := strconv.Atoi(in)
+	if err != nil || n <= 0 {goCover_dfe3ca4f3b1d__7[8] = 1;
+		return fallback
+	}
+	goCover_dfe3ca4f3b1d__7[5] = 1;if n > max {goCover_dfe3ca4f3b1d__7[9] = 1;
+		return max
+	}
+	goCover_dfe3ca4f3b1d__7[6] = 1;return n
+}
+
+func windowSQLForExecutive(tw string) string {goCover_dfe3ca4f3b1d__8[0] = 9 ; goCover_dfe3ca4f3b1d__8[1] = goCover_dfe3ca4f3b1d_P ; goCover_dfe3ca4f3b1d__8[2] = 8 ; goCover_dfe3ca4f3b1d__8[3] = 1;
+	switch tw {
+	case "1h":goCover_dfe3ca4f3b1d__8[4] = 1;
+		return "i.last_activity_at > now()-interval '1 hour'"
+	case "30d":goCover_dfe3ca4f3b1d__8[5] = 1;
+		return "i.last_activity_at > now()-interval '30 days'"
+	case "90d":goCover_dfe3ca4f3b1d__8[6] = 1;
+		return "i.last_activity_at > now()-interval '90 days'"
+	case "1y":goCover_dfe3ca4f3b1d__8[7] = 1;
+		return "i.last_activity_at > now()-interval '1 year'"
+	case "5y":goCover_dfe3ca4f3b1d__8[8] = 1;
+		return "i.last_activity_at > now()-interval '5 years'"
+	case "20y":goCover_dfe3ca4f3b1d__8[9] = 1;
+		return "i.last_activity_at > now()-interval '20 years'"
+	case "7d":goCover_dfe3ca4f3b1d__8[10] = 1;
+		return "i.last_activity_at > now()-interval '7 days'"
+	default:goCover_dfe3ca4f3b1d__8[11] = 1;
+		return "i.last_activity_at > now()-interval '24 hours'"
+	}
+}
+
+func buildExecutiveIndustryWhere(f filters) (string, []any) {goCover_dfe3ca4f3b1d__9[0] = 8 ; goCover_dfe3ca4f3b1d__9[1] = goCover_dfe3ca4f3b1d_P ; goCover_dfe3ca4f3b1d__9[2] = 9 ; goCover_dfe3ca4f3b1d__9[3] = 1;
+	args := []any{}
+	where := windowSQLForExecutive(f.Window)
+	if f.Window == "custom" {goCover_dfe3ca4f3b1d__9[5] = 1;
+		from, to := f.From, f.To
+		if !from.IsZero() && !to.IsZero() && to.Before(from) {goCover_dfe3ca4f3b1d__9[7] = 1;
+			from, to = to, from
+		}
+		goCover_dfe3ca4f3b1d__9[6] = 1;switch {
+		case !from.IsZero() && !to.IsZero():goCover_dfe3ca4f3b1d__9[8] = 1;
+			args = append(args, from, to)
+			where = fmt.Sprintf("i.last_activity_at BETWEEN $%d AND $%d", len(args)-1, len(args))
+		case !from.IsZero():goCover_dfe3ca4f3b1d__9[9] = 1;
+			args = append(args, from)
+			where = fmt.Sprintf("i.last_activity_at >= $%d", len(args))
+		case !to.IsZero():goCover_dfe3ca4f3b1d__9[10] = 1;
+			args = append(args, to)
+			where = fmt.Sprintf("i.last_activity_at <= $%d", len(args))
+		}
+	}
+	goCover_dfe3ca4f3b1d__9[4] = 1;return where, args
+}

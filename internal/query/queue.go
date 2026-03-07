@@ -31,9 +31,13 @@ type QueueRow struct {
 	PriorityScore     float64 `json:"priorityScore"`
 	CompositeRisk     float64 `json:"compositeRisk"`
 	Confidence        float64 `json:"confidence"`
+	CountryISO2       string  `json:"countryIso2"`
 	Region            string  `json:"region"`
 	CountryCode       string  `json:"countryCode"`
+	CountryName       string  `json:"countryName"`
+	Sector            string  `json:"sector"`
 	Industry          string  `json:"industry"`
+	Venue             string  `json:"venue"`
 	RecommendedAction string  `json:"recommendedAction"`
 }
 
@@ -101,7 +105,9 @@ func whereClause(f QueueFilters) (string, []any) {
 
 func LoadQueue(ctx context.Context, db *pgxpool.Pool, f QueueFilters) ([]QueueRow, error) {
 	where, args := whereClause(f)
-	q := `SELECT i.id,i.primary_symbol,i.status,i.severity_band,coalesce(i.priority_score,0),coalesce(i.composite_risk,0),coalesce(i.confidence,0),coalesce(m.region,''),coalesce(m.country_code,'XX'),coalesce(m.industry,''),coalesce(i.top_driver_1,'watch') FROM incidents i LEFT JOIN instrument_metadata m ON m.instrument_id=i.primary_symbol WHERE ` + where
+	q := `SELECT i.id,i.primary_symbol,i.status,i.severity_band,coalesce(i.priority_score,0),coalesce(i.composite_risk,0),coalesce(i.confidence,0),
+coalesce(nullif(upper(m.country_code),''),'XX'),coalesce(m.region,''),coalesce(m.country_name,''),coalesce(m.sector,''),coalesce(m.industry,''),coalesce(m.venue,''),coalesce(i.top_driver_1,'watch')
+FROM incidents i LEFT JOIN instrument_metadata m ON m.instrument_id=i.primary_symbol WHERE ` + where
 	q += " ORDER BY i.priority_score DESC,i.last_activity_at DESC LIMIT 250"
 
 	rows, err := db.Query(ctx, q, args...)
@@ -112,9 +118,10 @@ func LoadQueue(ctx context.Context, db *pgxpool.Pool, f QueueFilters) ([]QueueRo
 	out := []QueueRow{}
 	for rows.Next() {
 		var r QueueRow
-		if rows.Scan(&r.ID, &r.Symbol, &r.Status, &r.SeverityBand, &r.PriorityScore, &r.CompositeRisk, &r.Confidence, &r.Region, &r.CountryCode, &r.Industry, &r.RecommendedAction) == nil {
-			out = append(out, r)
-		}
+			if rows.Scan(&r.ID, &r.Symbol, &r.Status, &r.SeverityBand, &r.PriorityScore, &r.CompositeRisk, &r.Confidence, &r.CountryISO2, &r.Region, &r.CountryName, &r.Sector, &r.Industry, &r.Venue, &r.RecommendedAction) == nil {
+				r.CountryCode = r.CountryISO2
+				out = append(out, r)
+			}
 	}
 	return out, nil
 }

@@ -1,0 +1,11 @@
+diff --git a/Makefile b/Makefile
+--- a/Makefile
++++ b/Makefile
+@@
+ up:
++	$(MAKE) dev-keys
+ 	$(COMPOSE) up -d --build
+@@
+ up-fast:
++	$(MAKE) dev-keys
+ 	$(FAST_COMPOSE) up -d --build

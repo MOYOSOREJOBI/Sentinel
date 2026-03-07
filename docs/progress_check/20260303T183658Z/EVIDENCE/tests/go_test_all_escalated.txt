@@ -1,0 +1,29 @@
+?   	sentinel/cmd/aggregator	[no test files]
+ok  	sentinel/cmd/alerts	67.454s
+ok  	sentinel/cmd/features	63.535s
+ok  	sentinel/cmd/gateway-api	71.043s
+ok  	sentinel/cmd/governance	76.071s
+ok  	sentinel/cmd/query	101.245s
+ok  	sentinel/cmd/simulator	77.772s
+ok  	sentinel/internal/audit	81.063s
+ok  	sentinel/internal/auth	90.030s
+ok  	sentinel/internal/authz	86.449s
+ok  	sentinel/internal/cache	96.774s
+ok  	sentinel/internal/config	92.742s
+?   	sentinel/internal/contracts	[no test files]
+?   	sentinel/internal/db	[no test files]
+ok  	sentinel/internal/healthcheck	105.353s
+?   	sentinel/internal/httpx	[no test files]
+ok  	sentinel/internal/incidents	111.044s
+ok  	sentinel/internal/kafka	74.237s
+?   	sentinel/internal/logging	[no test files]
+ok  	sentinel/internal/logic	77.165s
+ok  	sentinel/internal/marketmath	77.555s
+ok  	sentinel/internal/metrics	74.971s
+ok  	sentinel/internal/middleware	75.660s
+ok  	sentinel/internal/pipeline/scoring	77.505s
+ok  	sentinel/internal/query	75.869s
+ok  	sentinel/internal/rbac	75.428s
+?   	sentinel/internal/rediskv	[no test files]
+ok  	sentinel/internal/replay	74.838s
+?   	sentinel/internal/testredis	[no test files]

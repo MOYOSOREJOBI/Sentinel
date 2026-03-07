@@ -1,0 +1,7 @@
+HTTP/1.1 200 OK
+Content-Type: application/json
+X-Request-Id: 1be6b9e5d78db295
+Date: Wed, 04 Mar 2026 17:09:00 GMT
+Content-Length: 589
+
+{"allowedLatenessMs":5000,"completedAt":null,"featureSetVersion":"v2","id":"680abdaa-b55f-4806-ad80-f0397ff77849","limitations":["replay recomputes scores from raw ticks and compares them to stored scores for the same window"],"modelVersion":"baseline-v1","partial":true,"replayMode":"recompute","requestedAt":"2026-03-04T10:07:01.851239-07:00","result":{},"selectedMode":"recomputed","selectedStats":null,"startedAt":"2026-03-04T10:07:01.875367-07:00","status":"running","timeWindowEnd":"2026-03-03T10:59:21-07:00","timeWindowStart":"2026-03-03T08:45:47-07:00","watermarkPolicy":"wm_v1"}

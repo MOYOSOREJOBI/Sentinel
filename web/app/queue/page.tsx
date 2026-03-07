@@ -69,8 +69,13 @@ export default function QueuePage() {
     return (feed?.items || []).map((f: any) => ({
       id: f.id,
       symbol: f.symbol,
+      countryIso2: f.countryIso2 || f.countryCode,
       countryCode: f.countryCode,
+      countryName: f.countryName,
       region: f.region,
+      sector: f.sector,
+      industry: f.industry,
+      venue: f.venue,
       priorityScore: f.priorityScore,
       compositeRisk: f.compositeRisk,
       confidence: f.confidence,
@@ -86,10 +91,10 @@ export default function QueuePage() {
   const mapRows = useMemo(() => {
     const by = new Map<string, number>()
     for (const r of displayRows) {
-      const c = String(r.countryCode || 'XX').toUpperCase()
+      const c = String(r.countryIso2 || r.countryCode || 'XX').toUpperCase()
       by.set(c, (by.get(c) || 0) + 1)
     }
-    return Array.from(by.entries()).map(([countryCode, incidentCount]) => ({ countryCode, incidentCount }))
+    return Array.from(by.entries()).map(([countryIso2, incidentCount]) => ({ countryIso2, countryCode: countryIso2, incidentCount }))
   }, [displayRows])
 
   return <AppShell title="Queue" subtitle="Ranked incident queue" titleKey="titleQueue" subtitleKey="subtitleQueue" filters={filters} setFilters={apply}>
@@ -139,7 +144,7 @@ export default function QueuePage() {
                       <strong>{r.symbol || '-'}</strong>
                       <div className="muted">{r.severityBand || r.severity || 'elevated'}</div>
                     </td>
-                    <td>{r.countryCode || r.region || '-'}</td>
+                    <td>{r.countryName ? `${r.countryName} (${r.countryIso2 || r.countryCode || '-'})` : (r.countryIso2 || r.countryCode || r.region || '-')}</td>
                     <td>{priority.toFixed(1)}</td>
                     <td>{composite.toFixed(1)}</td>
                     <td>{(confidence * 100).toFixed(1)}%</td>

@@ -1,0 +1,7 @@
+HTTP/1.1 200 OK
+Content-Type: application/json
+X-Request-Id: 638bb45ec6d76dfa
+Date: Wed, 04 Mar 2026 17:08:22 GMT
+Content-Length: 857
+
+{"allowedLatenessMs":5000,"commonMismatchCauses":[],"determinismExplain":"No prior replay fingerprint comparison recorded.","determinismStatus":"UNKNOWN","featureSetVersion":"v2","matchedCount":0,"maxScoreDelta":0,"mismatchedCount":0,"modelVersion":"baseline-v1","parityExplanation":"No replay diff summary recorded yet.","parityStatus":"UNKNOWN","pinnedEvidence":[{"path":"/replay/680abdaa-b55f-4806-ad80-f0397ff77849","type":"replay_detail"},{"path":"/replay/680abdaa-b55f-4806-ad80-f0397ff77849/summary","type":"replay_summary"}],"replayId":"680abdaa-b55f-4806-ad80-f0397ff77849","timestamps":{"completedAt":null,"exportedAt":"2026-03-04T17:08:22Z","requestedAt":"2026-03-04T10:07:01.851239-07:00","startedAt":"2026-03-04T10:07:01.875367-07:00"},"watermarkPolicy":"wm_v1","window":{"end":"2026-03-03T10:59:21-07:00","start":"2026-03-03T08:45:47-07:00"}}

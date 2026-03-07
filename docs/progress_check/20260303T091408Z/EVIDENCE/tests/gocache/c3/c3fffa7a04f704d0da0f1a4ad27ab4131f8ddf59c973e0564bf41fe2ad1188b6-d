@@ -1,0 +1,186 @@
+//line /Users/mac/Desktop/Sentinel/cmd/aggregator/main.go:1:1
+package main; import _ "runtime/coverage"
+
+import (
+	"context"
+	"crypto/sha256"
+	"encoding/hex"
+	"encoding/json"
+	"fmt"
+	"log"
+	"net/http"
+	"os"
+	"os/signal"
+	"syscall"
+	"time"
+
+	"sentinel/internal/config"
+	"sentinel/internal/db"
+	"sentinel/internal/healthcheck"
+	"sentinel/internal/kafka"
+	"sentinel/internal/logging"
+	"sentinel/internal/metrics"
+
+	"github.com/twmb/franz-go/pkg/kgo"
+)
+
+type Tick struct {
+	EventID   string    `json:"event_id"`
+	Symbol    string    `json:"symbol"`
+	Price     float64   `json:"price"`
+	Volume    float64   `json:"volume"`
+	EventTime time.Time `json:"event_time"`
+}
+
+func main() {goCover_a09e8cbc37e3__0[0] = 49 ; goCover_a09e8cbc37e3__0[1] = goCover_a09e8cbc37e3_P ; goCover_a09e8cbc37e3__0[2] = 0 ; goCover_a09e8cbc37e3__0[3] = 1;
+	if len(os.Args) > 1 && os.Args[1] == "healthcheck" {goCover_a09e8cbc37e3__0[14] = 1;
+		port := healthcheck.MustPort("PORT", 8081)
+		os.Exit(healthcheck.Run(port, "/readyz"))
+	}
+
+	goCover_a09e8cbc37e3__0[4] = 1;ctx, cancel := context.WithCancel(context.Background())
+	defer cancel()
+	logger := logging.New("aggregator")
+	cfg := config.Load("aggregator")
+	if err := config.Validate(cfg); err != nil {goCover_a09e8cbc37e3__0[15] = 1;
+		log.Fatalf("aggregator: invalid config: %v", err)
+	}
+	goCover_a09e8cbc37e3__0[5] = 1;pool, err := db.Connect(ctx, cfg.PostgresURL)
+	if err != nil {goCover_a09e8cbc37e3__0[16] = 1;
+		log.Fatalf("aggregator: failed to connect to database: %v", err)
+	}
+	goCover_a09e8cbc37e3__0[6] = 1;defer pool.Close()
+	client, err := kafka.New(cfg.KafkaBrokers, "aggregator", "raw.ticks")
+	if err != nil {goCover_a09e8cbc37e3__0[17] = 1;
+		log.Fatalf("aggregator: failed to create kafka consumer: %v", err)
+	}
+	goCover_a09e8cbc37e3__0[7] = 1;defer client.Close()
+	prod, err := kafka.New(cfg.KafkaBrokers, "")
+	if err != nil {goCover_a09e8cbc37e3__0[18] = 1;
+		log.Fatalf("aggregator: failed to create kafka producer: %v", err)
+	}
+	goCover_a09e8cbc37e3__0[8] = 1;defer prod.Close()
+
+	mux := http.NewServeMux()
+	mux.HandleFunc("/healthz", func(w http.ResponseWriter, r *http.Request) {goCover_a09e8cbc37e3__0[19] = 1; w.Write([]byte("ok")) })
+	goCover_a09e8cbc37e3__0[9] = 1;mux.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {goCover_a09e8cbc37e3__0[20] = 1;
+		w.Header().Set("Content-Type", "application/json")
+		_, _ = w.Write([]byte(`{"service":"aggregator","version":"dev","links":["/healthz","/readyz","/metrics","/docs"]}`))
+	})
+	goCover_a09e8cbc37e3__0[10] = 1;mux.HandleFunc("/readyz", func(w http.ResponseWriter, r *http.Request) {goCover_a09e8cbc37e3__0[21] = 1;
+		probeCtx, probeCancel := context.WithTimeout(r.Context(), 2*time.Second)
+		defer probeCancel()
+		if err := pool.Ping(probeCtx); err != nil {goCover_a09e8cbc37e3__0[25] = 1;
+			http.Error(w, "database not ready", http.StatusServiceUnavailable)
+			return
+		}
+		goCover_a09e8cbc37e3__0[22] = 1;if err := client.Ping(probeCtx); err != nil {goCover_a09e8cbc37e3__0[26] = 1;
+			http.Error(w, "kafka consumer not ready", http.StatusServiceUnavailable)
+			return
+		}
+		goCover_a09e8cbc37e3__0[23] = 1;if err := prod.Ping(probeCtx); err != nil {goCover_a09e8cbc37e3__0[27] = 1;
+			http.Error(w, "kafka producer not ready", http.StatusServiceUnavailable)
+			return
+		}
+		goCover_a09e8cbc37e3__0[24] = 1;w.Write([]byte("ok"))
+	})
+	goCover_a09e8cbc37e3__0[11] = 1;mux.HandleFunc("/metrics", metrics.Handler)
+	srv := &http.Server{Addr: cfg.HTTPAddr, Handler: metrics.Wrap("aggregator", mux), ReadTimeout: 10 * time.Second, WriteTimeout: 10 * time.Second}
+	go func() {goCover_a09e8cbc37e3__0[28] = 1;
+		logger.Info("starting health server", map[string]any{"addr": cfg.HTTPAddr})
+		if err := srv.ListenAndServe(); err != nil && err != http.ErrServerClosed {goCover_a09e8cbc37e3__0[29] = 1;
+			log.Fatalf("aggregator: health server error: %v", err)
+		}
+	}()
+
+	goCover_a09e8cbc37e3__0[12] = 1;go func() {goCover_a09e8cbc37e3__0[30] = 1;
+		for {goCover_a09e8cbc37e3__0[31] = 1;
+			fetches := client.PollFetches(ctx)
+			if ctx.Err() != nil {goCover_a09e8cbc37e3__0[33] = 1;
+				return
+			}
+			goCover_a09e8cbc37e3__0[32] = 1;fetches.EachRecord(func(rec *kgo.Record) {goCover_a09e8cbc37e3__0[34] = 1;
+				metrics.IncKafkaConsumed("aggregator", rec.Topic)
+				var t Tick
+				if err := json.Unmarshal(rec.Value, &t); err != nil || t.Symbol == "" {goCover_a09e8cbc37e3__0[43] = 1;
+					logger.Error("malformed tick payload", map[string]any{"error": fmt.Sprintf("%v", err), "topic": rec.Topic, "partition": rec.Partition})
+					return
+				}
+				goCover_a09e8cbc37e3__0[35] = 1;if t.EventTime.IsZero() {goCover_a09e8cbc37e3__0[44] = 1;
+					t.EventTime = time.Now().UTC()
+				}
+
+				goCover_a09e8cbc37e3__0[36] = 1;tx, err := pool.Begin(ctx)
+				if err != nil {goCover_a09e8cbc37e3__0[45] = 1;
+					return
+				}
+				goCover_a09e8cbc37e3__0[37] = 1;defer tx.Rollback(ctx)
+
+				ct, err := tx.Exec(ctx, `INSERT INTO raw_ticks(event_id,symbol,price,volume,event_time) VALUES($1,$2,$3,$4,$5) ON CONFLICT DO NOTHING`, t.EventID, t.Symbol, t.Price, t.Volume, t.EventTime)
+				if err != nil {goCover_a09e8cbc37e3__0[46] = 1;
+					logger.Error("failed to insert raw tick", map[string]any{"error": err.Error(), "symbol": t.Symbol})
+					return
+				}
+				goCover_a09e8cbc37e3__0[38] = 1;if ct.RowsAffected() == 0 {goCover_a09e8cbc37e3__0[47] = 1;
+					logger.Info("duplicate raw tick no-op", map[string]any{"symbol": t.Symbol, "event_id": t.EventID})
+					return
+				} // duplicate event: no side effects
+
+				goCover_a09e8cbc37e3__0[39] = 1;bucket1s := t.EventTime.Truncate(time.Second)
+				bucket1m := t.EventTime.Truncate(time.Minute)
+				h1 := sha256.Sum256([]byte(t.Symbol + bucket1s.Format(time.RFC3339Nano) + "1s"))
+				k1 := hex.EncodeToString(h1[:])
+				hm := sha256.Sum256([]byte(t.Symbol + bucket1m.Format(time.RFC3339Nano) + "1m"))
+				km := hex.EncodeToString(hm[:])
+
+				start := time.Now()
+				if _, err := tx.Exec(ctx, `
+INSERT INTO candles(idempotency_key,symbol,bucket,interval,open,high,low,close,volume,open_event_time,close_event_time)
+VALUES($1,$2,$3,'1s',$4,$4,$4,$4,$5,$6,$6)
+ON CONFLICT (idempotency_key,bucket) DO UPDATE SET
+	high=GREATEST(candles.high,EXCLUDED.high),
+	low=LEAST(candles.low,EXCLUDED.low),
+	open=CASE WHEN EXCLUDED.open_event_time < candles.open_event_time THEN EXCLUDED.open ELSE candles.open END,
+	open_event_time=LEAST(candles.open_event_time,EXCLUDED.open_event_time),
+	close=CASE WHEN EXCLUDED.close_event_time >= candles.close_event_time THEN EXCLUDED.close ELSE candles.close END,
+	close_event_time=GREATEST(candles.close_event_time,EXCLUDED.close_event_time),
+	volume=candles.volume+EXCLUDED.volume`, k1, t.Symbol, bucket1s, t.Price, t.Volume, t.EventTime); err != nil {goCover_a09e8cbc37e3__0[48] = 1;
+					return
+				}
+
+				goCover_a09e8cbc37e3__0[40] = 1;metrics.ObserveDBQuery("aggregator", "upsert candles 1s", time.Since(start))
+				start = time.Now()
+				if _, err := tx.Exec(ctx, `
+INSERT INTO candles(idempotency_key,symbol,bucket,interval,open,high,low,close,volume,open_event_time,close_event_time)
+VALUES($1,$2,$3,'1m',$4,$4,$4,$4,$5,$6,$6)
+ON CONFLICT (idempotency_key,bucket) DO UPDATE SET
+	high=GREATEST(candles.high,EXCLUDED.high),
+	low=LEAST(candles.low,EXCLUDED.low),
+	open=CASE WHEN EXCLUDED.open_event_time < candles.open_event_time THEN EXCLUDED.open ELSE candles.open END,
+	open_event_time=LEAST(candles.open_event_time,EXCLUDED.open_event_time),
+	close=CASE WHEN EXCLUDED.close_event_time >= candles.close_event_time THEN EXCLUDED.close ELSE candles.close END,
+	close_event_time=GREATEST(candles.close_event_time,EXCLUDED.close_event_time),
+	volume=candles.volume+EXCLUDED.volume`, km, t.Symbol, bucket1m, t.Price, t.Volume, t.EventTime); err != nil {goCover_a09e8cbc37e3__0[49] = 1;
+					return
+				}
+
+				goCover_a09e8cbc37e3__0[41] = 1;metrics.ObserveDBQuery("aggregator", "upsert candles 1m", time.Since(start))
+				if err := tx.Commit(ctx); err != nil {goCover_a09e8cbc37e3__0[50] = 1;
+					logger.Error("failed to commit aggregation tx", map[string]any{"error": err.Error(), "symbol": t.Symbol})
+					return
+				}
+				goCover_a09e8cbc37e3__0[42] = 1;if err := kafka.ProduceJSON(ctx, prod, "derived.candles", t.Symbol, map[string]any{"symbol": t.Symbol, "bucket": bucket1s, "price": t.Price, "volume": t.Volume, "event_time": t.EventTime, "version": "v2"}); err == nil {goCover_a09e8cbc37e3__0[51] = 1;
+					metrics.IncKafkaProduced("aggregator", "derived.candles")
+				}
+			})
+		}
+	}()
+
+	goCover_a09e8cbc37e3__0[13] = 1;quit := make(chan os.Signal, 1)
+	signal.Notify(quit, syscall.SIGINT, syscall.SIGTERM)
+	<-quit
+	cancel()
+	shutdownCtx, shutdownCancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer shutdownCancel()
+	srv.Shutdown(shutdownCtx)
+}

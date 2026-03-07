@@ -57,8 +57,15 @@ export const api = {
   trust: (f: GlobalFilters = {}) => apiFetch(API_QUERY, `/trust${filtersToQuery(f)}`).catch(() => ({})),
   forecast: () => apiFetch(API_QUERY, '/forecast').catch(() => ({})),
   notifications: () => apiFetch(API_ALERTS, '/notifications').catch(() => ([])),
-  replay: (job: string) => apiFetch(API_QUERY, `/replay/${job}`).catch(() => ({ id: job, status: 'unknown' })),
-  worldMap: (f: GlobalFilters = {}) => apiFetch(API_QUERY, `/world-map${filtersToQuery(f)}`).catch(() => ({ countries: [] })),
+  replay: (job: string, mode = '') => apiFetch(API_QUERY, `/replay/${job}${mode ? `?mode=${encodeURIComponent(mode)}` : ''}`).catch(() => ({ id: job, status: 'unknown' })),
+  replaySummary: (job: string) => apiFetch(API_QUERY, `/replay/${job}/summary`).catch(() => ({ id: job, status: 'unknown', summary: {} })),
+  replayBrief: async (job: string, format: 'json' | 'md' = 'json') => {
+    const res = await fetch(`${API_QUERY}/replay/${job}/brief?format=${format}`, { credentials: 'include', cache: 'no-store' })
+    if (!res.ok) throw new Error(`${res.status}`)
+    if (format === 'md') return res.text()
+    return res.json()
+  },
+  worldMap: (f: GlobalFilters = {}) => apiFetch(API_QUERY, `/world-map${filtersToQuery(f)}`).catch(() => ({ countries: [], geoEnriched: false, missingGeoCount: 0 })),
   governanceSummary: () => apiFetch(API_QUERY, '/governance/summary').catch(() => ({ modelLineage: [], replayJobs: [] })),
   governanceSnapshot: () => apiFetch(API_GOVERNANCE, '/governance/summary').catch(() => ({ modelLineage: [], modelDeployments: [], replayJobs: [], escalationPolicies: [] })),
   models: () => apiFetch(API_GOVERNANCE, '/models').catch(() => ([])),
@@ -81,12 +88,11 @@ export const api = {
   caseDisposition: (id: string | number, status: string, reason: string) => apiFetch(API_ALERTS, `/cases/${id}/disposition`, { method: 'POST', body: JSON.stringify({ status, reason }) }),
   promoteIncidentCase: (incidentId: string | number, reason: string) => apiFetch(API_ALERTS, `/incidents/${incidentId}/promote-case`, { method: 'POST', body: JSON.stringify({ reason }) }),
   scores: (symbol = '', window = '24h', maxPoints = 300) =>
-    apiFetch(API_QUERY, `/scores?symbol=${encodeURIComponent(symbol)}&window=${window}&maxPoints=${maxPoints}`)
-      .catch(() => ({ series: [], symbol, window })),
+    apiFetch(API_QUERY, `/scores?symbol=${encodeURIComponent(symbol)}&window=${window}&maxPoints=${maxPoints}`),
   triggerBackfill: (years = 20) => apiFetch(API_QUERY, `/dev/backfill?years=${years}`, { method: 'POST' }),
   candles: (symbol = '', window = '24h', maxPoints = 300, res = '1m') =>
-    apiFetch(API_QUERY, `/candles?symbol=${encodeURIComponent(symbol)}&window=${window}&maxPoints=${maxPoints}&res=${encodeURIComponent(res)}`)
-      .catch(() => ({ series: [], symbol, window, res })),
+    apiFetch(API_QUERY, `/candles?symbol=${encodeURIComponent(symbol)}&window=${window}&maxPoints=${maxPoints}&res=${encodeURIComponent(res)}`),
+  updateLocalePreference: (locale: string) => apiFetch(API_GATEWAY, '/me/locale', { method: 'PUT', body: JSON.stringify({ locale }) }),
 }
 
 export const getCommandCenter = api.commandCenter

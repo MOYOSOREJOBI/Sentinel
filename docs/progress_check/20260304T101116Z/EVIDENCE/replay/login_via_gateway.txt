@@ -1,0 +1,9 @@
+HTTP/1.1 200 OK
+Content-Type: application/json
+Set-Cookie: sentinel_token=eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYWRtaW4iLCJzdWIiOiJhZG1pbkBzZW50aW5lbC5sb2NhbCIsImV4cCI6MTc3MjcyOTk4NCwiaWF0IjoxNzcyNjQzNTg0fQ.xa0HGXKUtqmzkGrdiVxxNUDhc91718sYE_wzupZDnSJiZD3WTPE_b6Lv56LcSojaoRDI_C_slYuD07lSD-XamxwryZl817j2b0FiJ7syCAczahcJTkLcuGlhvY8AM_O5Jyr9cey--1RbiVNqr9In-W_KuHiLw-3H0cGe84pbFIIib3QOgOnEz5X1IzWEl2EMncdM_1CWk2N90KZQSq0liDzUqlM125vlb_nRVX4kJKK90uyj5SYzpfe_2JIBUfAFITEZ-bYP_rIgHsfqqIbU6Hd5NCmyvQK2OcZtVQDqS5mwOSTCh4FlQZlAioWUSxYfOTRJkThl2PB56_Ti-fDDWQ; Path=/; Expires=Thu, 05 Mar 2026 16:59:44 GMT; HttpOnly; SameSite=Lax
+Set-Cookie: sentinel_csrf=GSLT9Ilkee4FvM81zfwlXGUDAnGu-RbxyObhFOHNoyE; Path=/; Expires=Wed, 04 Mar 2026 17:29:44 GMT; SameSite=Lax
+X-Request-Id: 43793b9bfe7838a9
+Date: Wed, 04 Mar 2026 16:59:44 GMT
+Content-Length: 17
+
+{"role":"admin"}

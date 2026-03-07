@@ -1,0 +1,86 @@
+//line /Users/mac/Desktop/Sentinel/internal/middleware/csrf.go:1:1
+package middleware
+
+import (
+	"context"
+	"crypto/rand"
+	"encoding/base64"
+	"net/http"
+	"sync"
+	"time"
+
+	"sentinel/internal/rediskv"
+)
+
+type csrfEntry struct {
+	Token  string
+	Expiry time.Time
+}
+
+var csrfStore sync.Map
+var csrfRedis = rediskv.NewFromEnv()
+
+func NewCSRFToken() (string, error) {goCover_9096a20e3d2e__3[0] = 3 ; goCover_9096a20e3d2e__3[1] = goCover_9096a20e3d2e_P ; goCover_9096a20e3d2e__3[2] = 3 ; goCover_9096a20e3d2e__3[3] = 1;
+	b := make([]byte, 32)
+	if _, err := rand.Read(b); err != nil {goCover_9096a20e3d2e__3[5] = 1;
+		return "", err
+	}
+	goCover_9096a20e3d2e__3[4] = 1;return base64.RawURLEncoding.EncodeToString(b), nil
+}
+
+func BindCSRF(subject, token string, ttl time.Duration) {goCover_9096a20e3d2e__4[0] = 2 ; goCover_9096a20e3d2e__4[1] = goCover_9096a20e3d2e_P ; goCover_9096a20e3d2e__4[2] = 4 ; goCover_9096a20e3d2e__4[3] = 1;
+	csrfStore.Store(subject, csrfEntry{Token: token, Expiry: time.Now().Add(ttl)})
+	if csrfRedis != nil && csrfRedis.Enabled() {goCover_9096a20e3d2e__4[4] = 1;
+		_ = csrfRedis.SetEX(context.Background(), "csrf:"+subject, token, ttl)
+	}
+}
+
+func ClearCSRF(subject string) {goCover_9096a20e3d2e__5[0] = 2 ; goCover_9096a20e3d2e__5[1] = goCover_9096a20e3d2e_P ; goCover_9096a20e3d2e__5[2] = 5 ; goCover_9096a20e3d2e__5[3] = 1;
+	csrfStore.Delete(subject)
+	if csrfRedis != nil && csrfRedis.Enabled() {goCover_9096a20e3d2e__5[4] = 1;
+		_ = csrfRedis.Del(context.Background(), "csrf:"+subject)
+	}
+}
+
+func ValidCSRF(subject, token string) bool {goCover_9096a20e3d2e__6[0] = 8 ; goCover_9096a20e3d2e__6[1] = goCover_9096a20e3d2e_P ; goCover_9096a20e3d2e__6[2] = 6 ; goCover_9096a20e3d2e__6[3] = 1;
+	if csrfRedis != nil && csrfRedis.Enabled() {goCover_9096a20e3d2e__6[7] = 1;
+		if v, ok, err := csrfRedis.Get(context.Background(), "csrf:"+subject); err == nil && ok {goCover_9096a20e3d2e__6[8] = 1;
+			return token != "" && v == token
+		}
+	}
+	goCover_9096a20e3d2e__6[4] = 1;v, ok := csrfStore.Load(subject)
+	if !ok {goCover_9096a20e3d2e__6[9] = 1;
+		return false
+	}
+	goCover_9096a20e3d2e__6[5] = 1;e := v.(csrfEntry)
+	if time.Now().After(e.Expiry) || token == "" {goCover_9096a20e3d2e__6[10] = 1;
+		return false
+	}
+	goCover_9096a20e3d2e__6[6] = 1;return e.Token == token
+}
+
+func RequireCSRFFunc(subjectFromReq func(*http.Request) (string, bool)) func(http.Handler) http.Handler {goCover_9096a20e3d2e__7[0] = 11 ; goCover_9096a20e3d2e__7[1] = goCover_9096a20e3d2e_P ; goCover_9096a20e3d2e__7[2] = 7 ; goCover_9096a20e3d2e__7[3] = 1;
+	return func(next http.Handler) http.Handler {goCover_9096a20e3d2e__7[4] = 1;
+		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {goCover_9096a20e3d2e__7[5] = 1;
+			if r.Method == http.MethodGet || r.Method == http.MethodHead || r.Method == http.MethodOptions {goCover_9096a20e3d2e__7[10] = 1;
+				next.ServeHTTP(w, r)
+				return
+			}
+			// Login is the CSRF bootstrap step that issues the CSRF cookie/token pair.
+			goCover_9096a20e3d2e__7[6] = 1;if r.URL.Path == "/auth/login" {goCover_9096a20e3d2e__7[11] = 1;
+				next.ServeHTTP(w, r)
+				return
+			}
+			goCover_9096a20e3d2e__7[7] = 1;sub, ok := subjectFromReq(r)
+			if !ok {goCover_9096a20e3d2e__7[12] = 1;
+				next.ServeHTTP(w, r)
+				return
+			}
+			goCover_9096a20e3d2e__7[8] = 1;if !ValidCSRF(sub, r.Header.Get("X-CSRF-Token")) {goCover_9096a20e3d2e__7[13] = 1;
+				http.Error(w, "forbidden", http.StatusForbidden)
+				return
+			}
+			goCover_9096a20e3d2e__7[9] = 1;next.ServeHTTP(w, r)
+		})
+	}
+}

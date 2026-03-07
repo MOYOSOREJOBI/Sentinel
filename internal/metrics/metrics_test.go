@@ -40,3 +40,11 @@ func TestHandlerExposesPrometheusMetrics(t *testing.T) {
 		}
 	}
 }
+
+func TestStatusRecorderPreservesFlusher(t *testing.T) {
+	rec := &statusRecorder{ResponseWriter: httptest.NewRecorder(), status: http.StatusOK}
+	if _, ok := any(rec).(http.Flusher); !ok {
+		t.Fatal("statusRecorder should preserve http.Flusher for SSE endpoints")
+	}
+	rec.Flush()
+}

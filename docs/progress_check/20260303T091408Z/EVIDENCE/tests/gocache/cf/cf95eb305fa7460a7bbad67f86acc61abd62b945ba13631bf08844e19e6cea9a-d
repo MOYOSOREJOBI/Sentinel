@@ -1,0 +1,13 @@
+./dq.go
+./ewma.go
+./hash.go
+./rolling.go
+./volatility.go
+./volume.go
+./zscore.go
+./dq_test.go
+./ewma_floor_test.go
+./ewma_test.go
+./rolling_lag_test.go
+./rolling_test.go
+./zscore_test.go

@@ -59,7 +59,7 @@ wait_for http://localhost:8084/readyz
 wait_for http://localhost:8085/readyz
 
 if ! admin="$(login_and_capture admin@sentinel.local)"; then
-  POSTGRES_URL=postgres://sentinel:sentinel@localhost:5432/sentinel?sslmode=disable go run "$ROOT/scripts/seed-users.go" >/dev/null
+  POSTGRES_URL=postgres://sentinel:sentinel@localhost:5432/sentinel?sslmode=disable go run -tags seedusers "$ROOT/scripts/seed-users.go" >/dev/null
   admin="$(login_and_capture admin@sentinel.local)"
 fi
 viewer="$(login_and_capture viewer@sentinel.local)"

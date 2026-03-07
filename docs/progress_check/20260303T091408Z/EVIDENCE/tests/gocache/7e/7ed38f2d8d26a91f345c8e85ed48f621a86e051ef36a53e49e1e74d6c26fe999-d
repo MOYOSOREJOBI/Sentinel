@@ -1,0 +1,121 @@
+//line /Users/mac/Desktop/Sentinel/internal/query/queue.go:1:1
+package query
+
+import (
+	"context"
+	"fmt"
+	"strings"
+	"time"
+
+	"github.com/jackc/pgx/v5/pgxpool"
+)
+
+type QueueFilters struct {
+	Window      string
+	From        time.Time
+	To          time.Time
+	Q           string
+	CountryCode string
+	Region      string
+	Sector      string
+	Industry    string
+	Venue       string
+	Symbol      string
+	Locale      string
+}
+
+type QueueRow struct {
+	ID                int64   `json:"id"`
+	Symbol            string  `json:"symbol"`
+	Status            string  `json:"status"`
+	SeverityBand      string  `json:"severityBand"`
+	PriorityScore     float64 `json:"priorityScore"`
+	CompositeRisk     float64 `json:"compositeRisk"`
+	Confidence        float64 `json:"confidence"`
+	Region            string  `json:"region"`
+	CountryCode       string  `json:"countryCode"`
+	Industry          string  `json:"industry"`
+	RecommendedAction string  `json:"recommendedAction"`
+}
+
+func windowSQL(tw string) string {goCover_fbd601c42ea1__14[0] = 9 ; goCover_fbd601c42ea1__14[1] = goCover_fbd601c42ea1_P ; goCover_fbd601c42ea1__14[2] = 14 ; goCover_fbd601c42ea1__14[3] = 1;
+	switch tw {
+	case "1h":goCover_fbd601c42ea1__14[4] = 1;
+		return "i.last_activity_at > now()-interval '1 hour'"
+	case "30d":goCover_fbd601c42ea1__14[5] = 1;
+		return "i.last_activity_at > now()-interval '30 days'"
+	case "90d":goCover_fbd601c42ea1__14[6] = 1;
+		return "i.last_activity_at > now()-interval '90 days'"
+	case "1y":goCover_fbd601c42ea1__14[7] = 1;
+		return "i.last_activity_at > now()-interval '1 year'"
+	case "5y":goCover_fbd601c42ea1__14[8] = 1;
+		return "i.last_activity_at > now()-interval '5 years'"
+	case "20y":goCover_fbd601c42ea1__14[9] = 1;
+		return "i.last_activity_at > now()-interval '20 years'"
+	case "7d":goCover_fbd601c42ea1__14[10] = 1;
+		return "i.last_activity_at > now()-interval '7 days'"
+	default:goCover_fbd601c42ea1__14[11] = 1;
+		return "i.last_activity_at > now()-interval '24 hours'"
+	}
+}
+
+func whereClause(f QueueFilters) (string, []any) {goCover_fbd601c42ea1__15[0] = 14 ; goCover_fbd601c42ea1__15[1] = goCover_fbd601c42ea1_P ; goCover_fbd601c42ea1__15[2] = 15 ; goCover_fbd601c42ea1__15[3] = 1;
+	args := []any{}
+	where := windowSQL(f.Window)
+	if f.Window == "custom" {goCover_fbd601c42ea1__15[7] = 1;
+		from, to := f.From, f.To
+		if !from.IsZero() && !to.IsZero() && to.Before(from) {goCover_fbd601c42ea1__15[9] = 1;
+			from, to = to, from
+		}
+		goCover_fbd601c42ea1__15[8] = 1;switch {
+		case !from.IsZero() && !to.IsZero():goCover_fbd601c42ea1__15[10] = 1;
+			args = append(args, from, to)
+			where = fmt.Sprintf("i.last_activity_at BETWEEN $%d AND $%d", len(args)-1, len(args))
+		case !from.IsZero():goCover_fbd601c42ea1__15[11] = 1;
+			args = append(args, from)
+			where = fmt.Sprintf("i.last_activity_at >= $%d", len(args))
+		case !to.IsZero():goCover_fbd601c42ea1__15[12] = 1;
+			args = append(args, to)
+			where = fmt.Sprintf("i.last_activity_at <= $%d", len(args))
+		}
+	}
+	goCover_fbd601c42ea1__15[4] = 1;add := func(col string, val any, skip bool) {goCover_fbd601c42ea1__15[13] = 1;
+		if skip {goCover_fbd601c42ea1__15[15] = 1;
+			return
+		}
+		goCover_fbd601c42ea1__15[14] = 1;args = append(args, val)
+		where += fmt.Sprintf(" AND %s=$%d", col, len(args))
+	}
+	goCover_fbd601c42ea1__15[5] = 1;add("m.region", f.Region, f.Region == "")
+	add("coalesce(m.country_code,'XX')", f.CountryCode, f.CountryCode == "")
+	add("m.sector", f.Sector, f.Sector == "")
+	add("m.industry", f.Industry, f.Industry == "")
+	add("m.venue", f.Venue, f.Venue == "")
+	add("i.primary_symbol", f.Symbol, f.Symbol == "")
+	if strings.TrimSpace(f.Q) != "" {goCover_fbd601c42ea1__15[16] = 1;
+		args = append(args, "%"+strings.ToLower(strings.TrimSpace(f.Q))+"%")
+		idx := len(args)
+		where += fmt.Sprintf(" AND (lower(i.primary_symbol) LIKE $%d OR lower(coalesce(m.country_code,'')) LIKE $%d OR lower(coalesce(m.region,'')) LIKE $%d OR lower(coalesce(m.sector,'')) LIKE $%d OR lower(coalesce(m.industry,'')) LIKE $%d OR lower(coalesce(m.venue,'')) LIKE $%d)", idx, idx, idx, idx, idx, idx)
+	}
+	goCover_fbd601c42ea1__15[6] = 1;return where, args
+}
+
+func LoadQueue(ctx context.Context, db *pgxpool.Pool, f QueueFilters) ([]QueueRow, error) {goCover_fbd601c42ea1__16[0] = 6 ; goCover_fbd601c42ea1__16[1] = goCover_fbd601c42ea1_P ; goCover_fbd601c42ea1__16[2] = 16 ; goCover_fbd601c42ea1__16[3] = 1;
+	where, args := whereClause(f)
+	q := `SELECT i.id,i.primary_symbol,i.status,i.severity_band,coalesce(i.priority_score,0),coalesce(i.composite_risk,0),coalesce(i.confidence,0),coalesce(m.region,''),coalesce(m.country_code,'XX'),coalesce(m.industry,''),coalesce(i.top_driver_1,'watch') FROM incidents i LEFT JOIN instrument_metadata m ON m.instrument_id=i.primary_symbol WHERE ` + where
+	q += " ORDER BY i.priority_score DESC,i.last_activity_at DESC LIMIT 250"
+
+	rows, err := db.Query(ctx, q, args...)
+	if err != nil {goCover_fbd601c42ea1__16[6] = 1;
+		return nil, err
+	}
+	goCover_fbd601c42ea1__16[4] = 1;defer rows.Close()
+	out := []QueueRow{}
+	for rows.Next() {goCover_fbd601c42ea1__16[7] = 1;
+		var r QueueRow
+		if rows.Scan(&r.ID, &r.Symbol, &r.Status, &r.SeverityBand, &r.PriorityScore, &r.CompositeRisk, &r.Confidence, &r.Region, &r.CountryCode, &r.Industry, &r.RecommendedAction) == nil {goCover_fbd601c42ea1__16[8] = 1;
+			out = append(out, r)
+		}
+	}
+	goCover_fbd601c42ea1__16[5] = 1;return out, nil
+}

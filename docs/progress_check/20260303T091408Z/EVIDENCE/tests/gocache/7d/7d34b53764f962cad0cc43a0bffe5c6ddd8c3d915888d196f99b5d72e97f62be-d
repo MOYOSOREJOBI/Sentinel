@@ -1,0 +1,55 @@
+//line /Users/mac/Desktop/Sentinel/internal/auth/auth.go:1:1
+package auth
+
+import (
+	"crypto/rsa"
+	"os"
+	"time"
+
+	"github.com/golang-jwt/jwt/v5"
+)
+
+type Claims struct {
+	Role string `json:"role"`
+	jwt.RegisteredClaims
+}
+
+func ReadPrivate(path string) (*rsa.PrivateKey, error) {goCover_7222defb38f3__0[0] = 3 ; goCover_7222defb38f3__0[1] = goCover_7222defb38f3_P ; goCover_7222defb38f3__0[2] = 0 ; goCover_7222defb38f3__0[3] = 1;
+	b, err := os.ReadFile(path)
+	if err != nil {goCover_7222defb38f3__0[5] = 1;
+		return nil, err
+	}
+	goCover_7222defb38f3__0[4] = 1;return jwt.ParseRSAPrivateKeyFromPEM(b)
+}
+func ReadPublic(path string) (*rsa.PublicKey, error) {goCover_7222defb38f3__1[0] = 3 ; goCover_7222defb38f3__1[1] = goCover_7222defb38f3_P ; goCover_7222defb38f3__1[2] = 1 ; goCover_7222defb38f3__1[3] = 1;
+	b, err := os.ReadFile(path)
+	if err != nil {goCover_7222defb38f3__1[5] = 1;
+		return nil, err
+	}
+	goCover_7222defb38f3__1[4] = 1;return jwt.ParseRSAPublicKeyFromPEM(b)
+}
+
+func Sign(userID, role string, key *rsa.PrivateKey) (string, error) {goCover_7222defb38f3__2[0] = 1 ; goCover_7222defb38f3__2[1] = goCover_7222defb38f3_P ; goCover_7222defb38f3__2[2] = 2 ; goCover_7222defb38f3__2[3] = 1;
+	t := jwt.NewWithClaims(jwt.SigningMethodRS256, Claims{Role: role, RegisteredClaims: jwt.RegisteredClaims{Subject: userID, ExpiresAt: jwt.NewNumericDate(time.Now().Add(24 * time.Hour)), IssuedAt: jwt.NewNumericDate(time.Now())}})
+	return t.SignedString(key)
+}
+
+func Parse(token string, pub *rsa.PublicKey) (*Claims, error) {goCover_7222defb38f3__3[0] = 11 ; goCover_7222defb38f3__3[1] = goCover_7222defb38f3_P ; goCover_7222defb38f3__3[2] = 3 ; goCover_7222defb38f3__3[3] = 1;
+	parsed, err := jwt.ParseWithClaims(token, &Claims{}, func(token *jwt.Token) (any, error) {goCover_7222defb38f3__3[7] = 1;
+		if token.Method != jwt.SigningMethodRS256 {goCover_7222defb38f3__3[9] = 1;
+			return nil, jwt.ErrTokenSignatureInvalid
+		}
+		goCover_7222defb38f3__3[8] = 1;return pub, nil
+	})
+	goCover_7222defb38f3__3[4] = 1;if err != nil || !parsed.Valid {goCover_7222defb38f3__3[10] = 1;
+		if err == nil {goCover_7222defb38f3__3[12] = 1;
+			err = jwt.ErrTokenInvalidClaims
+		}
+		goCover_7222defb38f3__3[11] = 1;return nil, err
+	}
+	goCover_7222defb38f3__3[5] = 1;claims, ok := parsed.Claims.(*Claims)
+	if !ok || claims.Subject == "" || claims.Role == "" {goCover_7222defb38f3__3[13] = 1;
+		return nil, jwt.ErrTokenInvalidClaims
+	}
+	goCover_7222defb38f3__3[6] = 1;return claims, nil
+}

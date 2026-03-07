@@ -1,0 +1,57 @@
+//line /Users/mac/Desktop/Sentinel/internal/middleware/ratelimit.go:1:1
+package middleware
+
+import (
+	"context"
+	"encoding/json"
+	"net/http"
+	"strconv"
+	"sync"
+	"time"
+
+	"sentinel/internal/rediskv"
+)
+
+type limiterEntry struct {
+	Count int
+	Reset time.Time
+}
+
+var rl sync.Map
+var rlRedis = rediskv.NewFromEnv()
+
+func allow(key string, max int, window time.Duration) bool {goCover_9096a20e3d2e__8[0] = 8 ; goCover_9096a20e3d2e__8[1] = goCover_9096a20e3d2e_P ; goCover_9096a20e3d2e__8[2] = 8 ; goCover_9096a20e3d2e__8[3] = 1;
+	if rlRedis != nil && rlRedis.Enabled() {goCover_9096a20e3d2e__8[6] = 1;
+		ctx := context.Background()
+		n, err := rlRedis.Incr(ctx, "rl:"+key)
+		if err == nil {goCover_9096a20e3d2e__8[7] = 1;
+			if n == 1 {goCover_9096a20e3d2e__8[9] = 1;
+				_ = rlRedis.Expire(ctx, "rl:"+key, window)
+			}
+			goCover_9096a20e3d2e__8[8] = 1;return n <= max
+		}
+	}
+	goCover_9096a20e3d2e__8[4] = 1;now := time.Now()
+	v, _ := rl.LoadOrStore(key, limiterEntry{Count: 0, Reset: now.Add(window)})
+	e := v.(limiterEntry)
+	if now.After(e.Reset) {goCover_9096a20e3d2e__8[10] = 1;
+		e = limiterEntry{Count: 0, Reset: now.Add(window)}
+	}
+	goCover_9096a20e3d2e__8[5] = 1;e.Count++
+	rl.Store(key, e)
+	return e.Count <= max
+}
+
+func RateLimit(keyFn func(*http.Request) string, max int, window time.Duration) func(http.Handler) http.Handler {goCover_9096a20e3d2e__9[0] = 5 ; goCover_9096a20e3d2e__9[1] = goCover_9096a20e3d2e_P ; goCover_9096a20e3d2e__9[2] = 9 ; goCover_9096a20e3d2e__9[3] = 1;
+	return func(next http.Handler) http.Handler {goCover_9096a20e3d2e__9[4] = 1;
+		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {goCover_9096a20e3d2e__9[5] = 1;
+			if !allow(keyFn(r), max, window) {goCover_9096a20e3d2e__9[7] = 1;
+				w.Header().Set("Content-Type", "application/json")
+				w.WriteHeader(http.StatusTooManyRequests)
+				_ = json.NewEncoder(w).Encode(map[string]any{"error": "rate_limited", "limit": strconv.Itoa(max)})
+				return
+			}
+			goCover_9096a20e3d2e__9[6] = 1;next.ServeHTTP(w, r)
+		})
+	}
+}

@@ -1,0 +1,463 @@
+ Image docker-aggregator Building 
+ Image docker-gateway-api Building 
+ Image docker-alerts Building 
+ Image docker-features Building 
+ Image docker-simulator Building 
+ Image docker-query Building 
+ Image docker-governance Building 
+ Image docker-inference Building 
+#1 [internal] load local bake definitions
+#1 reading from stdin 4.03kB done
+#1 DONE 0.0s
+
+#2 [query internal] load build definition from Dockerfile-go
+#2 transferring dockerfile:
+#2 transferring dockerfile: 428B 0.0s done
+#2 ...
+
+#3 [inference internal] load build definition from Dockerfile.inference
+#3 transferring dockerfile: 240B 0.0s done
+#3 ...
+
+#2 [features internal] load build definition from Dockerfile-go
+#2 DONE 17.8s
+
+#3 [inference internal] load build definition from Dockerfile.inference
+#3 DONE 22.6s
+
+#4 [governance internal] load metadata for docker.io/library/golang:1.23
+#4 ...
+
+#5 [auth] library/python:pull token for registry-1.docker.io
+#5 DONE 0.0s
+
+#6 [auth] library/golang:pull token for registry-1.docker.io
+#6 DONE 0.0s
+
+#7 [aggregator internal] load metadata for gcr.io/distroless/static-debian12:latest
+#7 ...
+
+#8 [inference internal] load metadata for docker.io/library/python:3.11-slim
+#8 ...
+
+#7 [governance internal] load metadata for gcr.io/distroless/static-debian12:latest
+#7 DONE 23.3s
+
+#4 [aggregator internal] load metadata for docker.io/library/golang:1.23
+#4 ...
+
+#8 [inference internal] load metadata for docker.io/library/python:3.11-slim
+#8 DONE 26.5s
+
+#4 [query internal] load metadata for docker.io/library/golang:1.23
+#4 DONE 27.0s
+
+#9 [inference internal] load .dockerignore
+#9 transferring context:
+#9 transferring context: 2B 0.0s done
+#9 DONE 5.6s
+
+#10 [aggregator internal] load build context
+#10 ...
+
+#11 [inference internal] load build context
+#11 transferring context: 74.53kB 0.4s done
+#11 DONE 7.0s
+
+#12 [aggregator stage-1 1/5] FROM gcr.io/distroless/static-debian12:latest@sha256:20bc6c0bc4d625a22a8fde3e55f6515709b32055ef8fb9cfbddaa06d1760f838
+#12 resolve gcr.io/distroless/static-debian12:latest@sha256:20bc6c0bc4d625a22a8fde3e55f6515709b32055ef8fb9cfbddaa06d1760f838
+#12 ...
+
+#13 [aggregator build 1/6] FROM docker.io/library/golang:1.23@sha256:60deed95d3888cc5e4d9ff8a10c54e5edc008c6ae3fba6187be6fb592e19e8c0
+#13 resolve docker.io/library/golang:1.23@sha256:60deed95d3888cc5e4d9ff8a10c54e5edc008c6ae3fba6187be6fb592e19e8c0
+#13 ...
+
+#14 [inference 1/5] FROM docker.io/library/python:3.11-slim@sha256:c8271b1f627d0068857dce5b53e14a9558603b527e46f1f901722f935b786a39
+#14 resolve docker.io/library/python:3.11-slim@sha256:c8271b1f627d0068857dce5b53e14a9558603b527e46f1f901722f935b786a39
+#14 ...
+
+#10 [aggregator internal] load build context
+#10 transferring context:
+#10 ...
+
+#13 [governance build 1/6] FROM docker.io/library/golang:1.23@sha256:60deed95d3888cc5e4d9ff8a10c54e5edc008c6ae3fba6187be6fb592e19e8c0
+#13 resolve docker.io/library/golang:1.23@sha256:60deed95d3888cc5e4d9ff8a10c54e5edc008c6ae3fba6187be6fb592e19e8c0 121.5s done
+#13 DONE 122.1s
+
+#10 [aggregator internal] load build context
+#10 ...
+
+#14 [inference 1/5] FROM docker.io/library/python:3.11-slim@sha256:c8271b1f627d0068857dce5b53e14a9558603b527e46f1f901722f935b786a39
+#14 resolve docker.io/library/python:3.11-slim@sha256:c8271b1f627d0068857dce5b53e14a9558603b527e46f1f901722f935b786a39 120.0s done
+#14 DONE 122.3s
+
+#10 [aggregator internal] load build context
+#10 ...
+
+#15 [inference 2/5] WORKDIR /app
+#15 CACHED
+
+#10 [aggregator internal] load build context
+#10 ...
+
+#12 [query stage-1 1/5] FROM gcr.io/distroless/static-debian12:latest@sha256:20bc6c0bc4d625a22a8fde3e55f6515709b32055ef8fb9cfbddaa06d1760f838
+#12 resolve gcr.io/distroless/static-debian12:latest@sha256:20bc6c0bc4d625a22a8fde3e55f6515709b32055ef8fb9cfbddaa06d1760f838 120.5s done
+#12 DONE 122.4s
+
+#10 [aggregator internal] load build context
+#10 transferring context: 31.21MB 5.0s
+#10 transferring context: 59.30MB 7.9s done
+#10 ...
+
+#16 [inference 3/5] COPY services/inference/requirements.txt .
+#16 ...
+
+#10 [gateway-api internal] load build context
+#10 DONE 133.3s
+
+#16 [inference 3/5] COPY services/inference/requirements.txt .
+#16 ...
+
+#17 [alerts build 3/6] COPY go.mod go.sum ./
+#17 CACHED
+
+#18 [alerts stage-1 3/5] COPY --from=build /app/services/inference/models /app/inference-models
+#18 CACHED
+
+#19 [alerts build 4/6] RUN go mod download
+#19 CACHED
+
+#20 [alerts stage-1 4/5] WORKDIR /app
+#20 CACHED
+
+#21 [alerts build 5/6] COPY . .
+#21 CACHED
+
+#22 [alerts build 6/6] RUN CGO_ENABLED=0 GOOS=linux go build -o /bin/service ./cmd/alerts
+#22 CACHED
+
+#23 [alerts stage-1 2/5] COPY --from=build /bin/service /app/service
+#23 CACHED
+
+#24 [alerts build 2/6] WORKDIR /app
+#24 CACHED
+
+#25 [alerts stage-1 5/5] COPY keys ./keys
+#25 ERROR: failed to calculate checksum of ref 9pzhsqcm3hzm6251dx538vgl1::vchoxjfm6ik02i6mi96pk6iol: "/keys": not found
+
+#26 [query stage-1 2/5] COPY --from=build /bin/service /app/service
+#26 CACHED
+
+#27 [query stage-1 3/5] COPY --from=build /app/services/inference/models /app/inference-models
+#27 CACHED
+
+#28 [query stage-1 4/5] WORKDIR /app
+#28 CACHED
+
+#29 [query build 6/6] RUN CGO_ENABLED=0 GOOS=linux go build -o /bin/service ./cmd/query
+#29 CACHED
+
+#30 [query stage-1 5/5] COPY keys ./keys
+#30 ERROR: failed to calculate checksum of ref 9pzhsqcm3hzm6251dx538vgl1::vchoxjfm6ik02i6mi96pk6iol: "/keys": not found
+
+#31 [simulator stage-1 2/5] COPY --from=build /bin/service /app/service
+#31 CACHED
+
+#32 [simulator build 6/6] RUN CGO_ENABLED=0 GOOS=linux go build -o /bin/service ./cmd/simulator
+#32 CACHED
+
+#33 [simulator stage-1 4/5] WORKDIR /app
+#33 CACHED
+
+#34 [simulator stage-1 3/5] COPY --from=build /app/services/inference/models /app/inference-models
+#34 CACHED
+
+#35 [simulator stage-1 5/5] COPY keys ./keys
+#35 ERROR: failed to calculate checksum of ref 9pzhsqcm3hzm6251dx538vgl1::vchoxjfm6ik02i6mi96pk6iol: "/keys": not found
+
+#36 [aggregator stage-1 3/5] COPY --from=build /app/services/inference/models /app/inference-models
+#36 CACHED
+
+#37 [aggregator stage-1 2/5] COPY --from=build /bin/service /app/service
+#37 CACHED
+
+#38 [aggregator stage-1 4/5] WORKDIR /app
+#38 CACHED
+
+#21 [simulator build 5/6] COPY . .
+#21 CACHED
+
+#24 [simulator build 2/6] WORKDIR /app
+#24 CACHED
+
+#17 [simulator build 3/6] COPY go.mod go.sum ./
+#17 CACHED
+
+#19 [simulator build 4/6] RUN go mod download
+#19 CACHED
+
+#39 [aggregator build 6/6] RUN CGO_ENABLED=0 GOOS=linux go build -o /bin/service ./cmd/aggregator
+#39 CACHED
+
+#40 [aggregator stage-1 5/5] COPY keys ./keys
+#40 ERROR: failed to calculate checksum of ref 9pzhsqcm3hzm6251dx538vgl1::vchoxjfm6ik02i6mi96pk6iol: "/keys": not found
+
+#16 [inference 3/5] COPY services/inference/requirements.txt .
+#16 ...
+
+#24 [governance build 2/6] WORKDIR /app
+#24 CACHED
+
+#19 [governance build 4/6] RUN go mod download
+#19 CACHED
+
+#21 [governance build 5/6] COPY . .
+#21 CACHED
+
+#41 [governance build 6/6] RUN CGO_ENABLED=0 GOOS=linux go build -o /bin/service ./cmd/governance
+#41 CACHED
+
+#17 [governance build 3/6] COPY go.mod go.sum ./
+#17 CACHED
+
+#42 [governance stage-1 3/5] COPY --from=build /app/services/inference/models /app/inference-models
+#42 CACHED
+
+#43 [governance stage-1 2/5] COPY --from=build /bin/service /app/service
+#43 CACHED
+
+#44 [governance stage-1 4/5] WORKDIR /app
+#44 CACHED
+
+#45 [governance stage-1 5/5] COPY keys ./keys
+#45 ERROR: failed to calculate checksum of ref 9pzhsqcm3hzm6251dx538vgl1::vchoxjfm6ik02i6mi96pk6iol: "/keys": not found
+
+#46 [gateway-api stage-1 4/5] WORKDIR /app
+#46 CACHED
+
+#47 [gateway-api stage-1 2/5] COPY --from=build /bin/service /app/service
+#47 CACHED
+
+#48 [gateway-api stage-1 3/5] COPY --from=build /app/services/inference/models /app/inference-models
+#48 CACHED
+
+#49 [gateway-api build 6/6] RUN CGO_ENABLED=0 GOOS=linux go build -o /bin/service ./cmd/gateway-api
+#49 CACHED
+
+#50 [gateway-api stage-1 5/5] COPY keys ./keys
+#50 ERROR: failed to calculate checksum of ref 9pzhsqcm3hzm6251dx538vgl1::vchoxjfm6ik02i6mi96pk6iol: "/keys": not found
+
+#51 [features stage-1 2/5] COPY --from=build /bin/service /app/service
+#51 CACHED
+
+#52 [features stage-1 4/5] WORKDIR /app
+#52 CACHED
+
+#53 [features stage-1 3/5] COPY --from=build /app/services/inference/models /app/inference-models
+#53 CACHED
+
+#54 [features build 6/6] RUN CGO_ENABLED=0 GOOS=linux go build -o /bin/service ./cmd/features
+#54 CACHED
+
+#55 [features stage-1 5/5] COPY keys ./keys
+#55 ERROR: failed to calculate checksum of ref 9pzhsqcm3hzm6251dx538vgl1::vchoxjfm6ik02i6mi96pk6iol: "/keys": not found
+
+#21 [gateway-api build 5/6] COPY . .
+#21 CACHED
+
+#19 [gateway-api build 4/6] RUN go mod download
+#19 CACHED
+
+#17 [gateway-api build 3/6] COPY go.mod go.sum ./
+#17 CACHED
+
+#24 [features build 2/6] WORKDIR /app
+#24 CACHED
+
+#16 [inference 3/5] COPY services/inference/requirements.txt .
+#16 DONE 13.7s
+
+#56 [inference 4/5] RUN pip install --no-cache-dir -r requirements.txt
+------
+ > [alerts stage-1 5/5] COPY keys ./keys:
+------
+------
+ > [query stage-1 5/5] COPY keys ./keys:
+------
+------
+ > [aggregator stage-1 5/5] COPY keys ./keys:
+------
+------
+ > [simulator stage-1 5/5] COPY keys ./keys:
+------
+------
+ > [governance stage-1 5/5] COPY keys ./keys:
+------
+------
+ > [features stage-1 5/5] COPY keys ./keys:
+------
+------
+ > [gateway-api stage-1 5/5] COPY keys ./keys:
+------
+Dockerfile-go:13
+
+--------------------
+
+  11 |     COPY --from=build /app/services/inference/models /app/inference-models
+
+  12 |     WORKDIR /app
+
+  13 | >>> COPY keys ./keys
+
+  14 |     ENTRYPOINT ["/app/service"]
+
+  15 |     
+
+--------------------
+
+target query: failed to solve: failed to compute cache key: failed to calculate checksum of ref 9pzhsqcm3hzm6251dx538vgl1::vchoxjfm6ik02i6mi96pk6iol: "/keys": not found
+
+342  /usr/local/bin/dockerd --config-file /run/config/docker/daemon.json
+
+github.com/moby/buildkit/cache/contenthash.(*cacheContext).checksum
+
+	/root/build-deb/engine/vendor/github.com/moby/buildkit/cache/contenthash/checksum.go:894
+
+github.com/moby/buildkit/cache/contenthash.(*cacheContext).scanChecksum
+
+	/root/build-deb/engine/vendor/github.com/moby/buildkit/cache/contenthash/checksum.go:878
+
+github.com/moby/buildkit/cache/contenthash.(*cacheContext).lazyChecksum
+
+	/root/build-deb/engine/vendor/github.com/moby/buildkit/cache/contenthash/checksum.go:841
+
+github.com/moby/buildkit/cache/contenthash.(*cacheContext).Checksum
+
+	/root/build-deb/engine/vendor/github.com/moby/buildkit/cache/contenthash/checksum.go:429
+
+github.com/moby/buildkit/cache/contenthash.(*cacheManager).Checksum
+
+	/root/build-deb/engine/vendor/github.com/moby/buildkit/cache/contenthash/checksum.go:120
+
+github.com/moby/buildkit/cache/contenthash.Checksum
+
+	/root/build-deb/engine/vendor/github.com/moby/buildkit/cache/contenthash/checksum.go:67
+
+github.com/moby/buildkit/solver/llbsolver/ops.(*fileOp).CacheMap.NewContentHashFunc.func2.1
+
+	/root/build-deb/engine/vendor/github.com/moby/buildkit/solver/llbsolver/ops/opsutils/contenthash.go:48
+
+golang.org/x/sync/errgroup.(*Group).Go.func1
+
+	/root/build-deb/engine/vendor/golang.org/x/sync/errgroup/errgroup.go:93
+
+runtime.goexit
+
+	/usr/local/go/src/runtime/asm_amd64.s:1693
+
+
+
+342  /usr/local/bin/dockerd --config-file /run/config/docker/daemon.json
+
+github.com/moby/buildkit/cache/contenthash.init
+
+	/root/build-deb/engine/vendor/github.com/moby/buildkit/cache/contenthash/checksum.go:30
+
+runtime.doInit1
+
+	/usr/local/go/src/runtime/proc.go:7670
+
+runtime.doInit
+
+	/usr/local/go/src/runtime/proc.go:7637
+
+runtime.main
+
+	/usr/local/go/src/runtime/proc.go:256
+
+runtime.goexit
+
+	/usr/local/go/src/runtime/asm_amd64.s:1693
+
+
+
+91179 v0.31.1-desktop.1 /Users/mac/.docker/cli-plugins/docker-buildx bake --file - --progress rawjson --metadata-file /var/folders/vk/y7jdn8793b33fkr3q9_b33xc0000gn/T/compose-build-metadataFile-a29e8c9c-79af-4ec5-b20f-259fb0ff6c98.json --allow fs.read=/Users/mac/Desktop/Sentinel --allow fs.read=/Users/mac/Desktop/Sentinel --allow fs.read=/Users/mac/Desktop/Sentinel --allow fs.read=/Users/mac/Desktop/Sentinel --allow fs.read=/Users/mac/Desktop/Sentinel --allow fs.read=/Users/mac/Desktop/Sentinel --allow fs.read=/Users/mac/Desktop/Sentinel --allow fs.read=/Users/mac/Desktop/Sentinel
+
+google.golang.org/grpc.(*ClientConn).Invoke
+
+	google.golang.org/grpc@v1.76.0/call.go:35
+
+github.com/moby/buildkit/api/services/control.(*controlClient).Solve
+
+	github.com/moby/buildkit@v0.27.0/api/services/control/control_grpc.pb.go:88
+
+github.com/moby/buildkit/client.(*Client).solve.func2
+
+	github.com/moby/buildkit@v0.27.0/client/solve.go:319
+
+golang.org/x/sync/errgroup.(*Group).Go.func1
+
+	golang.org/x/sync@v0.19.0/errgroup/errgroup.go:93
+
+runtime.goexit
+
+	runtime/asm_amd64.s:1693
+
+
+
+91179 v0.31.1-desktop.1 /Users/mac/.docker/cli-plugins/docker-buildx bake --file - --progress rawjson --metadata-file /var/folders/vk/y7jdn8793b33fkr3q9_b33xc0000gn/T/compose-build-metadataFile-a29e8c9c-79af-4ec5-b20f-259fb0ff6c98.json --allow fs.read=/Users/mac/Desktop/Sentinel --allow fs.read=/Users/mac/Desktop/Sentinel --allow fs.read=/Users/mac/Desktop/Sentinel --allow fs.read=/Users/mac/Desktop/Sentinel --allow fs.read=/Users/mac/Desktop/Sentinel --allow fs.read=/Users/mac/Desktop/Sentinel --allow fs.read=/Users/mac/Desktop/Sentinel --allow fs.read=/Users/mac/Desktop/Sentinel
+
+github.com/docker/buildx/build.BuildWithResultHandler.func1.5.2
+
+	github.com/docker/buildx/build/build.go:728
+
+github.com/docker/buildx/build.BuildWithResultHandler.func1.5
+
+	github.com/docker/buildx/build/build.go:734
+
+golang.org/x/sync/errgroup.(*Group).Go.func1
+
+	golang.org/x/sync@v0.19.0/errgroup/errgroup.go:93
+
+
+
+342  /usr/local/bin/dockerd --config-file /run/config/docker/daemon.json
+
+github.com/moby/buildkit/solver.(*edge).computeCacheKeyFromDep.func1
+
+	/root/build-deb/engine/vendor/github.com/moby/buildkit/solver/edge.go:900
+
+github.com/moby/buildkit/solver/internal/pipe.NewWithFunction[...].func2
+
+	/root/build-deb/engine/vendor/github.com/moby/buildkit/solver/internal/pipe/pipe.go:78
+
+runtime.goexit
+
+	/usr/local/go/src/runtime/asm_amd64.s:1693
+
+
+
+91179 v0.31.1-desktop.1 /Users/mac/.docker/cli-plugins/docker-buildx bake --file - --progress rawjson --metadata-file /var/folders/vk/y7jdn8793b33fkr3q9_b33xc0000gn/T/compose-build-metadataFile-a29e8c9c-79af-4ec5-b20f-259fb0ff6c98.json --allow fs.read=/Users/mac/Desktop/Sentinel --allow fs.read=/Users/mac/Desktop/Sentinel --allow fs.read=/Users/mac/Desktop/Sentinel --allow fs.read=/Users/mac/Desktop/Sentinel --allow fs.read=/Users/mac/Desktop/Sentinel --allow fs.read=/Users/mac/Desktop/Sentinel --allow fs.read=/Users/mac/Desktop/Sentinel --allow fs.read=/Users/mac/Desktop/Sentinel
+
+github.com/moby/buildkit/client.(*Client).solve.func2
+
+	github.com/moby/buildkit@v0.27.0/client/solve.go:321
+
+golang.org/x/sync/errgroup.(*Group).Go.func1
+
+	golang.org/x/sync@v0.19.0/errgroup/errgroup.go:93
+
+
+
+342  /usr/local/bin/dockerd --config-file /run/config/docker/daemon.json
+
+github.com/moby/buildkit/solver/llbsolver/ops.(*fileOp).CacheMap.NewContentHashFunc.func2.1
+
+	/root/build-deb/engine/vendor/github.com/moby/buildkit/solver/llbsolver/ops/opsutils/contenthash.go:60
+
+golang.org/x/sync/errgroup.(*Group).Go.func1
+
+	/root/build-deb/engine/vendor/golang.org/x/sync/errgroup/errgroup.go:93
+
+
+

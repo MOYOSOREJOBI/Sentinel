@@ -1,0 +1,29 @@
+diff --git a/docs/PRODUCTION_READINESS_REVIEW.md b/docs/PRODUCTION_READINESS_REVIEW.md
+--- a/docs/PRODUCTION_READINESS_REVIEW.md
++++ b/docs/PRODUCTION_READINESS_REVIEW.md
+@@
+-2. **Privileged and state-changing endpoints lack auth/RBAC enforcement.**
+-   - Root cause: `alerts` ack and governance routes do not validate JWT/role.
+-   - Blast radius: any caller can acknowledge alerts, deploy models, start replay.
+-   - User impact: unauthorized state changes and governance compromise.
+-   - Ops impact: incident forensics and compliance invalidated.
+-   - Fix: enforce JWT auth middleware + role checks on alerts/governance service entrypoints.
++2. **Privileged and state-changing endpoints should be re-verified from runtime, not assumed from older findings.**
++   - Current source now wraps `alerts` and `governance` write routes in auth/RBAC middleware.
++   - The remaining static security gap is `query`'s admin `POST /dev/backfill`, which still lacks a CSRF middleware.
+@@
+-3. **Startup race on Kafka topic readiness causing dropped/failed production attempts.**
+-   - Root cause: simulator starts with compose service health, but topic creation runs later (`run-demo` creates topics after services already running).
++3. **Raw compose boot and `run-demo.sh` have diverged; document the difference explicitly.**
++   - Current `run-demo.sh` creates topics before starting the main service set.
++   - The raw compose path remains unsafe on a clean checkout because it depends on pre-generated dev keys.
+@@
+-2. **Metrics contract broken for inference.**
+-   - Root cause: Prometheus scrapes default `/metrics`; inference exposes only `/healthz` and `/readyz`.
+-   - Blast radius: inference observability is blind.
+-   - User impact: failures/perf regressions undetected.
+-   - Ops impact: cannot track lag, throughput, errors.
+-   - Fix: add `/metrics` with Prometheus client and instrument Kafka loop.
++2. **Inference metrics must be proven from runtime in each audit, not inferred from older runs.**
++   - Current source exposes `/metrics` and Prometheus counters/gauges.
++   - The remaining problem is that runtime proof is blocked whenever the stack does not boot cleanly.

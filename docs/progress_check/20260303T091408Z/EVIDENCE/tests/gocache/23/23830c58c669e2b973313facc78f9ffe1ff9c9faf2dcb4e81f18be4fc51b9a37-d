@@ -1,0 +1,643 @@
+//line /Users/mac/Desktop/Sentinel/cmd/governance/main.go:1:1
+package main; import _ "runtime/coverage"
+
+import (
+	"context"
+	"crypto/rsa"
+	"encoding/json"
+	"errors"
+	"fmt"
+	"log"
+	"net/http"
+	"os"
+	"os/signal"
+	"strings"
+	"syscall"
+	"time"
+
+	"github.com/go-chi/chi/v5"
+	"github.com/jackc/pgx/v5/pgxpool"
+	"sentinel/internal/audit"
+	"sentinel/internal/auth"
+	"sentinel/internal/authz"
+	"sentinel/internal/cache"
+	"sentinel/internal/config"
+	"sentinel/internal/db"
+	"sentinel/internal/healthcheck"
+	"sentinel/internal/httpx"
+	"sentinel/internal/logging"
+	"sentinel/internal/metrics"
+	"sentinel/internal/middleware"
+	"sentinel/internal/replay"
+)
+
+func main() {goCover_738cedb3f4f2__0[0] = 119 ; goCover_738cedb3f4f2__0[1] = goCover_738cedb3f4f2_P ; goCover_738cedb3f4f2__0[2] = 0 ; goCover_738cedb3f4f2__0[3] = 1;
+	if len(os.Args) > 1 && os.Args[1] == "healthcheck" {goCover_738cedb3f4f2__0[26] = 1;
+		port := healthcheck.MustPort("PORT", 8084)
+		os.Exit(healthcheck.Run(port, "/readyz"))
+	}
+
+	goCover_738cedb3f4f2__0[4] = 1;ctx, cancel := context.WithCancel(context.Background())
+	defer cancel()
+
+	logger := logging.New("governance")
+	cfg := config.Load("governance")
+	if err := config.Validate(cfg); err != nil {goCover_738cedb3f4f2__0[27] = 1;
+		log.Fatalf("governance: invalid config: %v", err)
+	}
+
+	goCover_738cedb3f4f2__0[5] = 1;pool, err := db.Connect(ctx, cfg.PostgresURL)
+	if err != nil {goCover_738cedb3f4f2__0[28] = 1;
+		log.Fatalf("governance: failed to connect to database: %v", err)
+	}
+	goCover_738cedb3f4f2__0[6] = 1;defer pool.Close()
+
+	pub, err := auth.ReadPublic(cfg.JWTPublicKey)
+	if err != nil {goCover_738cedb3f4f2__0[29] = 1;
+		log.Fatalf("governance: failed to read JWT public key: %v", err)
+	}
+
+	goCover_738cedb3f4f2__0[7] = 1;r := chi.NewRouter()
+	r.Use(middleware.RequestID)
+	r.Use(middleware.CORS)
+	r.Use(metrics.HTTPMiddleware("governance"))
+	r.Use(middleware.RequireCSRFFunc(authz.SubjectFromRequest(pub)))
+	r.Get("/healthz", func(w http.ResponseWriter, r *http.Request) {goCover_738cedb3f4f2__0[30] = 1; w.Write([]byte("ok")) })
+	goCover_738cedb3f4f2__0[8] = 1;r.Get("/", func(w http.ResponseWriter, r *http.Request) {goCover_738cedb3f4f2__0[31] = 1;
+		httpx.JSON(w, http.StatusOK, map[string]any{
+			"service": "governance",
+			"version": "dev",
+			"links": map[string]string{
+				"healthz": "/healthz",
+				"readyz":  "/readyz",
+				"metrics": "/metrics",
+				"docs":    "/docs",
+			},
+		})
+	})
+	goCover_738cedb3f4f2__0[9] = 1;r.Get("/readyz", readinessHandler(pool))
+	read := r.With(authz.RequirePerm(pub, "read"))
+	admin := r.With(middleware.RateLimit(rateLimitSubjectKey("gov", pub), 10, 1*time.Minute), authz.RequireAnyPerm(pub, "*", "model:deploy"))
+	workflow := r.With(middleware.RateLimit(rateLimitSubjectKey("workflow", pub), 30, 1*time.Minute), authz.RequireAnyPerm(pub, "replay:write", "*"))
+	policyAdmin := r.With(middleware.RateLimit(rateLimitSubjectKey("policy", pub), 10, 1*time.Minute), authz.RequireAnyPerm(pub, "*"))
+
+	read.Get("/governance/summary", func(w http.ResponseWriter, r *http.Request) {goCover_738cedb3f4f2__0[32] = 1;
+		httpx.JSON(w, http.StatusOK, map[string]any{
+			"modelLineage":       loadModelRegistryRows(r.Context(), pool),
+			"modelDeployments":   loadModelDeploymentRows(r.Context(), pool),
+			"replayJobs":         loadReplayJobRows(r.Context(), pool),
+			"escalationPolicies": loadEscalationPolicyRows(r.Context(), pool),
+			"thresholdChanges":   []any{},
+		})
+	})
+
+	goCover_738cedb3f4f2__0[10] = 1;read.Get("/active-models", func(w http.ResponseWriter, r *http.Request) {goCover_738cedb3f4f2__0[33] = 1;
+		rows, err := pool.Query(ctx, `SELECT model_name,model_version,artifact_hash,artifact_path,feature_set_version,coalesce(calibration_version,''),deployed_at FROM model_deployments WHERE status='deployed' ORDER BY deployed_at DESC NULLS LAST`)
+		if err != nil {goCover_738cedb3f4f2__0[36] = 1;
+			logger.Error("load active models failed", map[string]any{"error": err.Error()})
+			http.Error(w, "internal error", http.StatusInternalServerError)
+			return
+		}
+		goCover_738cedb3f4f2__0[34] = 1;defer rows.Close()
+		out := map[string]any{"models": []map[string]any{}}
+		models := []map[string]any{}
+		for rows.Next() {goCover_738cedb3f4f2__0[37] = 1;
+			var name, version, artifactHash, artifactPath, featureSetVersion, calibrationVersion string
+			var deployedAt any
+			if err := rows.Scan(&name, &version, &artifactHash, &artifactPath, &featureSetVersion, &calibrationVersion, &deployedAt); err != nil {goCover_738cedb3f4f2__0[39] = 1;
+				continue
+			}
+			goCover_738cedb3f4f2__0[38] = 1;models = append(models, map[string]any{
+				"model_name":          name,
+				"model_version":       version,
+				"artifact_hash":       artifactHash,
+				"artifact_path":       artifactPath,
+				"feature_set_version": featureSetVersion,
+				"calibration_version": calibrationVersion,
+				"deployed_at":         deployedAt,
+			})
+		}
+		goCover_738cedb3f4f2__0[35] = 1;out["models"] = models
+		httpx.JSON(w, http.StatusOK, out)
+	})
+
+	goCover_738cedb3f4f2__0[11] = 1;r.Get("/metrics", metrics.Handler)
+	read.Get("/audit/verify", func(w http.ResponseWriter, r *http.Request) {goCover_738cedb3f4f2__0[40] = 1;
+		ok, msg, err := audit.Verify(r.Context(), pool)
+		if err != nil {goCover_738cedb3f4f2__0[43] = 1;
+			logger.Error("audit verify failed", map[string]any{"error": err.Error()})
+			http.Error(w, "internal error", http.StatusInternalServerError)
+			return
+		}
+		goCover_738cedb3f4f2__0[41] = 1;status := http.StatusOK
+		if !ok {goCover_738cedb3f4f2__0[44] = 1;
+			status = http.StatusConflict
+		}
+		goCover_738cedb3f4f2__0[42] = 1;httpx.JSON(w, status, map[string]any{"ok": ok, "message": msg})
+	})
+	goCover_738cedb3f4f2__0[12] = 1;admin.Post("/models/deploy", func(w http.ResponseWriter, r *http.Request) {goCover_738cedb3f4f2__0[45] = 1;
+		claims, _ := authz.Claims(r)
+		requestID := middleware.RequestIDValue(r)
+		var in map[string]string
+		if err := json.NewDecoder(http.MaxBytesReader(w, r.Body, 1<<20)).Decode(&in); err != nil {goCover_738cedb3f4f2__0[50] = 1;
+			http.Error(w, "bad request", http.StatusBadRequest)
+			return
+		}
+		goCover_738cedb3f4f2__0[46] = 1;modelName := in["model_name"]
+		version := in["version"]
+		if modelName == "" || version == "" {goCover_738cedb3f4f2__0[51] = 1;
+			http.Error(w, "model_name and version required", http.StatusBadRequest)
+			return
+		}
+		goCover_738cedb3f4f2__0[47] = 1;if _, err := pool.Exec(ctx, `INSERT INTO model_registry(model_name,version,state) VALUES($1,$2,'deployed') ON CONFLICT (model_name) DO UPDATE SET version=$2,state='deployed'`, modelName, version); err != nil {goCover_738cedb3f4f2__0[52] = 1;
+			logger.Error("deploy model failed", map[string]any{"error": err.Error()})
+			http.Error(w, "internal error", http.StatusInternalServerError)
+			return
+		}
+		goCover_738cedb3f4f2__0[48] = 1;_, _ = pool.Exec(ctx, `INSERT INTO model_deployments(model_name,model_version,artifact_hash,artifact_path,feature_set_version,calibration_version,status,created_by,approved_by,approved_at,deployed_at,change_reason) VALUES($1,$2,$3,$4,$5,$6,'deployed',$7,$7,now(),now(),$8)`, modelName, version, "inline", "/registry/"+modelName+":"+version, "v2", "", claims.Subject, "api deploy")
+		if err := audit.Append(ctx, pool, claims.Subject, "model.deploy", modelName+":"+version); err != nil {goCover_738cedb3f4f2__0[53] = 1;
+			logger.Error("audit append failed", map[string]any{"error": err.Error()})
+		}
+		goCover_738cedb3f4f2__0[49] = 1;logger.Info("model deployed", map[string]any{"request_id": requestID, "actor": claims.Subject, "model_name": modelName, "version": version})
+		cache.InvalidateByPrefixes(ctx, cache.ReadModelPrefixes()...)
+		w.WriteHeader(http.StatusNoContent)
+	})
+
+	goCover_738cedb3f4f2__0[13] = 1;workflow.Post("/replay/start", func(w http.ResponseWriter, r *http.Request) {goCover_738cedb3f4f2__0[54] = 1;
+		claims, _ := authz.Claims(r)
+		requestID := middleware.RequestIDValue(r)
+		var req struct {
+			Start             time.Time `json:"start"`
+			End               time.Time `json:"end"`
+			ModelVersion      string    `json:"model_version"`
+			FeatureSetVersion string    `json:"feature_set_version"`
+			ReplayMode        string    `json:"replay_mode"`
+		}
+		_ = json.NewDecoder(http.MaxBytesReader(w, r.Body, 1<<20)).Decode(&req)
+		if req.Start.IsZero() {goCover_738cedb3f4f2__0[62] = 1;
+			req.Start = time.Now().UTC().Add(-1 * time.Hour)
+		}
+		goCover_738cedb3f4f2__0[55] = 1;if req.End.IsZero() {goCover_738cedb3f4f2__0[63] = 1;
+			req.End = time.Now().UTC()
+		}
+		goCover_738cedb3f4f2__0[56] = 1;if req.ModelVersion == "" {goCover_738cedb3f4f2__0[64] = 1;
+			req.ModelVersion = "baseline-v1"
+		}
+		goCover_738cedb3f4f2__0[57] = 1;if req.FeatureSetVersion == "" {goCover_738cedb3f4f2__0[65] = 1;
+			req.FeatureSetVersion = "v2"
+		}
+		goCover_738cedb3f4f2__0[58] = 1;req.ReplayMode = normalizeReplayMode(req.ReplayMode)
+		var id string
+		if err := pool.QueryRow(ctx, `INSERT INTO replay_jobs(requested_by,status,time_window_start,time_window_end,replay_mode,watermark_policy_id,allowed_lateness_ms,model_version,feature_set_version) VALUES($1,'queued',$2,$3,$4,'wm_v1',5000,$5,$6) RETURNING id::text`, claims.Subject, req.Start, req.End, req.ReplayMode, req.ModelVersion, req.FeatureSetVersion).Scan(&id); err != nil {goCover_738cedb3f4f2__0[66] = 1;
+			logger.Error("start replay failed", map[string]any{"error": err.Error()})
+			http.Error(w, "internal error", http.StatusInternalServerError)
+			return
+		}
+		goCover_738cedb3f4f2__0[59] = 1;if err := audit.Append(ctx, pool, claims.Subject, "replay.start", id); err != nil {goCover_738cedb3f4f2__0[67] = 1;
+			logger.Error("audit append failed", map[string]any{"error": err.Error()})
+		}
+		goCover_738cedb3f4f2__0[60] = 1;metrics.IncReplayJobEvent("governance", "queued")
+		logger.Info("replay job queued", map[string]any{"request_id": requestID, "actor": claims.Subject, "job_id": id, "replay_mode": req.ReplayMode})
+		go func(id string) {goCover_738cedb3f4f2__0[68] = 1;
+			_ = replay.Run(context.Background(), pool, id)
+			cache.InvalidateByPrefixes(context.Background(), cache.ReadModelPrefixes()...)
+		}(id)
+		goCover_738cedb3f4f2__0[61] = 1;httpx.JSON(w, http.StatusAccepted, map[string]any{"id": id, "status": "queued", "replay_mode": req.ReplayMode})
+	})
+
+	goCover_738cedb3f4f2__0[14] = 1;read.Get("/models", func(w http.ResponseWriter, r *http.Request) {goCover_738cedb3f4f2__0[69] = 1;
+		httpx.JSON(w, http.StatusOK, loadModelRegistryRows(r.Context(), pool))
+	})
+
+	goCover_738cedb3f4f2__0[15] = 1;read.Get("/models/deployments", func(w http.ResponseWriter, r *http.Request) {goCover_738cedb3f4f2__0[70] = 1;
+		httpx.JSON(w, http.StatusOK, loadModelDeploymentRows(r.Context(), pool))
+	})
+
+	goCover_738cedb3f4f2__0[16] = 1;read.Get("/replay/jobs", func(w http.ResponseWriter, r *http.Request) {goCover_738cedb3f4f2__0[71] = 1;
+		httpx.JSON(w, http.StatusOK, loadReplayJobRows(r.Context(), pool))
+	})
+
+	goCover_738cedb3f4f2__0[17] = 1;read.Get("/escalation-policies", func(w http.ResponseWriter, r *http.Request) {goCover_738cedb3f4f2__0[72] = 1;
+		httpx.JSON(w, http.StatusOK, loadEscalationPolicyRows(r.Context(), pool))
+	})
+
+	goCover_738cedb3f4f2__0[18] = 1;policyAdmin.Post("/escalation-policies", func(w http.ResponseWriter, r *http.Request) {goCover_738cedb3f4f2__0[73] = 1;
+		claims, _ := authz.Claims(r)
+		requestID := middleware.RequestIDValue(r)
+		in, err := decodeEscalationPolicyPayload(w, r)
+		if err != nil {goCover_738cedb3f4f2__0[77] = 1;
+			if !errors.Is(err, errEscalationPayload) {goCover_738cedb3f4f2__0[79] = 1;
+				http.Error(w, "bad request", http.StatusBadRequest)
+			}
+			goCover_738cedb3f4f2__0[78] = 1;return
+		}
+		goCover_738cedb3f4f2__0[74] = 1;var id string
+		if err := pool.QueryRow(r.Context(), `INSERT INTO escalation_policies(name,severity_band,notify_channel,sla_minutes,on_call_target,created_by) VALUES($1,$2,$3,$4,$5,$6) RETURNING id::text`, in.Name, in.SeverityBand, in.NotifyChannel, in.SLAMinutes, in.OnCallTarget, claims.Subject).Scan(&id); err != nil {goCover_738cedb3f4f2__0[80] = 1;
+			http.Error(w, "internal error", http.StatusInternalServerError)
+			return
+		}
+		goCover_738cedb3f4f2__0[75] = 1;if err := audit.Append(r.Context(), pool, claims.Subject, "policy.create", id); err != nil {goCover_738cedb3f4f2__0[81] = 1;
+			logger.Error("audit append failed", map[string]any{"error": err.Error()})
+		}
+		goCover_738cedb3f4f2__0[76] = 1;logger.Info("escalation policy created", map[string]any{"request_id": requestID, "actor": claims.Subject, "policy_id": id})
+		httpx.JSON(w, http.StatusCreated, map[string]any{"id": id})
+	})
+
+	goCover_738cedb3f4f2__0[19] = 1;policyAdmin.Put("/escalation-policies", func(w http.ResponseWriter, r *http.Request) {goCover_738cedb3f4f2__0[82] = 1;
+		claims, _ := authz.Claims(r)
+		requestID := middleware.RequestIDValue(r)
+		in, err := decodeEscalationPolicyPayload(w, r)
+		if err != nil {goCover_738cedb3f4f2__0[88] = 1;
+			if !errors.Is(err, errEscalationPayload) {goCover_738cedb3f4f2__0[90] = 1;
+				http.Error(w, "bad request", http.StatusBadRequest)
+			}
+			goCover_738cedb3f4f2__0[89] = 1;return
+		}
+		goCover_738cedb3f4f2__0[83] = 1;id := strings.TrimSpace(in.ID)
+		if id == "" {goCover_738cedb3f4f2__0[91] = 1;
+			if err := pool.QueryRow(r.Context(), `INSERT INTO escalation_policies(name,severity_band,notify_channel,sla_minutes,on_call_target,created_by) VALUES($1,$2,$3,$4,$5,$6) RETURNING id::text`, in.Name, in.SeverityBand, in.NotifyChannel, in.SLAMinutes, in.OnCallTarget, claims.Subject).Scan(&id); err != nil {goCover_738cedb3f4f2__0[94] = 1;
+				http.Error(w, "internal error", http.StatusInternalServerError)
+				return
+			}
+			goCover_738cedb3f4f2__0[92] = 1;if err := audit.Append(r.Context(), pool, claims.Subject, "policy.create", id); err != nil {goCover_738cedb3f4f2__0[95] = 1;
+				logger.Error("audit append failed", map[string]any{"error": err.Error()})
+			}
+			goCover_738cedb3f4f2__0[93] = 1;logger.Info("escalation policy created", map[string]any{"request_id": requestID, "actor": claims.Subject, "policy_id": id})
+			httpx.JSON(w, http.StatusCreated, map[string]any{"id": id})
+			return
+		}
+		goCover_738cedb3f4f2__0[84] = 1;ct, err := pool.Exec(r.Context(), `UPDATE escalation_policies SET name=$2,severity_band=$3,notify_channel=$4,sla_minutes=$5,on_call_target=$6 WHERE id=$1::uuid`, id, in.Name, in.SeverityBand, in.NotifyChannel, in.SLAMinutes, in.OnCallTarget)
+		if err != nil {goCover_738cedb3f4f2__0[96] = 1;
+			http.Error(w, "internal error", http.StatusInternalServerError)
+			return
+		}
+		goCover_738cedb3f4f2__0[85] = 1;if ct.RowsAffected() == 0 {goCover_738cedb3f4f2__0[97] = 1;
+			http.Error(w, "not found", http.StatusNotFound)
+			return
+		}
+		goCover_738cedb3f4f2__0[86] = 1;if err := audit.Append(r.Context(), pool, claims.Subject, "policy.update", id); err != nil {goCover_738cedb3f4f2__0[98] = 1;
+			logger.Error("audit append failed", map[string]any{"error": err.Error()})
+		}
+		goCover_738cedb3f4f2__0[87] = 1;logger.Info("escalation policy updated", map[string]any{"request_id": requestID, "actor": claims.Subject, "policy_id": id})
+		httpx.JSON(w, http.StatusOK, map[string]any{"id": id})
+	})
+
+	goCover_738cedb3f4f2__0[20] = 1;policyAdmin.Delete("/escalation-policies/{id}", func(w http.ResponseWriter, r *http.Request) {goCover_738cedb3f4f2__0[99] = 1;
+		claims, _ := authz.Claims(r)
+		requestID := middleware.RequestIDValue(r)
+		id := chi.URLParam(r, "id")
+		ct, err := pool.Exec(r.Context(), `DELETE FROM escalation_policies WHERE id=$1::uuid`, id)
+		if err != nil {goCover_738cedb3f4f2__0[103] = 1;
+			http.Error(w, "internal error", http.StatusInternalServerError)
+			return
+		}
+		goCover_738cedb3f4f2__0[100] = 1;if ct.RowsAffected() == 0 {goCover_738cedb3f4f2__0[104] = 1;
+			http.Error(w, "not found", http.StatusNotFound)
+			return
+		}
+		goCover_738cedb3f4f2__0[101] = 1;if err := audit.Append(r.Context(), pool, claims.Subject, "policy.delete", id); err != nil {goCover_738cedb3f4f2__0[105] = 1;
+			logger.Error("audit append failed", map[string]any{"error": err.Error()})
+		}
+		goCover_738cedb3f4f2__0[102] = 1;logger.Info("escalation policy deleted", map[string]any{"request_id": requestID, "actor": claims.Subject, "policy_id": id})
+		w.WriteHeader(http.StatusNoContent)
+	})
+
+	goCover_738cedb3f4f2__0[21] = 1;read.Get("/on-call", func(w http.ResponseWriter, r *http.Request) {goCover_738cedb3f4f2__0[106] = 1;
+		rows, err := pool.Query(r.Context(), `SELECT id::text,name,current_on_call,rotation_start,rotation_end,coalesce(policy_id::text,''),created_at FROM on_call_rotations ORDER BY name`)
+		if err != nil {goCover_738cedb3f4f2__0[109] = 1;
+			http.Error(w, "internal error", http.StatusInternalServerError)
+			return
+		}
+		goCover_738cedb3f4f2__0[107] = 1;defer rows.Close()
+		out := []map[string]any{}
+		for rows.Next() {goCover_738cedb3f4f2__0[110] = 1;
+			var id, name, currentOnCall, policyID string
+			var rotStart, rotEnd, createdAt any
+			if rows.Scan(&id, &name, &currentOnCall, &rotStart, &rotEnd, &policyID, &createdAt) == nil {goCover_738cedb3f4f2__0[111] = 1;
+				out = append(out, map[string]any{"id": id, "name": name, "currentOnCall": currentOnCall, "rotationStart": rotStart, "rotationEnd": rotEnd, "policyId": policyID, "createdAt": createdAt})
+			}
+		}
+		goCover_738cedb3f4f2__0[108] = 1;httpx.JSON(w, http.StatusOK, out)
+	})
+	goCover_738cedb3f4f2__0[22] = 1;read.Get("/current-oncall", func(w http.ResponseWriter, r *http.Request) {goCover_738cedb3f4f2__0[112] = 1;
+		var name, currentOnCall, policyID string
+		var rotStart, rotEnd, createdAt any
+		err := pool.QueryRow(r.Context(), `SELECT name,current_on_call,rotation_start,rotation_end,coalesce(policy_id::text,''),created_at FROM on_call_rotations ORDER BY rotation_start DESC NULLS LAST, created_at DESC LIMIT 1`).Scan(&name, &currentOnCall, &rotStart, &rotEnd, &policyID, &createdAt)
+		if err != nil {goCover_738cedb3f4f2__0[114] = 1;
+			http.Error(w, "not found", http.StatusNotFound)
+			return
+		}
+		goCover_738cedb3f4f2__0[113] = 1;httpx.JSON(w, http.StatusOK, map[string]any{"name": name, "currentOnCall": currentOnCall, "rotationStart": rotStart, "rotationEnd": rotEnd, "policyId": policyID, "createdAt": createdAt})
+	})
+	goCover_738cedb3f4f2__0[23] = 1;workflow.Post("/forecast/refresh", func(w http.ResponseWriter, r *http.Request) {goCover_738cedb3f4f2__0[115] = 1;
+		claims, _ := authz.Claims(r)
+		snapshot, err := refreshForecast(r.Context(), pool, claims.Subject)
+		if err != nil {goCover_738cedb3f4f2__0[118] = 1;
+			http.Error(w, "internal error", http.StatusInternalServerError)
+			return
+		}
+		goCover_738cedb3f4f2__0[116] = 1;if err := audit.Append(r.Context(), pool, claims.Subject, "forecast.refresh", "24h"); err != nil {goCover_738cedb3f4f2__0[119] = 1;
+			logger.Error("audit append failed", map[string]any{"error": err.Error()})
+		}
+		goCover_738cedb3f4f2__0[117] = 1;httpx.JSON(w, http.StatusCreated, snapshot)
+	})
+
+	goCover_738cedb3f4f2__0[24] = 1;srv := &http.Server{
+		Addr:         cfg.HTTPAddr,
+		Handler:      r,
+		ReadTimeout:  15 * time.Second,
+		WriteTimeout: 15 * time.Second,
+		IdleTimeout:  60 * time.Second,
+	}
+
+	go func() {goCover_738cedb3f4f2__0[120] = 1;
+		logger.Info("starting server", map[string]any{"addr": cfg.HTTPAddr})
+		if err := srv.ListenAndServe(); err != nil && err != http.ErrServerClosed {goCover_738cedb3f4f2__0[121] = 1;
+			log.Fatalf("governance: server error: %v", err)
+		}
+	}()
+
+	goCover_738cedb3f4f2__0[25] = 1;quit := make(chan os.Signal, 1)
+	signal.Notify(quit, syscall.SIGINT, syscall.SIGTERM)
+	<-quit
+	logger.Info("shutting down", nil)
+	cancel()
+
+	shutdownCtx, shutdownCancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer shutdownCancel()
+	srv.Shutdown(shutdownCtx)
+}
+
+func corsMiddleware(next http.Handler) http.Handler {goCover_738cedb3f4f2__1[0] = 8 ; goCover_738cedb3f4f2__1[1] = goCover_738cedb3f4f2_P ; goCover_738cedb3f4f2__1[2] = 1 ; goCover_738cedb3f4f2__1[3] = 1;
+	allowedOrigins := middleware.LoadAllowedOrigins()
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {goCover_738cedb3f4f2__1[4] = 1;
+		// Use first allowed origin found
+		var origin string
+		for o := range allowedOrigins {goCover_738cedb3f4f2__1[8] = 1;
+			origin = o
+			break
+		}
+		goCover_738cedb3f4f2__1[5] = 1;if origin != "" {goCover_738cedb3f4f2__1[9] = 1;
+			w.Header().Set("Access-Control-Allow-Origin", origin)
+		}
+		goCover_738cedb3f4f2__1[6] = 1;w.Header().Set("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
+		w.Header().Set("Access-Control-Allow-Headers", "Content-Type, Authorization, X-CSRF-Token")
+		w.Header().Set("Access-Control-Allow-Credentials", "true")
+		if r.Method == http.MethodOptions {goCover_738cedb3f4f2__1[10] = 1;
+			w.WriteHeader(http.StatusNoContent)
+			return
+		}
+		goCover_738cedb3f4f2__1[7] = 1;next.ServeHTTP(w, r)
+	})
+}
+
+type pinger interface {
+	Ping(context.Context) error
+}
+
+func readinessHandler(p pinger) http.HandlerFunc {goCover_738cedb3f4f2__2[0] = 4 ; goCover_738cedb3f4f2__2[1] = goCover_738cedb3f4f2_P ; goCover_738cedb3f4f2__2[2] = 2 ; goCover_738cedb3f4f2__2[3] = 1;
+	return func(w http.ResponseWriter, r *http.Request) {goCover_738cedb3f4f2__2[4] = 1;
+		probeCtx, probeCancel := context.WithTimeout(r.Context(), 2*time.Second)
+		defer probeCancel()
+		if err := p.Ping(probeCtx); err != nil {goCover_738cedb3f4f2__2[6] = 1;
+			http.Error(w, "database not ready", http.StatusServiceUnavailable)
+			return
+		}
+		goCover_738cedb3f4f2__2[5] = 1;w.Write([]byte("ok"))
+	}
+}
+
+type escalationPolicyInput struct {
+	ID            string `json:"id"`
+	Name          string `json:"name"`
+	SeverityBand  string `json:"severity_band"`
+	NotifyChannel string `json:"notify_channel"`
+	SLAMinutes    int    `json:"sla_minutes"`
+	OnCallTarget  string `json:"on_call_target"`
+}
+
+var errEscalationPayload = errors.New("invalid escalation payload")
+
+func decodeEscalationPolicyPayload(w http.ResponseWriter, r *http.Request) (escalationPolicyInput, error) {goCover_738cedb3f4f2__3[0] = 10 ; goCover_738cedb3f4f2__3[1] = goCover_738cedb3f4f2_P ; goCover_738cedb3f4f2__3[2] = 3 ; goCover_738cedb3f4f2__3[3] = 1;
+	var in escalationPolicyInput
+	if err := json.NewDecoder(http.MaxBytesReader(w, r.Body, 1<<20)).Decode(&in); err != nil {goCover_738cedb3f4f2__3[8] = 1;
+		http.Error(w, "bad request", http.StatusBadRequest)
+		return escalationPolicyInput{}, errEscalationPayload
+	}
+	goCover_738cedb3f4f2__3[4] = 1;if in.Name == "" || in.SeverityBand == "" {goCover_738cedb3f4f2__3[9] = 1;
+		http.Error(w, "name and severity_band required", http.StatusBadRequest)
+		return escalationPolicyInput{}, errEscalationPayload
+	}
+	goCover_738cedb3f4f2__3[5] = 1;switch in.SeverityBand {
+	case "elevated", "high", "critical":goCover_738cedb3f4f2__3[10] = 1;
+	default:goCover_738cedb3f4f2__3[11] = 1;
+		http.Error(w, "severity_band must be elevated, high, or critical", http.StatusBadRequest)
+		return escalationPolicyInput{}, errEscalationPayload
+	}
+	goCover_738cedb3f4f2__3[6] = 1;if in.SLAMinutes <= 0 {goCover_738cedb3f4f2__3[12] = 1;
+		in.SLAMinutes = 60
+	}
+	goCover_738cedb3f4f2__3[7] = 1;return in, nil
+}
+
+func loadModelRegistryRows(ctx context.Context, pool *pgxpool.Pool) []map[string]any {goCover_738cedb3f4f2__4[0] = 6 ; goCover_738cedb3f4f2__4[1] = goCover_738cedb3f4f2_P ; goCover_738cedb3f4f2__4[2] = 4 ; goCover_738cedb3f4f2__4[3] = 1;
+	rows, err := pool.Query(ctx, `SELECT id,model_name,version,state,created_at FROM model_registry ORDER BY created_at DESC, id DESC LIMIT 100`)
+	if err != nil {goCover_738cedb3f4f2__4[6] = 1;
+		return []map[string]any{}
+	}
+	goCover_738cedb3f4f2__4[4] = 1;defer rows.Close()
+	out := []map[string]any{}
+	for rows.Next() {goCover_738cedb3f4f2__4[7] = 1;
+		var id int
+		var name, version, state string
+		var createdAt any
+		if rows.Scan(&id, &name, &version, &state, &createdAt) == nil {goCover_738cedb3f4f2__4[8] = 1;
+			out = append(out, map[string]any{"id": id, "model_name": name, "version": version, "state": state, "created_at": createdAt})
+		}
+	}
+	goCover_738cedb3f4f2__4[5] = 1;return out
+}
+
+func loadModelDeploymentRows(ctx context.Context, pool *pgxpool.Pool) []map[string]any {goCover_738cedb3f4f2__5[0] = 6 ; goCover_738cedb3f4f2__5[1] = goCover_738cedb3f4f2_P ; goCover_738cedb3f4f2__5[2] = 5 ; goCover_738cedb3f4f2__5[3] = 1;
+	rows, err := pool.Query(ctx, `SELECT id,model_name,model_version,artifact_hash,artifact_path,feature_set_version,coalesce(calibration_version,''),status,coalesce(created_by,''),coalesce(approved_by,''),approved_at,deployed_at,change_reason,created_at FROM model_deployments ORDER BY created_at DESC, id DESC LIMIT 100`)
+	if err != nil {goCover_738cedb3f4f2__5[6] = 1;
+		return []map[string]any{}
+	}
+	goCover_738cedb3f4f2__5[4] = 1;defer rows.Close()
+	out := []map[string]any{}
+	for rows.Next() {goCover_738cedb3f4f2__5[7] = 1;
+		var id int
+		var modelName, modelVersion, artifactHash, artifactPath, featureSetVersion, calibrationVersion, status, createdBy, approvedBy, changeReason string
+		var approvedAt, deployedAt, createdAt any
+		if rows.Scan(&id, &modelName, &modelVersion, &artifactHash, &artifactPath, &featureSetVersion, &calibrationVersion, &status, &createdBy, &approvedBy, &approvedAt, &deployedAt, &changeReason, &createdAt) == nil {goCover_738cedb3f4f2__5[8] = 1;
+			out = append(out, map[string]any{
+				"id":                  id,
+				"model_name":          modelName,
+				"model_version":       modelVersion,
+				"artifact_hash":       artifactHash,
+				"artifact_path":       artifactPath,
+				"feature_set_version": featureSetVersion,
+				"calibration_version": calibrationVersion,
+				"status":              status,
+				"created_by":          createdBy,
+				"approved_by":         approvedBy,
+				"approved_at":         approvedAt,
+				"deployed_at":         deployedAt,
+				"change_reason":       changeReason,
+				"created_at":          createdAt,
+			})
+		}
+	}
+	goCover_738cedb3f4f2__5[5] = 1;return out
+}
+
+func loadReplayJobRows(ctx context.Context, pool *pgxpool.Pool) []map[string]any {goCover_738cedb3f4f2__6[0] = 6 ; goCover_738cedb3f4f2__6[1] = goCover_738cedb3f4f2_P ; goCover_738cedb3f4f2__6[2] = 6 ; goCover_738cedb3f4f2__6[3] = 1;
+	rows, err := pool.Query(ctx, `SELECT id::text,status,requested_by,requested_at,started_at,completed_at,replay_mode,model_version,feature_set_version,watermark_policy_id,allowed_lateness_ms,error_message FROM replay_jobs ORDER BY requested_at DESC LIMIT 100`)
+	if err != nil {goCover_738cedb3f4f2__6[6] = 1;
+		return []map[string]any{}
+	}
+	goCover_738cedb3f4f2__6[4] = 1;defer rows.Close()
+	out := []map[string]any{}
+	for rows.Next() {goCover_738cedb3f4f2__6[7] = 1;
+		var id, status, requestedBy, replayMode, modelVersion, featureSetVersion, watermarkPolicy, errorMessage string
+		var requestedAt, startedAt, completedAt any
+		var allowedLatenessMS int
+		if rows.Scan(&id, &status, &requestedBy, &requestedAt, &startedAt, &completedAt, &replayMode, &modelVersion, &featureSetVersion, &watermarkPolicy, &allowedLatenessMS, &errorMessage) == nil {goCover_738cedb3f4f2__6[8] = 1;
+			out = append(out, map[string]any{
+				"id":                id,
+				"status":            status,
+				"requestedBy":       requestedBy,
+				"requestedAt":       requestedAt,
+				"startedAt":         startedAt,
+				"completedAt":       completedAt,
+				"replayMode":        replayMode,
+				"modelVersion":      modelVersion,
+				"featureSetVersion": featureSetVersion,
+				"watermarkPolicy":   watermarkPolicy,
+				"allowedLatenessMs": allowedLatenessMS,
+				"errorMessage":      errorMessage,
+			})
+		}
+	}
+	goCover_738cedb3f4f2__6[5] = 1;return out
+}
+
+func loadEscalationPolicyRows(ctx context.Context, pool *pgxpool.Pool) []map[string]any {goCover_738cedb3f4f2__7[0] = 6 ; goCover_738cedb3f4f2__7[1] = goCover_738cedb3f4f2_P ; goCover_738cedb3f4f2__7[2] = 7 ; goCover_738cedb3f4f2__7[3] = 1;
+	rows, err := pool.Query(ctx, `SELECT id::text,name,severity_band,notify_channel,sla_minutes,on_call_target,created_by,created_at FROM escalation_policies ORDER BY severity_band,name`)
+	if err != nil {goCover_738cedb3f4f2__7[6] = 1;
+		return []map[string]any{}
+	}
+	goCover_738cedb3f4f2__7[4] = 1;defer rows.Close()
+	out := []map[string]any{}
+	for rows.Next() {goCover_738cedb3f4f2__7[7] = 1;
+		var id, name, severityBand, notifyChannel, onCallTarget, createdBy string
+		var slaMinutes int
+		var createdAt any
+		if rows.Scan(&id, &name, &severityBand, &notifyChannel, &slaMinutes, &onCallTarget, &createdBy, &createdAt) == nil {goCover_738cedb3f4f2__7[8] = 1;
+			out = append(out, map[string]any{
+				"id":            id,
+				"name":          name,
+				"severityBand":  severityBand,
+				"notifyChannel": notifyChannel,
+				"slaMinutes":    slaMinutes,
+				"onCallTarget":  onCallTarget,
+				"createdBy":     createdBy,
+				"createdAt":     createdAt,
+			})
+		}
+	}
+	goCover_738cedb3f4f2__7[5] = 1;return out
+}
+
+func refreshForecast(ctx context.Context, pool *pgxpool.Pool, actor string) (map[string]any, error) {goCover_738cedb3f4f2__8[0] = 10 ; goCover_738cedb3f4f2__8[1] = goCover_738cedb3f4f2_P ; goCover_738cedb3f4f2__8[2] = 8 ; goCover_738cedb3f4f2__8[3] = 1;
+	var velocity, dqScore, dispersion, tailRisk float64
+	_ = pool.QueryRow(ctx, `
+SELECT
+  COALESCE(count(*)::float8 / 24.0, 0),
+  COALESCE(avg(CASE WHEN trust_state = 'stable' THEN 0.9 ELSE 0.5 END), 0),
+  COALESCE(stddev_pop(composite_risk), 0),
+  COALESCE(percentile_cont(0.95) WITHIN GROUP (ORDER BY composite_risk), 0)
+FROM incidents
+WHERE last_activity_at > now() - interval '24 hours'`).Scan(&velocity, &dqScore, &dispersion, &tailRisk)
+
+	rows, err := pool.Query(ctx, `
+SELECT primary_symbol
+FROM incidents
+WHERE status IN ('open','ack')
+ORDER BY composite_risk DESC, last_activity_at DESC
+LIMIT 5`)
+	if err != nil {goCover_738cedb3f4f2__8[8] = 1;
+		return nil, err
+	}
+	goCover_738cedb3f4f2__8[4] = 1;defer rows.Close()
+	watchlist := []string{}
+	for rows.Next() {goCover_738cedb3f4f2__8[9] = 1;
+		var symbol string
+		if rows.Scan(&symbol) == nil && symbol != "" {goCover_738cedb3f4f2__8[10] = 1;
+			watchlist = append(watchlist, symbol)
+		}
+	}
+	goCover_738cedb3f4f2__8[5] = 1;base := int(velocity*4 + tailRisk*10)
+	if base < 1 {goCover_738cedb3f4f2__8[11] = 1;
+		base = 1
+	}
+	goCover_738cedb3f4f2__8[6] = 1;whyMoved := []string{
+		"velocity reflects active incidents in the last 24h",
+		fmt.Sprintf("dispersion %.3f widened the forecast band", dispersion),
+		fmt.Sprintf("tail risk p95 %.3f raised the upside case", tailRisk),
+	}
+	var generatedAt time.Time
+	if err := pool.QueryRow(ctx, `
+INSERT INTO forecast_snapshots(window_label,incident_band_low,incident_band_base,incident_band_high,velocity,dq_score,dispersion,tail_risk_p95,watchlist_risks,why_moved,created_by)
+VALUES('24h',$1,$2,$3,$4,$5,$6,$7,$8,$9,$10)
+RETURNING generated_at`,
+		maxInt(base-2, 0), base, base+3, velocity, dqScore, dispersion, tailRisk, watchlist, whyMoved, actor).Scan(&generatedAt); err != nil {goCover_738cedb3f4f2__8[12] = 1;
+		return nil, err
+	}
+	goCover_738cedb3f4f2__8[7] = 1;return map[string]any{
+		"generatedAt":        generatedAt,
+		"incidentVolumeBand": map[string]int{"low": maxInt(base-2, 0), "base": base, "high": base + 3},
+		"watchlistRisks":     watchlist,
+		"whyMoved":           whyMoved,
+		"velocity":           velocity,
+		"dqScore":            dqScore,
+		"dispersion":         dispersion,
+		"tailRiskP95":        tailRisk,
+	}, nil
+}
+
+var errNotReady = errors.New("not ready")
+
+func maxInt(a, b int) int {goCover_738cedb3f4f2__9[0] = 3 ; goCover_738cedb3f4f2__9[1] = goCover_738cedb3f4f2_P ; goCover_738cedb3f4f2__9[2] = 9 ; goCover_738cedb3f4f2__9[3] = 1;
+	if a > b {goCover_738cedb3f4f2__9[5] = 1;
+		return a
+	}
+	goCover_738cedb3f4f2__9[4] = 1;return b
+}
+
+func rateLimitSubjectKey(prefix string, pub *rsa.PublicKey) func(*http.Request) string {goCover_738cedb3f4f2__10[0] = 9 ; goCover_738cedb3f4f2__10[1] = goCover_738cedb3f4f2_P ; goCover_738cedb3f4f2__10[2] = 10 ; goCover_738cedb3f4f2__10[3] = 1;
+	return func(r *http.Request) string {goCover_738cedb3f4f2__10[4] = 1;
+		if claims, err := authz.Authenticate(r, pub); err == nil {goCover_738cedb3f4f2__10[8] = 1;
+			return prefix + ":sub:" + claims.Subject
+		}
+		goCover_738cedb3f4f2__10[5] = 1;if authzHeader := r.Header.Get("Authorization"); len(authzHeader) > 7 {goCover_738cedb3f4f2__10[9] = 1;
+			token := strings.TrimSpace(strings.TrimPrefix(authzHeader, "Bearer "))
+			if token != "" {goCover_738cedb3f4f2__10[10] = 1;
+				return prefix + ":authz:" + token
+			}
+		}
+		goCover_738cedb3f4f2__10[6] = 1;if c, err := r.Cookie("sentinel_token"); err == nil && c.Value != "" {goCover_738cedb3f4f2__10[11] = 1;
+			return prefix + ":cookie:" + c.Value
+		}
+		goCover_738cedb3f4f2__10[7] = 1;return prefix + ":ip:" + r.RemoteAddr
+	}
+}
+
+func normalizeReplayMode(in string) string {goCover_738cedb3f4f2__11[0] = 3 ; goCover_738cedb3f4f2__11[1] = goCover_738cedb3f4f2_P ; goCover_738cedb3f4f2__11[2] = 11 ; goCover_738cedb3f4f2__11[3] = 1;
+	switch in {
+	case "as_scored", "recompute":goCover_738cedb3f4f2__11[4] = 1;
+		return in
+	default:goCover_738cedb3f4f2__11[5] = 1;
+		return "recompute"
+	}
+}

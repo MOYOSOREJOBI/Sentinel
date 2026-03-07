@@ -1,0 +1,1 @@
+ok  	sentinel/cmd/query	4.968s

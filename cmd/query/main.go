@@ -105,6 +105,7 @@ func main() {
 	r.Use(middleware.RequestID)
 	r.Use(middleware.CORS)
 	r.Use(metrics.HTTPMiddleware("query"))
+	r.Use(middleware.RequireCSRFFunc(authz.SubjectFromRequest(pub)))
 	r.Get("/healthz", func(w http.ResponseWriter, r *http.Request) { _, _ = w.Write([]byte("ok")) })
 	r.Get("/", func(w http.ResponseWriter, r *http.Request) {
 		httpx.JSON(w, http.StatusOK, map[string]any{
@@ -351,15 +352,15 @@ func main() {
 				return
 			}
 			key := cache.WorldMapKey(f.Region, f.CountryCode, f.Sector, f.Industry, f.Venue, f.Symbol, f.Locale, f.Window+":"+f.Q)
-			countries, err := cache.GetOrLoadJSON(r.Context(), key, ttlWorldMap, func() ([]qrm.CountryAgg, error) {
-				return qrm.LoadWorldMap(r.Context(), pool, qrm.QueueFilters{Window: f.Window, From: f.From, To: f.To, Q: f.Q, CountryCode: f.CountryCode, Region: f.Region, Sector: f.Sector, Industry: f.Industry, Venue: f.Venue, Symbol: f.Symbol, Locale: f.Locale})
+			worldMap, err := cache.GetOrLoadJSON(r.Context(), key, ttlWorldMap, func() (qrm.WorldMapSummary, error) {
+				return qrm.LoadWorldMapSummary(r.Context(), pool, qrm.QueueFilters{Window: f.Window, From: f.From, To: f.To, Q: f.Q, CountryCode: f.CountryCode, Region: f.Region, Sector: f.Sector, Industry: f.Industry, Venue: f.Venue, Symbol: f.Symbol, Locale: f.Locale})
 			})
 			if err != nil {
 				http.Error(w, "internal", 500)
 				return
 			}
-			metrics.ObserveRowsReturned("query", "world_map", len(countries))
-			httpx.JSON(w, 200, map[string]any{"countries": countries, "timeWindow": f.Window})
+			metrics.ObserveRowsReturned("query", "world_map", len(worldMap.Countries))
+			httpx.JSON(w, 200, map[string]any{"countries": worldMap.Countries, "geoEnriched": worldMap.GeoEnriched, "missingGeoCount": worldMap.MissingGeoCount, "timeWindow": f.Window})
 		})
 		pr.Get("/executive-summary", func(w http.ResponseWriter, r *http.Request) {
 			f, err := parseFilters(r)
@@ -437,15 +438,36 @@ func main() {
 				}
 			}
 			replays := []map[string]any{}
-			rp, err := pool.Query(r.Context(), `SELECT id::text,status,requested_at,started_at,completed_at,replay_mode,model_version,feature_set_version,watermark_policy_id,allowed_lateness_ms FROM replay_jobs ORDER BY requested_at DESC LIMIT 25`)
+			rp, err := pool.Query(r.Context(), `SELECT rj.id::text,rj.status,rj.requested_at,rj.started_at,rj.completed_at,rj.replay_mode,rj.model_version,rj.feature_set_version,rj.watermark_policy_id,rj.allowed_lateness_ms,rr.diff_summary
+FROM replay_jobs rj
+LEFT JOIN replay_runs rr ON rr.id = rj.id::text
+ORDER BY rj.requested_at DESC
+LIMIT 25`)
 			if err == nil {
 				defer rp.Close()
 				for rp.Next() {
 					var id, st, rm, mv, fv, wp string
 					var req, stt, ct any
 					var late int
-					if rp.Scan(&id, &st, &req, &stt, &ct, &rm, &mv, &fv, &wp, &late) == nil {
-						replays = append(replays, map[string]any{"id": id, "status": st, "requestedAt": req, "startedAt": stt, "completedAt": ct, "replayMode": rm, "modelVersion": mv, "featureSetVersion": fv, "watermarkPolicy": wp, "allowedLatenessMs": late})
+					var raw any
+					if rp.Scan(&id, &st, &req, &stt, &ct, &rm, &mv, &fv, &wp, &late, &raw) == nil {
+						summary := coerceReplaySummary(raw)
+						replays = append(replays, map[string]any{
+							"id":                id,
+							"status":            st,
+							"requestedAt":       req,
+							"startedAt":         stt,
+							"completedAt":       ct,
+							"replayMode":        rm,
+							"modelVersion":      mv,
+							"featureSetVersion": fv,
+							"watermarkPolicy":   wp,
+							"allowedLatenessMs": late,
+							"parityStatus":      replaySummaryValue(summary, "parity_status", "UNKNOWN"),
+							"matchedCount":      replaySummaryValue(summary, "matched_count", 0),
+							"mismatchedCount":   replaySummaryValue(summary, "mismatched_count", 0),
+							"maxScoreDelta":     replaySummaryValue(summary, "max_score_delta", 0),
+						})
 					}
 				}
 			}
@@ -455,24 +477,71 @@ func main() {
 			id := chi.URLParam(r, "job")
 			var status, replayMode, mv, fv, wp string
 			var late int
-			var s, e, started, completed any
-			if err := pool.QueryRow(r.Context(), `SELECT status,replay_mode,time_window_start,time_window_end,started_at,completed_at,model_version,feature_set_version,watermark_policy_id,allowed_lateness_ms FROM replay_jobs WHERE id=$1`, id).Scan(&status, &replayMode, &s, &e, &started, &completed, &mv, &fv, &wp, &late); err != nil {
+			var s, e, requested, started, completed any
+			if err := pool.QueryRow(r.Context(), `SELECT status,replay_mode,time_window_start,time_window_end,requested_at,started_at,completed_at,model_version,feature_set_version,watermark_policy_id,allowed_lateness_ms FROM replay_jobs WHERE id=$1`, id).Scan(&status, &replayMode, &s, &e, &requested, &started, &completed, &mv, &fv, &wp, &late); err != nil {
 				http.Error(w, "not found", 404)
 				return
 			}
 			var result any = map[string]any{}
 			_ = pool.QueryRow(r.Context(), `SELECT diff_summary FROM replay_runs WHERE id=$1`, id).Scan(&result)
+			summary := coerceReplaySummary(result)
 			selectedMode := normalizeReplayViewMode(r.URL.Query().Get("mode"))
 			partial := status != "completed"
-			resp := map[string]any{"id": id, "status": status, "replayMode": replayMode, "selectedMode": selectedMode, "timeWindowStart": s, "timeWindowEnd": e, "startedAt": started, "completedAt": completed, "modelVersion": mv, "featureSetVersion": fv, "watermarkPolicy": wp, "allowedLatenessMs": late, "result": result, "partial": partial, "limitations": []string{"deterministic replay scoring uses return-based approximation"}}
-			if m, ok := result.(map[string]any); ok {
-				if selectedMode == "as_scored" {
-					resp["selectedStats"] = m["as_scored"]
-				} else {
-					resp["selectedStats"] = m["recomputed"]
-				}
+			resp := map[string]any{"id": id, "status": status, "replayMode": replayMode, "selectedMode": selectedMode, "timeWindowStart": s, "timeWindowEnd": e, "requestedAt": requested, "startedAt": started, "completedAt": completed, "modelVersion": mv, "featureSetVersion": fv, "watermarkPolicy": wp, "allowedLatenessMs": late, "result": summary, "partial": partial, "limitations": []string{"replay recomputes scores from raw ticks and compares them to stored scores for the same window"}}
+			if selectedMode == "as_scored" {
+				resp["selectedStats"] = summary["as_scored"]
+			} else {
+				resp["selectedStats"] = summary["recomputed"]
 			}
 			httpx.JSON(w, 200, resp)
+		})
+		pr.Get("/replay/{job}/summary", func(w http.ResponseWriter, r *http.Request) {
+			id := chi.URLParam(r, "job")
+			var status string
+			if err := pool.QueryRow(r.Context(), `SELECT status FROM replay_jobs WHERE id=$1`, id).Scan(&status); err != nil {
+				http.Error(w, "not found", 404)
+				return
+			}
+			var raw any
+			_ = pool.QueryRow(r.Context(), `SELECT diff_summary FROM replay_runs WHERE id=$1`, id).Scan(&raw)
+			httpx.JSON(w, 200, map[string]any{
+				"id":      id,
+				"status":  status,
+				"summary": coerceReplaySummary(raw),
+			})
+		})
+		pr.Get("/replay/{job}/brief", func(w http.ResponseWriter, r *http.Request) {
+			id := chi.URLParam(r, "job")
+			var status, replayMode, mv, fv, wp string
+			var late int
+			var s, e, requested, started, completed any
+			if err := pool.QueryRow(r.Context(), `SELECT status,replay_mode,time_window_start,time_window_end,requested_at,started_at,completed_at,model_version,feature_set_version,watermark_policy_id,allowed_lateness_ms FROM replay_jobs WHERE id=$1`, id).Scan(&status, &replayMode, &s, &e, &requested, &started, &completed, &mv, &fv, &wp, &late); err != nil {
+				http.Error(w, "not found", 404)
+				return
+			}
+			var raw any
+			_ = pool.QueryRow(r.Context(), `SELECT diff_summary FROM replay_runs WHERE id=$1`, id).Scan(&raw)
+			job := map[string]any{
+				"id":                id,
+				"status":            status,
+				"replayMode":        replayMode,
+				"timeWindowStart":   s,
+				"timeWindowEnd":     e,
+				"requestedAt":       requested,
+				"startedAt":         started,
+				"completedAt":       completed,
+				"modelVersion":      mv,
+				"featureSetVersion": fv,
+				"watermarkPolicy":   wp,
+				"allowedLatenessMs": late,
+			}
+			payload := replayBriefPayload(job, coerceReplaySummary(raw))
+			if strings.EqualFold(r.URL.Query().Get("format"), "md") {
+				w.Header().Set("Content-Type", "text/markdown; charset=utf-8")
+				_, _ = fmt.Fprintf(w, "# Replay %s brief\n\n- Window: %v -> %v\n- Model version: %v\n- Feature set version: %v\n- Replay mode: %v\n- Parity: %v\n- Determinism: %v\n- Matched / mismatched: %v / %v\n- Max score delta: %v\n- Pinned evidence: %v\n- Requested: %v\n- Started: %v\n- Completed: %v\n- Exported: %v\n", id, s, e, mv, fv, replayMode, payload["parityStatus"], payload["determinismStatus"], payload["matchedCount"], payload["mismatchedCount"], payload["maxScoreDelta"], payload["pinnedEvidence"], requested, started, completed, payload["timestamps"].(map[string]any)["exportedAt"])
+				return
+			}
+			httpx.JSON(w, 200, payload)
 		})
 		pr.Get("/incident/{id}", func(w http.ResponseWriter, r *http.Request) {
 			id := chi.URLParam(r, "id")
@@ -627,7 +696,7 @@ func main() {
 		}, "trust_patch"))
 	})
 
-	srv := &http.Server{Addr: cfg.HTTPAddr, Handler: r, ReadTimeout: 15 * time.Second, WriteTimeout: 15 * time.Second, IdleTimeout: 60 * time.Second}
+	srv := &http.Server{Addr: cfg.HTTPAddr, Handler: r, ReadTimeout: 15 * time.Second, WriteTimeout: 0, IdleTimeout: 60 * time.Second}
 	go func() {
 		if err := srv.ListenAndServe(); err != nil && err != http.ErrServerClosed {
 			log.Fatalf("query server: %v", err)
@@ -651,7 +720,9 @@ func sseStream(payload func(context.Context) any, event string) http.HandlerFunc
 			http.Error(w, "unsupported", 500)
 			return
 		}
-		tk := time.NewTicker(15 * time.Second)
+		_, _ = w.Write([]byte(": connected\n\n"))
+		flusher.Flush()
+		tk := time.NewTicker(5 * time.Second)
 		defer tk.Stop()
 		for {
 			select {

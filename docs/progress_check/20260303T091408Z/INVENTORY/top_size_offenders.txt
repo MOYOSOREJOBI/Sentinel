@@ -1,0 +1,81 @@
+$ du -ah . | sort -rh | head -n 80
+ 58M	.
+ 19M	./alerts
+ 18M	./.git/objects/pack/pack-93affdfd69a69c32c3e5007bec3bd56aaf358250.pack
+ 18M	./.git/objects/pack
+ 18M	./.git/objects
+ 18M	./.git
+ 15M	./query
+4.3M	./docs
+1.8M	./docs/Asset-Manager
+1.2M	./docs/progress_check/20260301T165141Z
+1.2M	./docs/progress_check
+992K	./docs/Asset-Manager/.local/state/replit
+992K	./docs/Asset-Manager/.local/state
+992K	./docs/Asset-Manager/.local
+980K	./docs/progress_check/20260301T165141Z/EVIDENCE
+632K	./docs/review
+600K	./docs/ml
+596K	./web
+592K	./docs/Asset-Manager/.local/state/replit/log-query.db-wal
+568K	./docs/progress_check/20260301T165141Z/EVIDENCE/curl
+512K	./docs/ml/20260301T061423Z
+460K	./docs/Asset-Manager/client
+404K	./docs/Asset-Manager/client/src
+364K	./docs/Asset-Manager/.local/state/replit/agent
+360K	./docs/review/20260301T041338Z
+332K	./docs/Asset-Manager/client/src/components
+324K	./internal
+312K	./docs/Asset-Manager/client/src/components/ui
+284K	./docs/Asset-Manager/package-lock.json
+272K	./docs/review/20260301T054050Z
+204K	./docs/ml/20260301T061423Z/scores_api_after_clean_boot.txt
+204K	./docs/ml/20260301T061423Z/scores_api.txt
+180K	./docs/progress_check/20260301T165141Z/INVENTORY
+168K	./cmd
+156K	./web/app
+152K	./docs/progress_check/20260301T165141Z/EVIDENCE/curl/grafana_metrics.txt
+136K	./docs/progress_check/20260301T165141Z/EVIDENCE/sql
+128K	./services/inference
+128K	./services
+124K	./scripts
+112K	./docs/review/20260301T054050Z/ui_refs.txt
+112K	./docs/review/20260301T041338Z/ui_refs.txt
+112K	./docs/progress_check/20260301T165141Z/INVENTORY/ui_refs.txt
+ 96K	./web/package-lock.json
+ 96K	./docs/progress_check/20260301T165141Z/EVIDENCE/playwright
+ 92K	./docs/progress_check/20260301T165141Z/EVIDENCE/playwright/results.txt
+ 92K	./docs/Asset-Manager/.local/state/replit/agent/.agent_state_main.bin
+ 92K	./docs/Asset-Manager/.local/state/replit/agent/.agent_state_b3f01fb3d6487ced4e0ae052b00f818e63e7fb98.bin
+ 88K	./docs/Asset-Manager/.local/state/replit/agent/.agent_state_670b3e003850ca99b2fe5f5afb3ed71fdb182635.bin
+ 84K	./docs/Asset-Manager/.local/state/replit/agent/.agent_state_849c09c306c66471ab867d9579a2ff630b2cf539.bin
+ 80K	./web/lib
+ 80K	./web/components
+ 80K	./docs/progress_check/20260301T165141Z/EVIDENCE/curl/prometheus_metrics.txt
+ 80K	./.git/index
+ 68K	./web/messages
+ 64K	./web/tests
+ 64K	./docs/review/20260301T041338Z/runtime_routes
+ 64K	./docs/progress_check/20260301T165141Z/EVIDENCE/tests
+ 64K	./.git/hooks
+ 60K	./internal/query
+ 52K	./internal/marketmath
+ 52K	./docs/ui_perf/20260301T124932Z
+ 52K	./docs/ui_perf
+ 52K	./docs/Asset-Manager/client/public
+ 48K	./sql/migrations
+ 48K	./sql
+ 48K	./integration
+ 48K	./docs/progress_check/20260301T165141Z/EVIDENCE/docker
+ 48K	./docs/ml/20260301T052809Z
+ 48K	./docs/Asset-Manager/client/public/opengraph.jpg
+ 48K	./deploy
+ 44K	./docs/progress_check/20260301T165141Z/EVIDENCE/curl/grafana_root.txt
+ 44K	./cmd/governance
+ 40K	./services/inference/tests
+ 40K	./docs/progress_check/20260301T165141Z/EVIDENCE/sql/features_latest25.txt
+ 40K	./cmd/query
+ 36K	./services/inference/src
+ 36K	./docs/Asset-Manager/client/src/pages
+ 36K	./deploy/docker
+ 36K	./cmd/alerts

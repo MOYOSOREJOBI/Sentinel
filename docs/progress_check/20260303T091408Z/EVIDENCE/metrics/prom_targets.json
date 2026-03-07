@@ -1,0 +1,2 @@
+$ curl -sS --max-time 5 http://localhost:9090/api/v1/targets
+curl: (7) Failed to connect to localhost port 9090 after 0 ms: Could not connect to server

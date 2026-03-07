@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react'
 import AppShell, { useGlobalFilters } from '../../components/AppShell'
 import LoadingState from '../../components/LoadingState'
 import { api } from '../../lib/api'
+import { useI18n, withLocalePath } from '../../lib/i18n'
 
 type PolicyDraft = {
   id?: string
@@ -31,6 +32,7 @@ export default function GovernancePage() {
   const [policy, setPolicy] = useState<PolicyDraft>(emptyPolicy)
   const [actionState, setActionState] = useState('')
   const { filters, apply } = useGlobalFilters()
+  const { locale } = useI18n()
 
   const isAdmin = me?.role === 'admin'
   const canStartReplay = me?.role === 'admin' || me?.role === 'analyst'
@@ -102,6 +104,7 @@ export default function GovernancePage() {
             <div key={`${row.id}-${row.model_version}`} className="kv" style={{ alignItems: 'flex-start' }}>
               <span>{row.model_name} {row.model_version}</span>
               <span className="muted">{row.status} · {row.deployed_at || row.created_at || 'pending'}</span>
+              <span className="muted">artifact {row.artifact_hash || 'unknown'} · features {row.feature_set_version || 'unknown'}</span>
             </div>
           )) : <div className="empty-state">No model deployments recorded yet.</div>}
           <div style={{ marginTop: 12 }}>
@@ -121,8 +124,9 @@ export default function GovernancePage() {
           <p className="muted">Queue, inspect, and compare replay runs.</p>
           {Array.isArray(snapshot.replayJobs) && snapshot.replayJobs.length ? snapshot.replayJobs.slice(0, 10).map((row: any) => (
             <div key={row.id} className="kv" style={{ alignItems: 'flex-start' }}>
-              <span><Link href={`/replay/${row.id}`}>{row.id}</Link></span>
-              <span className="muted">{row.status} · {row.replayMode || 'recompute'}</span>
+              <span><Link href={withLocalePath(`/replay/${row.id}`, locale)}>{row.id}</Link></span>
+              <span className="muted">{row.status} · {row.replayMode || 'recompute'} · parity {row.parityStatus || 'UNKNOWN'}</span>
+              <span className="muted">matched {Number(row.matchedCount || 0)} · mismatched {Number(row.mismatchedCount || 0)} · max delta {Number(row.maxScoreDelta || 0).toFixed(4)}</span>
             </div>
           )) : <div className="empty-state">No replay jobs yet.</div>}
           <div style={{ marginTop: 12 }}>

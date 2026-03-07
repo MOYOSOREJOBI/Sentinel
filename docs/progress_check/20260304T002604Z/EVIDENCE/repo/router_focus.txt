@@ -1,0 +1,68 @@
+cmd/gateway-api/main.go:52:	r.Use(middleware.RequireCSRFFunc(func(r *http.Request) (string, bool) {
+cmd/gateway-api/main.go:104:		csrf, err := middleware.NewCSRFToken()
+cmd/gateway-api/main.go:109:		middleware.BindCSRF(in.Email, csrf, 30*time.Minute)
+cmd/gateway-api/main.go:112:		http.SetCookie(w, &http.Cookie{Name: "sentinel_csrf", Value: csrf, HttpOnly: false, Secure: secure, SameSite: http.SameSiteLaxMode, Path: "/", Expires: time.Now().Add(30 * time.Minute)})
+cmd/gateway-api/main.go:117:	r.Post("/auth/logout", func(w http.ResponseWriter, r *http.Request) {
+cmd/gateway-api/main.go:126:		http.SetCookie(w, &http.Cookie{Name: "sentinel_csrf", Value: "", HttpOnly: false, Secure: secure, SameSite: http.SameSiteLaxMode, Path: "/", MaxAge: -1})
+cmd/alerts/main.go:81:	r.Use(middleware.RequireCSRFFunc(authz.SubjectFromRequest(pub)))
+cmd/alerts/main.go:117:		middleware.RateLimit(rateLimitSubjectKey("alerts", pub), 45, time.Minute),
+cmd/alerts/main.go:620:func rateLimitSubjectKey(prefix string, pub *rsa.PublicKey) func(*http.Request) string {
+cmd/governance/write_route_auth_test.go:16:	priv, err := rsa.GenerateKey(rand.Reader, 2048)
+cmd/governance/write_route_auth_test.go:18:		t.Fatalf("generate key: %v", err)
+cmd/gateway-api/login_rate_limit_test.go:27:func TestLoginAllowed_SeparatesDifferentEmails(t *testing.T) {
+cmd/alerts/authz_test.go:16:	priv, err := rsa.GenerateKey(rand.Reader, 2048)
+cmd/governance/main.go:63:	r.Use(middleware.RequireCSRFFunc(authz.SubjectFromRequest(pub)))
+cmd/governance/main.go:79:	admin := r.With(middleware.RateLimit(rateLimitSubjectKey("gov", pub), 10, 1*time.Minute), authz.RequireAnyPerm(pub, "*", "model:deploy"))
+cmd/governance/main.go:80:	workflow := r.With(middleware.RateLimit(rateLimitSubjectKey("workflow", pub), 30, 1*time.Minute), authz.RequireAnyPerm(pub, "replay:write", "*"))
+cmd/governance/main.go:81:	policyAdmin := r.With(middleware.RateLimit(rateLimitSubjectKey("policy", pub), 10, 1*time.Minute), authz.RequireAnyPerm(pub, "*"))
+cmd/governance/main.go:588:	var generatedAt time.Time
+cmd/governance/main.go:592:RETURNING generated_at`,
+cmd/governance/main.go:593:		maxInt(base-2, 0), base, base+3, velocity, dqScore, dispersion, tailRisk, watchlist, whyMoved, actor).Scan(&generatedAt); err != nil {
+cmd/governance/main.go:597:		"generatedAt":        generatedAt,
+cmd/governance/main.go:617:func rateLimitSubjectKey(prefix string, pub *rsa.PublicKey) func(*http.Request) string {
+internal/authz/middleware.go:56:func RequireAuth(pub *rsa.PublicKey) func(http.Handler) http.Handler {
+internal/authz/middleware.go:71:		return RequireAuth(pub)(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+cmd/query/main.go:108:	r.Use(middleware.RequireCSRFFunc(authz.SubjectFromRequest(pub)))
+cmd/query/main.go:597:			var generatedAt any
+cmd/query/main.go:601:			err := pool.QueryRow(r.Context(), `SELECT generated_at,incident_band_low,incident_band_base,incident_band_high,watchlist_risks,why_moved FROM forecast_snapshots ORDER BY generated_at DESC LIMIT 1`).Scan(&generatedAt, &incidentLow, &incidentBase, &incidentHigh, &watchlist, &explain)
+cmd/query/main.go:607:				"generatedAt":        generatedAt,
+internal/authz/middleware_test.go:14:	priv, err := rsa.GenerateKey(rand.Reader, 2048)
+internal/authz/middleware_test.go:29:	priv, err := rsa.GenerateKey(rand.Reader, 2048)
+internal/middleware/ratelimit.go:50:				_ = json.NewEncoder(w).Encode(map[string]any{"error": "rate_limited", "limit": strconv.Itoa(max)})
+internal/middleware/csrf.go:14:type csrfEntry struct {
+internal/middleware/csrf.go:19:var csrfStore sync.Map
+internal/middleware/csrf.go:20:var csrfRedis = rediskv.NewFromEnv()
+internal/middleware/csrf.go:31:	csrfStore.Store(subject, csrfEntry{Token: token, Expiry: time.Now().Add(ttl)})
+internal/middleware/csrf.go:32:	if csrfRedis != nil && csrfRedis.Enabled() {
+internal/middleware/csrf.go:33:		_ = csrfRedis.SetEX(context.Background(), "csrf:"+subject, token, ttl)
+internal/middleware/csrf.go:38:	csrfStore.Delete(subject)
+internal/middleware/csrf.go:39:	if csrfRedis != nil && csrfRedis.Enabled() {
+internal/middleware/csrf.go:40:		_ = csrfRedis.Del(context.Background(), "csrf:"+subject)
+internal/middleware/csrf.go:45:	if csrfRedis != nil && csrfRedis.Enabled() {
+internal/middleware/csrf.go:46:		if v, ok, err := csrfRedis.Get(context.Background(), "csrf:"+subject); err == nil && ok {
+internal/middleware/csrf.go:50:	v, ok := csrfStore.Load(subject)
+internal/middleware/csrf.go:54:	e := v.(csrfEntry)
+internal/middleware/csrf.go:61:func RequireCSRFFunc(subjectFromReq func(*http.Request) (string, bool)) func(http.Handler) http.Handler {
+internal/query/backfill.go:27:CROSS JOIN generate_series(1, $1) AS gs
+internal/query/backfill.go:45:CROSS JOIN generate_series(1, $1) AS gs
+internal/query/backfill.go:57:CROSS JOIN generate_series(1, $1) AS gs
+internal/query/backfill.go:89:CROSS JOIN generate_series(1, $1) AS gs
+internal/query/backfill.go:121:CROSS JOIN generate_series(1, $1) AS gs
+internal/middleware/csrf_test.go:9:		t.Fatal("csrf token not random")
+cmd/governance/rate_limit_test.go:14:	priv, err := rsa.GenerateKey(rand.Reader, 2048)
+cmd/governance/rate_limit_test.go:16:		t.Fatalf("generate key: %v", err)
+cmd/governance/rate_limit_test.go:23:	keyFn := rateLimitSubjectKey("gov", &priv.PublicKey)
+cmd/governance/rate_limit_test.go:35:	priv, err := rsa.GenerateKey(rand.Reader, 2048)
+cmd/governance/rate_limit_test.go:37:		t.Fatalf("generate key: %v", err)
+cmd/governance/rate_limit_test.go:44:	keyFn := rateLimitSubjectKey("workflow", &priv.PublicKey)
+cmd/governance/rate_limit_test.go:61:	priv, err := rsa.GenerateKey(rand.Reader, 2048)
+cmd/governance/rate_limit_test.go:63:		t.Fatalf("generate key: %v", err)
+cmd/governance/rate_limit_test.go:65:	keyFn := rateLimitSubjectKey("gov", &priv.PublicKey)
+internal/middleware/redis_backing_test.go:27:		csrfRedis = rediskv.NewFromEnv()
+internal/middleware/redis_backing_test.go:28:		csrfStore = sync.Map{}
+internal/middleware/redis_backing_test.go:33:	csrfRedis = rediskv.NewFromEnv()
+internal/middleware/redis_backing_test.go:34:	csrfStore = sync.Map{}
+internal/middleware/redis_backing_test.go:38:		t.Fatalf("expected csrf token to validate before expiry")
+internal/middleware/redis_backing_test.go:42:		t.Fatalf("expected csrf token to expire in redis")
+internal/auth/auth_test.go:13:	pubPriv, _ := rsa.GenerateKey(rand.Reader, 2048)
+internal/auth/auth_test.go:22:	key, _ := rsa.GenerateKey(rand.Reader, 2048)

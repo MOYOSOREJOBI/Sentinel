@@ -1,0 +1,107 @@
+//line /Users/mac/Desktop/Sentinel/internal/incidents/incidents.go:1:1
+package incidents
+
+import (
+	"context"
+	"fmt"
+	"strings"
+	"time"
+
+	"github.com/jackc/pgx/v5/pgxpool"
+)
+
+const DefaultClusterWindow = 60 * time.Second
+
+func FindOrCreateOpenIncident(ctx context.Context, pool *pgxpool.Pool, symbol string, score, escalation, confidence float64, featureHash, modelVersion string, at time.Time) (int64, error) {goCover_096d73815500__0[0] = 3 ; goCover_096d73815500__0[1] = goCover_096d73815500_P ; goCover_096d73815500__0[2] = 0 ; goCover_096d73815500__0[3] = 1;
+	var id int64
+	err := pool.QueryRow(ctx, `SELECT id FROM incidents WHERE primary_symbol=$1 AND status IN ('open','ack') AND last_activity_at >= $2 ORDER BY id DESC LIMIT 1`, symbol, at.Add(-DefaultClusterWindow)).Scan(&id)
+	rec := RecommendedActionForIncident(score, confidence, "stable", 0, false)
+	reason := RankReasonForIncident(score, escalation, confidence, "stable", 0, false)
+	if err == nil {goCover_096d73815500__0[5] = 1;
+		_, err = pool.Exec(ctx, `UPDATE incidents SET last_activity_at=$2,updated_at=now(),priority_score=GREATEST(priority_score,$3),composite_risk=GREATEST(composite_risk,$3),escalation_probability=GREATEST(escalation_probability,$4),confidence=LEAST(confidence,$5),top_driver_1=$6,top_driver_2=$7 WHERE id=$1`, id, at, score, escalation, confidence, rec, reason)
+		return id, err
+	}
+	goCover_096d73815500__0[4] = 1;err = pool.QueryRow(ctx, `INSERT INTO incidents (primary_symbol,status,severity_band,priority_score,composite_risk,escalation_probability,confidence,trust_state,feature_snapshot_hash,feature_set_version,model_version,started_at,last_activity_at,created_at,updated_at,top_driver_1,top_driver_2) VALUES ($1,'open','elevated',$2,$2,$3,$4,'stable',$5,'v1',$6,$7,$7,now(),now(),$8,$9) RETURNING id`, symbol, score, escalation, confidence, featureHash, modelVersion, at, rec, reason).Scan(&id)
+	return id, err
+}
+
+func CanPromoteToCase(status string) bool {goCover_096d73815500__1[0] = 1 ; goCover_096d73815500__1[1] = goCover_096d73815500_P ; goCover_096d73815500__1[2] = 1 ; goCover_096d73815500__1[3] = 1;
+	return status == "open" || status == "ack"
+}
+
+func NextIncidentStatus(current, command string) (string, error) {goCover_096d73815500__2[0] = 10 ; goCover_096d73815500__2[1] = goCover_096d73815500_P ; goCover_096d73815500__2[2] = 2 ; goCover_096d73815500__2[3] = 1;
+	switch command {
+	case "ack":goCover_096d73815500__2[5] = 1;
+		if current == "open" {goCover_096d73815500__2[9] = 1;
+			return "ack", nil
+		}
+	case "escalate":goCover_096d73815500__2[6] = 1;
+		if current == "open" || current == "ack" {goCover_096d73815500__2[10] = 1;
+			return "ack", nil
+		}
+	case "resolve", "close":goCover_096d73815500__2[7] = 1;
+		if current == "open" || current == "ack" || current == "suppressed" {goCover_096d73815500__2[11] = 1;
+			return "resolved", nil
+		}
+	case "suppress":goCover_096d73815500__2[8] = 1;
+		if current == "open" || current == "ack" {goCover_096d73815500__2[12] = 1;
+			return "suppressed", nil
+		}
+	}
+	goCover_096d73815500__2[4] = 1;return "", fmt.Errorf("invalid transition %s -> %s", current, command)
+}
+
+func RecommendedActionForIncident(compositeRisk, confidence float64, trustState string, recurrence float64, suppressed bool) string {goCover_096d73815500__3[0] = 9 ; goCover_096d73815500__3[1] = goCover_096d73815500_P ; goCover_096d73815500__3[2] = 3 ; goCover_096d73815500__3[3] = 1;
+	if suppressed {goCover_096d73815500__3[8] = 1;
+		return "suppressed_by_policy"
+	}
+	goCover_096d73815500__3[4] = 1;if trustState != "stable" || confidence < 0.45 {goCover_096d73815500__3[9] = 1;
+		return "check_data_quality"
+	}
+	goCover_096d73815500__3[5] = 1;if compositeRisk >= 0.8 && recurrence >= 0.3 {goCover_096d73815500__3[10] = 1;
+		return "promote_to_case"
+	}
+	goCover_096d73815500__3[6] = 1;if compositeRisk >= 0.75 {goCover_096d73815500__3[11] = 1;
+		return "review_now"
+	}
+	goCover_096d73815500__3[7] = 1;return "watch"
+}
+
+func RankReasonForIncident(compositeRisk, escalation, confidence float64, trustState string, recurrence float64, openSLA bool) string {goCover_096d73815500__4[0] = 9 ; goCover_096d73815500__4[1] = goCover_096d73815500_P ; goCover_096d73815500__4[2] = 4 ; goCover_096d73815500__4[3] = 1;
+	if trustState != "stable" {goCover_096d73815500__4[8] = 1;
+		return "Low trust reduced priority"
+	}
+	goCover_096d73815500__4[4] = 1;if recurrence >= 0.6 && openSLA {goCover_096d73815500__4[9] = 1;
+		return "Recurring incident with open SLA"
+	}
+	goCover_096d73815500__4[5] = 1;if compositeRisk >= 0.75 && escalation >= 0.6 {goCover_096d73815500__4[10] = 1;
+		return "High anomaly + elevated escalation"
+	}
+	goCover_096d73815500__4[6] = 1;if confidence < 0.5 {goCover_096d73815500__4[11] = 1;
+		return "Low confidence requires validation"
+	}
+	goCover_096d73815500__4[7] = 1;return "Elevated risk under watch"
+}
+
+func SafetyLevelForIncident(compositeRisk, dqPenalty float64) string {goCover_096d73815500__5[0] = 9 ; goCover_096d73815500__5[1] = goCover_096d73815500_P ; goCover_096d73815500__5[2] = 5 ; goCover_096d73815500__5[3] = 1;
+	if dqPenalty >= 0.4 {goCover_096d73815500__5[8] = 1;
+		return "Data Unreliable"
+	}
+	goCover_096d73815500__5[4] = 1;if compositeRisk >= 0.85 {goCover_096d73815500__5[9] = 1;
+		return "Critical"
+	}
+	goCover_096d73815500__5[5] = 1;if compositeRisk >= 0.7 {goCover_096d73815500__5[10] = 1;
+		return "High Risk"
+	}
+	goCover_096d73815500__5[6] = 1;if compositeRisk >= 0.45 {goCover_096d73815500__5[11] = 1;
+		return "Elevated"
+	}
+	goCover_096d73815500__5[7] = 1;return "Stable"
+}
+
+func TrustLabelForIncident(trustState string, confidence float64) string {goCover_096d73815500__6[0] = 3 ; goCover_096d73815500__6[1] = goCover_096d73815500_P ; goCover_096d73815500__6[2] = 6 ; goCover_096d73815500__6[3] = 1;
+	if strings.ToLower(trustState) != "stable" || confidence < 0.5 {goCover_096d73815500__6[5] = 1;
+		return "degraded"
+	}
+	goCover_096d73815500__6[4] = 1;return "stable"
+}

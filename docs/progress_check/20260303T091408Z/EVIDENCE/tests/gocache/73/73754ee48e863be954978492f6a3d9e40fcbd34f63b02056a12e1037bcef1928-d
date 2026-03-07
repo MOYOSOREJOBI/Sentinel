@@ -1,0 +1,32 @@
+//line /Users/mac/Desktop/Sentinel/internal/cache/keys.go:1:1
+package cache
+
+import "fmt"
+
+func ReadModelPrefixes() []string {goCover_6b3c91dd9e60__1[0] = 1 ; goCover_6b3c91dd9e60__1[1] = goCover_6b3c91dd9e60_P ; goCover_6b3c91dd9e60__1[2] = 1 ; goCover_6b3c91dd9e60__1[3] = 1;
+	return []string{
+		"queue:v3:", "cc:v3:", "trust:v3:", "worldmap:v3:", "exec:v3:",
+		"queue:v2:", "cc:v2:", "trust:v2:", "worldmap:v2:", "exec:v2:",
+		"queue:v1:", "cc:v1:", "trust:v1:", "worldmap:v1:", "exec:v1:",
+	}
+}
+
+func QueueKey(role, region, country, sector, industry, venue, symbol, locale, window string) string {goCover_6b3c91dd9e60__2[0] = 1 ; goCover_6b3c91dd9e60__2[1] = goCover_6b3c91dd9e60_P ; goCover_6b3c91dd9e60__2[2] = 2 ; goCover_6b3c91dd9e60__2[3] = 1;
+	return fmt.Sprintf("queue:v3:%s:%s:%s:%s:%s:%s:%s:%s:%s", role, region, country, sector, industry, venue, symbol, locale, window)
+}
+
+func CommandCenterKey(role, region, country, sector, industry, venue, symbol, locale, window string) string {goCover_6b3c91dd9e60__3[0] = 1 ; goCover_6b3c91dd9e60__3[1] = goCover_6b3c91dd9e60_P ; goCover_6b3c91dd9e60__3[2] = 3 ; goCover_6b3c91dd9e60__3[3] = 1;
+	return fmt.Sprintf("cc:v3:%s:%s:%s:%s:%s:%s:%s:%s:%s", role, region, country, sector, industry, venue, symbol, locale, window)
+}
+
+func TrustKey(region, country, sector, industry, venue, symbol, locale, window string) string {goCover_6b3c91dd9e60__4[0] = 1 ; goCover_6b3c91dd9e60__4[1] = goCover_6b3c91dd9e60_P ; goCover_6b3c91dd9e60__4[2] = 4 ; goCover_6b3c91dd9e60__4[3] = 1;
+	return fmt.Sprintf("trust:v3:%s:%s:%s:%s:%s:%s:%s:%s", region, country, sector, industry, venue, symbol, locale, window)
+}
+
+func WorldMapKey(region, country, sector, industry, venue, symbol, locale, window string) string {goCover_6b3c91dd9e60__5[0] = 1 ; goCover_6b3c91dd9e60__5[1] = goCover_6b3c91dd9e60_P ; goCover_6b3c91dd9e60__5[2] = 5 ; goCover_6b3c91dd9e60__5[3] = 1;
+	return fmt.Sprintf("worldmap:v3:%s:%s:%s:%s:%s:%s:%s:%s", region, country, sector, industry, venue, symbol, locale, window)
+}
+
+func ExecutiveKey(region, country, sector, industry, venue, symbol, locale, window string) string {goCover_6b3c91dd9e60__6[0] = 1 ; goCover_6b3c91dd9e60__6[1] = goCover_6b3c91dd9e60_P ; goCover_6b3c91dd9e60__6[2] = 6 ; goCover_6b3c91dd9e60__6[3] = 1;
+	return fmt.Sprintf("exec:v3:%s:%s:%s:%s:%s:%s:%s:%s", region, country, sector, industry, venue, symbol, locale, window)
+}

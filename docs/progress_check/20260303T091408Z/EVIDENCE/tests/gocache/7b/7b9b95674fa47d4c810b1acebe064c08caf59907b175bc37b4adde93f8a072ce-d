@@ -1,0 +1,4 @@
+covervars.go
+config.cover.go
+validate.cover.go
+./validate_test.go

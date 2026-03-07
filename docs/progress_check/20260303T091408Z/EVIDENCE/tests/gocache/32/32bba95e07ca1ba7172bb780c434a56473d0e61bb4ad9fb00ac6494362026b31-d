@@ -1,0 +1,251 @@
+//line /Users/mac/Desktop/Sentinel/cmd/gateway-api/main.go:1:1
+package main; import _ "runtime/coverage"
+
+import (
+	"context"
+	"crypto/rsa"
+	"encoding/json"
+	"log"
+	"net/http"
+	"os"
+	"os/signal"
+	"strconv"
+	"strings"
+	"sync"
+
+	"sentinel/internal/rediskv"
+	"syscall"
+	"time"
+
+	"github.com/go-chi/chi/v5"
+	"golang.org/x/crypto/bcrypt"
+	"sentinel/internal/audit"
+	"sentinel/internal/auth"
+	"sentinel/internal/config"
+	"sentinel/internal/db"
+	"sentinel/internal/healthcheck"
+	"sentinel/internal/httpx"
+	"sentinel/internal/metrics"
+	"sentinel/internal/middleware"
+)
+
+func main() {goCover_cfd293e11bc1__0[0] = 40 ; goCover_cfd293e11bc1__0[1] = goCover_cfd293e11bc1_P ; goCover_cfd293e11bc1__0[2] = 0 ; goCover_cfd293e11bc1__0[3] = 1;
+	if len(os.Args) > 1 && os.Args[1] == "healthcheck" {goCover_cfd293e11bc1__0[14] = 1;
+		port := healthcheck.MustPort("PORT", 8080)
+		os.Exit(healthcheck.Run(port, "/readyz"))
+	}
+
+	goCover_cfd293e11bc1__0[4] = 1;ctx, cancel := context.WithCancel(context.Background())
+	defer cancel()
+	cfg := config.Load("gateway-api")
+	pool, err := db.Connect(ctx, cfg.PostgresURL)
+	if err != nil {goCover_cfd293e11bc1__0[15] = 1;
+		log.Fatal(err)
+	}
+	goCover_cfd293e11bc1__0[5] = 1;defer pool.Close()
+	priv, _ := auth.ReadPrivate(cfg.JWTPrivateKey)
+	pub, _ := auth.ReadPublic(cfg.JWTPublicKey)
+
+	r := chi.NewRouter()
+	r.Use(middleware.RequestID)
+	r.Use(middleware.CORS)
+	r.Use(metrics.HTTPMiddleware("gateway_api"))
+	r.Use(middleware.RequireCSRFFunc(func(r *http.Request) (string, bool) {goCover_cfd293e11bc1__0[16] = 1;
+		claims, ok := authn(r, pub)
+		if !ok {goCover_cfd293e11bc1__0[18] = 1;
+			return "", false
+		}
+		goCover_cfd293e11bc1__0[17] = 1;return claims.Subject, true
+	}))
+	goCover_cfd293e11bc1__0[6] = 1;r.Get("/healthz", func(w http.ResponseWriter, r *http.Request) {goCover_cfd293e11bc1__0[19] = 1; _, _ = w.Write([]byte("ok")) })
+	goCover_cfd293e11bc1__0[7] = 1;r.Get("/", func(w http.ResponseWriter, r *http.Request) {goCover_cfd293e11bc1__0[20] = 1;
+		httpx.JSON(w, http.StatusOK, map[string]any{
+			"service": "gateway-api",
+			"version": "dev",
+			"links": map[string]string{
+				"healthz": "/healthz",
+				"readyz":  "/readyz",
+				"metrics": "/metrics",
+				"docs":    "/docs",
+			},
+		})
+	})
+	goCover_cfd293e11bc1__0[8] = 1;r.Get("/readyz", func(w http.ResponseWriter, r *http.Request) {goCover_cfd293e11bc1__0[21] = 1;
+		if pool.Ping(r.Context()) != nil {goCover_cfd293e11bc1__0[23] = 1;
+			http.Error(w, "not ready", 503)
+			return
+		}
+		goCover_cfd293e11bc1__0[22] = 1;_, _ = w.Write([]byte("ok"))
+	})
+	goCover_cfd293e11bc1__0[9] = 1;r.Get("/metrics", metrics.Handler)
+
+	r.Post("/auth/login", func(w http.ResponseWriter, r *http.Request) {goCover_cfd293e11bc1__0[24] = 1;
+		var in struct{ Email, Password string }
+		if err := json.NewDecoder(http.MaxBytesReader(w, r.Body, 1<<20)).Decode(&in); err != nil {goCover_cfd293e11bc1__0[30] = 1;
+			http.Error(w, "bad request", 400)
+			return
+		}
+		goCover_cfd293e11bc1__0[25] = 1;if loginAttemptsExceeded(clientIP(r), in.Email) {goCover_cfd293e11bc1__0[31] = 1;
+			http.Error(w, "too many attempts", http.StatusTooManyRequests)
+			return
+		}
+		goCover_cfd293e11bc1__0[26] = 1;var hash, role string
+		err := pool.QueryRow(r.Context(), `SELECT password_hash,role FROM users WHERE email=$1`, in.Email).Scan(&hash, &role)
+		if err != nil || bcrypt.CompareHashAndPassword([]byte(hash), []byte(in.Password)) != nil {goCover_cfd293e11bc1__0[32] = 1;
+			recordFailedLogin(clientIP(r), in.Email)
+			http.Error(w, "unauthorized", 401)
+			return
+		}
+		goCover_cfd293e11bc1__0[27] = 1;clearLoginAttempts(clientIP(r), in.Email)
+		tok, err := auth.Sign(in.Email, role, priv)
+		if err != nil {goCover_cfd293e11bc1__0[33] = 1;
+			http.Error(w, "internal", 500)
+			return
+		}
+		goCover_cfd293e11bc1__0[28] = 1;csrf, err := middleware.NewCSRFToken()
+		if err != nil {goCover_cfd293e11bc1__0[34] = 1;
+			http.Error(w, "internal", 500)
+			return
+		}
+		goCover_cfd293e11bc1__0[29] = 1;middleware.BindCSRF(in.Email, csrf, 30*time.Minute)
+		secure := cookieSecure(r)
+		http.SetCookie(w, &http.Cookie{Name: "sentinel_token", Value: tok, HttpOnly: true, Secure: secure, SameSite: http.SameSiteLaxMode, Path: "/", Expires: time.Now().Add(24 * time.Hour)})
+		http.SetCookie(w, &http.Cookie{Name: "sentinel_csrf", Value: csrf, HttpOnly: false, Secure: secure, SameSite: http.SameSiteLaxMode, Path: "/", Expires: time.Now().Add(30 * time.Minute)})
+		_ = audit.Append(r.Context(), pool, in.Email, "login", "success")
+		httpx.JSON(w, 200, map[string]any{"role": role})
+	})
+
+	goCover_cfd293e11bc1__0[10] = 1;r.Post("/auth/logout", func(w http.ResponseWriter, r *http.Request) {goCover_cfd293e11bc1__0[35] = 1;
+		claims, ok := authn(r, pub)
+		if ok {goCover_cfd293e11bc1__0[37] = 1;
+			middleware.ClearCSRF(claims.Subject)
+		}
+		goCover_cfd293e11bc1__0[36] = 1;secure := cookieSecure(r)
+		http.SetCookie(w, &http.Cookie{Name: "sentinel_token", Value: "", HttpOnly: true, Secure: secure, SameSite: http.SameSiteLaxMode, Path: "/", MaxAge: -1})
+		http.SetCookie(w, &http.Cookie{Name: "sentinel_csrf", Value: "", HttpOnly: false, Secure: secure, SameSite: http.SameSiteLaxMode, Path: "/", MaxAge: -1})
+		w.WriteHeader(http.StatusNoContent)
+	})
+
+	goCover_cfd293e11bc1__0[11] = 1;r.Get("/me", func(w http.ResponseWriter, r *http.Request) {goCover_cfd293e11bc1__0[38] = 1;
+		claims, ok := authn(r, pub)
+		if !ok {goCover_cfd293e11bc1__0[40] = 1;
+			http.Error(w, "unauthorized", 401)
+			return
+		}
+		goCover_cfd293e11bc1__0[39] = 1;httpx.JSON(w, 200, map[string]any{"user": claims.Subject, "role": claims.Role})
+	})
+
+	goCover_cfd293e11bc1__0[12] = 1;srv := &http.Server{Addr: cfg.HTTPAddr, Handler: r}
+	go func() {goCover_cfd293e11bc1__0[41] = 1;
+		if err := srv.ListenAndServe(); err != nil && err != http.ErrServerClosed {goCover_cfd293e11bc1__0[42] = 1;
+			log.Fatal(err)
+		}
+	}()
+	goCover_cfd293e11bc1__0[13] = 1;quit := make(chan os.Signal, 1)
+	signal.Notify(quit, syscall.SIGINT, syscall.SIGTERM)
+	<-quit
+	_ = srv.Shutdown(context.Background())
+}
+
+func clientIP(r *http.Request) string {goCover_cfd293e11bc1__1[0] = 3 ; goCover_cfd293e11bc1__1[1] = goCover_cfd293e11bc1_P ; goCover_cfd293e11bc1__1[2] = 1 ; goCover_cfd293e11bc1__1[3] = 1;
+	if xff := strings.TrimSpace(r.Header.Get("X-Forwarded-For")); xff != "" {goCover_cfd293e11bc1__1[5] = 1;
+		return strings.Split(xff, ",")[0]
+	}
+	goCover_cfd293e11bc1__1[4] = 1;return r.RemoteAddr
+}
+
+func authn(r *http.Request, pub *rsa.PublicKey) (*auth.Claims, bool) {goCover_cfd293e11bc1__2[0] = 5 ; goCover_cfd293e11bc1__2[1] = goCover_cfd293e11bc1_P ; goCover_cfd293e11bc1__2[2] = 2 ; goCover_cfd293e11bc1__2[3] = 1;
+	c, err := r.Cookie("sentinel_token")
+	if err != nil {goCover_cfd293e11bc1__2[6] = 1;
+		return nil, false
+	}
+	goCover_cfd293e11bc1__2[4] = 1;claims, err := auth.Parse(c.Value, pub)
+	if err != nil {goCover_cfd293e11bc1__2[7] = 1;
+		return nil, false
+	}
+	goCover_cfd293e11bc1__2[5] = 1;return claims, true
+}
+
+type loginLimitEntry struct {
+	Count int
+	Reset time.Time
+}
+
+var loginAttempts sync.Map
+var loginRedis = rediskv.NewFromEnv()
+
+func loginKey(ip, email string) string {goCover_cfd293e11bc1__3[0] = 1 ; goCover_cfd293e11bc1__3[1] = goCover_cfd293e11bc1_P ; goCover_cfd293e11bc1__3[2] = 3 ; goCover_cfd293e11bc1__3[3] = 1;
+	return "login:" + strings.ToLower(strings.TrimSpace(email)) + ":" + ip
+}
+
+func loginAttemptsExceeded(ip, email string) bool {goCover_cfd293e11bc1__4[0] = 9 ; goCover_cfd293e11bc1__4[1] = goCover_cfd293e11bc1_P ; goCover_cfd293e11bc1__4[2] = 4 ; goCover_cfd293e11bc1__4[3] = 1;
+	key := loginKey(ip, email)
+	if loginRedis != nil && loginRedis.Enabled() {goCover_cfd293e11bc1__4[7] = 1;
+		raw, ok, err := loginRedis.Get(context.Background(), key)
+		if err == nil && ok {goCover_cfd293e11bc1__4[8] = 1;
+			n, convErr := strconv.Atoi(strings.TrimSpace(raw))
+			if convErr == nil {goCover_cfd293e11bc1__4[9] = 1;
+				return n >= 5
+			}
+		}
+	}
+	goCover_cfd293e11bc1__4[4] = 1;now := time.Now()
+	v, ok := loginAttempts.Load(key)
+	if !ok {goCover_cfd293e11bc1__4[10] = 1;
+		return false
+	}
+	goCover_cfd293e11bc1__4[5] = 1;e := v.(loginLimitEntry)
+	if now.After(e.Reset) {goCover_cfd293e11bc1__4[11] = 1;
+		loginAttempts.Delete(key)
+		return false
+	}
+	goCover_cfd293e11bc1__4[6] = 1;return e.Count >= 5
+}
+
+func recordFailedLogin(ip, email string) {goCover_cfd293e11bc1__5[0] = 8 ; goCover_cfd293e11bc1__5[1] = goCover_cfd293e11bc1_P ; goCover_cfd293e11bc1__5[2] = 5 ; goCover_cfd293e11bc1__5[3] = 1;
+	key := "login:" + strings.ToLower(strings.TrimSpace(email)) + ":" + ip
+	window := 5 * time.Minute
+	if loginRedis != nil && loginRedis.Enabled() {goCover_cfd293e11bc1__5[6] = 1;
+		n, err := loginRedis.Incr(context.Background(), key)
+		if err == nil {goCover_cfd293e11bc1__5[7] = 1;
+			if n == 1 {goCover_cfd293e11bc1__5[9] = 1;
+				_ = loginRedis.Expire(context.Background(), key, window)
+			}
+			goCover_cfd293e11bc1__5[8] = 1;return
+		}
+	}
+	goCover_cfd293e11bc1__5[4] = 1;now := time.Now()
+	v, _ := loginAttempts.LoadOrStore(key, loginLimitEntry{Count: 0, Reset: now.Add(window)})
+	e := v.(loginLimitEntry)
+	if now.After(e.Reset) {goCover_cfd293e11bc1__5[10] = 1;
+		e = loginLimitEntry{Count: 0, Reset: now.Add(window)}
+	}
+	goCover_cfd293e11bc1__5[5] = 1;e.Count++
+	loginAttempts.Store(key, e)
+}
+
+func clearLoginAttempts(ip, email string) {goCover_cfd293e11bc1__6[0] = 2 ; goCover_cfd293e11bc1__6[1] = goCover_cfd293e11bc1_P ; goCover_cfd293e11bc1__6[2] = 6 ; goCover_cfd293e11bc1__6[3] = 1;
+	key := loginKey(ip, email)
+	loginAttempts.Delete(key)
+	if loginRedis != nil && loginRedis.Enabled() {goCover_cfd293e11bc1__6[4] = 1;
+		_ = loginRedis.Del(context.Background(), key)
+	}
+}
+
+func cookieSecure(r *http.Request) bool {goCover_cfd293e11bc1__7[0] = 9 ; goCover_cfd293e11bc1__7[1] = goCover_cfd293e11bc1_P ; goCover_cfd293e11bc1__7[2] = 7 ; goCover_cfd293e11bc1__7[3] = 1;
+	if strings.EqualFold(strings.TrimSpace(os.Getenv("APP_ENV")), "local") {goCover_cfd293e11bc1__7[8] = 1;
+		return false
+	}
+	goCover_cfd293e11bc1__7[4] = 1;if strings.EqualFold(strings.TrimSpace(r.Header.Get("X-Forwarded-Proto")), "http") {goCover_cfd293e11bc1__7[9] = 1;
+		return false
+	}
+	goCover_cfd293e11bc1__7[5] = 1;host := strings.TrimSpace(r.Header.Get("X-Forwarded-Host"))
+	if host == "" {goCover_cfd293e11bc1__7[10] = 1;
+		host = strings.TrimSpace(r.Host)
+	}
+	goCover_cfd293e11bc1__7[6] = 1;host = strings.ToLower(host)
+	if strings.HasPrefix(host, "localhost") || strings.HasPrefix(host, "127.0.0.1") {goCover_cfd293e11bc1__7[11] = 1;
+		return false
+	}
+	goCover_cfd293e11bc1__7[7] = 1;return true
+}

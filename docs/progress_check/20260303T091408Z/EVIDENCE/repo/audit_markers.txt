@@ -1,0 +1,5 @@
+$ find docs/audit -maxdepth 3 -type f | sort
+docs/audit/README.md
+
+$ find docs/audit/_latest/proofs -maxdepth 1 -type f | sort
+find: docs/audit/_latest/proofs: No such file or directory

@@ -1,0 +1,2 @@
+$ rg -n "TODO|FIXME|HACK" .
+./docs/Asset-Manager/attached_assets/Pasted--You-are-building-the-frontend-only-for-an-existing-pro_1772125707272.txt:253:* `TODO_TRANSLATE`

@@ -1,0 +1,87 @@
+//line /Users/mac/Desktop/Sentinel/internal/authz/middleware.go:1:1
+package authz
+
+import (
+	"context"
+	"crypto/rsa"
+	"errors"
+	"net/http"
+	"strings"
+
+	"sentinel/internal/auth"
+	"sentinel/internal/rbac"
+)
+
+type claimsContextKey struct{}
+
+func Authenticate(r *http.Request, pub *rsa.PublicKey) (*auth.Claims, error) {goCover_d4edc86edeaf__0[0] = 8 ; goCover_d4edc86edeaf__0[1] = goCover_d4edc86edeaf_P ; goCover_d4edc86edeaf__0[2] = 0 ; goCover_d4edc86edeaf__0[3] = 1;
+	if pub == nil {goCover_d4edc86edeaf__0[7] = 1;
+		return nil, errors.New("missing public key")
+	}
+	goCover_d4edc86edeaf__0[4] = 1;if authz := strings.TrimSpace(r.Header.Get("Authorization")); strings.HasPrefix(strings.ToLower(authz), "bearer ") {goCover_d4edc86edeaf__0[8] = 1;
+		token := strings.TrimSpace(authz[7:])
+		if token != "" {goCover_d4edc86edeaf__0[9] = 1;
+			return auth.Parse(token, pub)
+		}
+	}
+	goCover_d4edc86edeaf__0[5] = 1;c, err := r.Cookie("sentinel_token")
+	if err != nil {goCover_d4edc86edeaf__0[10] = 1;
+		return nil, err
+	}
+	goCover_d4edc86edeaf__0[6] = 1;return auth.Parse(c.Value, pub)
+}
+
+func SubjectFromRequest(pub *rsa.PublicKey) func(*http.Request) (string, bool) {goCover_d4edc86edeaf__1[0] = 4 ; goCover_d4edc86edeaf__1[1] = goCover_d4edc86edeaf_P ; goCover_d4edc86edeaf__1[2] = 1 ; goCover_d4edc86edeaf__1[3] = 1;
+	return func(r *http.Request) (string, bool) {goCover_d4edc86edeaf__1[4] = 1;
+		claims, err := Authenticate(r, pub)
+		if err != nil {goCover_d4edc86edeaf__1[6] = 1;
+			return "", false
+		}
+		goCover_d4edc86edeaf__1[5] = 1;return claims.Subject, true
+	}
+}
+
+func WithClaims(ctx context.Context, claims *auth.Claims) context.Context {goCover_d4edc86edeaf__2[0] = 1 ; goCover_d4edc86edeaf__2[1] = goCover_d4edc86edeaf_P ; goCover_d4edc86edeaf__2[2] = 2 ; goCover_d4edc86edeaf__2[3] = 1;
+	return context.WithValue(ctx, claimsContextKey{}, claims)
+}
+
+func Claims(r *http.Request) (*auth.Claims, bool) {goCover_d4edc86edeaf__3[0] = 3 ; goCover_d4edc86edeaf__3[1] = goCover_d4edc86edeaf_P ; goCover_d4edc86edeaf__3[2] = 3 ; goCover_d4edc86edeaf__3[3] = 1;
+	v := r.Context().Value(claimsContextKey{})
+	if v == nil {goCover_d4edc86edeaf__3[5] = 1;
+		return nil, false
+	}
+	goCover_d4edc86edeaf__3[4] = 1;claims, ok := v.(*auth.Claims)
+	return claims, ok && claims != nil
+}
+
+func RequireAuth(pub *rsa.PublicKey) func(http.Handler) http.Handler {goCover_d4edc86edeaf__4[0] = 5 ; goCover_d4edc86edeaf__4[1] = goCover_d4edc86edeaf_P ; goCover_d4edc86edeaf__4[2] = 4 ; goCover_d4edc86edeaf__4[3] = 1;
+	return func(next http.Handler) http.Handler {goCover_d4edc86edeaf__4[4] = 1;
+		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {goCover_d4edc86edeaf__4[5] = 1;
+			claims, err := Authenticate(r, pub)
+			if err != nil {goCover_d4edc86edeaf__4[7] = 1;
+				http.Error(w, "unauthorized", http.StatusUnauthorized)
+				return
+			}
+			goCover_d4edc86edeaf__4[6] = 1;next.ServeHTTP(w, r.WithContext(WithClaims(r.Context(), claims)))
+		})
+	}
+}
+
+func RequireAnyPerm(pub *rsa.PublicKey, perms ...string) func(http.Handler) http.Handler {goCover_d4edc86edeaf__5[0] = 6 ; goCover_d4edc86edeaf__5[1] = goCover_d4edc86edeaf_P ; goCover_d4edc86edeaf__5[2] = 5 ; goCover_d4edc86edeaf__5[3] = 1;
+	return func(next http.Handler) http.Handler {goCover_d4edc86edeaf__5[4] = 1;
+		return RequireAuth(pub)(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {goCover_d4edc86edeaf__5[5] = 1;
+			claims, _ := Claims(r)
+			for _, perm := range perms {goCover_d4edc86edeaf__5[7] = 1;
+				if rbac.Allowed(claims.Role, perm) {goCover_d4edc86edeaf__5[8] = 1;
+					next.ServeHTTP(w, r)
+					return
+				}
+			}
+			goCover_d4edc86edeaf__5[6] = 1;http.Error(w, "forbidden", http.StatusForbidden)
+		}))
+	}
+}
+
+func RequirePerm(pub *rsa.PublicKey, perm string) func(http.Handler) http.Handler {goCover_d4edc86edeaf__6[0] = 1 ; goCover_d4edc86edeaf__6[1] = goCover_d4edc86edeaf_P ; goCover_d4edc86edeaf__6[2] = 6 ; goCover_d4edc86edeaf__6[3] = 1;
+	return RequireAnyPerm(pub, perm)
+}

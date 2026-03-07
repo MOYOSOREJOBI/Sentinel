@@ -1,0 +1,52 @@
+//line /Users/mac/Desktop/Sentinel/internal/middleware/cors.go:1:1
+package middleware
+
+import (
+	"net/http"
+	"os"
+	"strings"
+)
+
+func CORS(next http.Handler) http.Handler {goCover_9096a20e3d2e__0[0] = 8 ; goCover_9096a20e3d2e__0[1] = goCover_9096a20e3d2e_P ; goCover_9096a20e3d2e__0[2] = 0 ; goCover_9096a20e3d2e__0[3] = 1;
+	allowed := loadAllowedOrigins()
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {goCover_9096a20e3d2e__0[4] = 1;
+		origin := r.Header.Get("Origin")
+		if origin != "" && allowed[origin] {goCover_9096a20e3d2e__0[7] = 1;
+			w.Header().Set("Access-Control-Allow-Origin", origin)
+			w.Header().Set("Vary", "Origin")
+			w.Header().Set("Access-Control-Allow-Methods", "GET, POST, PUT, PATCH, DELETE, OPTIONS")
+			w.Header().Set("Access-Control-Allow-Headers", "Content-Type, X-CSRF-Token, X-Request-ID")
+			w.Header().Set("Access-Control-Allow-Credentials", "true")
+		}
+		goCover_9096a20e3d2e__0[5] = 1;if r.Method == http.MethodOptions {goCover_9096a20e3d2e__0[8] = 1;
+			if origin == "" || !allowed[origin] {goCover_9096a20e3d2e__0[10] = 1;
+				http.Error(w, "forbidden", http.StatusForbidden)
+				return
+			}
+			goCover_9096a20e3d2e__0[9] = 1;w.WriteHeader(http.StatusNoContent)
+			return
+		}
+		goCover_9096a20e3d2e__0[6] = 1;next.ServeHTTP(w, r)
+	})
+}
+
+// LoadAllowedOrigins returns the map of allowed CORS origins from ALLOWED_ORIGINS env var.
+// If not set and APP_ENV=local, defaults to http://localhost:3000,http://127.0.0.1:3000 .
+func LoadAllowedOrigins() map[string]bool {goCover_9096a20e3d2e__1[0] = 6 ; goCover_9096a20e3d2e__1[1] = goCover_9096a20e3d2e_P ; goCover_9096a20e3d2e__1[2] = 1 ; goCover_9096a20e3d2e__1[3] = 1;
+	out := map[string]bool{}
+	v := strings.TrimSpace(os.Getenv("ALLOWED_ORIGINS"))
+	if v == "" && strings.ToLower(os.Getenv("APP_ENV")) == "local" {goCover_9096a20e3d2e__1[6] = 1;
+		v = "http://localhost:3000,http://127.0.0.1:3000"
+	}
+	goCover_9096a20e3d2e__1[4] = 1;for _, p := range strings.Split(v, ",") {goCover_9096a20e3d2e__1[7] = 1;
+		p = strings.TrimSpace(p)
+		if p != "" {goCover_9096a20e3d2e__1[8] = 1;
+			out[p] = true
+		}
+	}
+	goCover_9096a20e3d2e__1[5] = 1;return out
+}
+
+func loadAllowedOrigins() map[string]bool {goCover_9096a20e3d2e__2[0] = 1 ; goCover_9096a20e3d2e__2[1] = goCover_9096a20e3d2e_P ; goCover_9096a20e3d2e__2[2] = 2 ; goCover_9096a20e3d2e__2[3] = 1;
+	return LoadAllowedOrigins()
+}

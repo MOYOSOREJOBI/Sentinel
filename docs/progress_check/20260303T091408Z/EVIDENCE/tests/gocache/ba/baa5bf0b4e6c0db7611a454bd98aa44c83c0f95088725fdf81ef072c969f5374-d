@@ -1,0 +1,16 @@
+mode: set
+sentinel/internal/kafka/kafka.go:12.81,14.17 2 0
+sentinel/internal/kafka/kafka.go:14.17,16.3 1 0
+sentinel/internal/kafka/kafka.go:17.2,17.31 1 0
+sentinel/internal/kafka/kafka.go:20.115,24.25 4 0
+sentinel/internal/kafka/kafka.go:24.25,26.17 2 0
+sentinel/internal/kafka/kafka.go:26.17,28.4 1 0
+sentinel/internal/kafka/kafka.go:29.3,29.36 1 0
+sentinel/internal/kafka/kafka.go:29.36,31.4 1 0
+sentinel/internal/kafka/kafka.go:32.3,32.10 1 0
+sentinel/internal/kafka/kafka.go:33.21,34.20 1 0
+sentinel/internal/kafka/kafka.go:35.66,35.66 0 0
+sentinel/internal/kafka/kafka.go:38.2,38.12 1 0
+sentinel/internal/kafka/kafka.go:41.46,42.16 1 1
+sentinel/internal/kafka/kafka.go:42.16,44.3 1 1
+sentinel/internal/kafka/kafka.go:45.2,48.50 2 1

@@ -1,0 +1,39 @@
+//line /Users/mac/Desktop/Sentinel/internal/logic/logic.go:1:1
+package logic
+
+import "math"
+
+func FeatureLogReturn(price float64) float64 {goCover_0d0a6b268597__0[0] = 1 ; goCover_0d0a6b268597__0[1] = goCover_0d0a6b268597_P ; goCover_0d0a6b268597__0[2] = 0 ; goCover_0d0a6b268597__0[3] = 1; return math.Log(price / 100.0) }
+func Severity(score float64) string {goCover_0d0a6b268597__1[0] = 7 ; goCover_0d0a6b268597__1[1] = goCover_0d0a6b268597_P ; goCover_0d0a6b268597__1[2] = 1 ; goCover_0d0a6b268597__1[3] = 1;
+	if score > 0.8 {goCover_0d0a6b268597__1[7] = 1;
+		return "critical"
+	}
+	goCover_0d0a6b268597__1[4] = 1;if score > 0.6 {goCover_0d0a6b268597__1[8] = 1;
+		return "high"
+	}
+	goCover_0d0a6b268597__1[5] = 1;if score > 0.4 {goCover_0d0a6b268597__1[9] = 1;
+		return "medium"
+	}
+	goCover_0d0a6b268597__1[6] = 1;return "low"
+}
+
+type ModelState string
+
+const (
+	Draft    ModelState = "draft"
+	Approved ModelState = "approved"
+	Deployed ModelState = "deployed"
+)
+
+func Transition(s ModelState, evt string) ModelState {goCover_0d0a6b268597__2[0] = 7 ; goCover_0d0a6b268597__2[1] = goCover_0d0a6b268597_P ; goCover_0d0a6b268597__2[2] = 2 ; goCover_0d0a6b268597__2[3] = 1;
+	if s == Draft && evt == "approve" {goCover_0d0a6b268597__2[7] = 1;
+		return Approved
+	}
+	goCover_0d0a6b268597__2[4] = 1;if s == Approved && evt == "deploy" {goCover_0d0a6b268597__2[8] = 1;
+		return Deployed
+	}
+	goCover_0d0a6b268597__2[5] = 1;if evt == "rollback" {goCover_0d0a6b268597__2[9] = 1;
+		return Approved
+	}
+	goCover_0d0a6b268597__2[6] = 1;return s
+}

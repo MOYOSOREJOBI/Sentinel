@@ -1,0 +1,15 @@
+diff --git a/scripts/playwright-docker.sh b/scripts/playwright-docker.sh
+--- a/scripts/playwright-docker.sh
++++ b/scripts/playwright-docker.sh
+@@
+ set -euo pipefail
++if [ ! -f keys/jwtRS256.key ] || [ ! -f keys/jwtRS256.key.pub ]; then
++  echo "missing dev keys; run make dev-keys first" >&2
++  exit 1
++fi
++if command -v lsof >/dev/null 2>&1 && lsof -nP -iTCP:5432 -sTCP:LISTEN >/dev/null 2>&1; then
++  echo "port 5432 is already allocated; stop the listener or use the e2e compose override" >&2
++  exit 1
++fi
+ COMPOSE_FILE="${COMPOSE_FILE:-deploy/docker/docker-compose.yml}"
+ DC="docker compose -f ${COMPOSE_FILE}"

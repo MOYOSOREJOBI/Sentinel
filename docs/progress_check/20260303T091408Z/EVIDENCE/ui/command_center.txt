@@ -1,0 +1,2 @@
+$ curl -sS --max-time 5 -b docs/progress_check/20260303T091408Z/EVIDENCE/ui/web.cookies.txt http://localhost:3000/api/proxy/query/command-center?window=24h
+curl: (7) Failed to connect to localhost port 3000 after 0 ms: Could not connect to server

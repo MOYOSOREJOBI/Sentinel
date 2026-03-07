@@ -1,0 +1,9 @@
+HTTP/1.1 204 No Content
+vary: RSC, Next-Router-State-Tree, Next-Router-Prefetch
+date: Wed, 04 Mar 2026 01:19:27 GMT
+set-cookie: sentinel_token=; Path=/; Max-Age=0; HttpOnly; SameSite=Lax
+set-cookie: sentinel_csrf=; Path=/; Max-Age=0; SameSite=Lax
+x-request-id: 0a60991c6bb04020
+Connection: keep-alive
+Keep-Alive: timeout=5
+

@@ -1,0 +1,10 @@
+HTTP/1.1 200 OK
+vary: RSC, Next-Router-State-Tree, Next-Router-Prefetch
+content-length: 70
+content-type: application/json
+date: Wed, 04 Mar 2026 01:03:40 GMT
+x-request-id: 72f5a77d5c1225e5
+Connection: keep-alive
+Keep-Alive: timeout=5
+
+{"preferredLocale":"en","role":"admin","user":"admin@sentinel.local"}

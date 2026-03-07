@@ -1,0 +1,13 @@
+//line /Users/mac/Desktop/Sentinel/internal/marketmath/volume.go:1:1
+package marketmath
+
+func VolumeRatio(vol, mean float64) float64 {goCover_3d3a9210d624__16[0] = 3 ; goCover_3d3a9210d624__16[1] = goCover_3d3a9210d624_P ; goCover_3d3a9210d624__16[2] = 16 ; goCover_3d3a9210d624__16[3] = 1;
+	if mean < 1e-9 {goCover_3d3a9210d624__16[5] = 1;
+		return 0
+	}
+	goCover_3d3a9210d624__16[4] = 1;return vol / mean
+}
+
+func VolumeSurprise(vol, mean, std float64) float64 {goCover_3d3a9210d624__17[0] = 1 ; goCover_3d3a9210d624__17[1] = goCover_3d3a9210d624_P ; goCover_3d3a9210d624__17[2] = 17 ; goCover_3d3a9210d624__17[3] = 1;
+	return ZScore(vol, mean, std)
+}

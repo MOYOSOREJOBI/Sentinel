@@ -1,0 +1,3 @@
+# sentinel/scripts
+# [sentinel/scripts]
+vet: scripts/seed-users.go:26:6: main redeclared in this block

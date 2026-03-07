@@ -1,0 +1,14 @@
+covervars.go
+dq.cover.go
+ewma.cover.go
+hash.cover.go
+rolling.cover.go
+volatility.cover.go
+volume.cover.go
+zscore.cover.go
+./dq_test.go
+./ewma_floor_test.go
+./ewma_test.go
+./rolling_lag_test.go
+./rolling_test.go
+./zscore_test.go

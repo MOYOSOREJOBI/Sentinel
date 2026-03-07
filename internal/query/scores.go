@@ -102,19 +102,9 @@ func scoreWindowPredicate(window string, from, to time.Time, startArg int, timeC
 	return fmt.Sprintf("%s > now() - interval '%s'", timeCol, windowInterval(window)), nil
 }
 
-// LoadScoreSeries returns a time-ordered score series for charting.
-// symbol="" returns all symbols; window selects the lookback period.
-// Results are sampled to at most maxPoints using a simple nth-row approach.
-func LoadScoreSeries(ctx context.Context, db *pgxpool.Pool, symbol, window string, maxPoints int, from, to time.Time) ([]ScorePoint, error) {
-	if maxPoints <= 0 {
-		maxPoints = 500
-	}
-	source, timeCol := scoreSeriesSource(window)
-	timeWhere, extraArgs := scoreWindowPredicate(window, from, to, 3, timeCol)
-
-	query := fmt.Sprintf(`
-		WITH base AS (
-			SELECT
+func scoreSeriesExpressions(source, timeCol string) (string, string) {
+	if source == "scores" {
+		return fmt.Sprintf(`
 				%s AS ts,
 				COALESCE(normalized_anomaly_score, score, 0) AS anomaly_score,
 				COALESCE(normalized_anomaly_score, score, 0) AS score_norm,
@@ -130,8 +120,37 @@ func LoadScoreSeries(ctx context.Context, db *pgxpool.Pool, symbol, window strin
 				COALESCE(model_artifact_hash, '')            AS model_artifact_hash,
 				symbol,
 				COALESCE(severity, '')                       AS severity,
-				row_number() OVER (ORDER BY COALESCE(produced_at, %s)) AS rn,
-				count(*) OVER ()                             AS total
+		`, timeCol), fmt.Sprintf("COALESCE(produced_at, %s)", timeCol)
+	}
+	return fmt.Sprintf(`
+				%s AS ts,
+				COALESCE(anomaly_score, 0)             AS anomaly_score,
+				COALESCE(score_norm, 0)                AS score_norm,
+				COALESCE(score_raw, 0)                 AS score_raw,
+				COALESCE(escalation_prob, 0)           AS escalation_prob,
+				COALESCE(composite, 0)                 AS composite,
+				COALESCE(composite_risk, 0)            AS composite_risk,
+				COALESCE(model_version, 'baseline-v1') AS model_version,
+				COALESCE(produced_at, %s)              AS produced_at,
+				COALESCE(scoring_run_id, '')           AS scoring_run_id,
+				COALESCE(feature_snapshot_hash, '')    AS feature_snapshot_hash,
+				COALESCE(artifact_hash, '')            AS artifact_hash,
+				COALESCE(model_artifact_hash, '')      AS model_artifact_hash,
+				symbol,
+				COALESCE(severity, '')                 AS severity,
+		`, timeCol, timeCol), "COALESCE(produced_at, ts)"
+}
+
+func loadScoreSeriesFromSource(ctx context.Context, db *pgxpool.Pool, source, timeCol, symbol, window string, maxPoints int, from, to time.Time) ([]ScorePoint, error) {
+	selectCols, orderCol := scoreSeriesExpressions(source, timeCol)
+	timeWhere, extraArgs := scoreWindowPredicate(window, from, to, 3, timeCol)
+
+	query := fmt.Sprintf(`
+		WITH base AS (
+			SELECT
+				%s
+				row_number() OVER (ORDER BY %s) AS rn,
+				count(*) OVER () AS total
 			FROM %s
 			WHERE %s
 			  AND ($1 = '' OR symbol = $1)
@@ -141,7 +160,7 @@ func LoadScoreSeries(ctx context.Context, db *pgxpool.Pool, symbol, window strin
 		WHERE total <= $2 OR rn %% GREATEST(1, total / $2) = 0
 		ORDER BY produced_at
 		LIMIT $2
-	`, timeCol, timeCol, source, timeWhere)
+	`, selectCols, orderCol, source, timeWhere)
 
 	args := []any{symbol, maxPoints}
 	args = append(args, extraArgs...)
@@ -160,17 +179,27 @@ func LoadScoreSeries(ctx context.Context, db *pgxpool.Pool, symbol, window strin
 		p.Time = p.Ts
 		out = append(out, p)
 	}
-	return out, nil
+	return out, rows.Err()
 }
 
-// LoadCandleSeries returns OHLCV candles for the charting panel.
-func LoadCandleSeries(ctx context.Context, db *pgxpool.Pool, symbol, window, res string, maxPoints int) ([]CandlePoint, error) {
+// LoadScoreSeries returns a time-ordered score series for charting.
+// symbol="" returns all symbols; window selects the lookback period.
+// Results are sampled to at most maxPoints using a simple nth-row approach.
+func LoadScoreSeries(ctx context.Context, db *pgxpool.Pool, symbol, window string, maxPoints int, from, to time.Time) ([]ScorePoint, error) {
 	if maxPoints <= 0 {
 		maxPoints = 500
 	}
+	source, timeCol := scoreSeriesSource(window)
+	out, err := loadScoreSeriesFromSource(ctx, db, source, timeCol, symbol, window, maxPoints, from, to)
+	if (err != nil || len(out) == 0) && source != "scores" {
+		return loadScoreSeriesFromSource(ctx, db, "scores", "ts", symbol, window, maxPoints, from, to)
+	}
+	return out, err
+}
+
+func loadCandleSeriesFromSource(ctx context.Context, db *pgxpool.Pool, source, timeCol string, aggregated bool, symbol, window, res string, maxPoints int) ([]CandlePoint, error) {
 	interval := windowInterval(window)
 	resolution := candleResolution(res)
-	source, timeCol, aggregated := candleSeriesSource(window)
 
 	var query string
 	if aggregated {
@@ -185,10 +214,9 @@ func LoadCandleSeries(ctx context.Context, db *pgxpool.Pool, symbol, window, res
 					volume,
 					symbol,
 					row_number() OVER (ORDER BY %s) AS rn,
-					count(*) OVER ()                AS total
+					count(*) OVER () AS total
 				FROM %s
 				WHERE %s > now() - interval '%s'
-				  AND interval = '1m'
 				  AND ($1 = '' OR symbol = $1)
 			)
 			SELECT ts, open, high, low, close, volume, symbol
@@ -235,7 +263,7 @@ func LoadCandleSeries(ctx context.Context, db *pgxpool.Pool, symbol, window, res
 					low,
 					close,
 					volume,
-					row_number() OVER (PARTITION BY grp, symbol ORDER BY bucket ASC)  AS rn_open,
+					row_number() OVER (PARTITION BY grp, symbol ORDER BY bucket ASC) AS rn_open,
 					row_number() OVER (PARTITION BY grp, symbol ORDER BY bucket DESC) AS rn_close
 				FROM filtered
 			),
@@ -243,9 +271,9 @@ func LoadCandleSeries(ctx context.Context, db *pgxpool.Pool, symbol, window, res
 				SELECT
 					grp AS ts,
 					symbol,
-					MAX(CASE WHEN rn_open = 1 THEN open END)  AS open,
-					MAX(high)   AS high,
-					MIN(low)    AS low,
+					MAX(CASE WHEN rn_open = 1 THEN open END) AS open,
+					MAX(high) AS high,
+					MIN(low) AS low,
 					MAX(CASE WHEN rn_close = 1 THEN close END) AS close,
 					SUM(volume) AS volume
 				FROM ranked
@@ -261,7 +289,7 @@ func LoadCandleSeries(ctx context.Context, db *pgxpool.Pool, symbol, window, res
 					a.volume,
 					a.symbol,
 					row_number() OVER (ORDER BY a.ts) AS rn,
-					count(*) OVER ()                  AS total
+					count(*) OVER () AS total
 				FROM agg a
 			)
 			SELECT ts, open, high, low, close, volume, symbol
@@ -286,5 +314,18 @@ func LoadCandleSeries(ctx context.Context, db *pgxpool.Pool, symbol, window, res
 		}
 		out = append(out, p)
 	}
-	return out, nil
+	return out, rows.Err()
+}
+
+// LoadCandleSeries returns OHLCV candles for the charting panel.
+func LoadCandleSeries(ctx context.Context, db *pgxpool.Pool, symbol, window, res string, maxPoints int) ([]CandlePoint, error) {
+	if maxPoints <= 0 {
+		maxPoints = 500
+	}
+	source, timeCol, aggregated := candleSeriesSource(window)
+	out, err := loadCandleSeriesFromSource(ctx, db, source, timeCol, aggregated, symbol, window, res, maxPoints)
+	if (err != nil || len(out) == 0) && source != "candles" {
+		return loadCandleSeriesFromSource(ctx, db, "candles", "bucket", false, symbol, window, res, maxPoints)
+	}
+	return out, err
 }

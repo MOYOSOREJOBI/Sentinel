@@ -1,0 +1,2 @@
+$ curl -i -sS --max-time 5 -c docs/progress_check/20260303T091408Z/EVIDENCE/ui/web.cookies.txt -H Content-Type: application/json -d {"Email":"admin@sentinel.local","Password":"Sentinel#123"} http://localhost:3000/api/proxy/gateway-api/auth/login
+curl: (7) Failed to connect to localhost port 3000 after 0 ms: Could not connect to server

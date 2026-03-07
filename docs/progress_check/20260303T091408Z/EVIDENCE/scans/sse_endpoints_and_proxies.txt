@@ -1,0 +1,47 @@
+$ rg -n "SSE|text/event-stream|EventSource|/stream|/events|/sse" cmd web internal
+web/e2e/sentinel.spec.ts:77:test('SSE endpoint returns a live stream response', async ({ page }) => {
+web/e2e/sentinel.spec.ts:80:    const res = await fetch('/api/sse/command-center', {
+web/e2e/sentinel.spec.ts:82:      headers: { Accept: 'text/event-stream' },
+web/e2e/sentinel.spec.ts:89:  expect(stream.contentType).toContain('text/event-stream')
+web/lib/stream.ts:4:  const es = new EventSource(path, { withCredentials: true });
+web/lib/stream.ts:15:  return sub("/api/sse/queue", "queue_patch", onPatch, onError);
+web/lib/stream.ts:18:  return sub("/api/sse/command-center", "command_center_patch", onPatch, onError);
+web/lib/stream.ts:21:  return sub("/api/sse/trust", "trust_patch", onPatch, onError);
+web/lib/useSSE.ts:4:type SSEStatus = "connecting" | "open" | "closed" | "error";
+web/lib/useSSE.ts:5:export function useSSE<T>(url: string, onMessage: (data: T) => void) {
+web/lib/useSSE.ts:6:  const [status, setStatus] = useState<SSEStatus>("connecting");
+web/lib/useSSE.ts:7:  const esRef = useRef<EventSource | null>(null);
+web/lib/useSSE.ts:31:      const es = new EventSource(url, { withCredentials: true });
+cmd/query/main.go:612:		pr.Get("/stream/queue", sseStream(func(ctx context.Context) any {
+cmd/query/main.go:620:		pr.Get("/stream/command-center", sseStream(func(ctx context.Context) any {
+cmd/query/main.go:624:		pr.Get("/stream/trust", sseStream(func(ctx context.Context) any {
+cmd/query/main.go:646:		w.Header().Set("Content-Type", "text/event-stream")
+web/package-lock.json:2359:    "node_modules/streamsearch": {
+web/package-lock.json:2361:      "resolved": "https://registry.npmjs.org/streamsearch/-/streamsearch-1.1.0.tgz",
+cmd/alerts/main.go:114:	r.With(authz.RequirePerm(pub, "read")).Get("/sse/alerts", sse)
+cmd/alerts/main.go:637:	w.Header().Set("Content-Type", "text/event-stream")
+cmd/alerts/main.go:694:		// Use first allowed origin found; for SSE streaming, this is acceptable
+web/app/trust/page.tsx:7:import { subscribeTrustPatches } from '../../lib/stream'
+web/app/feed/page.tsx:6:import { useSSE } from '../../lib/useSSE'
+web/app/feed/page.tsx:69:  // SSE: reload feed when the queue emits new incidents (debounced 3s)
+web/app/feed/page.tsx:71:  const { status: sseStatus } = useSSE('/api/sse/command-center', () => {
+web/app/feed/page.tsx:81:  // Polling fallback: refresh every 10s when SSE is degraded
+web/app/about/page.tsx:32:  'Real-time: new ticks, new scores, and feed/queue updates (via SSE, with polling fallback).',
+web/app/api/sse/command-center/route.ts:1:import { proxySSE } from '../proxy'
+web/app/api/sse/command-center/route.ts:8:  return proxySSE(request, `${API_QUERY}/stream/command-center`, 'command_center_patch')
+web/app/api/sse/proxy.ts:1:const SSE_HEADERS = {
+web/app/api/sse/proxy.ts:2:  'Content-Type': 'text/event-stream',
+web/app/api/sse/proxy.ts:7:export async function proxySSE(request: Request, upstreamURL: string, eventName: string) {
+web/app/api/sse/proxy.ts:13:        Accept: 'text/event-stream',
+web/app/api/sse/proxy.ts:20:    return new Response(upstream.body, { status: 200, headers: SSE_HEADERS })
+web/app/api/sse/proxy.ts:37:    return new Response(stream, { status: 200, headers: SSE_HEADERS })
+web/app/api/sse/queue/route.ts:1:import { proxySSE } from '../proxy'
+web/app/api/sse/queue/route.ts:8:  return proxySSE(request, `${API_QUERY}/stream/queue`, 'queue_patch')
+web/app/queue/page.tsx:11:import { useSSE } from '../../lib/useSSE'
+web/app/queue/page.tsx:41:  const { status: sseStatus } = useSSE<any>('/api/sse/queue', (patch) => {
+web/app/command-center/page.tsx:14:import { useSSE } from '../../lib/useSSE'
+web/app/command-center/page.tsx:61:  const { status: sseStatus } = useSSE<any>('/api/sse/command-center', (evt) => {
+web/app/api/sse/alerts/route.ts:1:import { proxySSE } from '../proxy'
+web/app/api/sse/alerts/route.ts:8:  return proxySSE(request, `${API_ALERTS}/sse/alerts`, 'alert')
+web/app/api/sse/trust/route.ts:1:import { proxySSE } from '../proxy'
+web/app/api/sse/trust/route.ts:8:  return proxySSE(request, `${API_QUERY}/stream/trust`, 'trust_patch')

@@ -1,0 +1,372 @@
+//line /Users/mac/Desktop/Sentinel/internal/query/feed.go:1:1
+package query
+
+import (
+	"context"
+	"encoding/base64"
+	"fmt"
+	"math"
+	"sort"
+	"strconv"
+	"strings"
+	"time"
+
+	"github.com/jackc/pgx/v5/pgxpool"
+)
+
+type feedRow struct {
+	ID                    int64
+	Symbol                string
+	Status                string
+	SeverityBand          string
+	PriorityScore         float64
+	CompositeRisk         float64
+	EscalationProbability float64
+	Confidence            float64
+	TrustState            string
+	ModelVersion          string
+	TopDriver1            string
+	TopDriver2            string
+	LastActivityAt        time.Time
+	CountryCode           string
+	Region                string
+	Industry              string
+	Sector                string
+	Venue                 string
+}
+
+type feedRanked struct {
+	row               feedRow
+	rankScore         float64
+	marketImpliedRisk float64
+	components        map[string]float64
+	rankReason        []string
+}
+
+type FeedHistory struct {
+	AvailableDays int       `json:"available_days"`
+	OldestAt      time.Time `json:"oldest_at"`
+	NewestAt      time.Time `json:"newest_at"`
+}
+
+type FeedPage struct {
+	Items          []map[string]any `json:"items"`
+	NextCursor     string           `json:"next_cursor"`
+	ServerTime     time.Time        `json:"server_time"`
+	History        FeedHistory      `json:"history"`
+	HistoryLimited bool             `json:"history_limited"`
+}
+
+func clamp01(v float64) float64 {goCover_fbd601c42ea1__2[0] = 5 ; goCover_fbd601c42ea1__2[1] = goCover_fbd601c42ea1_P ; goCover_fbd601c42ea1__2[2] = 2 ; goCover_fbd601c42ea1__2[3] = 1;
+	if v < 0 {goCover_fbd601c42ea1__2[6] = 1;
+		return 0
+	}
+	goCover_fbd601c42ea1__2[4] = 1;if v > 1 {goCover_fbd601c42ea1__2[7] = 1;
+		return 1
+	}
+	goCover_fbd601c42ea1__2[5] = 1;return v
+}
+
+func severityWeight(sev string) float64 {goCover_fbd601c42ea1__3[0] = 5 ; goCover_fbd601c42ea1__3[1] = goCover_fbd601c42ea1_P ; goCover_fbd601c42ea1__3[2] = 3 ; goCover_fbd601c42ea1__3[3] = 1;
+	switch strings.ToLower(strings.TrimSpace(sev)) {
+	case "critical":goCover_fbd601c42ea1__3[4] = 1;
+		return 1.0
+	case "high":goCover_fbd601c42ea1__3[5] = 1;
+		return 0.8
+	case "elevated":goCover_fbd601c42ea1__3[6] = 1;
+		return 0.6
+	default:goCover_fbd601c42ea1__3[7] = 1;
+		return 0.45
+	}
+}
+
+func activeFilterCount(f QueueFilters) int {goCover_fbd601c42ea1__4[0] = 4 ; goCover_fbd601c42ea1__4[1] = goCover_fbd601c42ea1_P ; goCover_fbd601c42ea1__4[2] = 4 ; goCover_fbd601c42ea1__4[3] = 1;
+	n := 0
+	for _, v := range []string{f.Q, f.CountryCode, f.Region, f.Sector, f.Industry, f.Venue, f.Symbol} {goCover_fbd601c42ea1__4[5] = 1;
+		if strings.TrimSpace(v) != "" {goCover_fbd601c42ea1__4[6] = 1;
+			n++
+		}
+	}
+	goCover_fbd601c42ea1__4[4] = 1;return n
+}
+
+func rankReasonList(row feedRow, confidenceNorm, freshnessNorm, trustPenalty float64) []string {goCover_fbd601c42ea1__5[0] = 5 ; goCover_fbd601c42ea1__5[1] = goCover_fbd601c42ea1_P ; goCover_fbd601c42ea1__5[2] = 5 ; goCover_fbd601c42ea1__5[3] = 1;
+	reasons := []string{
+		fmt.Sprintf("severity:%s", strings.ToLower(strings.TrimSpace(row.SeverityBand))),
+		fmt.Sprintf("priority:%.2f", clamp01(row.PriorityScore/100.0)),
+		fmt.Sprintf("composite:%.2f", clamp01(row.CompositeRisk/100.0)),
+		fmt.Sprintf("escalation:%.2f", clamp01(row.EscalationProbability)),
+		fmt.Sprintf("confidence:%.2f", confidenceNorm),
+		fmt.Sprintf("freshness:%.2f", freshnessNorm),
+	}
+	if strings.TrimSpace(row.TopDriver1) != "" {goCover_fbd601c42ea1__5[6] = 1;
+		reasons = append(reasons, "driver:"+row.TopDriver1)
+	}
+	goCover_fbd601c42ea1__5[4] = 1;if trustPenalty > 0 {goCover_fbd601c42ea1__5[7] = 1;
+		reasons = append(reasons, fmt.Sprintf("trust_penalty:%.2f", trustPenalty))
+	}
+	goCover_fbd601c42ea1__5[5] = 1;return reasons
+}
+
+// rankFeedRow computes a bounded [0,1] rank score for a feed item.
+// mode: "" or "default" = standard weights; "trending" = boost freshness;
+// "for_you" = double the filter-context boost.
+func rankFeedRow(row feedRow, f QueueFilters, now time.Time, mode string) (float64, float64, map[string]float64, []string) {goCover_fbd601c42ea1__6[0] = 11 ; goCover_fbd601c42ea1__6[1] = goCover_fbd601c42ea1_P ; goCover_fbd601c42ea1__6[2] = 6 ; goCover_fbd601c42ea1__6[3] = 1;
+	priorityNorm := clamp01(row.PriorityScore / 100.0)
+	compositeNorm := clamp01(row.CompositeRisk / 100.0)
+	escalationNorm := clamp01(row.EscalationProbability)
+	confidenceNorm := clamp01(row.Confidence)
+	severityNorm := severityWeight(row.SeverityBand)
+
+	ageMin := now.Sub(row.LastActivityAt).Minutes()
+	if ageMin < 0 {goCover_fbd601c42ea1__6[9] = 1;
+		ageMin = 0
+	}
+	goCover_fbd601c42ea1__6[4] = 1;freshnessNorm := math.Exp(-ageMin / 180.0)
+
+	trustPenalty := 0.0
+	trustState := strings.ToLower(strings.TrimSpace(row.TrustState))
+	if trustState != "" && trustState != "stable" && trustState != "healthy" {goCover_fbd601c42ea1__6[10] = 1;
+		trustPenalty += 0.08
+	}
+	goCover_fbd601c42ea1__6[5] = 1;if strings.Contains(strings.ToLower(row.ModelVersion), "fallback") {goCover_fbd601c42ea1__6[11] = 1;
+		trustPenalty += 0.10
+	}
+
+	goCover_fbd601c42ea1__6[6] = 1;filterBoostMax := 0.15
+	if mode == "for_you" {goCover_fbd601c42ea1__6[12] = 1;
+		filterBoostMax = 0.30
+	}
+	goCover_fbd601c42ea1__6[7] = 1;filterBoost := math.Min(filterBoostMax, float64(activeFilterCount(f))*0.025)
+
+	wPriority := 0.28
+	wFreshness := 0.12
+	if mode == "trending" {goCover_fbd601c42ea1__6[13] = 1;
+		wPriority = 0.20
+		wFreshness = 0.20
+	}
+
+	goCover_fbd601c42ea1__6[8] = 1;score := wPriority*priorityNorm +
+		0.22*compositeNorm +
+		0.18*escalationNorm +
+		0.12*confidenceNorm +
+		wFreshness*freshnessNorm +
+		0.08*severityNorm -
+		trustPenalty +
+		filterBoost
+	score = clamp01(score)
+
+	marketImpliedRisk := clamp01(0.60*escalationNorm + 0.40*compositeNorm)
+	components := map[string]float64{
+		"priority":      priorityNorm,
+		"composite":     compositeNorm,
+		"escalation":    escalationNorm,
+		"confidence":    confidenceNorm,
+		"freshness":     freshnessNorm,
+		"severity":      severityNorm,
+		"trustPenalty":  trustPenalty,
+		"filterContext": filterBoost,
+	}
+
+	return score, marketImpliedRisk, components, rankReasonList(row, confidenceNorm, freshnessNorm, trustPenalty)
+}
+
+func decodeCursor(cursor string) int {goCover_fbd601c42ea1__7[0] = 7 ; goCover_fbd601c42ea1__7[1] = goCover_fbd601c42ea1_P ; goCover_fbd601c42ea1__7[2] = 7 ; goCover_fbd601c42ea1__7[3] = 1;
+	cursor = strings.TrimSpace(cursor)
+	if cursor == "" {goCover_fbd601c42ea1__7[7] = 1;
+		return 0
+	}
+	goCover_fbd601c42ea1__7[4] = 1;raw, err := base64.RawURLEncoding.DecodeString(cursor)
+	if err != nil {goCover_fbd601c42ea1__7[8] = 1;
+		return 0
+	}
+	goCover_fbd601c42ea1__7[5] = 1;text := strings.TrimPrefix(string(raw), "i:")
+	n, err := strconv.Atoi(text)
+	if err != nil || n < 0 {goCover_fbd601c42ea1__7[9] = 1;
+		return 0
+	}
+	goCover_fbd601c42ea1__7[6] = 1;return n
+}
+
+func encodeCursor(offset int) string {goCover_fbd601c42ea1__8[0] = 3 ; goCover_fbd601c42ea1__8[1] = goCover_fbd601c42ea1_P ; goCover_fbd601c42ea1__8[2] = 8 ; goCover_fbd601c42ea1__8[3] = 1;
+	if offset <= 0 {goCover_fbd601c42ea1__8[5] = 1;
+		return ""
+	}
+	goCover_fbd601c42ea1__8[4] = 1;return base64.RawURLEncoding.EncodeToString([]byte(fmt.Sprintf("i:%d", offset)))
+}
+
+func LoadFeedHistory(ctx context.Context, db *pgxpool.Pool) (FeedHistory, error) {goCover_fbd601c42ea1__9[0] = 5 ; goCover_fbd601c42ea1__9[1] = goCover_fbd601c42ea1_P ; goCover_fbd601c42ea1__9[2] = 9 ; goCover_fbd601c42ea1__9[3] = 1;
+	var oldest, newest time.Time
+	err := db.QueryRow(ctx, `SELECT coalesce(min(last_activity_at), now()), coalesce(max(last_activity_at), now()) FROM incidents`).Scan(&oldest, &newest)
+	if err != nil {goCover_fbd601c42ea1__9[6] = 1;
+		return FeedHistory{}, err
+	}
+	goCover_fbd601c42ea1__9[4] = 1;availableDays := int(math.Ceil(newest.Sub(oldest).Hours() / 24))
+	if availableDays < 0 {goCover_fbd601c42ea1__9[7] = 1;
+		availableDays = 0
+	}
+	goCover_fbd601c42ea1__9[5] = 1;return FeedHistory{AvailableDays: availableDays, OldestAt: oldest, NewestAt: newest}, nil
+}
+
+func windowDuration(window string) time.Duration {goCover_fbd601c42ea1__10[0] = 9 ; goCover_fbd601c42ea1__10[1] = goCover_fbd601c42ea1_P ; goCover_fbd601c42ea1__10[2] = 10 ; goCover_fbd601c42ea1__10[3] = 1;
+	switch window {
+	case "1h":goCover_fbd601c42ea1__10[4] = 1;
+		return time.Hour
+	case "7d":goCover_fbd601c42ea1__10[5] = 1;
+		return 7 * 24 * time.Hour
+	case "30d":goCover_fbd601c42ea1__10[6] = 1;
+		return 30 * 24 * time.Hour
+	case "90d":goCover_fbd601c42ea1__10[7] = 1;
+		return 90 * 24 * time.Hour
+	case "1y":goCover_fbd601c42ea1__10[8] = 1;
+		return 365 * 24 * time.Hour
+	case "5y":goCover_fbd601c42ea1__10[9] = 1;
+		return 5 * 365 * 24 * time.Hour
+	case "20y":goCover_fbd601c42ea1__10[10] = 1;
+		return 20 * 365 * 24 * time.Hour
+	default:goCover_fbd601c42ea1__10[11] = 1;
+		return 24 * time.Hour
+	}
+}
+
+func requestedWindowDays(f QueueFilters) int {goCover_fbd601c42ea1__11[0] = 7 ; goCover_fbd601c42ea1__11[1] = goCover_fbd601c42ea1_P ; goCover_fbd601c42ea1__11[2] = 11 ; goCover_fbd601c42ea1__11[3] = 1;
+	if f.Window == "custom" {goCover_fbd601c42ea1__11[5] = 1;
+		if !f.From.IsZero() && !f.To.IsZero() {goCover_fbd601c42ea1__11[7] = 1;
+			from, to := f.From, f.To
+			if to.Before(from) {goCover_fbd601c42ea1__11[9] = 1;
+				from, to = to, from
+			}
+			goCover_fbd601c42ea1__11[8] = 1;return int(math.Ceil(to.Sub(from).Hours() / 24))
+		}
+		goCover_fbd601c42ea1__11[6] = 1;return 0
+	}
+	goCover_fbd601c42ea1__11[4] = 1;return int(math.Ceil(windowDuration(f.Window).Hours() / 24))
+}
+
+func LoadRiskFeed(ctx context.Context, db *pgxpool.Pool, f QueueFilters, limit int, cursor, mode string) (FeedPage, error) {goCover_fbd601c42ea1__12[0] = 29 ; goCover_fbd601c42ea1__12[1] = goCover_fbd601c42ea1_P ; goCover_fbd601c42ea1__12[2] = 12 ; goCover_fbd601c42ea1__12[3] = 1;
+	if limit <= 0 {goCover_fbd601c42ea1__12[14] = 1;
+		limit = 50
+	}
+	goCover_fbd601c42ea1__12[4] = 1;if limit > 200 {goCover_fbd601c42ea1__12[15] = 1;
+		limit = 200
+	}
+
+	goCover_fbd601c42ea1__12[5] = 1;offset := decodeCursor(cursor)
+	where, args := whereClause(f)
+	q := `SELECT i.id,i.primary_symbol,i.status,i.severity_band,coalesce(i.priority_score,0),coalesce(i.composite_risk,0),
+coalesce(i.escalation_probability,0),coalesce(i.confidence,0),coalesce(i.trust_state,'stable'),coalesce(i.model_version,''),
+coalesce(i.top_driver_1,''),coalesce(i.top_driver_2,''),i.last_activity_at,coalesce(m.country_code,'XX'),coalesce(m.region,''),
+coalesce(m.industry,''),coalesce(m.sector,''),coalesce(m.venue,'')
+FROM incidents i
+LEFT JOIN instrument_metadata m ON m.instrument_id=i.primary_symbol
+WHERE i.status in ('open','ack') AND ` + where + `
+ORDER BY i.last_activity_at DESC, i.id ASC
+LIMIT 500`
+
+	rows, err := db.Query(ctx, q, args...)
+	if err != nil {goCover_fbd601c42ea1__12[16] = 1;
+		return FeedPage{}, err
+	}
+	goCover_fbd601c42ea1__12[6] = 1;defer rows.Close()
+
+	now := time.Now().UTC()
+	ranked := make([]feedRanked, 0, 128)
+	for rows.Next() {goCover_fbd601c42ea1__12[17] = 1;
+		var r feedRow
+		if err := rows.Scan(
+			&r.ID, &r.Symbol, &r.Status, &r.SeverityBand, &r.PriorityScore, &r.CompositeRisk,
+			&r.EscalationProbability, &r.Confidence, &r.TrustState, &r.ModelVersion,
+			&r.TopDriver1, &r.TopDriver2, &r.LastActivityAt, &r.CountryCode, &r.Region,
+			&r.Industry, &r.Sector, &r.Venue,
+		); err != nil {goCover_fbd601c42ea1__12[19] = 1;
+			continue
+		}
+
+		goCover_fbd601c42ea1__12[18] = 1;score, marketImplied, components, reason := rankFeedRow(r, f, now, mode)
+		ranked = append(ranked, feedRanked{
+			row:               r,
+			rankScore:         score,
+			marketImpliedRisk: marketImplied,
+			components:        components,
+			rankReason:        reason,
+		})
+	}
+
+	goCover_fbd601c42ea1__12[7] = 1;sort.Slice(ranked, func(i, j int) bool {goCover_fbd601c42ea1__12[20] = 1;
+		if ranked[i].rankScore == ranked[j].rankScore {goCover_fbd601c42ea1__12[22] = 1;
+			return ranked[i].row.ID < ranked[j].row.ID
+		}
+		goCover_fbd601c42ea1__12[21] = 1;return ranked[i].rankScore > ranked[j].rankScore
+	})
+
+	goCover_fbd601c42ea1__12[8] = 1;total := len(ranked)
+	if offset > total {goCover_fbd601c42ea1__12[23] = 1;
+		offset = total
+	}
+	goCover_fbd601c42ea1__12[9] = 1;end := offset + limit
+	if end > total {goCover_fbd601c42ea1__12[24] = 1;
+		end = total
+	}
+	goCover_fbd601c42ea1__12[10] = 1;nextCursor := ""
+	if end < total {goCover_fbd601c42ea1__12[25] = 1;
+		nextCursor = encodeCursor(end)
+	}
+
+	goCover_fbd601c42ea1__12[11] = 1;windowed := ranked[offset:end]
+	out := make([]map[string]any, 0, len(windowed))
+	for i, item := range windowed {goCover_fbd601c42ea1__12[26] = 1;
+		drivers := []string{}
+		if item.row.TopDriver1 != "" {goCover_fbd601c42ea1__12[29] = 1;
+			drivers = append(drivers, item.row.TopDriver1)
+		}
+		goCover_fbd601c42ea1__12[27] = 1;if item.row.TopDriver2 != "" {goCover_fbd601c42ea1__12[30] = 1;
+			drivers = append(drivers, item.row.TopDriver2)
+		}
+
+		goCover_fbd601c42ea1__12[28] = 1;out = append(out, map[string]any{
+			"rank":                  offset + i + 1,
+			"id":                    item.row.ID,
+			"incident_id":           item.row.ID,
+			"symbol":                item.row.Symbol,
+			"status":                item.row.Status,
+			"severityBand":          item.row.SeverityBand,
+			"severity":              item.row.SeverityBand,
+			"priorityScore":         item.row.PriorityScore,
+			"compositeRisk":         item.row.CompositeRisk,
+			"composite":             item.row.CompositeRisk,
+			"escalationProbability": item.row.EscalationProbability,
+			"escalation_prob":       item.row.EscalationProbability,
+			"confidence":            item.row.Confidence,
+			"trustState":            item.row.TrustState,
+			"modelVersion":          item.row.ModelVersion,
+			"countryCode":           item.row.CountryCode,
+			"country_code":          item.row.CountryCode,
+			"region":                item.row.Region,
+			"industry":              item.row.Industry,
+			"sector":                item.row.Sector,
+			"venue":                 item.row.Venue,
+			"topDrivers":            drivers,
+			"lastActivityAt":        item.row.LastActivityAt,
+			"timestamp":             item.row.LastActivityAt,
+			"rankScore":             item.rankScore,
+			"rank_score":            item.rankScore,
+			"marketImpliedRisk":     item.marketImpliedRisk,
+			"rankComponents":        item.components,
+			"rankReason":            item.rankReason,
+			"rank_reason":           item.rankReason,
+		})
+	}
+
+	goCover_fbd601c42ea1__12[12] = 1;history, historyErr := LoadFeedHistory(ctx, db)
+	if historyErr != nil {goCover_fbd601c42ea1__12[31] = 1;
+		history = FeedHistory{}
+	}
+
+	goCover_fbd601c42ea1__12[13] = 1;return FeedPage{
+		Items:          out,
+		NextCursor:     nextCursor,
+		ServerTime:     now,
+		History:        history,
+		HistoryLimited: history.AvailableDays > 0 && requestedWindowDays(f) > history.AvailableDays,
+	}, nil
+}

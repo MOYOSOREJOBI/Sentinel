@@ -1,0 +1,111 @@
+//line /Users/mac/Desktop/Sentinel/internal/rediskv/rediskv.go:1:1
+package rediskv
+
+import (
+	"bufio"
+	"context"
+	"fmt"
+	"net"
+	"os"
+	"strconv"
+	"strings"
+	"time"
+)
+
+type Client struct{ addr string }
+
+func NewFromEnv() *Client {goCover_1f8b2f55fc0a__0[0] = 5 ; goCover_1f8b2f55fc0a__0[1] = goCover_1f8b2f55fc0a_P ; goCover_1f8b2f55fc0a__0[2] = 0 ; goCover_1f8b2f55fc0a__0[3] = 1;
+	addr := strings.TrimSpace(os.Getenv("REDIS_ADDR"))
+	if addr == "" {goCover_1f8b2f55fc0a__0[6] = 1;
+		addr = "redis:6379"
+	}
+	goCover_1f8b2f55fc0a__0[4] = 1;if strings.EqualFold(os.Getenv("REDIS_ENABLED"), "false") {goCover_1f8b2f55fc0a__0[7] = 1;
+		return nil
+	}
+	goCover_1f8b2f55fc0a__0[5] = 1;return &Client{addr: addr}
+}
+
+func (c *Client) Enabled() bool {goCover_1f8b2f55fc0a__1[0] = 1 ; goCover_1f8b2f55fc0a__1[1] = goCover_1f8b2f55fc0a_P ; goCover_1f8b2f55fc0a__1[2] = 1 ; goCover_1f8b2f55fc0a__1[3] = 1; return c != nil && c.addr != "" }
+
+func (c *Client) do(ctx context.Context, args ...string) (string, error) {goCover_1f8b2f55fc0a__2[0] = 21 ; goCover_1f8b2f55fc0a__2[1] = goCover_1f8b2f55fc0a_P ; goCover_1f8b2f55fc0a__2[2] = 2 ; goCover_1f8b2f55fc0a__2[3] = 1;
+	if !c.Enabled() {goCover_1f8b2f55fc0a__2[10] = 1;
+		return "", fmt.Errorf("redis disabled")
+	}
+	goCover_1f8b2f55fc0a__2[4] = 1;d := net.Dialer{Timeout: 800 * time.Millisecond}
+	conn, err := d.DialContext(ctx, "tcp", c.addr)
+	if err != nil {goCover_1f8b2f55fc0a__2[11] = 1;
+		return "", err
+	}
+	goCover_1f8b2f55fc0a__2[5] = 1;defer conn.Close()
+	_ = conn.SetDeadline(time.Now().Add(1200 * time.Millisecond))
+	var b strings.Builder
+	b.WriteString("*" + strconv.Itoa(len(args)) + "\r\n")
+	for _, a := range args {goCover_1f8b2f55fc0a__2[12] = 1;
+		b.WriteString("$" + strconv.Itoa(len(a)) + "\r\n" + a + "\r\n")
+	}
+	goCover_1f8b2f55fc0a__2[6] = 1;if _, err := conn.Write([]byte(b.String())); err != nil {goCover_1f8b2f55fc0a__2[13] = 1;
+		return "", err
+	}
+	goCover_1f8b2f55fc0a__2[7] = 1;r := bufio.NewReader(conn)
+	p, err := r.ReadByte()
+	if err != nil {goCover_1f8b2f55fc0a__2[14] = 1;
+		return "", err
+	}
+	goCover_1f8b2f55fc0a__2[8] = 1;line, err := r.ReadString('\n')
+	if err != nil {goCover_1f8b2f55fc0a__2[15] = 1;
+		return "", err
+	}
+	goCover_1f8b2f55fc0a__2[9] = 1;line = strings.TrimSuffix(strings.TrimSuffix(line, "\n"), "\r")
+	switch p {
+	case '+', ':':goCover_1f8b2f55fc0a__2[16] = 1;
+		return line, nil
+	case '-':goCover_1f8b2f55fc0a__2[17] = 1;
+		return "", fmt.Errorf(line)
+	case '$':goCover_1f8b2f55fc0a__2[18] = 1;
+		n, _ := strconv.Atoi(line)
+		if n < 0 {goCover_1f8b2f55fc0a__2[22] = 1;
+			return "", nil
+		}
+		goCover_1f8b2f55fc0a__2[19] = 1;buf := make([]byte, n+2)
+		if _, err := r.Read(buf); err != nil {goCover_1f8b2f55fc0a__2[23] = 1;
+			return "", err
+		}
+		goCover_1f8b2f55fc0a__2[20] = 1;return string(buf[:n]), nil
+	default:goCover_1f8b2f55fc0a__2[21] = 1;
+		return "", fmt.Errorf("unsupported redis response: %q %q", string(p), line)
+	}
+}
+
+func (c *Client) Get(ctx context.Context, key string) (string, bool, error) {goCover_1f8b2f55fc0a__3[0] = 7 ; goCover_1f8b2f55fc0a__3[1] = goCover_1f8b2f55fc0a_P ; goCover_1f8b2f55fc0a__3[2] = 3 ; goCover_1f8b2f55fc0a__3[3] = 1;
+	v, err := c.do(ctx, "GET", key)
+	if err != nil {goCover_1f8b2f55fc0a__3[6] = 1;
+		if strings.Contains(err.Error(), "nil") {goCover_1f8b2f55fc0a__3[8] = 1;
+			return "", false, nil
+		}
+		goCover_1f8b2f55fc0a__3[7] = 1;return "", false, err
+	}
+	goCover_1f8b2f55fc0a__3[4] = 1;if v == "" {goCover_1f8b2f55fc0a__3[9] = 1;
+		return "", false, nil
+	}
+	goCover_1f8b2f55fc0a__3[5] = 1;return v, true, nil
+}
+func (c *Client) SetEX(ctx context.Context, key, val string, ttl time.Duration) error {goCover_1f8b2f55fc0a__4[0] = 1 ; goCover_1f8b2f55fc0a__4[1] = goCover_1f8b2f55fc0a_P ; goCover_1f8b2f55fc0a__4[2] = 4 ; goCover_1f8b2f55fc0a__4[3] = 1;
+	_, err := c.do(ctx, "SET", key, val, "PX", strconv.FormatInt(ttl.Milliseconds(), 10))
+	return err
+}
+func (c *Client) Del(ctx context.Context, key string) error {goCover_1f8b2f55fc0a__5[0] = 1 ; goCover_1f8b2f55fc0a__5[1] = goCover_1f8b2f55fc0a_P ; goCover_1f8b2f55fc0a__5[2] = 5 ; goCover_1f8b2f55fc0a__5[3] = 1;
+	_, err := c.do(ctx, "DEL", key)
+	return err
+}
+func (c *Client) Incr(ctx context.Context, key string) (int, error) {goCover_1f8b2f55fc0a__6[0] = 3 ; goCover_1f8b2f55fc0a__6[1] = goCover_1f8b2f55fc0a_P ; goCover_1f8b2f55fc0a__6[2] = 6 ; goCover_1f8b2f55fc0a__6[3] = 1;
+	s, err := c.do(ctx, "INCR", key)
+	if err != nil {goCover_1f8b2f55fc0a__6[5] = 1;
+		return 0, err
+	}
+	goCover_1f8b2f55fc0a__6[4] = 1;n, _ := strconv.Atoi(strings.TrimSpace(s))
+	return n, nil
+}
+func (c *Client) Expire(ctx context.Context, key string, ttl time.Duration) error {goCover_1f8b2f55fc0a__7[0] = 1 ; goCover_1f8b2f55fc0a__7[1] = goCover_1f8b2f55fc0a_P ; goCover_1f8b2f55fc0a__7[2] = 7 ; goCover_1f8b2f55fc0a__7[3] = 1;
+	_, err := c.do(ctx, "PEXPIRE", key, strconv.FormatInt(ttl.Milliseconds(), 10))
+	return err
+}

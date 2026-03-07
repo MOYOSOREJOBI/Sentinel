@@ -484,9 +484,48 @@ const localeAutonymFallback: Record<Locale, string> = {
   ar: 'العربية',
 }
 
+function readLocaleCookie() {
+  if (typeof document === 'undefined') return ''
+  const match = document.cookie
+    .split(';')
+    .map((part) => part.trim())
+    .find((part) => part.startsWith('locale='))
+  return match ? decodeURIComponent(match.split('=')[1]) : ''
+}
+
 function resolveLocale(input: string | null | undefined): Locale {
   const next = String(input || 'en') as Locale
   return locales.includes(next) ? next : 'en'
+}
+
+export function localeFromRoute(segment: string | null | undefined): Locale | null {
+  const raw = String(segment || '').trim()
+  if (!raw) return null
+  if (raw === 'zh') return 'zh-Hans'
+  return locales.includes(raw as Locale) ? (raw as Locale) : null
+}
+
+export function localeToRoute(locale: string) {
+  const safe = resolveLocale(locale)
+  if (safe === 'zh-Hans') return 'zh'
+  return safe
+}
+
+export function stripLocalePrefix(pathname: string | null | undefined) {
+  const raw = String(pathname || '/')
+  const parts = raw.split('/').filter(Boolean)
+  const detected = localeFromRoute(parts[0])
+  if (!detected) {
+    return raw.startsWith('/') ? raw : `/${raw}`
+  }
+  const rest = parts.slice(1).join('/')
+  return rest ? `/${rest}` : '/'
+}
+
+export function withLocalePath(pathname: string | null | undefined, locale: string) {
+  const base = stripLocalePrefix(pathname)
+  const prefixed = `/${localeToRoute(locale)}`
+  return base === '/' ? prefixed : `${prefixed}${base}`
 }
 
 export function applyLocale(locale: string) {
@@ -501,7 +540,15 @@ export function applyLocale(locale: string) {
 
 export function localeFromStorage(): Locale {
   if (typeof window === 'undefined') return 'en'
-  return resolveLocale(localStorage.getItem(STORAGE_KEY))
+  const fromPath = localeFromRoute(window.location.pathname.split('/').filter(Boolean)[0] || '')
+  if (fromPath) {
+    return fromPath
+  }
+  const fromStorage = localStorage.getItem(STORAGE_KEY)
+  if (fromStorage) {
+    return resolveLocale(fromStorage)
+  }
+  return resolveLocale(readLocaleCookie())
 }
 
 export function setLocaleStorage(locale: Locale) {
@@ -518,13 +565,6 @@ export function allLocales(): Locale[] {
 }
 
 export function localeLabel(locale: Locale): string {
-  try {
-    const display = new Intl.DisplayNames([locale], { type: 'language' })
-    const value = display.of(locale)
-    if (value) return value
-  } catch {
-    // fall through to manual autonym map
-  }
   return localeAutonymFallback[locale] || locale
 }
 

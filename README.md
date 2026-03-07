@@ -33,7 +33,8 @@ You can run in Docker or on Kubernetes.
 
 • Role‑based access control on mutation endpoints.
 • Tamper‑evident audit log with a hash chain.
-• CSRF and rate limits with Redis state when configured.
+• CSRF and rate limits are Redis-backed; protected writes fail closed if Redis is unavailable unless `DEV_UNSAFE=true` is set for local debugging.
+• Replay jobs persist parity summaries, determinism fingerprints, and exportable replay briefs with provenance.
 
 ### Observability
 
@@ -69,10 +70,39 @@ Bring up the stack:
 make demo
 ```
 
+This is the supported clean-checkout path. It now:
+- generates `keys/` automatically if missing
+- boots the stack
+- runs migrations
+- creates Kafka topics
+- seeds demo users and instrument metadata
+- auto-switches to the local override ports if the default host ports are already taken
+- requires Redis for login throttling and CSRF; if Redis is down, protected writes return `503` unless `DEV_UNSAFE=true` is set for local-only troubleshooting
+
+Demo logins after `make demo`:
+- `admin@sentinel.local` / `Sentinel#123`
+- `analyst@sentinel.local` / `Sentinel#123`
+- `viewer@sentinel.local` / `Sentinel#123`
+
 Or run compose manually:
 
 ```bash
+make dev-keys
 docker compose -f deploy/docker/docker-compose.yml up -d --build
+make seed
+```
+
+If the default host ports are busy, use the standard local override:
+
+```bash
+make up-local
+make seed POSTGRES_PORT=55432
+```
+
+Equivalent raw compose command:
+
+```bash
+docker compose -f deploy/docker/docker-compose.yml -f deploy/docker/docker-compose.override.local.yml up -d --build
 ```
 
 Open services:
@@ -81,6 +111,21 @@ Primary entrypoint: http://localhost:3000
 Backend ports (host-side verification only): http://localhost:8080 and http://localhost:8085
 Prometheus: http://localhost:9090
 Grafana: http://localhost:3001
+
+When the local override is active:
+- Web: `http://localhost:33000`
+- Gateway API: `http://localhost:58080`
+- Query: `http://localhost:58085`
+- Alerts: `http://localhost:58083`
+- Governance: `http://localhost:58084`
+- Aggregator: `http://localhost:58081`
+- Features: `http://localhost:58082`
+- Inference: `http://localhost:58090`
+- Postgres: `localhost:55432`
+- Redis: `localhost:56379`
+- Redpanda: `localhost:59092`
+- Prometheus: `http://localhost:59090`
+- Grafana: `http://localhost:33001`
 
 Health and metrics:
 
@@ -123,7 +168,30 @@ To run Playwright inside Docker:
 
 ```bash
 make demo
-make seed
+```
+
+`make up`, `make up-fast`, `make up-local`, and `make up-fast-local` generate local dev keys automatically before Docker builds. `make demo` and `make demo-local` also seed the demo users automatically.
+
+### Port conflicts
+
+Use the standard local override when the defaults are already occupied:
+
+```bash
+make demo-local
+```
+
+Or force the demo wrapper to use the override file:
+
+```bash
+SENTINEL_USE_LOCAL_OVERRIDE=1 ./scripts/run-demo.sh default
+```
+
+To inspect which process owns a conflicting port:
+
+```bash
+lsof -nP -iTCP:3000 -sTCP:LISTEN
+lsof -nP -iTCP:8080 -sTCP:LISTEN
+lsof -nP -iTCP:5432 -sTCP:LISTEN
 ```
 
 ### How to validate
@@ -136,11 +204,13 @@ make seed
 ### How to demo
 
 1. Log in as `admin@sentinel.local` / `Sentinel#123`.
-2. Open Queue or Feed, then drill into an incident.
-3. Use `Ack`, `Escalate`, `Notify on-call`, and `Promote to Case`.
-4. Copy or download the incident brief from the incident page.
-5. Open Feed to show the Comms panel and the persisted `Next 24h forecast`.
-6. Open Grafana to verify `http_requests_total`, latency, and Kafka traffic panels are non-zero.
+2. Open Command Center and confirm the demo shows populated country, severity, and histogram charts plus a live market+risk overlay instead of the empty fallback.
+3. Open Queue or Feed, then drill into an incident.
+4. Use `Ack`, `Escalate`, `Notify on-call`, and `Promote to Case`.
+5. Copy or download the incident brief from the incident page.
+6. Open Feed to show the Comms panel and the persisted `Next 24h forecast`.
+7. Open Grafana to verify `http_requests_total`, latency, and Kafka traffic panels are non-zero.
+8. Open Governance, start a replay, then open the replay job to show `MATCH`/`MISMATCH`, determinism status, and export the replay brief.
 
 ## Common issues
 

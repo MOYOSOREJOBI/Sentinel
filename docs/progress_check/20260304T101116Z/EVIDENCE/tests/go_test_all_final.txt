@@ -1,0 +1,29 @@
+?   	sentinel/cmd/aggregator	[no test files]
+ok  	sentinel/cmd/alerts	(cached)
+ok  	sentinel/cmd/features	(cached)
+ok  	sentinel/cmd/gateway-api	(cached)
+ok  	sentinel/cmd/governance	0.903s
+ok  	sentinel/cmd/query	(cached)
+ok  	sentinel/cmd/simulator	(cached)
+ok  	sentinel/internal/audit	(cached)
+ok  	sentinel/internal/auth	(cached)
+ok  	sentinel/internal/authz	(cached)
+ok  	sentinel/internal/cache	(cached)
+ok  	sentinel/internal/config	(cached)
+?   	sentinel/internal/contracts	[no test files]
+?   	sentinel/internal/db	[no test files]
+ok  	sentinel/internal/healthcheck	(cached)
+?   	sentinel/internal/httpx	[no test files]
+ok  	sentinel/internal/incidents	(cached)
+ok  	sentinel/internal/kafka	(cached)
+?   	sentinel/internal/logging	[no test files]
+ok  	sentinel/internal/logic	(cached)
+ok  	sentinel/internal/marketmath	(cached)
+ok  	sentinel/internal/metrics	(cached)
+ok  	sentinel/internal/middleware	(cached)
+ok  	sentinel/internal/pipeline/scoring	(cached)
+ok  	sentinel/internal/query	(cached)
+ok  	sentinel/internal/rbac	(cached)
+?   	sentinel/internal/rediskv	[no test files]
+ok  	sentinel/internal/replay	(cached)
+?   	sentinel/internal/testredis	[no test files]

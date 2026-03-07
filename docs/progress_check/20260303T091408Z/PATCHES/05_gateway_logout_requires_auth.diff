@@ -1,0 +1,16 @@
+diff --git a/cmd/gateway-api/main.go b/cmd/gateway-api/main.go
+--- a/cmd/gateway-api/main.go
++++ b/cmd/gateway-api/main.go
+@@
+ 	r.Post("/auth/logout", func(w http.ResponseWriter, r *http.Request) {
+ 		claims, ok := authn(r, pub)
+-		if ok {
+-			middleware.ClearCSRF(claims.Subject)
++		if !ok {
++			http.Error(w, "unauthorized", http.StatusUnauthorized)
++			return
+ 		}
++		middleware.ClearCSRF(claims.Subject)
+ 		secure := cookieSecure(r)
+ 		http.SetCookie(w, &http.Cookie{Name: "sentinel_token", Value: "", HttpOnly: true, Secure: secure, SameSite: http.SameSiteLaxMode, Path: "/", MaxAge: -1})
+ 		http.SetCookie(w, &http.Cookie{Name: "sentinel_csrf", Value: "", HttpOnly: false, Secure: secure, SameSite: http.SameSiteLaxMode, Path: "/", MaxAge: -1})

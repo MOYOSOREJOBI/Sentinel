@@ -1,0 +1,35 @@
+Metrics summary generated from current runtime probes.
+
+## gateway-api
+curl:
+
+## query
+curl:
+
+## alerts
+curl:
+
+## governance
+curl:
+
+## aggregator
+curl:
+
+## features
+curl:
+
+## simulator
+curl:
+
+## inference
+curl:
+
+## web
+curl:
+
+## prometheus
+curl:
+
+## grafana
+curl:
+

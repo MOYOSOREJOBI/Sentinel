@@ -1,0 +1,3 @@
+covervars.go
+logic.cover.go
+./logic_test.go

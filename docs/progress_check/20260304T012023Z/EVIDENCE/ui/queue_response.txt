@@ -1,0 +1,10 @@
+HTTP/1.1 200 OK
+vary: RSC, Next-Router-State-Tree, Next-Router-Prefetch
+content-length: 1308
+content-type: application/json
+date: Wed, 04 Mar 2026 01:29:06 GMT
+x-request-id: 2ae795e83d2c7f05
+Connection: keep-alive
+Keep-Alive: timeout=5
+
+[{"id":1,"symbol":"CONS-041","status":"open","severityBand":"elevated","priorityScore":0.5080163901210949,"compositeRisk":0.5080163901210949,"confidence":0.9952147555873333,"region":"Asia","countryCode":"JP","industry":"Retail","recommendedAction":"watch"},{"id":2,"symbol":"REIT-021","status":"open","severityBand":"elevated","priorityScore":0.5049035217589962,"compositeRisk":0.5049035217589962,"confidence":0.996118361393,"region":"Oceania","countryCode":"AU","industry":"REITs","recommendedAction":"watch"},{"id":3,"symbol":"UTIL-071","status":"open","severityBand":"elevated","priorityScore":0.4945025046304407,"compositeRisk":0.4945025046304407,"confidence":0.9925395411351666,"region":"Europe","countryCode":"GB","industry":"Power Utilities","recommendedAction":"watch"},{"id":5,"symbol":"COMM-081","status":"open","severityBand":"elevated","priorityScore":0.4871166142394985,"compositeRisk":0.4871166142394985,"confidence":0.9904054171945,"region":"Asia","countryCode":"SG","industry":"Telecom Services","recommendedAction":"watch"},{"id":4,"symbol":"IND-081","status":"open","severityBand":"elevated","priorityScore":0.47771720488247743,"compositeRisk":0.47771720488247743,"confidence":0.9947910956968333,"region":"Europe","countryCode":"DE","industry":"Capital Goods","recommendedAction":"watch"}]

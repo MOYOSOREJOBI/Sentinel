@@ -1,0 +1,5 @@
+Playwright final console capture for `http://localhost:33000/en/command-center` returned:
+
+- total messages: 1
+- error messages: 0
+- warnings: 0

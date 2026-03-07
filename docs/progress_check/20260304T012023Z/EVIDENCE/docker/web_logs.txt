@@ -1,0 +1,400 @@
+      at Object.errorRequest (node:internal/deps/undici/undici:1707:17)
+      at Socket.<anonymous> (node:internal/deps/undici/undici:6433:16)
+      at Socket.emit (node:events:536:35)
+      at TCP.<anonymous> (node:net:343:12)
+      at TCP.callbackTrampoline (node:internal/async_hooks:130:17) {
+    [cause]: SocketError: other side closed
+        at Socket.<anonymous> (node:internal/deps/undici/undici:6408:28)
+        at Socket.emit (node:events:536:35)
+        at endReadableNT (node:internal/streams/readable:1698:12)
+        at process.processTicksAndRejections (node:internal/process/task_queues:82:21) {
+      code: 'UND_ERR_SOCKET',
+      socket: [Object],
+      [Symbol(undici.error.UND_ERR)]: true,
+      [Symbol(undici.error.UND_ERR_SOCKET)]: true
+    }
+  }
+}
+ GET /api/sse/trust 500 in 20256ms
+ GET / 200 in 63ms
+ GET / 200 in 81ms
+ GET / 200 in 72ms
+ GET / 200 in 364ms
+ ⨯ Error: failed to pipe response
+    at pipeToNodeResponse (/app/web/node_modules/next/dist/server/pipe-readable.js:126:15)
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async sendResponse (/app/web/node_modules/next/dist/server/send-response.js:40:13)
+    at async doRender (/app/web/node_modules/next/dist/server/base-server.js:1407:25)
+    at async cacheEntry.responseCache.get.routeKind (/app/web/node_modules/next/dist/server/base-server.js:1599:28)
+    at async DevServer.renderToResponseWithComponentsImpl (/app/web/node_modules/next/dist/server/base-server.js:1507:28)
+    at async DevServer.renderPageComponent (/app/web/node_modules/next/dist/server/base-server.js:1931:24)
+    at async DevServer.renderToResponseImpl (/app/web/node_modules/next/dist/server/base-server.js:1969:32)
+    at async DevServer.pipeImpl (/app/web/node_modules/next/dist/server/base-server.js:920:25)
+    at async NextNodeServer.handleCatchallRenderRequest (/app/web/node_modules/next/dist/server/next-server.js:272:17)
+    at async DevServer.handleRequestImpl (/app/web/node_modules/next/dist/server/base-server.js:816:17)
+    at async /app/web/node_modules/next/dist/server/dev/next-dev-server.js:339:20
+    at async Span.traceAsyncFn (/app/web/node_modules/next/dist/trace/trace.js:154:20)
+    at async DevServer.handleRequest (/app/web/node_modules/next/dist/server/dev/next-dev-server.js:336:24)
+    at async invokeRender (/app/web/node_modules/next/dist/server/lib/router-server.js:174:21)
+    at async handleRequest (/app/web/node_modules/next/dist/server/lib/router-server.js:353:24)
+    at async requestHandlerImpl (/app/web/node_modules/next/dist/server/lib/router-server.js:377:13)
+    at async Server.requestListener (/app/web/node_modules/next/dist/server/lib/start-server.js:141:13) {
+  [cause]: TypeError: terminated
+      at Fetch.onAborted (node:internal/deps/undici/undici:11322:53)
+      at Fetch.emit (node:events:524:28)
+      at Fetch.terminate (node:internal/deps/undici/undici:10480:14)
+      at Object.onError (node:internal/deps/undici/undici:11445:38)
+      at Request.onError (node:internal/deps/undici/undici:2210:31)
+      at Object.errorRequest (node:internal/deps/undici/undici:1707:17)
+      at Socket.<anonymous> (node:internal/deps/undici/undici:6433:16)
+      at Socket.emit (node:events:536:35)
+      at TCP.<anonymous> (node:net:343:12)
+      at TCP.callbackTrampoline (node:internal/async_hooks:130:17) {
+    [cause]: SocketError: other side closed
+        at Socket.<anonymous> (node:internal/deps/undici/undici:6408:28)
+        at Socket.emit (node:events:536:35)
+        at endReadableNT (node:internal/streams/readable:1698:12)
+        at process.processTicksAndRejections (node:internal/process/task_queues:82:21) {
+      code: 'UND_ERR_SOCKET',
+      socket: [Object],
+      [Symbol(undici.error.UND_ERR)]: true,
+      [Symbol(undici.error.UND_ERR_SOCKET)]: true
+    }
+  }
+}
+ GET /api/sse/trust 500 in 22576ms
+ GET / 200 in 96ms
+ GET / 200 in 87ms
+ GET / 200 in 75ms
+ GET / 200 in 74ms
+ GET /api/proxy/query/trust?window=1h 200 in 359ms
+ GET / 200 in 185ms
+ GET /api/sse/trust 200 in 23656ms
+ GET /api/proxy/gateway-api/me 200 in 212ms
+ GET /api/proxy/query/cases 200 in 278ms
+ GET /api/proxy/gateway-api/me 200 in 264ms
+ GET /api/proxy/gateway-api/me 200 in 295ms
+ GET /api/proxy/gateway-api/me 200 in 301ms
+ GET /api/proxy/query/cases 200 in 322ms
+ GET / 200 in 99ms
+ GET /api/proxy/query/queue?window=24h 200 in 166ms
+ GET /api/proxy/gateway-api/me 200 in 172ms
+ GET /api/proxy/gateway-api/me 200 in 180ms
+ GET /api/proxy/query/queue?window=24h 200 in 200ms
+ GET /api/proxy/query/feed?window=24h&limit=100 200 in 206ms
+ GET /api/proxy/query/feed?window=24h&limit=100 200 in 217ms
+ GET /api/sse/queue 200 in 3701ms
+ GET /api/proxy/gateway-api/me 200 in 95ms
+ GET /api/proxy/query/world-map?window=24h 200 in 181ms
+ GET /api/proxy/query/feed?window=24h&limit=5 200 in 179ms
+ GET /api/proxy/query/queue?window=24h 200 in 193ms
+ GET /api/proxy/gateway-api/me 200 in 192ms
+ GET /api/proxy/query/command-center?window=24h 200 in 214ms
+ GET /api/proxy/query/command-center?window=24h 200 in 262ms
+ GET /api/proxy/query/world-map?window=24h 200 in 190ms
+ GET /api/proxy/query/queue?window=24h 200 in 194ms
+ GET /api/proxy/query/feed?window=24h&limit=5 200 in 201ms
+ GET /api/proxy/query/scores?symbol=CONS-041&window=24h&maxPoints=320 200 in 391ms
+ GET /api/proxy/query/scores?symbol=CONS-041&window=24h&maxPoints=320 200 in 529ms
+ GET / 200 in 91ms
+ GET /api/proxy/query/candles?symbol=CONS-041&window=24h&maxPoints=320&res=5m 200 in 1721ms
+ GET /api/proxy/query/candles?symbol=CONS-041&window=24h&maxPoints=320&res=5m 200 in 2010ms
+ GET /api/proxy/query/candles?symbol=CONS-041&window=24h&maxPoints=320&res=1m 200 in 125ms
+ GET /api/proxy/query/scores?symbol=CONS-041&window=24h&maxPoints=320 200 in 182ms
+ GET / 200 in 84ms
+ GET /api/proxy/query/candles?symbol=CONS-041&window=24h&maxPoints=320&res=1h 200 in 129ms
+ GET /api/proxy/query/scores?symbol=CONS-041&window=24h&maxPoints=320 200 in 163ms
+ GET / 200 in 59ms
+ ⨯ Error: failed to pipe response
+    at pipeToNodeResponse (/app/web/node_modules/next/dist/server/pipe-readable.js:126:15)
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async sendResponse (/app/web/node_modules/next/dist/server/send-response.js:40:13)
+    at async doRender (/app/web/node_modules/next/dist/server/base-server.js:1407:25)
+    at async cacheEntry.responseCache.get.routeKind (/app/web/node_modules/next/dist/server/base-server.js:1599:28)
+    at async DevServer.renderToResponseWithComponentsImpl (/app/web/node_modules/next/dist/server/base-server.js:1507:28)
+    at async DevServer.renderPageComponent (/app/web/node_modules/next/dist/server/base-server.js:1931:24)
+    at async DevServer.renderToResponseImpl (/app/web/node_modules/next/dist/server/base-server.js:1969:32)
+    at async DevServer.pipeImpl (/app/web/node_modules/next/dist/server/base-server.js:920:25)
+    at async NextNodeServer.handleCatchallRenderRequest (/app/web/node_modules/next/dist/server/next-server.js:272:17)
+    at async DevServer.handleRequestImpl (/app/web/node_modules/next/dist/server/base-server.js:816:17)
+    at async /app/web/node_modules/next/dist/server/dev/next-dev-server.js:339:20
+    at async Span.traceAsyncFn (/app/web/node_modules/next/dist/trace/trace.js:154:20)
+    at async DevServer.handleRequest (/app/web/node_modules/next/dist/server/dev/next-dev-server.js:336:24)
+    at async invokeRender (/app/web/node_modules/next/dist/server/lib/router-server.js:174:21)
+    at async handleRequest (/app/web/node_modules/next/dist/server/lib/router-server.js:353:24)
+    at async requestHandlerImpl (/app/web/node_modules/next/dist/server/lib/router-server.js:377:13)
+    at async Server.requestListener (/app/web/node_modules/next/dist/server/lib/start-server.js:141:13) {
+  [cause]: TypeError: terminated
+      at Fetch.onAborted (node:internal/deps/undici/undici:11322:53)
+      at Fetch.emit (node:events:524:28)
+      at Fetch.terminate (node:internal/deps/undici/undici:10480:14)
+      at Object.onError (node:internal/deps/undici/undici:11445:38)
+      at Request.onError (node:internal/deps/undici/undici:2210:31)
+      at Object.errorRequest (node:internal/deps/undici/undici:1707:17)
+      at Socket.<anonymous> (node:internal/deps/undici/undici:6433:16)
+      at Socket.emit (node:events:536:35)
+      at TCP.<anonymous> (node:net:343:12)
+      at TCP.callbackTrampoline (node:internal/async_hooks:130:17) {
+    [cause]: SocketError: other side closed
+        at Socket.<anonymous> (node:internal/deps/undici/undici:6408:28)
+        at Socket.emit (node:events:536:35)
+        at endReadableNT (node:internal/streams/readable:1698:12)
+        at process.processTicksAndRejections (node:internal/process/task_queues:82:21) {
+      code: 'UND_ERR_SOCKET',
+      socket: [Object],
+      [Symbol(undici.error.UND_ERR)]: true,
+      [Symbol(undici.error.UND_ERR_SOCKET)]: true
+    }
+  }
+}
+ GET /api/sse/command-center 500 in 15175ms
+ GET /api/proxy/query/candles?symbol=CONS-041&window=24h&maxPoints=320&res=1h 200 in 118ms
+ GET /api/proxy/query/scores?symbol=CONS-041&window=24h&maxPoints=320 200 in 150ms
+ GET / 200 in 76ms
+ GET / 200 in 57ms
+ GET /api/proxy/query/candles?symbol=CONS-041&window=24h&maxPoints=320&res=1h 200 in 141ms
+ GET /api/proxy/query/scores?symbol=CONS-041&window=24h&maxPoints=320 200 in 178ms
+ GET / 200 in 68ms
+ ⨯ Error: failed to pipe response
+    at pipeToNodeResponse (/app/web/node_modules/next/dist/server/pipe-readable.js:126:15)
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async sendResponse (/app/web/node_modules/next/dist/server/send-response.js:40:13)
+    at async doRender (/app/web/node_modules/next/dist/server/base-server.js:1407:25)
+    at async cacheEntry.responseCache.get.routeKind (/app/web/node_modules/next/dist/server/base-server.js:1599:28)
+    at async DevServer.renderToResponseWithComponentsImpl (/app/web/node_modules/next/dist/server/base-server.js:1507:28)
+    at async DevServer.renderPageComponent (/app/web/node_modules/next/dist/server/base-server.js:1931:24)
+    at async DevServer.renderToResponseImpl (/app/web/node_modules/next/dist/server/base-server.js:1969:32)
+    at async DevServer.pipeImpl (/app/web/node_modules/next/dist/server/base-server.js:920:25)
+    at async NextNodeServer.handleCatchallRenderRequest (/app/web/node_modules/next/dist/server/next-server.js:272:17)
+    at async DevServer.handleRequestImpl (/app/web/node_modules/next/dist/server/base-server.js:816:17)
+    at async /app/web/node_modules/next/dist/server/dev/next-dev-server.js:339:20
+    at async Span.traceAsyncFn (/app/web/node_modules/next/dist/trace/trace.js:154:20)
+    at async DevServer.handleRequest (/app/web/node_modules/next/dist/server/dev/next-dev-server.js:336:24)
+    at async invokeRender (/app/web/node_modules/next/dist/server/lib/router-server.js:174:21)
+    at async handleRequest (/app/web/node_modules/next/dist/server/lib/router-server.js:353:24)
+    at async requestHandlerImpl (/app/web/node_modules/next/dist/server/lib/router-server.js:377:13)
+    at async Server.requestListener (/app/web/node_modules/next/dist/server/lib/start-server.js:141:13) {
+  [cause]: TypeError: terminated
+      at Fetch.onAborted (node:internal/deps/undici/undici:11322:53)
+      at Fetch.emit (node:events:524:28)
+      at Fetch.terminate (node:internal/deps/undici/undici:10480:14)
+      at Object.onError (node:internal/deps/undici/undici:11445:38)
+      at Request.onError (node:internal/deps/undici/undici:2210:31)
+      at Object.errorRequest (node:internal/deps/undici/undici:1707:17)
+      at Socket.<anonymous> (node:internal/deps/undici/undici:6433:16)
+      at Socket.emit (node:events:536:35)
+      at TCP.<anonymous> (node:net:343:12)
+      at TCP.callbackTrampoline (node:internal/async_hooks:130:17) {
+    [cause]: SocketError: other side closed
+        at Socket.<anonymous> (node:internal/deps/undici/undici:6408:28)
+        at Socket.emit (node:events:536:35)
+        at endReadableNT (node:internal/streams/readable:1698:12)
+        at process.processTicksAndRejections (node:internal/process/task_queues:82:21) {
+      code: 'UND_ERR_SOCKET',
+      socket: [Object],
+      [Symbol(undici.error.UND_ERR)]: true,
+      [Symbol(undici.error.UND_ERR_SOCKET)]: true
+    }
+  }
+}
+ GET /api/sse/command-center 500 in 15076ms
+ GET / 200 in 68ms
+ GET /api/proxy/query/candles?symbol=CONS-041&window=24h&maxPoints=320&res=1h 200 in 119ms
+ GET /api/proxy/query/scores?symbol=CONS-041&window=24h&maxPoints=320 200 in 142ms
+ GET / 200 in 68ms
+ GET / 200 in 72ms
+ ⨯ Error: failed to pipe response
+    at pipeToNodeResponse (/app/web/node_modules/next/dist/server/pipe-readable.js:126:15)
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async sendResponse (/app/web/node_modules/next/dist/server/send-response.js:40:13)
+    at async doRender (/app/web/node_modules/next/dist/server/base-server.js:1407:25)
+    at async cacheEntry.responseCache.get.routeKind (/app/web/node_modules/next/dist/server/base-server.js:1599:28)
+    at async DevServer.renderToResponseWithComponentsImpl (/app/web/node_modules/next/dist/server/base-server.js:1507:28)
+    at async DevServer.renderPageComponent (/app/web/node_modules/next/dist/server/base-server.js:1931:24)
+    at async DevServer.renderToResponseImpl (/app/web/node_modules/next/dist/server/base-server.js:1969:32)
+    at async DevServer.pipeImpl (/app/web/node_modules/next/dist/server/base-server.js:920:25)
+    at async NextNodeServer.handleCatchallRenderRequest (/app/web/node_modules/next/dist/server/next-server.js:272:17)
+    at async DevServer.handleRequestImpl (/app/web/node_modules/next/dist/server/base-server.js:816:17)
+    at async /app/web/node_modules/next/dist/server/dev/next-dev-server.js:339:20
+    at async Span.traceAsyncFn (/app/web/node_modules/next/dist/trace/trace.js:154:20)
+    at async DevServer.handleRequest (/app/web/node_modules/next/dist/server/dev/next-dev-server.js:336:24)
+    at async invokeRender (/app/web/node_modules/next/dist/server/lib/router-server.js:174:21)
+    at async handleRequest (/app/web/node_modules/next/dist/server/lib/router-server.js:353:24)
+    at async requestHandlerImpl (/app/web/node_modules/next/dist/server/lib/router-server.js:377:13)
+    at async Server.requestListener (/app/web/node_modules/next/dist/server/lib/start-server.js:141:13) {
+  [cause]: TypeError: terminated
+      at Fetch.onAborted (node:internal/deps/undici/undici:11322:53)
+      at Fetch.emit (node:events:524:28)
+      at Fetch.terminate (node:internal/deps/undici/undici:10480:14)
+      at Object.onError (node:internal/deps/undici/undici:11445:38)
+      at Request.onError (node:internal/deps/undici/undici:2210:31)
+      at Object.errorRequest (node:internal/deps/undici/undici:1707:17)
+      at Socket.<anonymous> (node:internal/deps/undici/undici:6433:16)
+      at Socket.emit (node:events:536:35)
+      at TCP.<anonymous> (node:net:343:12)
+      at TCP.callbackTrampoline (node:internal/async_hooks:130:17) {
+    [cause]: SocketError: other side closed
+        at Socket.<anonymous> (node:internal/deps/undici/undici:6408:28)
+        at Socket.emit (node:events:536:35)
+        at endReadableNT (node:internal/streams/readable:1698:12)
+        at process.processTicksAndRejections (node:internal/process/task_queues:82:21) {
+      code: 'UND_ERR_SOCKET',
+      socket: [Object],
+      [Symbol(undici.error.UND_ERR)]: true,
+      [Symbol(undici.error.UND_ERR_SOCKET)]: true
+    }
+  }
+}
+ GET /api/sse/command-center 500 in 15061ms
+ GET /api/proxy/query/candles?symbol=CONS-041&window=24h&maxPoints=320&res=1h 200 in 190ms
+ GET /api/proxy/query/scores?symbol=CONS-041&window=24h&maxPoints=320 200 in 208ms
+ GET / 200 in 86ms
+ GET / 200 in 70ms
+ GET /api/proxy/query/scores?symbol=CONS-041&window=24h&maxPoints=320 200 in 115ms
+ GET /api/proxy/query/candles?symbol=CONS-041&window=24h&maxPoints=320&res=1h 200 in 145ms
+ GET / 200 in 70ms
+ ⨯ Error: failed to pipe response
+    at pipeToNodeResponse (/app/web/node_modules/next/dist/server/pipe-readable.js:126:15)
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async sendResponse (/app/web/node_modules/next/dist/server/send-response.js:40:13)
+    at async doRender (/app/web/node_modules/next/dist/server/base-server.js:1407:25)
+    at async cacheEntry.responseCache.get.routeKind (/app/web/node_modules/next/dist/server/base-server.js:1599:28)
+    at async DevServer.renderToResponseWithComponentsImpl (/app/web/node_modules/next/dist/server/base-server.js:1507:28)
+    at async DevServer.renderPageComponent (/app/web/node_modules/next/dist/server/base-server.js:1931:24)
+    at async DevServer.renderToResponseImpl (/app/web/node_modules/next/dist/server/base-server.js:1969:32)
+    at async DevServer.pipeImpl (/app/web/node_modules/next/dist/server/base-server.js:920:25)
+    at async NextNodeServer.handleCatchallRenderRequest (/app/web/node_modules/next/dist/server/next-server.js:272:17)
+    at async DevServer.handleRequestImpl (/app/web/node_modules/next/dist/server/base-server.js:816:17)
+    at async /app/web/node_modules/next/dist/server/dev/next-dev-server.js:339:20
+    at async Span.traceAsyncFn (/app/web/node_modules/next/dist/trace/trace.js:154:20)
+    at async DevServer.handleRequest (/app/web/node_modules/next/dist/server/dev/next-dev-server.js:336:24)
+    at async invokeRender (/app/web/node_modules/next/dist/server/lib/router-server.js:174:21)
+    at async handleRequest (/app/web/node_modules/next/dist/server/lib/router-server.js:353:24)
+    at async requestHandlerImpl (/app/web/node_modules/next/dist/server/lib/router-server.js:377:13)
+    at async Server.requestListener (/app/web/node_modules/next/dist/server/lib/start-server.js:141:13) {
+  [cause]: TypeError: terminated
+      at Fetch.onAborted (node:internal/deps/undici/undici:11322:53)
+      at Fetch.emit (node:events:524:28)
+      at Fetch.terminate (node:internal/deps/undici/undici:10480:14)
+      at Object.onError (node:internal/deps/undici/undici:11445:38)
+      at Request.onError (node:internal/deps/undici/undici:2210:31)
+      at Object.errorRequest (node:internal/deps/undici/undici:1707:17)
+      at Socket.<anonymous> (node:internal/deps/undici/undici:6433:16)
+      at Socket.emit (node:events:536:35)
+      at TCP.<anonymous> (node:net:343:12)
+      at TCP.callbackTrampoline (node:internal/async_hooks:130:17) {
+    [cause]: SocketError: other side closed
+        at Socket.<anonymous> (node:internal/deps/undici/undici:6408:28)
+        at Socket.emit (node:events:536:35)
+        at endReadableNT (node:internal/streams/readable:1698:12)
+        at process.processTicksAndRejections (node:internal/process/task_queues:82:21) {
+      code: 'UND_ERR_SOCKET',
+      socket: [Object],
+      [Symbol(undici.error.UND_ERR)]: true,
+      [Symbol(undici.error.UND_ERR_SOCKET)]: true
+    }
+  }
+}
+ GET /api/sse/command-center 500 in 15071ms
+ GET /api/proxy/query/candles?symbol=CONS-041&window=24h&maxPoints=320&res=1h 200 in 122ms
+ GET /api/proxy/query/scores?symbol=CONS-041&window=24h&maxPoints=320 200 in 171ms
+ GET / 200 in 126ms
+ GET / 200 in 72ms
+ GET /api/proxy/query/scores?symbol=CONS-041&window=24h&maxPoints=320 200 in 118ms
+ GET /api/proxy/query/candles?symbol=CONS-041&window=24h&maxPoints=320&res=1h 200 in 132ms
+ ⨯ Error: failed to pipe response
+    at pipeToNodeResponse (/app/web/node_modules/next/dist/server/pipe-readable.js:126:15)
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async sendResponse (/app/web/node_modules/next/dist/server/send-response.js:40:13)
+    at async doRender (/app/web/node_modules/next/dist/server/base-server.js:1407:25)
+    at async cacheEntry.responseCache.get.routeKind (/app/web/node_modules/next/dist/server/base-server.js:1599:28)
+    at async DevServer.renderToResponseWithComponentsImpl (/app/web/node_modules/next/dist/server/base-server.js:1507:28)
+    at async DevServer.renderPageComponent (/app/web/node_modules/next/dist/server/base-server.js:1931:24)
+    at async DevServer.renderToResponseImpl (/app/web/node_modules/next/dist/server/base-server.js:1969:32)
+    at async DevServer.pipeImpl (/app/web/node_modules/next/dist/server/base-server.js:920:25)
+    at async NextNodeServer.handleCatchallRenderRequest (/app/web/node_modules/next/dist/server/next-server.js:272:17)
+    at async DevServer.handleRequestImpl (/app/web/node_modules/next/dist/server/base-server.js:816:17)
+    at async /app/web/node_modules/next/dist/server/dev/next-dev-server.js:339:20
+    at async Span.traceAsyncFn (/app/web/node_modules/next/dist/trace/trace.js:154:20)
+    at async DevServer.handleRequest (/app/web/node_modules/next/dist/server/dev/next-dev-server.js:336:24)
+    at async invokeRender (/app/web/node_modules/next/dist/server/lib/router-server.js:174:21)
+    at async handleRequest (/app/web/node_modules/next/dist/server/lib/router-server.js:353:24)
+    at async requestHandlerImpl (/app/web/node_modules/next/dist/server/lib/router-server.js:377:13)
+    at async Server.requestListener (/app/web/node_modules/next/dist/server/lib/start-server.js:141:13) {
+  [cause]: TypeError: terminated
+      at Fetch.onAborted (node:internal/deps/undici/undici:11322:53)
+      at Fetch.emit (node:events:524:28)
+      at Fetch.terminate (node:internal/deps/undici/undici:10480:14)
+      at Object.onError (node:internal/deps/undici/undici:11445:38)
+      at Request.onError (node:internal/deps/undici/undici:2210:31)
+      at Object.errorRequest (node:internal/deps/undici/undici:1707:17)
+      at Socket.<anonymous> (node:internal/deps/undici/undici:6433:16)
+      at Socket.emit (node:events:536:35)
+      at TCP.<anonymous> (node:net:343:12)
+      at TCP.callbackTrampoline (node:internal/async_hooks:130:17) {
+    [cause]: SocketError: other side closed
+        at Socket.<anonymous> (node:internal/deps/undici/undici:6408:28)
+        at Socket.emit (node:events:536:35)
+        at endReadableNT (node:internal/streams/readable:1698:12)
+        at process.processTicksAndRejections (node:internal/process/task_queues:82:21) {
+      code: 'UND_ERR_SOCKET',
+      socket: [Object],
+      [Symbol(undici.error.UND_ERR)]: true,
+      [Symbol(undici.error.UND_ERR_SOCKET)]: true
+    }
+  }
+}
+ GET /api/sse/command-center 500 in 15061ms
+ GET / 200 in 74ms
+ GET / 200 in 64ms
+ GET /api/proxy/query/scores?symbol=CONS-041&window=24h&maxPoints=320 200 in 189ms
+ GET /api/proxy/query/candles?symbol=CONS-041&window=24h&maxPoints=320&res=1h 200 in 201ms
+ GET / 200 in 63ms
+ ⨯ Error: failed to pipe response
+    at pipeToNodeResponse (/app/web/node_modules/next/dist/server/pipe-readable.js:126:15)
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async sendResponse (/app/web/node_modules/next/dist/server/send-response.js:40:13)
+    at async doRender (/app/web/node_modules/next/dist/server/base-server.js:1407:25)
+    at async cacheEntry.responseCache.get.routeKind (/app/web/node_modules/next/dist/server/base-server.js:1599:28)
+    at async DevServer.renderToResponseWithComponentsImpl (/app/web/node_modules/next/dist/server/base-server.js:1507:28)
+    at async DevServer.renderPageComponent (/app/web/node_modules/next/dist/server/base-server.js:1931:24)
+    at async DevServer.renderToResponseImpl (/app/web/node_modules/next/dist/server/base-server.js:1969:32)
+    at async DevServer.pipeImpl (/app/web/node_modules/next/dist/server/base-server.js:920:25)
+    at async NextNodeServer.handleCatchallRenderRequest (/app/web/node_modules/next/dist/server/next-server.js:272:17)
+    at async DevServer.handleRequestImpl (/app/web/node_modules/next/dist/server/base-server.js:816:17)
+    at async /app/web/node_modules/next/dist/server/dev/next-dev-server.js:339:20
+    at async Span.traceAsyncFn (/app/web/node_modules/next/dist/trace/trace.js:154:20)
+    at async DevServer.handleRequest (/app/web/node_modules/next/dist/server/dev/next-dev-server.js:336:24)
+    at async invokeRender (/app/web/node_modules/next/dist/server/lib/router-server.js:174:21)
+    at async handleRequest (/app/web/node_modules/next/dist/server/lib/router-server.js:353:24)
+    at async requestHandlerImpl (/app/web/node_modules/next/dist/server/lib/router-server.js:377:13)
+    at async Server.requestListener (/app/web/node_modules/next/dist/server/lib/start-server.js:141:13) {
+  [cause]: TypeError: terminated
+      at Fetch.onAborted (node:internal/deps/undici/undici:11322:53)
+      at Fetch.emit (node:events:524:28)
+      at Fetch.terminate (node:internal/deps/undici/undici:10480:14)
+      at Object.onError (node:internal/deps/undici/undici:11445:38)
+      at Request.onError (node:internal/deps/undici/undici:2210:31)
+      at Object.errorRequest (node:internal/deps/undici/undici:1707:17)
+      at Socket.<anonymous> (node:internal/deps/undici/undici:6433:16)
+      at Socket.emit (node:events:536:35)
+      at TCP.<anonymous> (node:net:343:12)
+      at TCP.callbackTrampoline (node:internal/async_hooks:130:17) {
+    [cause]: SocketError: other side closed
+        at Socket.<anonymous> (node:internal/deps/undici/undici:6408:28)
+        at Socket.emit (node:events:536:35)
+        at endReadableNT (node:internal/streams/readable:1698:12)
+        at process.processTicksAndRejections (node:internal/process/task_queues:82:21) {
+      code: 'UND_ERR_SOCKET',
+      socket: [Object],
+      [Symbol(undici.error.UND_ERR)]: true,
+      [Symbol(undici.error.UND_ERR_SOCKET)]: true
+    }
+  }
+}
+ GET /api/sse/command-center 500 in 15096ms
+ GET / 200 in 81ms
+ GET /api/proxy/query/scores?symbol=CONS-041&window=24h&maxPoints=320 200 in 136ms
+ GET /api/proxy/query/candles?symbol=CONS-041&window=24h&maxPoints=320&res=1h 200 in 142ms
+ GET / 200 in 67ms
+ GET / 200 in 85ms

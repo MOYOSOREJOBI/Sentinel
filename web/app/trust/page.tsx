@@ -65,8 +65,12 @@ export default function TrustPage() {
           <p className="muted">This tells you whether Sentinel is using trained model artifacts or a deterministic fallback estimate.</p>
           <div className="grid-3">
             <div className="card kpi-card"><h3>Mode</h3><p>{fallbackMode ? 'Fallback' : 'Trained'}</p><span className="muted">{fallbackMode ? 'Deterministic estimate path' : 'Artifact-backed scoring path'}</span></div>
-            <div className="card kpi-card"><h3>Model version</h3><p>{data?.modelState?.model_version || 'unknown'}</p><span className="muted">Lineage for the latest visible score</span></div>
+            <div className="card kpi-card"><h3>Model version</h3><p>{data?.modelState?.active_model_version || data?.modelState?.model_version || 'unknown'}</p><span className="muted">Active deployed model version</span></div>
             <div className="card kpi-card"><h3>Trained at</h3><p>{data?.modelState?.last_trained_at || 'unknown'}</p><span className="muted">Last known training timestamp</span></div>
+          </div>
+          <div className="grid-2" style={{ marginTop: 12 }}>
+            <div className="kv"><span>Artifact hash</span><strong>{data?.modelState?.active_artifact_hash || data?.modelState?.model_artifact_hash || 'unknown'}</strong></div>
+            <div className="kv"><span>Deployment timestamp</span><strong>{data?.modelState?.active_deployed_at || 'unknown'}</strong></div>
           </div>
         </section>
 

@@ -1,0 +1,10 @@
+HTTP/1.1 200 OK
+vary: RSC, Next-Router-State-Tree, Next-Router-Prefetch
+content-length: 1658
+content-type: application/json
+date: Wed, 04 Mar 2026 09:40:20 GMT
+x-request-id: 55254cce5345ef83
+Connection: keep-alive
+Keep-Alive: timeout=5
+
+{"countries":[{"countryIso2":"SG","countryCode":"SG","countryName":"Singapore","incidentCount":22,"avgCompositeRisk":0.5010749414124209,"maxSafetyLevel":"stable","trustState":"stable","topIndustry":"Telecom Services"},{"countryIso2":"AU","countryCode":"AU","countryName":"Australia","incidentCount":22,"avgCompositeRisk":0.5205528856538207,"maxSafetyLevel":"stable","trustState":"stable","topIndustry":"REITs"},{"countryIso2":"GB","countryCode":"GB","countryName":"United Kingdom","incidentCount":21,"avgCompositeRisk":0.5197382145062116,"maxSafetyLevel":"stable","trustState":"stable","topIndustry":"Power Utilities"},{"countryIso2":"JP","countryCode":"JP","countryName":"Japan","incidentCount":21,"avgCompositeRisk":0.5127626852438616,"maxSafetyLevel":"stable","trustState":"stable","topIndustry":"Retail"},{"countryIso2":"DE","countryCode":"DE","countryName":"Germany","incidentCount":21,"avgCompositeRisk":0.5303674859467845,"maxSafetyLevel":"stable","trustState":"stable","topIndustry":"Capital Goods"},{"countryIso2":"SA","countryCode":"SA","countryName":"Saudi Arabia","incidentCount":20,"avgCompositeRisk":0.511,"maxSafetyLevel":"stable","trustState":"stable","topIndustry":"Integrated Oil \u0026 Gas"},{"countryIso2":"BR","countryCode":"BR","countryName":"Brazil","incidentCount":20,"avgCompositeRisk":0.509,"maxSafetyLevel":"stable","trustState":"stable","topIndustry":"Metals \u0026 Mining"},{"countryIso2":"US","countryCode":"US","countryName":"United States","incidentCount":2,"avgCompositeRisk":0.475,"maxSafetyLevel":"elevated","trustState":"stable","topIndustry":"Medical Devices"}],"geoEnriched":true,"missingGeoCount":0,"timeWindow":"24h"}

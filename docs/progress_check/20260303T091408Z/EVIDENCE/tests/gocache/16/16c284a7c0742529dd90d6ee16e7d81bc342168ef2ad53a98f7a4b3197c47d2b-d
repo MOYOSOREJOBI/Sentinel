@@ -1,0 +1,16 @@
+//line /Users/mac/Desktop/Sentinel/internal/marketmath/zscore.go:1:1
+package marketmath
+
+func ZScore(x, mean, std float64) float64 {goCover_3d3a9210d624__18[0] = 7 ; goCover_3d3a9210d624__18[1] = goCover_3d3a9210d624_P ; goCover_3d3a9210d624__18[2] = 18 ; goCover_3d3a9210d624__18[3] = 1;
+	if std < 1e-9 {goCover_3d3a9210d624__18[7] = 1;
+		return 0
+	}
+	goCover_3d3a9210d624__18[4] = 1;z := (x - mean) / std
+	if z > 8 {goCover_3d3a9210d624__18[8] = 1;
+		return 8
+	}
+	goCover_3d3a9210d624__18[5] = 1;if z < -8 {goCover_3d3a9210d624__18[9] = 1;
+		return -8
+	}
+	goCover_3d3a9210d624__18[6] = 1;return z
+}

@@ -1,0 +1,2 @@
+$ git ls-files | wc -l
+     681

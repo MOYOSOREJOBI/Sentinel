@@ -1,0 +1,3 @@
+$ head -n 120 docs/progress_check/20260303T091408Z/EVIDENCE/curl/aggregator_metrics.txt
+$ curl -i -sS --max-time 5 http://localhost:8081/metrics
+curl: (7) Failed to connect to localhost port 8081 after 0 ms: Could not connect to server

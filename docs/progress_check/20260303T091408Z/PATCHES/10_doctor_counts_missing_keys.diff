@@ -1,0 +1,14 @@
+diff --git a/scripts/doctor.sh b/scripts/doctor.sh
+--- a/scripts/doctor.sh
++++ b/scripts/doctor.sh
+@@
+-[ -f keys/jwtRS256.key ] || echo "WARN jwt private key missing; run make dev-keys"
+-[ -f keys/jwtRS256.key.pub ] || echo "WARN jwt public key missing; run make dev-keys"
++if [ ! -f keys/jwtRS256.key ]; then
++  echo "WARN jwt private key missing; run make dev-keys"
++  warn=1
++fi
++if [ ! -f keys/jwtRS256.key.pub ]; then
++  echo "WARN jwt public key missing; run make dev-keys"
++  warn=1
++fi

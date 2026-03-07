@@ -1,0 +1,200 @@
+ Image docker-gateway-api Building 
+ Image docker-query Building 
+#1 [internal] load local bake definitions
+#1 reading from stdin 1.08kB done
+#1 DONE 0.0s
+
+#2 [gateway-api internal] load build definition from Dockerfile-go
+#2 transferring dockerfile:
+#2 transferring dockerfile: 428B 0.0s done
+#2 DONE 7.7s
+
+#3 [query internal] load metadata for gcr.io/distroless/static-debian12:latest
+#3 DONE 0.5s
+
+#4 [gateway-api internal] load metadata for docker.io/library/golang:1.23
+#4 ...
+
+#5 [auth] library/golang:pull token for registry-1.docker.io
+#5 DONE 0.0s
+
+#4 [gateway-api internal] load metadata for docker.io/library/golang:1.23
+#4 DONE 1.1s
+
+#6 [query internal] load .dockerignore
+#6 transferring context:
+#6 transferring context: 2B 0.0s done
+#6 DONE 8.3s
+
+#7 [gateway-api internal] load build context
+#7 ...
+
+#8 [gateway-api stage-1 1/5] FROM gcr.io/distroless/static-debian12:latest@sha256:20bc6c0bc4d625a22a8fde3e55f6515709b32055ef8fb9cfbddaa06d1760f838
+#8 resolve gcr.io/distroless/static-debian12:latest@sha256:20bc6c0bc4d625a22a8fde3e55f6515709b32055ef8fb9cfbddaa06d1760f838 0.2s done
+#8 DONE 0.2s
+
+#7 [gateway-api internal] load build context
+#7 ...
+
+#9 [gateway-api build 1/6] FROM docker.io/library/golang:1.23@sha256:60deed95d3888cc5e4d9ff8a10c54e5edc008c6ae3fba6187be6fb592e19e8c0
+#9 resolve docker.io/library/golang:1.23@sha256:60deed95d3888cc5e4d9ff8a10c54e5edc008c6ae3fba6187be6fb592e19e8c0 0.2s done
+#9 DONE 0.2s
+
+#7 [gateway-api internal] load build context
+#7 transferring context: 22.22MB 4.9s
+#7 transferring context: 66.00MB 10.1s
+#7 transferring context: 67.19MB 14.4s done
+#7 transferring context: 67.19MB 14.4s done
+#7 DONE 27.0s
+
+#10 [query build 2/6] WORKDIR /app
+#10 CACHED
+
+#11 [query build 3/6] COPY go.mod go.sum ./
+#11 CACHED
+
+#12 [query build 4/6] RUN go mod download
+#12 CACHED
+
+#10 [gateway-api build 2/6] WORKDIR /app
+#10 CACHED
+
+#11 [gateway-api build 3/6] COPY go.mod go.sum ./
+#11 CACHED
+
+#12 [gateway-api build 4/6] RUN go mod download
+#12 CACHED
+
+#13 [gateway-api build 5/6] COPY . .
+#13 DONE 58.4s
+
+#14 [gateway-api build 6/6] RUN CGO_ENABLED=0 GOOS=linux go build -o /bin/service ./cmd/gateway-api
+#14 ...
+
+#15 [query build 6/6] RUN CGO_ENABLED=0 GOOS=linux go build -o /bin/service ./cmd/query
+#15 ...
+
+#14 [gateway-api build 6/6] RUN CGO_ENABLED=0 GOOS=linux go build -o /bin/service ./cmd/gateway-api
+#14 DONE 65.3s
+
+#15 [query build 6/6] RUN CGO_ENABLED=0 GOOS=linux go build -o /bin/service ./cmd/query
+#15 ...
+
+#8 [query stage-1 1/5] FROM gcr.io/distroless/static-debian12:latest@sha256:20bc6c0bc4d625a22a8fde3e55f6515709b32055ef8fb9cfbddaa06d1760f838
+#8 CACHED
+
+#15 [query build 6/6] RUN CGO_ENABLED=0 GOOS=linux go build -o /bin/service ./cmd/query
+#15 ...
+
+#16 [gateway-api stage-1 2/5] COPY --from=build /bin/service /app/service
+#16 DONE 0.4s
+
+#15 [query build 6/6] RUN CGO_ENABLED=0 GOOS=linux go build -o /bin/service ./cmd/query
+#15 ...
+
+#17 [gateway-api stage-1 3/5] COPY --from=build /app/services/inference/models /app/inference-models
+#17 DONE 0.4s
+
+#15 [query build 6/6] RUN CGO_ENABLED=0 GOOS=linux go build -o /bin/service ./cmd/query
+#15 ...
+
+#18 [gateway-api stage-1 4/5] WORKDIR /app
+#18 DONE 0.1s
+
+#19 [gateway-api stage-1 5/5] COPY keys ./keys
+#19 DONE 0.2s
+
+#15 [query build 6/6] RUN CGO_ENABLED=0 GOOS=linux go build -o /bin/service ./cmd/query
+#15 ...
+
+#20 [gateway-api] exporting to image
+#20 exporting layers
+#20 ...
+
+#15 [query build 6/6] RUN CGO_ENABLED=0 GOOS=linux go build -o /bin/service ./cmd/query
+#15 DONE 68.2s
+
+#20 [gateway-api] exporting to image
+#20 ...
+
+#21 [query stage-1 2/5] COPY --from=build /bin/service /app/service
+#21 DONE 2.9s
+
+#20 [gateway-api] exporting to image
+#20 exporting layers 4.1s done
+#20 exporting manifest sha256:22d333fce1912d307aab22ce0f2ffdde8ac305814ed326bac7147f72a8aef591 0.1s done
+#20 exporting config sha256:6177675c5dbb21097ce8be7a531418aaf835365c9cae53d8db72679decdcb2da 0.1s done
+#20 ...
+
+#22 [query stage-1 3/5] COPY --from=build /app/services/inference/models /app/inference-models
+#22 DONE 0.2s
+
+#20 [gateway-api] exporting to image
+#20 exporting attestation manifest sha256:abecd5a4b7af4f256e49e4a783862f2786f22a62a524ec9ac53db55bccf16d9b 0.1s done
+#20 exporting manifest list sha256:ca545ed8bb0d2dc7d3a807a33ced889eeea67e86559ffadd0bed42185acc54ab
+#20 ...
+
+#23 [query stage-1 4/5] WORKDIR /app
+#23 DONE 0.2s
+
+#20 [gateway-api] exporting to image
+#20 exporting manifest list sha256:ca545ed8bb0d2dc7d3a807a33ced889eeea67e86559ffadd0bed42185acc54ab 0.0s done
+#20 naming to docker.io/library/docker-gateway-api:latest 0.0s done
+#20 unpacking to docker.io/library/docker-gateway-api:latest
+#20 ...
+
+#24 [query stage-1 5/5] COPY keys ./keys
+#24 DONE 0.1s
+
+#25 [query] exporting to image
+#25 ...
+
+#20 [gateway-api] exporting to image
+#20 unpacking to docker.io/library/docker-gateway-api:latest 0.8s done
+#20 DONE 5.5s
+
+#25 [query] exporting to image
+#25 ...
+
+#26 [gateway-api] resolving provenance for metadata file
+#26 DONE 0.1s
+
+#25 [query] exporting to image
+#25 exporting layers 4.2s done
+#25 exporting manifest sha256:5d72d0deddaff44f7ed722a6f916ba8ede67c72f9d66c522120962b5d94c5386
+#25 exporting manifest sha256:5d72d0deddaff44f7ed722a6f916ba8ede67c72f9d66c522120962b5d94c5386 0.0s done
+#25 exporting config sha256:1d82eaa19fbc78d8c41be7e10ae86de3f65ea72f443b5ad4031938479432cd97 0.0s done
+#25 exporting attestation manifest sha256:485378e988817b16567cab14b894439ed5561998274f5aa43ed8e12d1ef4d0ab
+#25 exporting attestation manifest sha256:485378e988817b16567cab14b894439ed5561998274f5aa43ed8e12d1ef4d0ab 0.1s done
+#25 exporting manifest list sha256:cc2bf8ee283b0708032ed555b2191188d1f999643590a12fd47f556ad8b49e46 0.0s done
+#25 naming to docker.io/library/docker-query:latest
+#25 naming to docker.io/library/docker-query:latest done
+#25 unpacking to docker.io/library/docker-query:latest
+#25 unpacking to docker.io/library/docker-query:latest 0.7s done
+#25 DONE 12.7s
+
+#27 [query] resolving provenance for metadata file
+#27 DONE 0.0s
+ Image docker-gateway-api Built 
+ Image docker-query Built 
+ Container docker-postgres-1 Recreate 
+ Container docker-redpanda-1 Recreate 
+ Container docker-redis-1 Recreate 
+ Container docker-redis-1 Recreated 
+ Container docker-redpanda-1 Recreated 
+ Container docker-postgres-1 Recreated 
+ Container docker-gateway-api-1 Recreate 
+ Container docker-query-1 Recreate 
+ Container docker-gateway-api-1 Recreated 
+ Container docker-query-1 Recreated 
+ Container docker-web-1 Recreate 
+ Container docker-web-1 Recreated 
+ Container docker-redpanda-1 Starting 
+ Container docker-postgres-1 Starting 
+ Container docker-redis-1 Starting 
+ Container docker-redpanda-1 Started 
+ Container docker-redpanda-1 Waiting 
+ Container docker-redpanda-1 Healthy 
+ Container docker-topics-init-1 Starting 
+ Container docker-topics-init-1 Started 
+Error response from daemon: failed to set up container networking: driver failed programming external connectivity on endpoint docker-postgres-1 (26291ee784b3a2cde7ae6944c4b3400b46c5cc779819c971a191333625218aa5): Bind for 0.0.0.0:5432 failed: port is already allocated

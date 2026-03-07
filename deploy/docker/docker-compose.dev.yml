@@ -1,0 +1,22 @@
+# Development override: replaces production web build with hot-reload dev server.
+# Usage: docker compose -f docker-compose.yml -f docker-compose.dev.yml up
+services:
+  web:
+    build: ~
+    image: node:20-alpine
+    working_dir: /app/web
+    volumes: ["../../:/app"]
+    environment:
+      NODE_ENV: "development"
+      NEXT_TELEMETRY_DISABLED: "1"
+      SENTINEL_UPSTREAM_MODE: "compose"
+      UPSTREAM_GATEWAY: "http://gateway-api:8080"
+      UPSTREAM_GATEWAY_API: "http://gateway-api:8080"
+      UPSTREAM_QUERY: "http://query:8085"
+      UPSTREAM_ALERTS: "http://alerts:8083"
+      UPSTREAM_GOVERNANCE: "http://governance:8084"
+      API_QUERY: "http://query:8085"
+      API_ALERTS: "http://alerts:8083"
+      API_GATEWAY: "http://gateway-api:8080"
+      DEV_UNSAFE: "${DEV_UNSAFE:-false}"
+    command: sh -c "npm install --prefer-offline && npm run dev"

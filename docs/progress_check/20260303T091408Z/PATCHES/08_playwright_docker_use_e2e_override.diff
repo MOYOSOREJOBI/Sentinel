@@ -1,0 +1,14 @@
+diff --git a/scripts/playwright-docker.sh b/scripts/playwright-docker.sh
+--- a/scripts/playwright-docker.sh
++++ b/scripts/playwright-docker.sh
+@@
+-COMPOSE_FILE="${COMPOSE_FILE:-deploy/docker/docker-compose.yml}"
+-DC="docker compose -f ${COMPOSE_FILE}"
++BASE_COMPOSE="${COMPOSE_FILE:-deploy/docker/docker-compose.yml}"
++COMPOSE_ARGS=(-f "${BASE_COMPOSE}")
++if [ -f deploy/docker/docker-compose.e2e.yml ]; then
++  COMPOSE_ARGS+=(-f deploy/docker/docker-compose.e2e.yml)
++fi
+@@
+-${DC} --profile e2e run --rm playwright 2>&1 | tee -a "${TS_DIR}/logs/playwright.log"
++docker compose "${COMPOSE_ARGS[@]}" --profile e2e run --rm playwright 2>&1 | tee -a "${TS_DIR}/logs/playwright.log"

@@ -1,0 +1,45 @@
+?   	sentinel/cmd/aggregator	[no test files]
+# sentinel/cmd/simulator.test
+ld: warning: '/private/var/folders/vk/y7jdn8793b33fkr3q9_b33xc0000gn/T/go-link-3029595914/000013.o' has malformed LC_DYSYMTAB, expected 98 undefined symbols to start at index 884, found 95 undefined symbols starting at index 884
+# sentinel/cmd/gateway-api.test
+ld: warning: '/private/var/folders/vk/y7jdn8793b33fkr3q9_b33xc0000gn/T/go-link-323138129/000013.o' has malformed LC_DYSYMTAB, expected 98 undefined symbols to start at index 884, found 95 undefined symbols starting at index 884
+# sentinel/cmd/features.test
+ld: warning: '/private/var/folders/vk/y7jdn8793b33fkr3q9_b33xc0000gn/T/go-link-3242016586/000013.o' has malformed LC_DYSYMTAB, expected 98 undefined symbols to start at index 884, found 95 undefined symbols starting at index 884
+# sentinel/cmd/alerts.test
+ld: warning: '/private/var/folders/vk/y7jdn8793b33fkr3q9_b33xc0000gn/T/go-link-2421983627/000013.o' has malformed LC_DYSYMTAB, expected 98 undefined symbols to start at index 884, found 95 undefined symbols starting at index 884
+# sentinel/cmd/query.test
+ld: warning: '/private/var/folders/vk/y7jdn8793b33fkr3q9_b33xc0000gn/T/go-link-2148873379/000013.o' has malformed LC_DYSYMTAB, expected 98 undefined symbols to start at index 884, found 95 undefined symbols starting at index 884
+# sentinel/cmd/governance.test
+ld: warning: '/private/var/folders/vk/y7jdn8793b33fkr3q9_b33xc0000gn/T/go-link-1704563306/000013.o' has malformed LC_DYSYMTAB, expected 98 undefined symbols to start at index 884, found 95 undefined symbols starting at index 884
+# sentinel/internal/metrics.test
+ld: warning: '/private/var/folders/vk/y7jdn8793b33fkr3q9_b33xc0000gn/T/go-link-3934690016/000013.o' has malformed LC_DYSYMTAB, expected 98 undefined symbols to start at index 884, found 95 undefined symbols starting at index 884
+ok  	sentinel/cmd/alerts	15.599s
+ok  	sentinel/cmd/features	7.397s
+ok  	sentinel/cmd/gateway-api	20.840s
+ok  	sentinel/cmd/governance	27.570s
+# sentinel/internal/replay.test
+ld: warning: '/private/var/folders/vk/y7jdn8793b33fkr3q9_b33xc0000gn/T/go-link-522192424/000013.o' has malformed LC_DYSYMTAB, expected 98 undefined symbols to start at index 884, found 95 undefined symbols starting at index 884
+ok  	sentinel/cmd/query	56.734s
+ok  	sentinel/cmd/simulator	44.330s
+ok  	sentinel/internal/audit	52.460s
+ok  	sentinel/internal/auth	50.275s
+ok  	sentinel/internal/authz	39.070s
+ok  	sentinel/internal/cache	39.884s
+ok  	sentinel/internal/config	31.630s
+?   	sentinel/internal/contracts	[no test files]
+?   	sentinel/internal/db	[no test files]
+ok  	sentinel/internal/healthcheck	27.626s
+?   	sentinel/internal/httpx	[no test files]
+ok  	sentinel/internal/incidents	57.320s
+ok  	sentinel/internal/kafka	61.038s
+?   	sentinel/internal/logging	[no test files]
+ok  	sentinel/internal/logic	64.981s
+ok  	sentinel/internal/marketmath	65.825s
+ok  	sentinel/internal/metrics	62.102s
+ok  	sentinel/internal/middleware	108.732s
+ok  	sentinel/internal/pipeline/scoring	114.105s
+ok  	sentinel/internal/query	108.553s
+ok  	sentinel/internal/rbac	112.229s
+?   	sentinel/internal/rediskv	[no test files]
+ok  	sentinel/internal/replay	111.130s
+?   	sentinel/internal/testredis	[no test files]

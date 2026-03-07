@@ -1,0 +1,10 @@
+HTTP/1.1 200 OK
+vary: RSC, Next-Router-State-Tree, Next-Router-Prefetch
+content-length: 1609
+content-type: application/json
+date: Wed, 04 Mar 2026 02:34:09 GMT
+x-request-id: e5a8dde18b579924
+Connection: keep-alive
+Keep-Alive: timeout=5
+
+{"backlogDelta":-149,"compositeHistogram":[6,57,64,62,18],"highRiskCount":58,"openIncidents":207,"severityBreakdown":{"critical":3,"elevated":98,"high":55,"stable":51},"timeWindow":"24h","topCountries":[{"countryCode":"US","incidentCount":60},{"countryCode":"AU","incidentCount":22},{"countryCode":"SG","incidentCount":22},{"countryCode":"DE","incidentCount":21},{"countryCode":"GB","incidentCount":21},{"countryCode":"JP","incidentCount":21},{"countryCode":"BR","incidentCount":20},{"countryCode":"SA","incidentCount":20}],"topIncidents":[{"compositeRisk":0.8500000000000001,"id":35,"priorityScore":0.8500000000000001,"severityBand":"critical","symbol":"REIT-010"},{"compositeRisk":0.8500000000000001,"id":103,"priorityScore":0.8500000000000001,"severityBand":"critical","symbol":"IND-018"},{"compositeRisk":0.8500000000000001,"id":171,"priorityScore":0.8500000000000001,"severityBand":"critical","symbol":"FIN-006"},{"compositeRisk":0.8400000000000001,"id":64,"priorityScore":0.8400000000000001,"severityBand":"high","symbol":"UTIL-019"},{"compositeRisk":0.8400000000000001,"id":132,"priorityScore":0.8400000000000001,"severityBand":"high","symbol":"ENERGY-007"}],"topIndustries":[{"incidentCount":22,"industry":"REITs"},{"incidentCount":22,"industry":"Telecom Services"},{"incidentCount":21,"industry":"Capital Goods"},{"incidentCount":21,"industry":"Power Utilities"},{"incidentCount":21,"industry":"Retail"},{"incidentCount":20,"industry":"Diversified Financials"},{"incidentCount":20,"industry":"Integrated Oil \u0026 Gas"},{"incidentCount":20,"industry":"Medical Devices"}],"trust":{"state":"stable"}}

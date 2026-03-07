@@ -1,0 +1,2 @@
+$ docker compose -f deploy/docker/docker-compose.yml exec -T postgres psql -U sentinel -d sentinel -c SELECT\ schemaname\,\ tablename\,\ indexname\,\ indexdef\ FROM\ pg_indexes\ WHERE\ schemaname=\'public\'\ ORDER\ BY\ tablename\,\ indexname\;
+service "postgres" is not running

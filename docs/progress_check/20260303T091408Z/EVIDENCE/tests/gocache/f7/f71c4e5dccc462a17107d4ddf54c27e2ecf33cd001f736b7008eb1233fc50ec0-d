@@ -1,0 +1,23 @@
+mode: set
+sentinel/internal/audit/audit.go:21.89,23.16 2 0
+sentinel/internal/audit/audit.go:23.16,25.3 1 0
+sentinel/internal/audit/audit.go:26.2,28.91 2 0
+sentinel/internal/audit/audit.go:28.91,30.3 1 0
+sentinel/internal/audit/audit.go:32.2,35.168 4 0
+sentinel/internal/audit/audit.go:35.168,37.3 1 0
+sentinel/internal/audit/audit.go:38.2,38.23 1 0
+sentinel/internal/audit/audit.go:41.74,43.16 2 0
+sentinel/internal/audit/audit.go:43.16,45.3 1 0
+sentinel/internal/audit/audit.go:46.2,48.18 3 0
+sentinel/internal/audit/audit.go:48.18,50.98 2 0
+sentinel/internal/audit/audit.go:50.98,52.4 1 0
+sentinel/internal/audit/audit.go:53.3,53.31 1 0
+sentinel/internal/audit/audit.go:55.2,56.21 2 0
+sentinel/internal/audit/audit.go:59.58,62.2 2 1
+sentinel/internal/audit/audit.go:64.55,66.28 2 1
+sentinel/internal/audit/audit.go:66.28,67.25 1 1
+sentinel/internal/audit/audit.go:67.25,69.4 1 0
+sentinel/internal/audit/audit.go:70.3,70.61 1 1
+sentinel/internal/audit/audit.go:70.61,72.4 1 1
+sentinel/internal/audit/audit.go:73.3,73.17 1 1
+sentinel/internal/audit/audit.go:75.2,75.19 1 1

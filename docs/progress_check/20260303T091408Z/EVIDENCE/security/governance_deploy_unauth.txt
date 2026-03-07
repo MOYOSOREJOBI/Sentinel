@@ -1,0 +1,2 @@
+$ curl -i -sS --max-time 5 -X POST http://localhost:8084/models/deploy
+curl: (7) Failed to connect to localhost port 8084 after 0 ms: Could not connect to server

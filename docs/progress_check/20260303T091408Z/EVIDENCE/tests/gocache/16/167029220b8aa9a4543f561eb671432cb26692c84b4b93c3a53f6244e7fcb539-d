@@ -1,0 +1,24 @@
+//line /Users/mac/Desktop/Sentinel/internal/marketmath/dq.go:1:1
+package marketmath
+
+func Clip(v, lo, hi float64) float64 {goCover_3d3a9210d624__0[0] = 5 ; goCover_3d3a9210d624__0[1] = goCover_3d3a9210d624_P ; goCover_3d3a9210d624__0[2] = 0 ; goCover_3d3a9210d624__0[3] = 1;
+	if v < lo {goCover_3d3a9210d624__0[6] = 1;
+		return lo
+	}
+	goCover_3d3a9210d624__0[4] = 1;if v > hi {goCover_3d3a9210d624__0[7] = 1;
+		return hi
+	}
+	goCover_3d3a9210d624__0[5] = 1;return v
+}
+
+func DQPenalty(stalenessScore, lateRatio, outOfOrderRatio, duplicateRatio, missingnessRatio float64) float64 {goCover_3d3a9210d624__1[0] = 1 ; goCover_3d3a9210d624__1[1] = goCover_3d3a9210d624_P ; goCover_3d3a9210d624__1[2] = 1 ; goCover_3d3a9210d624__1[3] = 1;
+	return Clip(
+		0.35*stalenessScore+
+			0.25*lateRatio+
+			0.20*outOfOrderRatio+
+			0.10*duplicateRatio+
+			0.10*missingnessRatio,
+		0,
+		1,
+	)
+}

@@ -1,0 +1,8 @@
+./backfill.go
+./command_center.go
+./feed.go
+./model_bundle.go
+./queue.go
+./scores.go
+./trust.go
+./world_map.go

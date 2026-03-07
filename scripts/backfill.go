@@ -1,3 +1,5 @@
+//go:build backfill
+
 package main
 
 import (

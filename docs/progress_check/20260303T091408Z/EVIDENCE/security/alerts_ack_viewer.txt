@@ -1,0 +1,2 @@
+$ curl -i -sS --max-time 5 -b docs/progress_check/20260303T091408Z/EVIDENCE/security/viewer.cookies.txt -X POST http://localhost:8083/alerts/1/ack
+curl: (7) Failed to connect to localhost port 8083 after 0 ms: Could not connect to server

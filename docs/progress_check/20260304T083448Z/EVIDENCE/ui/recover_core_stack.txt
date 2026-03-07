@@ -1,0 +1,163 @@
+ Image docker-gateway-api Building 
+ Image docker-query Building 
+#1 [internal] load local bake definitions
+#1 reading from stdin 1.08kB done
+#1 DONE 0.0s
+
+#2 [query internal] load build definition from Dockerfile-go
+#2 transferring dockerfile:
+#2 transferring dockerfile: 428B 0.1s done
+#2 DONE 14.6s
+
+#3 [query internal] load metadata for gcr.io/distroless/static-debian12:latest
+#3 DONE 0.8s
+
+#4 [gateway-api internal] load metadata for docker.io/library/golang:1.23
+#4 ...
+
+#5 [auth] library/golang:pull token for registry-1.docker.io
+#5 DONE 0.0s
+
+#4 [gateway-api internal] load metadata for docker.io/library/golang:1.23
+#4 DONE 1.7s
+
+#6 [query internal] load .dockerignore
+#6 transferring context:
+#6 transferring context: 2B 0.0s done
+#6 DONE 2.9s
+
+#7 [gateway-api internal] load build context
+#7 ...
+
+#8 [gateway-api stage-1 1/5] FROM gcr.io/distroless/static-debian12:latest@sha256:20bc6c0bc4d625a22a8fde3e55f6515709b32055ef8fb9cfbddaa06d1760f838
+#8 resolve gcr.io/distroless/static-debian12:latest@sha256:20bc6c0bc4d625a22a8fde3e55f6515709b32055ef8fb9cfbddaa06d1760f838 0.2s done
+#8 DONE 0.2s
+
+#9 [query build 1/6] FROM docker.io/library/golang:1.23@sha256:60deed95d3888cc5e4d9ff8a10c54e5edc008c6ae3fba6187be6fb592e19e8c0
+#9 resolve docker.io/library/golang:1.23@sha256:60deed95d3888cc5e4d9ff8a10c54e5edc008c6ae3fba6187be6fb592e19e8c0 0.2s done
+#9 DONE 0.2s
+
+#7 [gateway-api internal] load build context
+#7 transferring context: 11.19MB 4.9s
+#7 transferring context: 68.74MB 9.9s
+#7 transferring context: 70.18MB 15.3s done
+#7 transferring context: 70.18MB 15.3s done
+#7 DONE 27.4s
+
+#10 [gateway-api build 2/6] WORKDIR /app
+#10 CACHED
+
+#11 [gateway-api build 3/6] COPY go.mod go.sum ./
+#11 CACHED
+
+#12 [gateway-api build 4/6] RUN go mod download
+#12 CACHED
+
+#10 [query build 2/6] WORKDIR /app
+#10 CACHED
+
+#11 [query build 3/6] COPY go.mod go.sum ./
+#11 CACHED
+
+#12 [query build 4/6] RUN go mod download
+#12 CACHED
+
+#13 [query build 5/6] COPY . .
+#13 DONE 65.5s
+
+#14 [query build 6/6] RUN CGO_ENABLED=0 GOOS=linux go build -o /bin/service ./cmd/query
+#14 ...
+
+#15 [gateway-api build 6/6] RUN CGO_ENABLED=0 GOOS=linux go build -o /bin/service ./cmd/gateway-api
+#15 DONE 174.3s
+
+#14 [query build 6/6] RUN CGO_ENABLED=0 GOOS=linux go build -o /bin/service ./cmd/query
+#14 ...
+
+#16 [gateway-api stage-1 2/5] COPY --from=build /bin/service /app/service
+#16 CACHED
+
+#17 [gateway-api stage-1 3/5] COPY --from=build /app/services/inference/models /app/inference-models
+#17 CACHED
+
+#18 [gateway-api stage-1 4/5] WORKDIR /app
+#18 CACHED
+
+#19 [gateway-api stage-1 5/5] COPY keys ./keys
+#19 CACHED
+
+#20 [gateway-api] exporting to image
+#20 exporting layers
+#20 exporting layers 0.2s done
+#20 exporting manifest sha256:22d333fce1912d307aab22ce0f2ffdde8ac305814ed326bac7147f72a8aef591 done
+#20 exporting config sha256:6177675c5dbb21097ce8be7a531418aaf835365c9cae53d8db72679decdcb2da 0.0s done
+#20 exporting attestation manifest sha256:e28a6fb9fe469e61667262d7894c16436feeb7ac855c4a5f6f542547e564d930
+#20 exporting attestation manifest sha256:e28a6fb9fe469e61667262d7894c16436feeb7ac855c4a5f6f542547e564d930 0.2s done
+#20 exporting manifest list sha256:f3f8903a56be67cbabc0e736a40757c4e5303183da9eb069d86601b05c0112e1
+#20 exporting manifest list sha256:f3f8903a56be67cbabc0e736a40757c4e5303183da9eb069d86601b05c0112e1 0.1s done
+#20 naming to docker.io/library/docker-gateway-api:latest
+#20 naming to docker.io/library/docker-gateway-api:latest 0.0s done
+#20 unpacking to docker.io/library/docker-gateway-api:latest
+#20 unpacking to docker.io/library/docker-gateway-api:latest 0.3s done
+#20 DONE 1.7s
+
+#14 [query build 6/6] RUN CGO_ENABLED=0 GOOS=linux go build -o /bin/service ./cmd/query
+#14 DONE 177.8s
+
+#8 [query stage-1 1/5] FROM gcr.io/distroless/static-debian12:latest@sha256:20bc6c0bc4d625a22a8fde3e55f6515709b32055ef8fb9cfbddaa06d1760f838
+#8 CACHED
+
+#21 [query stage-1 2/5] COPY --from=build /bin/service /app/service
+#21 DONE 0.6s
+
+#22 [query stage-1 3/5] COPY --from=build /app/services/inference/models /app/inference-models
+#22 DONE 0.3s
+
+#23 [query stage-1 4/5] WORKDIR /app
+#23 DONE 0.3s
+
+#24 [gateway-api] resolving provenance for metadata file
+#24 DONE 0.3s
+
+#25 [query stage-1 5/5] COPY keys ./keys
+#25 DONE 0.4s
+
+#26 [query] exporting to image
+#26 exporting layers 7.2s done
+#26 exporting manifest sha256:1488413a4cffcfadc2869a2bb2f808cc11b7dad614f3a2ac042d63b7008f5804
+#26 exporting manifest sha256:1488413a4cffcfadc2869a2bb2f808cc11b7dad614f3a2ac042d63b7008f5804 0.1s done
+#26 exporting config sha256:6479de83c6a9d205c7dd1d87df11da257f6b9aaf1938b444cef7e72f4006a978 0.1s done
+#26 exporting attestation manifest sha256:98858c55dffcd59040f31f3fda5332e4ec83973d26dbeaadbd9564ca4f71c54c
+#26 exporting attestation manifest sha256:98858c55dffcd59040f31f3fda5332e4ec83973d26dbeaadbd9564ca4f71c54c 0.2s done
+#26 exporting manifest list sha256:5a75e287d2a13c1119a071dea85c357a381a16c9c8c259a5b344adaaebc93396
+#26 exporting manifest list sha256:5a75e287d2a13c1119a071dea85c357a381a16c9c8c259a5b344adaaebc93396 0.1s done
+#26 naming to docker.io/library/docker-query:latest 0.0s done
+#26 unpacking to docker.io/library/docker-query:latest
+#26 unpacking to docker.io/library/docker-query:latest 1.7s done
+#26 DONE 19.1s
+
+#27 [query] resolving provenance for metadata file
+#27 DONE 0.1s
+ Image docker-gateway-api Built 
+ Image docker-query Built 
+ Container docker-redis-1 Running 
+ Container docker-postgres-1 Running 
+ Container docker-query-1 Recreate 
+ Container docker-gateway-api-1 Recreate 
+ Container docker-gateway-api-1 Recreated 
+ Container docker-query-1 Recreated 
+ Container docker-web-1 Running 
+ Container docker-postgres-1 Waiting 
+ Container docker-redis-1 Waiting 
+ Container docker-postgres-1 Waiting 
+ Container docker-postgres-1 Healthy 
+ Container docker-redis-1 Healthy 
+ Container docker-query-1 Starting 
+ Container docker-postgres-1 Healthy 
+ Container docker-gateway-api-1 Starting 
+ Container docker-query-1 Started 
+ Container docker-gateway-api-1 Started 
+ Container docker-query-1 Waiting 
+ Container docker-gateway-api-1 Waiting 
+ Container docker-query-1 Healthy 
+ Container docker-gateway-api-1 Healthy 

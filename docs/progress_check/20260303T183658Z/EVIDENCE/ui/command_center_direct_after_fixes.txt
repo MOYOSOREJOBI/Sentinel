@@ -1,0 +1,7 @@
+HTTP/1.1 200 OK
+Content-Type: application/json
+X-Request-Id: 6d0b95ca1684184c
+Date: Tue, 03 Mar 2026 20:48:59 GMT
+Content-Length: 986
+
+{"backlogDelta":-4,"highRiskCount":0,"openIncidents":4,"timeWindow":"24h","topCountries":[{"countryCode":"AU","incidentCount":1},{"countryCode":"JP","incidentCount":1},{"countryCode":"GB","incidentCount":1},{"countryCode":"DE","incidentCount":1}],"topIncidents":[{"compositeRisk":0.5080163901210949,"id":1,"priorityScore":0.5080163901210949,"severityBand":"elevated","symbol":"CONS-041"},{"compositeRisk":0.5049035217589962,"id":2,"priorityScore":0.5049035217589962,"severityBand":"elevated","symbol":"REIT-021"},{"compositeRisk":0.4945025046304407,"id":3,"priorityScore":0.4945025046304407,"severityBand":"elevated","symbol":"UTIL-071"},{"compositeRisk":0.47771720488247743,"id":4,"priorityScore":0.47771720488247743,"severityBand":"elevated","symbol":"IND-081"}],"topIndustries":[{"incidentCount":1,"industry":"Retail"},{"incidentCount":1,"industry":"Power Utilities"},{"incidentCount":1,"industry":"REITs"},{"incidentCount":1,"industry":"Capital Goods"}],"trust":{"state":"stable"}}

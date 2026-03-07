@@ -1,0 +1,73 @@
+//line /Users/mac/Desktop/Sentinel/internal/query/model_bundle.go:1:1
+package query
+
+import (
+	"encoding/json"
+	"os"
+)
+
+type modelBundleMetadata struct {
+	ModelVersion       string
+	TrainedAt          string
+	ArtifactHash       string
+	FallbackMode       bool
+	CalibrationVersion string
+	Metrics            struct {
+		AUC              float64
+		Brier            float64
+		PRAUC            float64
+		AnomalyStability float64
+	}
+}
+
+func readModelBundleMetadata() modelBundleMetadata {goCover_fbd601c42ea1__13[0] = 9 ; goCover_fbd601c42ea1__13[1] = goCover_fbd601c42ea1_P ; goCover_fbd601c42ea1__13[2] = 13 ; goCover_fbd601c42ea1__13[3] = 1;
+	paths := []string{
+		os.Getenv("INFERENCE_MODEL_METADATA_PATH"),
+		"/app/inference-models/metadata.json",
+		"services/inference/models/metadata.json",
+	}
+	for _, path := range paths {goCover_fbd601c42ea1__13[5] = 1;
+		if path == "" {goCover_fbd601c42ea1__13[9] = 1;
+			continue
+		}
+		goCover_fbd601c42ea1__13[6] = 1;b, err := os.ReadFile(path)
+		if err != nil {goCover_fbd601c42ea1__13[10] = 1;
+			continue
+		}
+		goCover_fbd601c42ea1__13[7] = 1;var raw struct {
+			ModelVersion       string `json:"model_version"`
+			TrainedAt          string `json:"trained_at"`
+			ArtifactHash       string `json:"artifact_hash"`
+			FallbackMode       bool   `json:"fallback_mode"`
+			CalibrationVersion string `json:"calibration_version"`
+			Metrics            struct {
+				AUC              float64 `json:"auc"`
+				Brier            float64 `json:"brier"`
+				PRAUC            float64 `json:"pr_auc"`
+				AnomalyStability float64 `json:"anomaly_stability"`
+			} `json:"metrics"`
+		}
+		if err := json.Unmarshal(b, &raw); err != nil {goCover_fbd601c42ea1__13[11] = 1;
+			continue
+		}
+		goCover_fbd601c42ea1__13[8] = 1;return modelBundleMetadata{
+			ModelVersion:       raw.ModelVersion,
+			TrainedAt:          raw.TrainedAt,
+			ArtifactHash:       raw.ArtifactHash,
+			FallbackMode:       raw.FallbackMode,
+			CalibrationVersion: raw.CalibrationVersion,
+			Metrics: struct {
+				AUC              float64
+				Brier            float64
+				PRAUC            float64
+				AnomalyStability float64
+			}{
+				AUC:              raw.Metrics.AUC,
+				Brier:            raw.Metrics.Brier,
+				PRAUC:            raw.Metrics.PRAUC,
+				AnomalyStability: raw.Metrics.AnomalyStability,
+			},
+		}
+	}
+	goCover_fbd601c42ea1__13[4] = 1;return modelBundleMetadata{}
+}

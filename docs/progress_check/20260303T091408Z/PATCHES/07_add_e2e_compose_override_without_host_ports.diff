@@ -1,0 +1,18 @@
+diff --git a/deploy/docker/docker-compose.e2e.yml b/deploy/docker/docker-compose.e2e.yml
+new file mode 100644
+--- /dev/null
++++ b/deploy/docker/docker-compose.e2e.yml
+@@
++services:
++  redpanda:
++    ports: []
++  postgres:
++    ports: []
++  redis:
++    ports: []
++  gateway-api:
++    ports: []
++  query:
++    ports: []
++  web:
++    ports: []

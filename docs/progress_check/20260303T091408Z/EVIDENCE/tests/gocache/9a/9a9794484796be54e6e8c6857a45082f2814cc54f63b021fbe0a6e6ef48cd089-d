@@ -1,0 +1,18 @@
+//line /Users/mac/Desktop/Sentinel/internal/incidents/severity.go:1:1
+package incidents
+
+func SeverityFromPriority(priority, confidence, dq float64) string {goCover_096d73815500__7[0] = 9 ; goCover_096d73815500__7[1] = goCover_096d73815500_P ; goCover_096d73815500__7[2] = 7 ; goCover_096d73815500__7[3] = 1;
+	if dq >= 0.60 || confidence < 0.35 {goCover_096d73815500__7[8] = 1;
+		return "Data Unreliable"
+	}
+	goCover_096d73815500__7[4] = 1;if priority >= 97 {goCover_096d73815500__7[9] = 1;
+		return "Critical"
+	}
+	goCover_096d73815500__7[5] = 1;if priority >= 90 {goCover_096d73815500__7[10] = 1;
+		return "High Risk"
+	}
+	goCover_096d73815500__7[6] = 1;if priority >= 70 {goCover_096d73815500__7[11] = 1;
+		return "Elevated"
+	}
+	goCover_096d73815500__7[7] = 1;return "Stable"
+}

@@ -1,0 +1,3 @@
+# sentinel/cmd/query.test
+ld: warning: '/private/var/folders/vk/y7jdn8793b33fkr3q9_b33xc0000gn/T/go-link-2889980489/000013.o' has malformed LC_DYSYMTAB, expected 98 undefined symbols to start at index 884, found 95 undefined symbols starting at index 884
+ok  	sentinel/cmd/query	3.782s

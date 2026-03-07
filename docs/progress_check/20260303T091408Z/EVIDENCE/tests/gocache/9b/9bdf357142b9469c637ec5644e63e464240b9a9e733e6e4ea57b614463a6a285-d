@@ -1,0 +1,6 @@
+covervars.go
+contracts.cover.go
+jobs.cover.go
+runner.cover.go
+./runner_scoring_test.go
+./runner_test.go

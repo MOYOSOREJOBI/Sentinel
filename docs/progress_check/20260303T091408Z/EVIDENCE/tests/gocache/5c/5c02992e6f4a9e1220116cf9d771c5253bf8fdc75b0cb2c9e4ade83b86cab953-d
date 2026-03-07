@@ -1,0 +1,3 @@
+covervars.go
+audit.cover.go
+./audit_chain_test.go

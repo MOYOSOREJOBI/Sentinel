@@ -1,0 +1,163 @@
+//line /Users/mac/Desktop/Sentinel/cmd/simulator/main.go:1:1
+package main; import _ "runtime/coverage"
+
+import (
+	"context"
+	"fmt"
+	"log"
+	"math/rand"
+	"net/http"
+	"os"
+	"os/signal"
+	"strconv"
+	"strings"
+	"syscall"
+	"time"
+
+	"github.com/segmentio/ksuid"
+	"sentinel/internal/config"
+	"sentinel/internal/healthcheck"
+	"sentinel/internal/kafka"
+	"sentinel/internal/logging"
+	"sentinel/internal/metrics"
+)
+
+func main() {goCover_acae026bdd68__0[0] = 35 ; goCover_acae026bdd68__0[1] = goCover_acae026bdd68_P ; goCover_acae026bdd68__0[2] = 0 ; goCover_acae026bdd68__0[3] = 1;
+	if len(os.Args) > 1 && os.Args[1] == "healthcheck" {goCover_acae026bdd68__0[14] = 1;
+		port := healthcheck.MustPort("PORT", 8086)
+		os.Exit(healthcheck.Run(port, "/readyz"))
+	}
+
+	goCover_acae026bdd68__0[4] = 1;ctx, cancel := context.WithCancel(context.Background())
+	defer cancel()
+
+	logger := logging.New("simulator")
+	cfg := config.Load("simulator")
+	if err := config.Validate(cfg); err != nil {goCover_acae026bdd68__0[15] = 1;
+		log.Fatalf("simulator: invalid config: %v", err)
+	}
+
+	goCover_acae026bdd68__0[5] = 1;k, err := kafka.New(cfg.KafkaBrokers, "")
+	if err != nil {goCover_acae026bdd68__0[16] = 1;
+		log.Fatalf("simulator: failed to create kafka producer: %v", err)
+	}
+	goCover_acae026bdd68__0[6] = 1;defer k.Close()
+
+	symbols := parseSymbols(os.Getenv("SIM_SYMBOLS"))
+	if len(symbols) == 0 {goCover_acae026bdd68__0[17] = 1;
+		symbols = defaultSymbols()
+	}
+	goCover_acae026bdd68__0[7] = 1;prices := map[string]float64{"AAPL": 190, "MSFT": 420, "TSLA": 230, "NVDA": 780, "BTC-USD": 62000}
+	interval := 500 * time.Millisecond
+	if ms, err := strconv.Atoi(os.Getenv("SIM_INTERVAL_MS")); err == nil && ms > 0 {goCover_acae026bdd68__0[18] = 1;
+		interval = time.Duration(ms) * time.Millisecond
+	}
+	goCover_acae026bdd68__0[8] = 1;anomalyEvery := 50
+	if n, err := strconv.Atoi(os.Getenv("SIM_ANOMALY_EVERY")); err == nil && n > 0 {goCover_acae026bdd68__0[19] = 1;
+		anomalyEvery = n
+	}
+
+	goCover_acae026bdd68__0[9] = 1;logger.Info("starting simulator", map[string]any{"symbols": symbols, "interval": interval.String(), "anomaly_every": anomalyEvery})
+
+	mux := http.NewServeMux()
+	mux.HandleFunc("/healthz", func(w http.ResponseWriter, r *http.Request) {goCover_acae026bdd68__0[20] = 1; _, _ = w.Write([]byte("ok")) })
+	goCover_acae026bdd68__0[10] = 1;mux.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {goCover_acae026bdd68__0[21] = 1;
+		w.Header().Set("Content-Type", "application/json")
+		_, _ = w.Write([]byte(`{"service":"simulator","version":"dev","links":["/healthz","/readyz","/metrics","/docs"]}`))
+	})
+	goCover_acae026bdd68__0[11] = 1;mux.HandleFunc("/readyz", func(w http.ResponseWriter, r *http.Request) {goCover_acae026bdd68__0[22] = 1;
+		probeCtx, cancelProbe := context.WithTimeout(r.Context(), 2*time.Second)
+		defer cancelProbe()
+		if err := k.Ping(probeCtx); err != nil {goCover_acae026bdd68__0[24] = 1;
+			http.Error(w, "kafka producer not ready", http.StatusServiceUnavailable)
+			return
+		}
+		goCover_acae026bdd68__0[23] = 1;_, _ = w.Write([]byte("ok"))
+	})
+	goCover_acae026bdd68__0[12] = 1;mux.HandleFunc("/metrics", metrics.Handler)
+	srv := &http.Server{Addr: healthcheckAddr(cfg.HTTPAddr, ":8086"), Handler: metrics.Wrap("simulator", mux), ReadTimeout: 10 * time.Second, WriteTimeout: 10 * time.Second}
+	go func() {goCover_acae026bdd68__0[25] = 1;
+		if err := srv.ListenAndServe(); err != nil && err != http.ErrServerClosed {goCover_acae026bdd68__0[26] = 1;
+			log.Fatalf("simulator: health server error: %v", err)
+		}
+	}()
+
+	goCover_acae026bdd68__0[13] = 1;ticks := 0
+	ticker := time.NewTicker(interval)
+	defer ticker.Stop()
+
+	quit := make(chan os.Signal, 1)
+	signal.Notify(quit, syscall.SIGINT, syscall.SIGTERM)
+
+	for {goCover_acae026bdd68__0[27] = 1;
+		select {
+		case <-quit:goCover_acae026bdd68__0[28] = 1;
+			logger.Info("shutting down", nil)
+			return
+		case <-ticker.C:goCover_acae026bdd68__0[29] = 1;
+			for _, s := range symbols {goCover_acae026bdd68__0[30] = 1;
+				delta := rand.Float64()*2 - 1
+				if ticks > 0 && ticks%anomalyEvery == 0 {goCover_acae026bdd68__0[34] = 1;
+					delta = delta * 15
+				}
+				goCover_acae026bdd68__0[31] = 1;prices[s] += delta
+				if prices[s] < 0.01 {goCover_acae026bdd68__0[35] = 1;
+					prices[s] = 0.01
+				}
+				goCover_acae026bdd68__0[32] = 1;ev := map[string]any{
+					"event_id":   ksuid.New().String(),
+					"symbol":     s,
+					"price":      prices[s],
+					"volume":     100 + rand.Float64()*20,
+					"event_time": time.Now().UTC().Format(time.RFC3339Nano),
+				}
+				if err := kafka.ProduceJSON(ctx, k, "raw.ticks", s, ev); err != nil {goCover_acae026bdd68__0[36] = 1;
+					logger.Error("produce tick failed", map[string]any{"error": err.Error(), "symbol": s})
+				} else{ goCover_acae026bdd68__0[37] = 1;{
+					metrics.IncKafkaProduced("simulator", "raw.ticks")
+				}}
+				goCover_acae026bdd68__0[33] = 1;ticks++
+			}
+		}
+	}
+}
+
+func parseSymbols(raw string) []string {goCover_acae026bdd68__1[0] = 6 ; goCover_acae026bdd68__1[1] = goCover_acae026bdd68_P ; goCover_acae026bdd68__1[2] = 1 ; goCover_acae026bdd68__1[3] = 1;
+	if raw == "" {goCover_acae026bdd68__1[6] = 1;
+		return nil
+	}
+	goCover_acae026bdd68__1[4] = 1;parts := strings.Split(raw, ",")
+	out := make([]string, 0, len(parts))
+	for _, p := range parts {goCover_acae026bdd68__1[7] = 1;
+		p = strings.TrimSpace(p)
+		if p != "" {goCover_acae026bdd68__1[8] = 1;
+			out = append(out, p)
+		}
+	}
+	goCover_acae026bdd68__1[5] = 1;return out
+}
+
+func defaultSymbols() []string {goCover_acae026bdd68__2[0] = 4 ; goCover_acae026bdd68__2[1] = goCover_acae026bdd68_P ; goCover_acae026bdd68__2[2] = 2 ; goCover_acae026bdd68__2[3] = 1;
+	base := []string{
+		"AAPL", "MSFT", "GOOGL", "AMZN", "META", "NVDA", "TSLA", "JPM", "BAC", "WFC",
+		"XOM", "CVX", "COP", "UNH", "PFE", "JNJ", "MRK", "V", "MA", "PYPL",
+		"DIS", "NFLX", "KO", "PEP", "COST", "WMT", "TGT", "INTC", "AMD", "AVGO",
+		"ORCL", "ADBE", "CRM", "QCOM", "IBM", "GE", "CAT", "BA", "NKE", "SBUX",
+		"PLTR", "SNOW", "SHOP", "UBER", "ABNB", "BTC-USD", "ETH-USD", "SOL-USD", "GLD", "TLT",
+	}
+	out := append([]string{}, base...)
+	sectors := []string{"TECH", "FIN", "HC", "IND", "CONS", "ENERGY", "UTIL", "REIT", "MAT", "COMM"}
+	for _, sec := range sectors {goCover_acae026bdd68__2[5] = 1;
+		for i := 1; i <= 100; i++ {goCover_acae026bdd68__2[6] = 1;
+			out = append(out, fmt.Sprintf("%s-%03d", sec, i))
+		}
+	}
+	goCover_acae026bdd68__2[4] = 1;return out
+}
+
+func healthcheckAddr(addr, fallback string) string {goCover_acae026bdd68__3[0] = 3 ; goCover_acae026bdd68__3[1] = goCover_acae026bdd68_P ; goCover_acae026bdd68__3[2] = 3 ; goCover_acae026bdd68__3[3] = 1;
+	if strings.TrimSpace(addr) == "" {goCover_acae026bdd68__3[5] = 1;
+		return fallback
+	}
+	goCover_acae026bdd68__3[4] = 1;return addr
+}

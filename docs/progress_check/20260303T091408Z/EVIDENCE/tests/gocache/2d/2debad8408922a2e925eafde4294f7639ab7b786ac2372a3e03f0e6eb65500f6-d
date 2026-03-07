@@ -1,0 +1,27 @@
+//line /Users/mac/Desktop/Sentinel/internal/config/validate.go:1:1
+package config
+
+import (
+	"fmt"
+	"net/url"
+	"strings"
+)
+
+func Validate(c Config) error {goCover_ae50b64f8ba2__3[0] = 10 ; goCover_ae50b64f8ba2__3[1] = goCover_ae50b64f8ba2_P ; goCover_ae50b64f8ba2__3[2] = 3 ; goCover_ae50b64f8ba2__3[3] = 1;
+	if strings.TrimSpace(c.ServiceName) == "" {goCover_ae50b64f8ba2__3[8] = 1;
+		return fmt.Errorf("service name is required")
+	}
+	goCover_ae50b64f8ba2__3[4] = 1;if c.HTTPAddr == "" {goCover_ae50b64f8ba2__3[9] = 1;
+		return fmt.Errorf("http addr is required")
+	}
+	goCover_ae50b64f8ba2__3[5] = 1;if c.PostgresURL != "" {goCover_ae50b64f8ba2__3[10] = 1;
+		u, err := url.Parse(c.PostgresURL)
+		if err != nil || u.Scheme == "" || u.Host == "" {goCover_ae50b64f8ba2__3[11] = 1;
+			return fmt.Errorf("invalid postgres url")
+		}
+	}
+	goCover_ae50b64f8ba2__3[6] = 1;if len(c.KafkaBrokers) == 0 || strings.TrimSpace(c.KafkaBrokers[0]) == "" {goCover_ae50b64f8ba2__3[12] = 1;
+		return fmt.Errorf("kafka broker is required")
+	}
+	goCover_ae50b64f8ba2__3[7] = 1;return nil
+}

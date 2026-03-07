@@ -1,0 +1,12 @@
+HTTP/1.1 200 OK
+vary: RSC, Next-Router-State-Tree, Next-Router-Prefetch
+content-length: 17
+content-type: application/json
+date: Wed, 04 Mar 2026 09:39:56 GMT
+set-cookie: sentinel_token=eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYWRtaW4iLCJzdWIiOiJhZG1pbkBzZW50aW5lbC5sb2NhbCIsImV4cCI6MTc3MjcwMzU5NiwiaWF0IjoxNzcyNjE3MTk2fQ.eMMSUe13J-VvgZDf5K8RG7-TUBziEzydYDugJLc6ysrXYtb8qUD9HHUplMTVUeThcIesRkVm5YGAAcwKGh2z9jQESFnC3xh5aPaJlgcpCaehtOV7AEOuL2r34POpUuoLE0EqsD7Oj66_CLL_O0Zg7MreLeKljUsbuDhKjJywSYgyIunNkE4-0I8DLgAKi_dfCs-QTeyDWPwDcPcQxlNf4p0MHy_YcqKqegbQYu3vbA7nBo3Yfhycz9Rf23EHtTAUSOjJ0v2lVPnI7e6qICFSAkVu_rGzpzwIkchKfwEPL9ceL2PxZdTHDSHwLuOcoj-QNPtf5EB85Dia1GZtzyUAvg; Path=/; Expires=Thu, 05 Mar 2026 09:39:56 GMT; HttpOnly; SameSite=Lax
+set-cookie: sentinel_csrf=BbwtiD-rVaLXUMeulwFROblPn6OHVbnCBctjwp3QByU; Path=/; Expires=Wed, 04 Mar 2026 10:09:56 GMT; SameSite=Lax
+x-request-id: e623332665f3cccb
+Connection: keep-alive
+Keep-Alive: timeout=5
+
+{"role":"admin"}

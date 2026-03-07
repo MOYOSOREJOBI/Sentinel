@@ -1,0 +1,8 @@
+mode: set
+sentinel/internal/pipeline/scoring/scoring.go:5.67,6.34 1 1
+sentinel/internal/pipeline/scoring/scoring.go:6.34,8.3 1 1
+sentinel/internal/pipeline/scoring/scoring.go:9.2,11.9 3 1
+sentinel/internal/pipeline/scoring/scoring.go:12.21,13.27 1 0
+sentinel/internal/pipeline/scoring/scoring.go:14.21,15.23 1 0
+sentinel/internal/pipeline/scoring/scoring.go:16.21,17.27 1 0
+sentinel/internal/pipeline/scoring/scoring.go:18.10,19.25 1 1

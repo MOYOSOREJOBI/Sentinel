@@ -1,0 +1,52 @@
+services:
+  redpanda:
+    ports: !override
+      - "59092:9092"
+
+  postgres:
+    ports: !override
+      - "55432:5432"
+
+  redis:
+    ports: !override
+      - "56379:6379"
+
+  gateway-api:
+    ports: !override
+      - "58080:8080"
+
+  aggregator:
+    ports: !override
+      - "58081:8081"
+
+  features:
+    ports: !override
+      - "58082:8082"
+
+  inference:
+    ports: !override
+      - "58090:8090"
+
+  alerts:
+    ports: !override
+      - "58083:8083"
+
+  governance:
+    ports: !override
+      - "58084:8084"
+
+  query:
+    ports: !override
+      - "58085:8085"
+
+  web:
+    ports: !override
+      - "3000:3000"
+
+  prometheus:
+    ports: !override
+      - "59090:9090"
+
+  grafana:
+    ports: !override
+      - "33001:3000"

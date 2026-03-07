@@ -1,0 +1,7 @@
+HTTP/1.1 200 OK
+Content-Type: application/json
+X-Request-Id: 9c17efbf792ef762
+Date: Wed, 04 Mar 2026 17:06:04 GMT
+Content-Length: 229
+
+{"escalationPolicies":[],"modelDeployments":[],"modelLineage":[{"created_at":"2026-03-03T09:29:16.935507-07:00","id":1,"model_name":"escalation","state":"deployed","version":"baseline-v1"}],"replayJobs":[],"thresholdChanges":[]}

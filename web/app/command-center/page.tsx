@@ -84,7 +84,23 @@ export default function CommandCenterPage() {
     return () => clearInterval(iv)
   }, [loadAll, sseStatus])
 
-  const globeData = useMemo(() => (map?.countries || []).map((c: any) => ({ iso2: (c.countryCode || c.country_code || 'XX').toUpperCase(), name: c.countryName || c.country_name || 'Unknown', risk: Number(c.avgCompositeRisk || c.avg_risk || 0), highRisk: Number(c.incidentCount || c.incident_count || 0), p95: Number(c.avgCompositeRisk || c.avg_risk || 0) })), [map])
+  const globeData = useMemo(() => (map?.countries || [])
+    .map((c: any) => ({ iso2: (c.countryIso2 || c.countryCode || c.country_code || '').toUpperCase(), name: c.countryName || c.country_name || '', risk: Number(c.avgCompositeRisk || c.avg_risk || 0), highRisk: Number(c.incidentCount || c.incident_count || 0), p95: Number(c.avgCompositeRisk || c.avg_risk || 0) }))
+    .filter((c: any) => c.iso2 && c.iso2 !== 'XX' && c.name && c.name.toLowerCase() !== 'unknown')
+  , [map])
+  const geoIncomplete = useMemo(() => {
+    if (typeof map?.geoEnriched === 'boolean') {
+      return map.geoEnriched === false
+    }
+    return Number(map?.missingGeoCount || 0) > 0
+  }, [map])
+  const focusSymbol = useMemo(() => {
+    const selected = String(filters.symbol || '').trim()
+    if (selected) return selected
+    const fromTop = String(data?.topIncidents?.[0]?.symbol || '').trim()
+    if (fromTop) return fromTop
+    return String(queue[0]?.symbol || '').trim()
+  }, [data, filters.symbol, queue])
   const quant = useMemo(() => deriveQuantMetrics(queue), [queue])
 
   if (!data) return <AppShell title="Command Center" subtitle="Real-time risk workspace" titleKey="titleCommandCenter" subtitleKey="subtitleCommandCenter" filters={filters} setFilters={apply}><div data-testid="command-center"><LoadingState /></div></AppShell>
@@ -99,7 +115,7 @@ export default function CommandCenterPage() {
     </div>
 
     <div className="analytics-grid">
-      <CandleRiskPanel window={filters.window || '24h'} />
+      <CandleRiskPanel symbol={focusSymbol} window={filters.window || '24h'} />
       <div className="card">
         <h3>Quantitative risk math</h3>
         <div className="kv"><span>Mean composite risk</span><strong>{quant.meanComposite.toFixed(2)}</strong></div>
@@ -112,11 +128,11 @@ export default function CommandCenterPage() {
     </div>
 
     <div className="analytics-grid">
-      <RiskGlobe data={globeData} onSelect={(iso2) => apply({ countryCode: iso2 })} />
-      <WorldRiskMap data={map.countries || []} selectedCountryCode={filters.countryCode} onSelectCountry={(c) => apply({ countryCode: c })} />
+      <RiskGlobe data={globeData} geoIncomplete={geoIncomplete} onSelect={(iso2) => apply({ countryCode: iso2 })} />
+      <WorldRiskMap data={map.countries || []} geoIncomplete={geoIncomplete} selectedCountryCode={filters.countryCode} onSelectCountry={(c) => apply({ countryCode: c || '' })} />
     </div>
 
-    <QuantVisuals queue={queue} mapRows={map?.countries || []} />
+    <QuantVisuals queue={queue} mapRows={map?.countries || []} rollups={data} />
 
     <div className='card'>
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.5rem' }}>
@@ -157,14 +173,14 @@ export default function CommandCenterPage() {
         </table>
       )}
     </div>
-    {degraded ? <DegradedState message="Data links degraded. Verify query/alerts services and seed warmup." /> : null}
+    {degraded ? <DegradedState message="Data links degraded. Verify query/alerts services and seed warmup." onRetry={loadAll} /> : null}
     </section>
   </AppShell>
 }
 
 function eventSummary(evt: any): string {
   if (!evt || typeof evt !== 'object') return 'live patch received'
-  if (evt.type === 'degraded' || evt.type === 'degraded-heartbeat') return evt.message || 'upstream degraded'
+  if (evt.type === 'degraded' || evt.type === 'degraded-heartbeat') return humanizeStreamStatus(evt.message)
   if (evt.incident?.id) {
     const risk = Number(evt.incident?.compositeRisk || evt.incident?.composite_risk || 0).toFixed(2)
     return `Incident ${evt.incident.id} updated; composite ${risk}`
@@ -177,4 +193,12 @@ function eventSummary(evt: any): string {
   if (evt.message) return String(evt.message)
   if (evt.symbol) return `Symbol update ${String(evt.symbol)}`
   return 'command-center patch'
+}
+
+function humanizeStreamStatus(message: any): string {
+  const raw = String(message || '').trim()
+  if (!raw) return 'Live updates paused; reconnecting.'
+  if (/^upstream\s+\d+$/i.test(raw)) return 'Live updates paused; reconnecting.'
+  if (/waiting for upstream/i.test(raw)) return 'Live updates paused; waiting for the stream.'
+  return raw
 }

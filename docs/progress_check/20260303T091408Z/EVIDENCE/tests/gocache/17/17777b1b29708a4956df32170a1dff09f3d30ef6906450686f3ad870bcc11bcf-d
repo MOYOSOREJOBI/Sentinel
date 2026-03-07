@@ -1,0 +1,3 @@
+covervars.go
+healthcheck.cover.go
+./healthcheck_test.go

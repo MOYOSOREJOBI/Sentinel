@@ -40,12 +40,15 @@ test('trust page renders trend containers', () => {
   assert.match(src, /Data quality/)
   assert.match(src, /Why this matters/)
   assert.match(src, /What you can do/)
+  assert.match(src, /Artifact hash/)
 })
 
 test('replay page labels metadata-first mode and deterministic timeline', () => {
   const src = fs.readFileSync(process.cwd() + '/app/replay/[job]/page.tsx', 'utf-8')
   assert.match(src, /metadata-first mode/)
   assert.match(src, /Deterministic timeline/)
+  assert.match(src, /Export brief/)
+  assert.match(src, /Matched vs mismatched/)
 })
 
 test('governance executive about and glossary pages are productized', () => {
@@ -55,6 +58,7 @@ test('governance executive about and glossary pages are productized', () => {
   const glossary = fs.readFileSync(process.cwd() + '/app/glossary/page.tsx', 'utf-8')
   assert.match(gov, /Editable escalation policies/)
   assert.match(gov, /Replay control/)
+  assert.match(gov, /parity/)
   assert.match(exec, /Plain-English/)
   assert.match(about, /Risk is a ranked signal that something is unusual AND important/)
   assert.match(glossary, /DQ warning/)
@@ -75,6 +79,8 @@ test('TrustStrip renders fallback honesty', () => {
 test('WorldRiskMap renders legend and empty state scaffolding', () => {
   const empty = renderToStaticMarkup(React.createElement(WorldRiskMap, { rows: [] }))
   assert.match(empty, /No regional aggregates yet/)
-  const html = renderToStaticMarkup(React.createElement(WorldRiskMap, { rows: [{ country: 'US', region: 'NA', incident_count: 3 }] }))
+  const html = renderToStaticMarkup(React.createElement(WorldRiskMap, { data: [{ countryIso2: 'US', countryCode: 'US', countryName: 'United States', incidentCount: 3, avgCompositeRisk: 0.62, maxSafetyLevel: 'High Risk', trustState: 'healthy' }] }))
   assert.match(html, /Top regions/)
+  assert.match(html, /data-country-code="US"/)
+  assert.doesNotMatch(html, /fallback codes/)
 })

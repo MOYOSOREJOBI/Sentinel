@@ -1,0 +1,13 @@
+# ./internal/replay
+open /Users/mac/Library/Caches/go-build/22/2215c5dd8c10c126726257f4e5afc07800504f361cfe2b97835985257326e8a2-d: operation not permitted
+FAIL	./internal/replay [setup failed]
+# ./internal/query
+open /Users/mac/Library/Caches/go-build/2a/2a71028405cddee79fa1d75db3d2e9276cadb03100cb459c0cbc2576f8a04f56-a: operation not permitted
+FAIL	./internal/query [setup failed]
+# ./cmd/query
+open /Users/mac/Library/Caches/go-build/ec/ec98f4f5b6856daa8d5fe081962b5f59097307ec13fe362c82de1735217fe38f-d: operation not permitted
+FAIL	./cmd/query [setup failed]
+# ./cmd/governance
+open /Users/mac/Library/Caches/go-build/15/15c14e761e87eec501c7613e50951328a91deaf8ec40c257bfe826284118d706-a: operation not permitted
+FAIL	./cmd/governance [setup failed]
+FAIL

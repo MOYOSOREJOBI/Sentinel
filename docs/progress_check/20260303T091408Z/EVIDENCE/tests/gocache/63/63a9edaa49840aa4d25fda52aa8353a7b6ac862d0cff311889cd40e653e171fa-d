@@ -1,0 +1,50 @@
+//line /Users/mac/Desktop/Sentinel/internal/kafka/kafka.go:1:1
+package kafka
+
+import (
+	"context"
+	"encoding/json"
+	"strings"
+	"time"
+
+	"github.com/twmb/franz-go/pkg/kgo"
+)
+
+func New(brokers []string, group string, topics ...string) (*kgo.Client, error) {goCover_307c6f38fecd__0[0] = 3 ; goCover_307c6f38fecd__0[1] = goCover_307c6f38fecd_P ; goCover_307c6f38fecd__0[2] = 0 ; goCover_307c6f38fecd__0[3] = 1;
+	opts := []kgo.Opt{kgo.SeedBrokers(brokers...)}
+	if group != "" {goCover_307c6f38fecd__0[5] = 1;
+		opts = append(opts, kgo.ConsumerGroup(group), kgo.ConsumeTopics(topics...))
+	}
+	goCover_307c6f38fecd__0[4] = 1;return kgo.NewClient(opts...)
+}
+
+func ProduceJSON(ctx context.Context, c *kgo.Client, topic, key string, v any, headers ...kgo.RecordHeader) error {goCover_307c6f38fecd__1[0] = 9 ; goCover_307c6f38fecd__1[1] = goCover_307c6f38fecd_P ; goCover_307c6f38fecd__1[2] = 1 ; goCover_307c6f38fecd__1[3] = 1;
+	b, _ := json.Marshal(v)
+	rec := &kgo.Record{Topic: topic, Key: []byte(key), Value: b, Headers: headers}
+	var err error
+	for i := 0; i < 6; i++ {goCover_307c6f38fecd__1[5] = 1;
+		err = c.ProduceSync(ctx, rec).FirstErr()
+		if err == nil {goCover_307c6f38fecd__1[8] = 1;
+			return nil
+		}
+		goCover_307c6f38fecd__1[6] = 1;if !shouldRetryProduceError(err) {goCover_307c6f38fecd__1[9] = 1;
+			return err
+		}
+		goCover_307c6f38fecd__1[7] = 1;select {
+		case <-ctx.Done():goCover_307c6f38fecd__1[10] = 1;
+			return ctx.Err()
+		case <-time.After(time.Duration(i+1) * 300 * time.Millisecond):goCover_307c6f38fecd__1[11] = 1;
+		}
+	}
+	goCover_307c6f38fecd__1[4] = 1;return err
+}
+
+func shouldRetryProduceError(err error) bool {goCover_307c6f38fecd__2[0] = 3 ; goCover_307c6f38fecd__2[1] = goCover_307c6f38fecd_P ; goCover_307c6f38fecd__2[2] = 2 ; goCover_307c6f38fecd__2[3] = 1;
+	if err == nil {goCover_307c6f38fecd__2[5] = 1;
+		return false
+	}
+	goCover_307c6f38fecd__2[4] = 1;e := strings.ToUpper(err.Error())
+	return strings.Contains(e, "UNKNOWN_TOPIC_OR_PARTITION") ||
+		strings.Contains(e, "LEADER_NOT_AVAILABLE") ||
+		strings.Contains(e, "NOT_LEADER_FOR_PARTITION")
+}

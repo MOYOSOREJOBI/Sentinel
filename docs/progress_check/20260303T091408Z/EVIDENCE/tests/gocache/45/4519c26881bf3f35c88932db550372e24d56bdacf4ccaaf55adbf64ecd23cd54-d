@@ -1,0 +1,37 @@
+//line /Users/mac/Desktop/Sentinel/internal/healthcheck/healthcheck.go:1:1
+package healthcheck
+
+import (
+	"context"
+	"fmt"
+	"net/http"
+	"os"
+	"time"
+)
+
+func Run(port int, path string) int {goCover_39bd82838373__0[0] = 5 ; goCover_39bd82838373__0[1] = goCover_39bd82838373_P ; goCover_39bd82838373__0[2] = 0 ; goCover_39bd82838373__0[3] = 1;
+	ctx, cancel := context.WithTimeout(context.Background(), 900*time.Millisecond)
+	defer cancel()
+
+	url := fmt.Sprintf("http://127.0.0.1:%d%s", port, path)
+	req, _ := http.NewRequestWithContext(ctx, http.MethodGet, url, nil)
+	resp, err := http.DefaultClient.Do(req)
+	if err != nil {goCover_39bd82838373__0[6] = 1;
+		return 1
+	}
+	goCover_39bd82838373__0[4] = 1;defer resp.Body.Close()
+	if resp.StatusCode >= 200 && resp.StatusCode < 300 {goCover_39bd82838373__0[7] = 1;
+		return 0
+	}
+	goCover_39bd82838373__0[5] = 1;return 1
+}
+
+func MustPort(env string, fallback int) int {goCover_39bd82838373__1[0] = 4 ; goCover_39bd82838373__1[1] = goCover_39bd82838373_P ; goCover_39bd82838373__1[2] = 1 ; goCover_39bd82838373__1[3] = 1;
+	if v := os.Getenv(env); v != "" {goCover_39bd82838373__1[5] = 1;
+		var p int
+		if _, err := fmt.Sscanf(v, "%d", &p); err == nil && p > 0 {goCover_39bd82838373__1[6] = 1;
+			return p
+		}
+	}
+	goCover_39bd82838373__1[4] = 1;return fallback
+}

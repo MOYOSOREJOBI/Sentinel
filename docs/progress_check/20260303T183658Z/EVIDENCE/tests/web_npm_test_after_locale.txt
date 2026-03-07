@@ -1,0 +1,45 @@
+
+> sentinel-web@0.1.0 test
+> rm -rf .tmp-tests && tsc -p tests/tsconfig.json && node --test .tmp-tests/tests/*.test.js .tmp-tests/tests/**/*.test.js
+
+✔ command center renders analytics containers (14.798064ms)
+✔ queue renders recommended actions and priority (1.572383ms)
+✔ incident page renders model and explanation sections and case promotion (1.402159ms)
+✔ case workspace and detail show role-gated workflow (1.910862ms)
+✔ trust page renders trend containers (1.629991ms)
+✔ replay page labels metadata-first mode and deterministic timeline (1.195861ms)
+✔ governance executive about and glossary pages are productized (2.487989ms)
+✔ filter bar allowlist excludes about and glossary (1.790953ms)
+✔ TrustStrip renders fallback honesty (42.612593ms)
+✔ WorldRiskMap renders legend and empty state scaffolding (25.720431ms)
+✔ pickOverlaySymbol prefers the symbol shared by candles and scores (45.374754ms)
+✔ filterSeriesBySymbol keeps only the focused instrument when one is selected (10.514896ms)
+✔ role-gated tabs are enforced by role mapping (28.407281ms)
+✔ score summary counts high and critical severities (32.95637ms)
+✔ degraded state component exists (17.521136ms)
+✔ governance page has no JSON dump pre block (16.345824ms)
+✔ layout renders html shell and child content (69.128962ms)
+✔ filterAlerts applies severity status and symbol filters (29.561654ms)
+✔ groupAlerts groups by status and symbol (5.445619ms)
+✔ normalizeAlertCreatedAt prefers created_at and falls back to ts (29.345814ms)
+✔ route locale helpers translate zh alias and strip prefixes (17.591339ms)
+✔ withLocalePath prefixes logical routes (1.24205ms)
+✔ i18n dictionary provides translated navigation labels (25.819037ms)
+✔ every locale contains every English key (24.814262ms)
+✔ percentile returns bounded value (17.634091ms)
+✔ deriveQuantMetrics computes meaningful positive values (14.698458ms)
+✔ role-gated tabs are enforced by role mapping (45.667697ms)
+✔ capabilities are strictly separated by role (1.33427ms)
+✔ normalizeRiskValue supports normalized and percentage-like inputs (34.556613ms)
+✔ bucketIndex uses 0..1 risk buckets (3.164182ms)
+✔ upsert replaces matching row only (15.551106ms)
+✔ governance page retains admin-gated controls (10.466476ms)
+✔ world map has click binding for filters (11.858283ms)
+ℹ tests 33
+ℹ suites 0
+ℹ pass 33
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 3215.572473
